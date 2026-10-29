@@ -8658,7 +8658,7 @@ abstract class AppLocalizations {
   /// No description provided for @demoHomeNotice.
   ///
   /// In en, this message translates to:
-  /// **'For now this is a demo home. Real devices (Shelly, WLED, Tasmota, ESPHome) come in the next version.'**
+  /// **'This is the demo home. Add your Shelly or WLED devices and the demo turns itself off.'**
   String get demoHomeNotice;
 
   /// No description provided for @firstRunWelcomeBodyLite.
@@ -8678,6 +8678,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Version and updates'**
   String get settingsAboutHint;
+
+  /// No description provided for @addDeviceLanHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Shelly and WLED devices on the same Wi-Fi network as the phone show up here by themselves.'**
+  String get addDeviceLanHint;
+
+  /// No description provided for @addDeviceSearching.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking for devices…'**
+  String get addDeviceSearching;
+
+  /// No description provided for @addDeviceNoneYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing yet. Check that the phone is on the same Wi-Fi network as the device, or enter its IP address.'**
+  String get addDeviceNoneYet;
+
+  /// No description provided for @addDeviceManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter IP address'**
+  String get addDeviceManual;
+
+  /// No description provided for @addDeviceAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Device IP address'**
+  String get addDeviceAddressLabel;
+
+  /// No description provided for @addDeviceChecking.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking…'**
+  String get addDeviceChecking;
+
+  /// No description provided for @addDeviceNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No Shelly or WLED found at that address.'**
+  String get addDeviceNotFound;
+
+  /// No description provided for @addDeviceAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Added'**
+  String get addDeviceAdded;
+
+  /// No description provided for @addDeviceAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get addDeviceAdd;
+
+  /// No description provided for @addDeviceDone.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} added.'**
+  String addDeviceDone(String name);
+
+  /// No description provided for @addDeviceWhere.
+  ///
+  /// In en, this message translates to:
+  /// **'Which room?'**
+  String get addDeviceWhere;
+
+  /// No description provided for @roomNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New room…'**
+  String get roomNew;
+
+  /// No description provided for @roomNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Room name'**
+  String get roomNameLabel;
+
+  /// No description provided for @roomDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete room'**
+  String get roomDelete;
+
+  /// No description provided for @roomDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the room {name}? Its devices stay, without a room.'**
+  String roomDeleteConfirm(String name);
+
+  /// No description provided for @deviceRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove device'**
+  String get deviceRemove;
+
+  /// No description provided for @deviceRemoveConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {name} from the app? The device keeps working.'**
+  String deviceRemoveConfirm(String name);
+
+  /// No description provided for @demoDevicesSetting.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo devices'**
+  String get demoDevicesSetting;
+
+  /// No description provided for @demoDevicesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A made-up home for trying the app.'**
+  String get demoDevicesHint;
+
+  /// No description provided for @homeDevicesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Devices'**
+  String get homeDevicesTitle;
 }
 
 class _AppLocalizationsDelegate

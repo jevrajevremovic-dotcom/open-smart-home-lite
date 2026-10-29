@@ -5118,7 +5118,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get demoHomeNotice =>
-      'Za sada je ovo demo dom. Pravi uređaji (Shelly, WLED, Tasmota, ESPHome) dolaze u sledećoj verziji.';
+      'Ovo je demo dom. Dodajte svoje Shelly ili WLED uređaje i demo će se sam ugasiti.';
 
   @override
   String get firstRunWelcomeBodyLite =>
@@ -5129,6 +5129,74 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get settingsAboutHint => 'Verzija i ažuriranja';
+
+  @override
+  String get addDeviceLanHint =>
+      'Shelly i WLED uređaji na istoj Wi-Fi mreži kao telefon pojavljuju se ovde sami.';
+
+  @override
+  String get addDeviceSearching => 'Tražim uređaje…';
+
+  @override
+  String get addDeviceNoneYet =>
+      'Još ništa. Proverite da je telefon na istoj Wi-Fi mreži kao uređaj, ili unesite njegovu IP adresu.';
+
+  @override
+  String get addDeviceManual => 'Unesi IP adresu';
+
+  @override
+  String get addDeviceAddressLabel => 'IP adresa uređaja';
+
+  @override
+  String get addDeviceChecking => 'Proveravam…';
+
+  @override
+  String get addDeviceNotFound => 'Na toj adresi nije pronađen Shelly ni WLED.';
+
+  @override
+  String get addDeviceAdded => 'Dodat';
+
+  @override
+  String get addDeviceAdd => 'Dodaj';
+
+  @override
+  String addDeviceDone(String name) {
+    return '$name je dodat.';
+  }
+
+  @override
+  String get addDeviceWhere => 'U koju sobu?';
+
+  @override
+  String get roomNew => 'Nova soba…';
+
+  @override
+  String get roomNameLabel => 'Ime sobe';
+
+  @override
+  String get roomDelete => 'Obriši sobu';
+
+  @override
+  String roomDeleteConfirm(String name) {
+    return 'Obrisati sobu $name? Uređaji ostaju, bez sobe.';
+  }
+
+  @override
+  String get deviceRemove => 'Ukloni uređaj';
+
+  @override
+  String deviceRemoveConfirm(String name) {
+    return 'Ukloniti $name iz aplikacije? Uređaj nastavlja da radi.';
+  }
+
+  @override
+  String get demoDevicesSetting => 'Demo uređaji';
+
+  @override
+  String get demoDevicesHint => 'Izmišljeni dom za probu aplikacije.';
+
+  @override
+  String get homeDevicesTitle => 'Uređaji';
 }
 
 /// The translations for Serbian, using the Latin script (`sr_Latn`).

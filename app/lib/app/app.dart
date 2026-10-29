@@ -6,6 +6,7 @@ import '../features/alerts/alert_notifications.dart';
 import '../features/app_lock/application/app_lock.dart';
 import '../features/app_lock/presentation/app_lock_gate.dart';
 import '../features/devices/application/device_providers.dart';
+import '../features/kiosk/application/kiosk_controller.dart';
 import '../features/settings/application/appearance_controllers.dart';
 import '../features/shortcuts/app_shortcuts.dart';
 import '../features/shortcuts/quick_tiles.dart';
@@ -32,12 +33,19 @@ class _SmartHomeAppState extends ConsumerState<SmartHomeApp> {
   void initState() {
     super.initState();
     _lifecycle = AppLifecycleListener(
-      onResume: () => ref.read(appLockProvider.notifier).onForeground(),
+      onResume: () {
+        ref.read(appLockProvider.notifier).onForeground();
+        ref.read(homeBackendProvider)?.setActive(true);
+      },
       // Save before the OS may suspend or kill us.
       onPause: () => ref.read(homeBackendProvider)?.flush(),
       onHide: () {
         ref.read(appLockProvider.notifier).onBackground();
         ref.read(homeBackendProvider)?.flush();
+        // A wall panel stays in front; a phone stops asking its devices.
+        if (!ref.read(kioskActiveProvider)) {
+          ref.read(homeBackendProvider)?.setActive(false);
+        }
       },
     );
   }

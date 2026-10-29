@@ -16,7 +16,7 @@ const demoRooms = {
 
 /// A small home in memory that obeys its commands, so the app can be tried
 /// (and tested) without any device.
-class DemoAdapter implements DeviceAdapter {
+class DemoAdapter extends DeviceAdapter {
   DemoAdapter({this.latency = const Duration(milliseconds: 150)});
 
   /// How long a device takes to answer.

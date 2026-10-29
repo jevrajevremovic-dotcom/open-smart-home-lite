@@ -11,6 +11,8 @@ import '../../../app/theme/app_theme.dart';
 import '../../../core/widgets/responsive.dart';
 import '../../../core/widgets/status_widgets.dart';
 import '../../devices/application/device_providers.dart';
+import '../../devices/data/local/local_home.dart';
+import '../../devices/presentation/device_edit.dart' show createRoom;
 import '../../kiosk/presentation/kiosk_settings_section.dart';
 import '../../app_lock/application/app_lock.dart';
 import '../../../core/storage/app_preferences.dart';
@@ -273,6 +275,9 @@ class _SectionBody extends ConsumerWidget {
 
   List<Widget> _home(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    final textTheme = Theme.of(context).textTheme;
+    final home = ref.watch(localHomeProvider);
+    final controller = ref.read(localHomeProvider.notifier);
     final deviceCount = ref.watch(
       visibleDeviceIdsProvider.select((ids) => ids.length),
     );
@@ -287,7 +292,77 @@ class _SectionBody extends ConsumerWidget {
         ),
         subtitle: Text(l10n.devicesInRooms(deviceCount, roomCount)),
       ),
-      InlineNotice.info(l10n.demoHomeNotice),
+      if (home.demo) ...[
+        InlineNotice.info(l10n.demoHomeNotice),
+        const SizedBox(height: 8),
+      ],
+      Align(
+        alignment: Alignment.centerLeft,
+        child: FilledButton.tonalIcon(
+          key: const Key('settingsAddDevice'),
+          onPressed: () => context.push(AppRoutes.addDevice),
+          icon: const Icon(Icons.add),
+          label: Text(l10n.addDeviceTitle),
+        ),
+      ),
+      if (home.devices.isNotEmpty) ...[
+        const SizedBox(height: 16),
+        Text(l10n.homeDevicesTitle, style: textTheme.labelLarge),
+        for (final d in home.devices)
+          ListTile(
+            key: ValueKey('homeDevice-${d.key}'),
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(
+              d.adapter == 'wled' ? Icons.light_outlined : Icons.power_outlined,
+            ),
+            title: Text(d.label ?? d.model ?? d.host),
+            subtitle: Text([?d.model, d.host].join(' · ')),
+          ),
+      ],
+      const SizedBox(height: 16),
+      Text(l10n.navRooms, style: textTheme.labelLarge),
+      for (final r in home.rooms)
+        ListTile(
+          key: ValueKey('homeRoom-${r.id}'),
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(Icons.meeting_room_outlined),
+          title: Text(r.name),
+          trailing: IconButton(
+            key: ValueKey('deleteRoom-${r.id}'),
+            tooltip: l10n.roomDelete,
+            icon: const Icon(Icons.delete_outline),
+            onPressed: () async {
+              if (await _confirm(
+                context,
+                title: l10n.roomDelete,
+                body: l10n.roomDeleteConfirm(r.name),
+                action: l10n.delete,
+                destructive: true,
+              )) {
+                await controller.removeRoom(r.id);
+              }
+            },
+          ),
+        ),
+      Align(
+        alignment: Alignment.centerLeft,
+        child: TextButton.icon(
+          key: const Key('settingsAddRoom'),
+          onPressed: () => createRoom(context, ref),
+          icon: const Icon(Icons.add),
+          label: Text(l10n.roomNew),
+        ),
+      ),
+      const Divider(height: 24),
+      SwitchListTile(
+        key: const Key('demoDevicesSwitch'),
+        contentPadding: EdgeInsets.zero,
+        secondary: const Icon(Icons.science_outlined),
+        title: Text(l10n.demoDevicesSetting),
+        subtitle: Text(l10n.demoDevicesHint),
+        value: home.demo,
+        onChanged: controller.setDemo,
+      ),
     ];
   }
 

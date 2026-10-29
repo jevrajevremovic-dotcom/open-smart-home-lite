@@ -3,6 +3,9 @@ import 'dart:typed_data';
 
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:open_smart_home_lite/core/config/app_config.dart';
+import 'package:open_smart_home_lite/core/errors/app_failure.dart';
+import 'package:open_smart_home_lite/features/add_device/data/lan_discovery.dart';
+import 'package:open_smart_home_lite/features/devices/data/local/lan_http.dart';
 import 'package:open_smart_home_lite/core/platform/speech_output.dart';
 import 'package:open_smart_home_lite/core/storage/app_preferences.dart';
 import 'package:open_smart_home_lite/core/storage/credential_store.dart';
@@ -14,6 +17,7 @@ import 'package:open_smart_home_lite/features/devices/application/device_provide
 import 'package:open_smart_home_lite/features/devices/data/local/demo_adapter.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/device_adapter.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/local_backend.dart';
+import 'package:open_smart_home_lite/features/devices/data/local/local_home.dart';
 import 'package:open_smart_home_lite/features/devices/domain/capability.dart';
 import 'package:open_smart_home_lite/features/devices/domain/device_command.dart';
 import 'package:open_smart_home_lite/features/devices/domain/device_kind.dart';
@@ -28,7 +32,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// Devices of a test home. Commands are recorded in [sent]; [onCommand]
 /// may return the device's new state (else nothing changes).
-class TestAdapter implements DeviceAdapter {
+class TestAdapter extends DeviceAdapter {
   TestAdapter(List<SmartHomeDevice> devices, {this.onCommand})
     : _devices = {for (final d in devices) d.id: d};
 
@@ -64,6 +68,50 @@ class TestAdapter implements DeviceAdapter {
 
   @override
   Future<void> dispose() => _controller.close();
+}
+
+/// Devices on a pretend local network: answers by `host` and `path`
+/// (a value, or a function of the query/body); records every request.
+/// A host that is not in [answers] does not answer.
+class FakeLanHttp implements LanHttp {
+  FakeLanHttp(this.answers);
+
+  final Map<String, Map<String, Object? Function(Map<String, Object?>)>>
+  answers;
+  final List<(String host, String path, Object? data)> requests = [];
+
+  Object? _answer(String host, String path, Map<String, Object?> data) {
+    requests.add((host, path, data));
+    final answer = answers[host]?[path];
+    if (answer == null) {
+      throw const AppFailure(FailureKind.network, debugMessage: 'no answer');
+    }
+    return answer(data);
+  }
+
+  @override
+  Future<Object?> get(
+    String host,
+    String path, {
+    Map<String, Object?> query = const {},
+  }) async => _answer(host, path, query);
+
+  @override
+  Future<Object?> post(String host, String path, Object? body) async =>
+      _answer(host, path, {'body': body});
+}
+
+/// Finds the given services, as mDNS would.
+class FakeLanDiscovery implements LanDiscovery {
+  FakeLanDiscovery(this.services);
+
+  final List<LanService> services;
+
+  @override
+  bool get isSupported => true;
+
+  @override
+  Stream<List<LanService>> browse() => Stream.value(services);
 }
 
 /// A device for [TestAdapter] (id `test:<id>`).
@@ -132,7 +180,8 @@ class FakeKioskPlatform implements KioskPlatform {
 }
 
 /// Overrides for running the app in tests: the demo home (answering at
-/// once), or [adapter]'s devices in [rooms]. The first-run wizard is done
+/// once), [adapter]'s devices in [rooms], or the real adapters on the
+/// pretend network [http]. The first-run wizard is done
 /// unless [firstRun].
 Future<List<Override>> testOverrides({
   InMemoryCredentialStore? credentials,
@@ -150,6 +199,8 @@ Future<List<Override>> testOverrides({
   ApproachPlatform? approach,
   QuickTilesPlatform? tiles,
   SpeechOutput? speech,
+  LanHttp? http,
+  LanDiscovery? discovery,
   List<Override> overrides = const [],
 }) async {
   SharedPreferences.setMockInitialValues({
@@ -160,16 +211,27 @@ Future<List<Override>> testOverrides({
   return [
     appConfigProvider.overrideWithValue(const AppConfig(mockMode: true)),
     sharedPreferencesProvider.overrideWithValue(prefs),
-    homeBackendProvider.overrideWith((ref) {
-      final backend = adapter == null
-          ? LocalBackend([
-              DemoAdapter(latency: Duration.zero),
-            ], rooms: demoRooms)
-          : LocalBackend([adapter], rooms: rooms);
-      backend.start();
-      ref.onDispose(backend.dispose);
-      return backend;
-    }),
+    // With [http] the app's own backend runs (demo, Shelly, WLED) against
+    // the pretend network.
+    if (adapter != null || http == null)
+      homeBackendProvider.overrideWith((ref) {
+        final home = ref.read(localHomeProvider);
+        final backend = adapter == null
+            ? LocalBackend(
+                [DemoAdapter(latency: Duration.zero)],
+                rooms: demoRooms,
+                home: home,
+              )
+            : LocalBackend([adapter], rooms: rooms, home: home);
+        ref.listen(localHomeProvider, (_, h) => backend.configure(h));
+        backend.start();
+        ref.onDispose(backend.dispose);
+        return backend;
+      }),
+    lanHttpProvider.overrideWithValue(http ?? FakeLanHttp(const {})),
+    lanDiscoveryProvider.overrideWithValue(
+      discovery ?? FakeLanDiscovery(const []),
+    ),
     kioskPlatformProvider.overrideWithValue(
       kioskPlatform ?? FakeKioskPlatform(),
     ),

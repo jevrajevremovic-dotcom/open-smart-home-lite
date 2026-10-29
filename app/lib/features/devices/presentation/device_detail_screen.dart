@@ -7,6 +7,8 @@ import '../../../core/widgets/responsive.dart';
 import '../../../core/widgets/status_widgets.dart';
 import '../../favorites/application/favorites_controller.dart';
 import '../application/device_providers.dart';
+import '../data/local/local_home.dart';
+import '../../kiosk/application/kiosk_controller.dart';
 import '../domain/home_snapshot.dart';
 import '../domain/capability.dart';
 import '../domain/device_kind.dart';
@@ -18,6 +20,7 @@ import 'controls/more_controls.dart';
 import 'controls/other_controls.dart';
 import '../../restricted/application/restricted_mode.dart';
 import '../../media/presentation/tv_remote.dart';
+import 'device_edit.dart';
 import 'device_presentation.dart';
 import 'stale_data_banner.dart';
 import '../../../core/widgets/skeleton.dart';
@@ -55,6 +58,30 @@ class DeviceDetailScreen extends ConsumerWidget {
       appBar: AppBar(
         title: _DeviceTitle(device: device),
         actions: [
+          // Not on the wall panel or for children: organising belongs to
+          // the household's phones.
+          if (!ref.watch(kioskActiveProvider) &&
+              !ref.watch(restrictedModeProvider).enabled) ...[
+            IconButton(
+              key: const Key('editDevice'),
+              tooltip: l10n.editDevice,
+              icon: const Icon(Icons.edit_outlined),
+              onPressed: () => editDevice(context, ref, device),
+            ),
+            if (isAddedDevice(ref.watch(localHomeProvider), device))
+              IconButton(
+                key: const Key('removeDevice'),
+                tooltip: l10n.deviceRemove,
+                icon: const Icon(Icons.delete_outline),
+                onPressed: () async {
+                  final navigator = Navigator.of(context);
+                  if (await removeDevice(context, ref, device) &&
+                      navigator.canPop()) {
+                    navigator.pop();
+                  }
+                },
+              ),
+          ],
           IconButton(
             key: const Key('favoriteToggle'),
             tooltip: favorite ? l10n.removeFavorite : l10n.addFavorite,

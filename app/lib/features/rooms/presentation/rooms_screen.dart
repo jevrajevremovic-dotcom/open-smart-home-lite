@@ -13,6 +13,7 @@ import '../../devices/presentation/all_lights.dart';
 import '../../devices/presentation/device_grid.dart';
 import '../../devices/presentation/device_presentation.dart';
 import '../../devices/presentation/stale_data_banner.dart';
+import '../../restricted/application/restricted_mode.dart';
 import 'room_card.dart';
 import 'room_photo.dart';
 
@@ -66,6 +67,13 @@ class RoomsScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(l10n.navRooms),
         actions: [
+          if (!ref.watch(restrictedModeProvider).enabled)
+            IconButton(
+              key: const Key('openAddDevice'),
+              tooltip: l10n.addDeviceTitle,
+              onPressed: () => context.push(AppRoutes.addDevice),
+              icon: const Icon(Icons.add),
+            ),
           TextButton.icon(
             onPressed: () => context.push(AppRoutes.allDevices),
             icon: const Icon(Icons.list),

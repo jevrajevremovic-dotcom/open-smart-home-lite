@@ -6,9 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/utils/value_list.dart';
 import '../data/local/demo_adapter.dart';
+import '../data/local/lan_http.dart';
 import '../data/local/local_backend.dart';
+import '../data/local/local_home.dart';
+import '../data/local/shelly_adapter.dart';
+import '../data/local/wled_adapter.dart';
 import '../domain/home_snapshot.dart';
-import '../domain/home_backend.dart';
 import '../domain/device_kind.dart';
 import '../domain/smart_home_device.dart';
 
@@ -16,10 +19,17 @@ import '../domain/smart_home_device.dart';
 /// layout, tiles). There is one home for now.
 final homeIdProvider = Provider<String>((ref) => 'local');
 
-/// The home's backend: the devices the phone talks to itself. Until the
-/// first real adapters (Shelly, WLED…) it is the demo home.
-final homeBackendProvider = Provider<HomeBackend?>((ref) {
-  final backend = LocalBackend([DemoAdapter()], rooms: demoRooms)..start();
+/// The home's backend: the devices the phone talks to itself (and the
+/// demo home until the first real device is added). Follows the
+/// household's changes to [localHomeProvider] without starting over.
+final homeBackendProvider = Provider<LocalBackend?>((ref) {
+  final http = ref.watch(lanHttpProvider);
+  final backend = LocalBackend(
+    [DemoAdapter(), ShellyAdapter(http), WledAdapter(http)],
+    rooms: demoRooms,
+    home: ref.read(localHomeProvider),
+  )..start();
+  ref.listen(localHomeProvider, (_, home) => backend.configure(home));
   ref.onDispose(() => unawaited(backend.dispose()));
   return backend;
 });

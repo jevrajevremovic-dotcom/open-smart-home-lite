@@ -7,7 +7,9 @@ import 'package:open_smart_home_lite/app/localization/generated/app_localization
 import 'package:open_smart_home_lite/app/localization/generated/app_localizations_sr.dart';
 import 'package:open_smart_home_lite/app/router/app_router.dart';
 import 'package:open_smart_home_lite/core/platform/speech_output.dart';
+import 'package:open_smart_home_lite/features/add_device/data/lan_discovery.dart';
 import 'package:open_smart_home_lite/features/alerts/alert_notifications.dart';
+import 'package:open_smart_home_lite/features/devices/data/local/lan_http.dart';
 import 'package:open_smart_home_lite/features/app_lock/data/device_auth.dart';
 import 'package:open_smart_home_lite/features/clap/clap_platform.dart';
 import 'package:open_smart_home_lite/features/devices/application/device_providers.dart';
@@ -39,6 +41,8 @@ Future<InMemoryCredentialStore> pumpApp(
   ApproachPlatform? approach,
   QuickTilesPlatform? tiles,
   SpeechOutput? speech,
+  LanHttp? http,
+  LanDiscovery? discovery,
   List<Override> overrides = const [],
 }) async {
   tester.view
@@ -61,6 +65,8 @@ Future<InMemoryCredentialStore> pumpApp(
     approach: approach,
     tiles: tiles,
     speech: speech,
+    http: http,
+    discovery: discovery,
     overrides: overrides,
   );
   await tester.pumpWidget(

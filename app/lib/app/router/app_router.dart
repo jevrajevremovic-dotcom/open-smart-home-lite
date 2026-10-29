@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/widgets/responsive.dart';
+import '../../features/add_device/presentation/add_device_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
 import '../../features/devices/presentation/device_detail_screen.dart';
 import '../../features/devices/presentation/device_bundle_screen.dart';
@@ -35,6 +36,7 @@ abstract final class AppRoutes {
   static const houseCheck = '/check';
   static String houseCheckFor(String mode) => '$houseCheck?mode=$mode';
   static const dashboardLayout = '/home-layout';
+  static const addDevice = '/add-device';
   static String weatherFor({bool kiosk = false}) =>
       '${kiosk ? AppRoutes.kiosk : ''}$weather';
 
@@ -215,6 +217,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.dashboardLayout,
             builder: (_, _) => const DashboardLayoutScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.addDevice,
+            builder: (_, _) => const AddDeviceScreen(),
           ),
           GoRoute(
             path: AppRoutes.allDevices,

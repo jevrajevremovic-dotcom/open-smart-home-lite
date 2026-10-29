@@ -5088,7 +5088,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get demoHomeNotice =>
-      'For now this is a demo home. Real devices (Shelly, WLED, Tasmota, ESPHome) come in the next version.';
+      'This is the demo home. Add your Shelly or WLED devices and the demo turns itself off.';
 
   @override
   String get firstRunWelcomeBodyLite =>
@@ -5099,4 +5099,72 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsAboutHint => 'Version and updates';
+
+  @override
+  String get addDeviceLanHint =>
+      'Shelly and WLED devices on the same Wi-Fi network as the phone show up here by themselves.';
+
+  @override
+  String get addDeviceSearching => 'Looking for devices…';
+
+  @override
+  String get addDeviceNoneYet =>
+      'Nothing yet. Check that the phone is on the same Wi-Fi network as the device, or enter its IP address.';
+
+  @override
+  String get addDeviceManual => 'Enter IP address';
+
+  @override
+  String get addDeviceAddressLabel => 'Device IP address';
+
+  @override
+  String get addDeviceChecking => 'Checking…';
+
+  @override
+  String get addDeviceNotFound => 'No Shelly or WLED found at that address.';
+
+  @override
+  String get addDeviceAdded => 'Added';
+
+  @override
+  String get addDeviceAdd => 'Add';
+
+  @override
+  String addDeviceDone(String name) {
+    return '$name added.';
+  }
+
+  @override
+  String get addDeviceWhere => 'Which room?';
+
+  @override
+  String get roomNew => 'New room…';
+
+  @override
+  String get roomNameLabel => 'Room name';
+
+  @override
+  String get roomDelete => 'Delete room';
+
+  @override
+  String roomDeleteConfirm(String name) {
+    return 'Delete the room $name? Its devices stay, without a room.';
+  }
+
+  @override
+  String get deviceRemove => 'Remove device';
+
+  @override
+  String deviceRemoveConfirm(String name) {
+    return 'Remove $name from the app? The device keeps working.';
+  }
+
+  @override
+  String get demoDevicesSetting => 'Demo devices';
+
+  @override
+  String get demoDevicesHint => 'A made-up home for trying the app.';
+
+  @override
+  String get homeDevicesTitle => 'Devices';
 }
