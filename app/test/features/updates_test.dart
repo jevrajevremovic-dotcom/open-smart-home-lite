@@ -141,13 +141,13 @@ void main() {
     await file.delete();
   });
 
-  testWidgets('service screen: check, new version, verified install', (
+  testWidgets('about screen: check, new version, verified install', (
     tester,
   ) async {
     final installer = _FakeInstaller();
     await pumpApp(
       tester,
-      signedIn: true,
+
       size: const Size(800, 1600),
       overrides: [
         githubReleasesProvider.overrideWithValue(
@@ -157,7 +157,7 @@ void main() {
       ],
     );
     await settle(tester, 10);
-    await goTo(tester, AppRoutes.settingsSection('service'));
+    await goTo(tester, AppRoutes.settingsSection('about'));
     await settle(tester, 4);
     expect(find.text(en.updateCurrent(appVersion)), findsOneWidget);
     await tester.runAsync(() async {
@@ -179,12 +179,12 @@ void main() {
   testWidgets('automatic checks are off until turned on', (tester) async {
     await pumpApp(
       tester,
-      signedIn: true,
+
       size: const Size(800, 1600),
       overrides: [updateInstallerProvider.overrideWithValue(_FakeInstaller())],
     );
     await settle(tester, 6);
-    await goTo(tester, AppRoutes.settingsSection('service'));
+    await goTo(tester, AppRoutes.settingsSection('about'));
     await settle(tester, 4);
     final tile = tester.widget<SwitchListTile>(
       find.byKey(const Key('updateAuto')),
@@ -195,9 +195,9 @@ void main() {
   });
 
   testWidgets('the demo (mock server) offers no updates', (tester) async {
-    await pumpApp(tester, signedIn: true, size: const Size(800, 1600));
+    await pumpApp(tester, size: const Size(800, 1600));
     await settle(tester, 6);
-    await goTo(tester, AppRoutes.settingsSection('service'));
+    await goTo(tester, AppRoutes.settingsSection('about'));
     await settle(tester, 4);
     expect(find.byKey(const Key('updateAuto')), findsNothing);
     await unmount(tester);

@@ -8,7 +8,6 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import '../../../core/logging/app_logger.dart';
 import '../../../core/security/pin_hasher.dart';
 import '../../../core/storage/app_preferences.dart';
-import '../../authentication/application/session_controller.dart';
 import '../data/kiosk_settings.dart';
 import 'kiosk_people.dart';
 
@@ -61,10 +60,6 @@ class KioskSessionController extends Notifier<bool> {
 
   @override
   bool build() {
-    // Signing out (or wiping data) always leaves kiosk mode.
-    ref.listen(sessionControllerProvider, (previous, next) {
-      if (previous?.value != null && next.value == null) state = false;
-    });
     return ref.read(kioskSettingsProvider).startInKiosk;
   }
 

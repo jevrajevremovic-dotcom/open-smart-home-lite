@@ -5,14 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quick_actions/quick_actions.dart';
 
-import '../extras/coming_home.dart';
 import '../../app/localization/l10n.dart';
 import '../../app/router/app_router.dart';
-import '../assist/presentation/assist_sheet.dart';
-import '../authentication/application/session_controller.dart';
 import '../kiosk/application/kiosk_controller.dart';
 import '../devices/application/device_providers.dart';
-import '../devices/data/home_state_repository.dart';
+import '../devices/domain/home_snapshot.dart';
 import '../devices/domain/device_command.dart';
 import '../devices/domain/device_kind.dart';
 import '../devices/application/device_command_service.dart';
@@ -125,8 +122,6 @@ class AppShortcutsBinder {
     final items = [
       for (final (id, name) in scenes) ('scene:$id', name, 'ic_scene'),
       ('check', l10n.houseCheckTitle, 'ic_check'),
-      if (!restricted) ('coming', l10n.comingHomeTitle, 'ic_coming_home'),
-      if (!restricted) ('assist', l10n.assistTitle, 'ic_assist'),
       if (!restricted) ('kiosk', l10n.kioskStart, 'ic_kiosk'),
     ];
     if (_lastItems != null && listEquals(_lastItems, items)) return;
@@ -162,11 +157,8 @@ class AppShortcutsBinder {
       unawaited(widget.initialUri().then(open));
       widget.clicks.listen(open);
     }
-    final signedIn = ref.read(activeProfileProvider) != null;
-    final scenes = signedIn
-        ? ref.read(widgetScenesProvider)
-        : const <(String, String)>[];
-    final empty = signedIn ? l10n.widgetNoScenes : l10n.widgetSignedOut;
+    final scenes = ref.read(widgetScenesProvider);
+    final empty = l10n.widgetNoScenes;
     final last = _lastWidget;
     if (last != null && listEquals(last.$1, scenes) && last.$2 == empty) {
       return;
@@ -247,8 +239,6 @@ class _ShortcutsHostState extends ConsumerState<ShortcutsHost> {
   void _handle(String? type) {
     if (type == null) return;
     final router = ref.read(routerProvider);
-    final signedIn = ref.read(activeProfileProvider) != null;
-    if (!signedIn) return;
     switch (type) {
       case 'kiosk':
         ref.read(pendingShortcutProvider.notifier).set(null);
@@ -259,20 +249,6 @@ class _ShortcutsHostState extends ConsumerState<ShortcutsHost> {
         router
           ..go(AppRoutes.home)
           ..push(AppRoutes.houseCheck);
-      case 'coming':
-        ref.read(pendingShortcutProvider.notifier).set(null);
-        router.go(AppRoutes.home);
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          final ctx = router.routerDelegate.navigatorKey.currentContext;
-          if (ctx != null && ctx.mounted) unawaited(runComingHome(ctx, ref));
-        });
-      case 'assist':
-        ref.read(pendingShortcutProvider.notifier).set(null);
-        router.go(AppRoutes.home);
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          final ctx = router.routerDelegate.navigatorKey.currentContext;
-          if (ctx != null) showAssist(ctx);
-        });
       default:
         if (type.startsWith('widgetAction:')) {
           unawaited(_runWidgetAction());
@@ -288,7 +264,6 @@ class _ShortcutsHostState extends ConsumerState<ShortcutsHost> {
     ref
       ..listen(shortcutScenesProvider, (_, _) => _binder.bind(l10n))
       ..listen(widgetScenesProvider, (_, _) => _binder.bind(l10n))
-      ..listen(activeProfileProvider, (_, _) => _binder.bind(l10n))
       ..listen(
         restrictedModeProvider.select((s) => s.enabled),
         (_, _) => _binder.bind(l10n),

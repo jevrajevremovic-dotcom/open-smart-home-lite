@@ -3,10 +3,10 @@ import 'package:flutter/foundation.dart';
 import '../../clap/clap_detector.dart';
 
 /// The one extra thing the always-on screen shows under the clock.
-enum AodFocus { none, nextEvent, list, device, energy, media, home }
+enum AodFocus { none, device, energy, media, home }
 
 /// Cards of the kiosk's home overview.
-enum HomeCard { cameras, weather, media, calendar, lists, floorPlan }
+enum HomeCard { weather, media, floorPlan }
 
 /// What wakes the idle kiosk screen besides a touch.
 enum ApproachWake { off, sensor, camera }
@@ -40,7 +40,7 @@ class KioskSettings {
     this.popupLive = true,
     this.popupOpenId,
     this.popupSpeakerId,
-    this.aodFocus = AodFocus.nextEvent,
+    this.aodFocus = AodFocus.home,
     this.aodEntityId,
     this.morningScreen = true,
     this.morningFrom = 6 * 60,
@@ -234,7 +234,7 @@ class KioskSettings {
   /// Under the clock of the always-on screen.
   final AodFocus aodFocus;
 
-  /// The list or device for [AodFocus.list] / [AodFocus.device].
+  /// The device for [AodFocus.device].
   final String? aodEntityId;
 
   /// Between [morningFrom] and [morningTo] (minutes after midnight) the

@@ -1,62 +1,5 @@
 part of 'dashboard_screen.dart';
 
-class ConnectionIndicator extends ConsumerWidget {
-  const ConnectionIndicator({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) => ConnectionStatusChip(
-    status:
-        ref.watch(connectionStatusProvider).value ?? HaConnectionStatus.initial,
-  );
-}
-
-/// Shown only when something is wrong with the connection.
-class ConnectionProblemCard extends ConsumerWidget {
-  const ConnectionProblemCard({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.l10n;
-    final status =
-        ref.watch(connectionStatusProvider).value ?? HaConnectionStatus.initial;
-    final connecting =
-        status.state == HaConnectionState.connecting ||
-        status.state == HaConnectionState.authenticating;
-    if (status.isConnected || connecting) return const SizedBox.shrink();
-
-    return Card.outlined(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (status.failure != null)
-              InlineNotice.warning(failureMessage(l10n, status.failure!)),
-            const SizedBox(height: 12),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: status.isTerminal
-                  ? FilledButton.icon(
-                      onPressed: () => ref
-                          .read(sessionControllerProvider.notifier)
-                          .signOut(),
-                      icon: const Icon(Icons.login),
-                      label: Text(l10n.signInAgain),
-                    )
-                  : OutlinedButton.icon(
-                      onPressed: () =>
-                          ref.read(webSocketManagerProvider)?.retryNow(),
-                      icon: const Icon(Icons.refresh),
-                      label: Text(l10n.retryNow),
-                    ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class CriticalAlertsBanner extends ConsumerWidget {
   const CriticalAlertsBanner({super.key});
 
@@ -128,12 +71,7 @@ class SceneButtons extends ConsumerWidget {
               final d = ref.watch(deviceProvider(id));
               if (d == null) return const SizedBox.shrink();
               return ActionChip(
-                avatar: SceneSwatch(
-                  sceneId: id,
-                  icon: Icons.play_arrow,
-                  size: 24,
-                  fallback: Colors.transparent,
-                ),
+                avatar: const Icon(Icons.play_arrow),
                 label: Text(d.name),
                 onPressed: d.available
                     ? () async {

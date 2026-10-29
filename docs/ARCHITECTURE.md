@@ -1,5 +1,7 @@
 # Arhitektura
 
+> Ovo je arhitektura Open Smart Home 1.0 (klijent za Home Assistant). U lite verziji HA sloj je uklonjen: stanje i komande idu kroz `HomeBackend` / `LocalBackend` i adaptere po vrsti uređaja (vidi [README](../README.md#granica)). Slojevi, model uređaja, UI i kiosk ostaju kako je ovde opisano; delovi o HA-u, sesiji, WebSocket-u i offline kešu važe samo za original.
+
 ## Više domova
 
 `SessionRepository` čuva listu profila (`connection.savedProfiles`, bez tajni) i imena domova (`connection.homeNames`, iz `location_name`); token svakog doma je u secure storage-u pod ID-jem profila. Aktivan je jedan profil; promena aktivnog profila (`SessionController.switchTo`) ponovo gradi sve provajdere vezane za sesiju (REST, WebSocket, keš, omiljeni). Dok korisnik dodaje dom (`addingHomeProvider`), ekrani za povezivanje su dostupni i uz postojeću sesiju.

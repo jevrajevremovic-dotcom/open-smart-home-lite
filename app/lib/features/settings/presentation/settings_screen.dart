@@ -1,51 +1,42 @@
 import 'package:flutter/material.dart';
 
-import '../../installer/service_section.dart';
-import 'ha_backup_section.dart';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../alerts/alert_notifications.dart';
-import '../../connection/presentation/remote_address.dart';
-import '../../ha_notify/ha_push_tile.dart';
 import '../../../app/router/app_router.dart';
 import '../../../app/localization/l10n.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../core/widgets/responsive.dart';
 import '../../../core/widgets/status_widgets.dart';
-import '../../authentication/application/session_controller.dart';
 import '../../devices/application/device_providers.dart';
 import '../../kiosk/presentation/kiosk_settings_section.dart';
 import '../../app_lock/application/app_lock.dart';
-import '../../assist/application/voice_providers.dart';
+import '../../../core/storage/app_preferences.dart';
+import '../../first_run/first_run_controller.dart';
 import '../../restricted/application/restricted_mode.dart';
 import '../../restricted/presentation/restricted_settings.dart';
 import '../data/settings_backup.dart';
 import '../../weather/application/weather_providers.dart';
 import '../../weather/presentation/weather_card.dart';
-import '../../nfc_tags/nfc_tags.dart';
-import '../../nfc_tags/nfc_tags_ui.dart';
 import '../../shortcuts/quick_tiles_settings.dart';
-import '../../assist/presentation/assist_settings.dart';
 import 'language_selector.dart';
 import '../../simple_mode/simple_mode.dart';
 import '../../shortcuts/home_widgets.dart';
 import '../../media/now_playing_notification.dart';
+import '../../updates/update_section.dart';
 
 /// Settings categories; each one is its own screen (`/settings/<name>`).
 enum SettingsSection {
   appearance(Icons.palette_outlined),
-  server(Icons.dns_outlined),
+  home(Icons.home_outlined),
   kiosk(Icons.tablet_outlined),
   notifications(Icons.notifications_outlined),
-  assist(Icons.assistant_outlined),
   security(Icons.lock_outline),
-  nfc(Icons.nfc),
   privacy(Icons.privacy_tip_outlined),
   backup(Icons.sync_alt),
-  service(Icons.build_outlined);
+  about(Icons.info_outline);
 
   const SettingsSection(this.icon);
 
@@ -56,28 +47,24 @@ enum SettingsSection {
 
   String title(AppLocalizations l10n) => switch (this) {
     appearance => l10n.appearance,
-    server => l10n.serverSection,
+    home => l10n.settingsHomeSection,
     kiosk => l10n.kioskSection,
     notifications => l10n.settingsNotificationsSection,
-    assist => l10n.settingsAssistSection,
     security => l10n.securitySection,
-    nfc => l10n.nfcTitle,
     privacy => l10n.privacySection,
     backup => l10n.backupSection,
-    service => l10n.serviceSection,
+    about => l10n.settingsAboutSection,
   };
 
   String hint(AppLocalizations l10n) => switch (this) {
     appearance => l10n.settingsAppearanceHint,
-    server => l10n.settingsServerHint,
+    home => l10n.settingsHomeHint,
     kiosk => l10n.settingsKioskHint,
     notifications => l10n.settingsNotificationsHint,
-    assist => l10n.settingsAssistHint,
     security => l10n.settingsSecurityHint,
-    nfc => l10n.nfcSectionHint,
     privacy => l10n.settingsPrivacyHint,
     backup => l10n.settingsBackupHint,
-    service => l10n.serviceSectionHint,
+    about => l10n.settingsAboutHint,
   };
 }
 
@@ -156,18 +143,10 @@ class _SectionList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
-    final profile = ref.watch(activeProfileProvider);
     final notifications = ref.watch(alertNotifierProvider).supported;
-    final nfc = ref.watch(nfcPlatformProvider).supported;
-    final assist =
-        ref.watch(speechOutputProvider).supported ||
-        ref.watch(assistLaunchProvider).supported;
     final sections = [
       for (final s in SettingsSection.values)
-        if ((s != SettingsSection.notifications || notifications) &&
-            (s != SettingsSection.nfc || nfc) &&
-            (s != SettingsSection.assist || assist))
-          s,
+        if (s != SettingsSection.notifications || notifications) s,
     ];
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
@@ -194,9 +173,7 @@ class _SectionList extends ConsumerWidget {
                     ),
                     title: Text(s.title(l10n)),
                     subtitle: Text(
-                      s == SettingsSection.server && profile != null
-                          ? profile.address.toString()
-                          : s.hint(l10n),
+                      s.hint(l10n),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -247,15 +224,13 @@ class _SectionBody extends ConsumerWidget {
                 ),
               ...switch (section) {
                 SettingsSection.appearance => _appearance(context, ref),
-                SettingsSection.server => _server(context, ref),
+                SettingsSection.home => _home(context, ref),
                 SettingsSection.kiosk => const [KioskSettingsSection()],
                 SettingsSection.notifications => _notifications(context, ref),
                 SettingsSection.security => _security(context, ref),
-                SettingsSection.assist => const [AssistSettings()],
-                SettingsSection.nfc => const [NfcTagsSection()],
                 SettingsSection.privacy => _privacy(context, ref),
                 SettingsSection.backup => _backup(context, ref),
-                SettingsSection.service => const [ServiceSection()],
+                SettingsSection.about => const [UpdateSection()],
               },
             ],
           ),
@@ -296,52 +271,29 @@ class _SectionBody extends ConsumerWidget {
     ];
   }
 
-  List<Widget> _server(BuildContext context, WidgetRef ref) {
+  List<Widget> _home(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final profile = ref.watch(activeProfileProvider);
-    final version = ref.watch(serverConfigProvider).value?.version;
     final deviceCount = ref.watch(
       visibleDeviceIdsProvider.select((ids) => ids.length),
     );
     final roomCount = ref.watch(roomsProvider.select((r) => r.length));
     return [
-      if (profile != null)
-        ListTile(
-          contentPadding: EdgeInsets.zero,
-          leading: Icon(
-            profile.address.isSecure ? Icons.lock_outline : Icons.dns_outlined,
-          ),
-          title: Text(profile.address.toString()),
-          subtitle: Text(
-            [
-              if (version != null) l10n.serverVersion(version),
-              if (deviceCount > 0) l10n.devicesInRooms(deviceCount, roomCount),
-            ].join('\n'),
-          ),
-        ),
-      const RemoteAddressTile(),
       ListTile(
-        key: const Key('settingsAddDevice'),
         contentPadding: EdgeInsets.zero,
-        leading: const Icon(Icons.add_circle_outline),
-        title: Text(l10n.addDeviceTitle),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: () => context.push(AppRoutes.addDevice),
+        leading: const Icon(Icons.home_outlined),
+        title: Text(
+          ref.watch(homeSnapshotProvider.select((s) => s.locationName)) ??
+              l10n.settingsHomeSection,
+        ),
+        subtitle: Text(l10n.devicesInRooms(deviceCount, roomCount)),
       ),
-      const _HomesList(),
-      OutlinedButton.icon(
-        key: const Key('signOutButton'),
-        onPressed: () => confirmSignOut(context, ref),
-        icon: const Icon(Icons.logout),
-        label: Text(l10n.signOut),
-      ),
+      InlineNotice.info(l10n.demoHomeNotice),
     ];
   }
 
   List<Widget> _notifications(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     return [
-      const HaPushTile(),
       const NowPlayingNotificationTile(),
       if (ref.watch(alertNotifierProvider).supported)
         SwitchListTile(
@@ -406,15 +358,6 @@ class _SectionBody extends ConsumerWidget {
       const RestrictedSettingsTile(),
       const Divider(height: 24),
       const SimpleModeSettings(),
-      ListTile(
-        key: const Key('openPresenceSim'),
-        contentPadding: EdgeInsets.zero,
-        leading: const Icon(Icons.nights_stay_outlined),
-        title: Text(l10n.presenceTitle),
-        subtitle: Text(l10n.presenceHint),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: () => context.push(AppRoutes.presenceSim),
-      ),
     ];
   }
 
@@ -422,8 +365,6 @@ class _SectionBody extends ConsumerWidget {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
     return [
-      const HaBackupSection(),
-      const SizedBox(height: 24),
       Text(l10n.backupFileTitle, style: textTheme.titleSmall),
       const SizedBox(height: 4),
       Text(l10n.backupHint, style: textTheme.bodySmall),
@@ -487,24 +428,15 @@ class _SectionBody extends ConsumerWidget {
               : ref.read(deviceWeatherEnabledProvider.notifier).set(false),
         ),
       SwitchListTile(
-        key: const Key('voiceCloudSwitch'),
-        contentPadding: EdgeInsets.zero,
-        secondary: const Icon(Icons.mic_none),
-        title: Text(l10n.voiceCloudSetting),
-        subtitle: Text(l10n.voiceCloudSettingHint),
-        value: ref.watch(voiceCloudAllowedProvider) ?? false,
-        onChanged: (v) => ref.read(voiceCloudAllowedProvider.notifier).set(v),
-      ),
-      SwitchListTile(
         key: const Key('homeWeatherSwitch'),
         contentPadding: EdgeInsets.zero,
         secondary: const Icon(Icons.cloud_outlined),
         title: Text(l10n.weatherHomeLocationSetting),
         subtitle: Text(l10n.weatherHomeLocationSettingHint),
-        value: ref.watch(homeLocationWeatherEnabledProvider),
+        value: ref.watch(homeLocationWeatherEnabledProvider) != null,
         onChanged: (v) => v
             ? enableHomeLocationWeather(context, ref)
-            : ref.read(homeLocationWeatherEnabledProvider.notifier).set(false),
+            : ref.read(homeLocationWeatherEnabledProvider.notifier).set(null),
       ),
       const SizedBox(height: 24),
       OutlinedButton.icon(
@@ -520,17 +452,6 @@ class _SectionBody extends ConsumerWidget {
   }
 }
 
-Future<void> confirmSignOut(BuildContext context, WidgetRef ref) async {
-  final l10n = context.l10n;
-  final ok = await _confirm(
-    context,
-    title: l10n.signOutConfirmTitle,
-    body: l10n.signOutConfirmBody,
-    action: l10n.signOut,
-  );
-  if (ok) await ref.read(sessionControllerProvider.notifier).signOut();
-}
-
 Future<void> confirmDeleteAll(BuildContext context, WidgetRef ref) async {
   final l10n = context.l10n;
   final ok = await _confirm(
@@ -541,7 +462,9 @@ Future<void> confirmDeleteAll(BuildContext context, WidgetRef ref) async {
     destructive: true,
   );
   if (ok) {
-    await ref.read(sessionControllerProvider.notifier).deleteAllLocalData();
+    await ref.read(appPreferencesProvider).clear();
+    // Back to the first start.
+    ref.invalidate(firstRunProvider);
   }
 }
 
@@ -580,53 +503,4 @@ Future<bool> _confirm(
     },
   );
   return result ?? false;
-}
-
-/// Saved homes (several Home Assistant servers): switch or add one.
-class _HomesList extends ConsumerWidget {
-  const _HomesList();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.l10n;
-    final homes = ref.watch(savedHomesProvider).value ?? const [];
-    final active = ref.watch(activeProfileProvider);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        if (homes.length > 1) ...[
-          Text(l10n.homesTitle, style: Theme.of(context).textTheme.labelLarge),
-          for (final h in homes)
-            ListTile(
-              key: ValueKey('home-${h.profile.id}'),
-              contentPadding: EdgeInsets.zero,
-              leading: Icon(
-                h.profile.id == active?.id
-                    ? Icons.radio_button_checked
-                    : Icons.radio_button_unchecked,
-              ),
-              title: Text(h.name),
-              subtitle: Text(h.profile.address.host),
-              onTap: h.profile.id == active?.id
-                  ? null
-                  : () => ref
-                        .read(sessionControllerProvider.notifier)
-                        .switchTo(h.profile),
-            ),
-        ],
-        Align(
-          alignment: Alignment.centerLeft,
-          child: TextButton.icon(
-            key: const Key('addHome'),
-            onPressed: () {
-              ref.read(addingHomeProvider.notifier).set(true);
-              context.go(AppRoutes.connectServer);
-            },
-            icon: const Icon(Icons.add_home_outlined),
-            label: Text(l10n.addHome),
-          ),
-        ),
-      ],
-    );
-  }
 }

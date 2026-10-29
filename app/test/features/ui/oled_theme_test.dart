@@ -20,7 +20,7 @@ void main() {
   });
 
   testWidgets('the switch makes the dark theme black', (tester) async {
-    await pumpApp(tester, signedIn: true, size: const Size(800, 1600));
+    await pumpApp(tester, size: const Size(800, 1600));
     await settle(tester, 6);
     final container = ProviderScope.containerOf(
       tester.element(find.byType(SmartHomeApp)),

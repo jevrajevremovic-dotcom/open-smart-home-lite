@@ -5,8 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../app/localization/l10n.dart';
-import '../../../integrations/home_assistant/models/ha_calendar.dart';
-import '../../calendar/application/calendar_providers.dart';
 import '../../dashboard/application/home_sentence.dart';
 import '../../dashboard/application/home_summaries.dart';
 import '../../devices/application/device_providers.dart';
@@ -16,7 +14,6 @@ import '../../devices/domain/smart_home_device.dart';
 import '../../devices/presentation/device_actions.dart';
 import '../../devices/presentation/device_presentation.dart';
 import '../../media/application/media_providers.dart';
-import '../../todo/todo_lists.dart';
 import '../../weather/application/weather_providers.dart';
 import '../../weather/presentation/weather_labels.dart';
 import '../application/kiosk_controller.dart';
@@ -28,7 +25,6 @@ import '../application/kiosk_now.dart';
 /// the always-on brightness, so the text stays near white).
 const _bright = Colors.white;
 const _dim = Color(0xE6FFFFFF);
-const _faint = Color(0xB3FFFFFF);
 
 /// The always-on screen: black, a large thin clock, the weather and one
 /// chosen thing — or, in the morning, the day ahead. Everything moves a
@@ -328,8 +324,6 @@ class _Ambient extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final focusWidget = switch (focus) {
       AodFocus.none => null,
-      AodFocus.nextEvent => const _NextEvent(),
-      AodFocus.list => const _ListFocus(),
       AodFocus.device => const _DeviceFocus(),
       AodFocus.energy => const _EnergyFocus(),
       AodFocus.media => const _MediaFocus(),
@@ -356,84 +350,6 @@ class _Ambient extends ConsumerWidget {
 TextStyle? _focusStyle(BuildContext context) =>
     Theme.of(context).textTheme.headlineSmall
         ?.copyWith(color: _dim, fontWeight: FontWeight.w300);
-
-/// Events of all calendars from today on (this month and the next).
-List<HaCalendarEvent> _upcoming(WidgetRef ref, DateTime now) {
-  final month = DateTime(now.year, now.month);
-  return [...?ref.watch(calendarMonthEventsProvider(month)).value]
-      .where((e) => e.end.isAfter(now))
-      .toList();
-}
-
-String _when(AppLocalizations l10n, HaCalendarEvent e, DateTime now) {
-  final day = DateUtils.dateOnly(e.start);
-  final today = DateUtils.dateOnly(now);
-  final dayText = day == today
-      ? l10n.aodToday
-      : day == today.add(const Duration(days: 1))
-      ? l10n.aodTomorrow
-      : DateFormat.EEEE(l10n.localeName).format(e.start);
-  return e.allDay
-      ? dayText
-      : '$dayText ${DateFormat.Hm(l10n.localeName).format(e.start)}';
-}
-
-class _NextEvent extends ConsumerWidget {
-  const _NextEvent();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.l10n;
-    final now = ref.watch(kioskNowProvider);
-    final events = _upcoming(
-      ref,
-      now,
-    ).where((e) => e.start.isBefore(now.add(const Duration(days: 7))));
-    // What starts next; if nothing does, what is going on right now.
-    final next = events.where((e) => e.start.isAfter(now)).firstOrNull;
-    final ongoing = events.where((e) => !e.allDay).firstOrNull;
-    final shown = next ?? ongoing;
-    final when = shown == null
-        ? ''
-        : next == null
-        ? l10n.aodNowUntil(DateFormat.Hm(l10n.localeName).format(shown.end))
-        : _when(l10n, shown, now);
-    return Text(
-      shown == null
-          ? l10n.aodNoEvents
-          : '${l10n.aodNextEvent}: ${shown.summary} · $when',
-      textAlign: TextAlign.center,
-      style: _focusStyle(context),
-    );
-  }
-}
-
-class _ListFocus extends ConsumerWidget {
-  const _ListFocus();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final chosen = ref.watch(
-      kioskSettingsProvider.select((s) => s.aodEntityId),
-    );
-    final lists = ref.watch(todoListsProvider);
-    final list =
-        lists.where((l) => l.id == chosen).firstOrNull ?? lists.firstOrNull;
-    if (list == null) return const SizedBox.shrink();
-    final open = [
-      for (final i
-          in ref.watch(todoItemsProvider(list.id)).value ?? const <TodoItem>[])
-        if (!i.completed) i.summary,
-    ];
-    return Text(
-      open.isEmpty
-          ? '${list.name}: ${context.l10n.todoOpenCount(0)}'
-          : '${list.name}: ${open.take(5).join(', ')}',
-      textAlign: TextAlign.center,
-      style: _focusStyle(context),
-    );
-  }
-}
 
 class _DeviceFocus extends ConsumerWidget {
   const _DeviceFocus();
@@ -528,113 +444,23 @@ class _Morning extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
-    final now = ref.watch(kioskNowProvider);
-    final today = DateUtils.dateOnly(now);
-    final events = [
-      for (final e in _upcoming(ref, now))
-        if (!DateUtils.dateOnly(e.start).isAfter(today)) e,
-    ];
-    final reminders = <String>[
-      for (final list in ref.watch(todoListsProvider))
-        for (final i
-            in ref.watch(todoItemsProvider(list.id)).value ??
-                const <TodoItem>[])
-          if (!i.completed &&
-              i.due != null &&
-              DateTime.tryParse(i.due!) != null &&
-              !DateUtils.dateOnly(DateTime.parse(i.due!).toLocal())
-                  .isAfter(today))
-            i.summary,
-    ];
-    final heading = theme.textTheme.titleMedium?.copyWith(
-      color: _faint,
-      letterSpacing: 1.2,
-    );
-    final line = theme.textTheme.headlineSmall?.copyWith(
-      color: _bright,
-      fontWeight: FontWeight.w300,
-    );
-    // No width limit: the FittedBox around scales the whole day down.
     return KeyedSubtree(
       key: const Key('aodMorning'),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                l10n.greetingMorning,
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  color: _dim,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-              const SizedBox(height: 4),
-              const _Clock(),
-              const SizedBox(height: 20),
-              const _Weather(withRange: true),
-            ],
-          ),
-          const SizedBox(width: 72),
-          SizedBox(
-            width: 420,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (events.isEmpty && reminders.isEmpty)
-                  Text(l10n.morningNothing, style: line),
-                if (events.isNotEmpty) ...[
-                  Text(l10n.morningToday.toUpperCase(), style: heading),
-                  const SizedBox(height: 8),
-                  for (final e in events.take(5))
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Text(
-                        e.allDay
-                            ? e.summary
-                            : '${DateFormat.Hm(l10n.localeName).format(e.start)}  ${e.summary}',
-                        key: ValueKey('aodEvent-${e.summary}'),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: line,
-                      ),
-                    ),
-                  const SizedBox(height: 16),
-                ],
-                if (reminders.isNotEmpty) ...[
-                  Text(l10n.morningReminders.toUpperCase(), style: heading),
-                  const SizedBox(height: 8),
-                  for (final r in reminders.take(5))
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.radio_button_unchecked,
-                            color: _dim,
-                            size: 22,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              r,
-                              key: ValueKey('aodReminder-$r'),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: line,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                ],
-              ],
+          Text(
+            l10n.greetingMorning,
+            style: theme.textTheme.headlineMedium?.copyWith(
+              color: _dim,
+              fontWeight: FontWeight.w300,
             ),
           ),
+          const SizedBox(height: 4),
+          const _Clock(),
+          const SizedBox(height: 20),
+          const _Weather(withRange: true),
         ],
       ),
     );

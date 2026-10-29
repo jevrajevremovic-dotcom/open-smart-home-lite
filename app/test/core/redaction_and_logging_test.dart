@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:open_smart_home_lite/core/logging/app_logger.dart';
-import 'package:open_smart_home_lite/core/network/tls_trust.dart';
 import 'package:open_smart_home_lite/core/security/redactor.dart';
 
 const jwt =
@@ -84,9 +83,5 @@ void main() {
       ..info('y')
       ..warning('z');
     expect(records.map((r) => r.level), [LogLevel.warning]);
-  });
-
-  test('certificate fingerprints are formatted as colon-separated hex', () {
-    expect(formatFingerprint([0, 15, 255]), '00:0F:FF');
   });
 }

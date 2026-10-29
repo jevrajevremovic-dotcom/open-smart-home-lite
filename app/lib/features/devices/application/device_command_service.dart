@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/errors/app_failure.dart';
 import '../../../core/logging/app_logger.dart';
-import '../data/home_state_repository.dart';
+import '../domain/home_snapshot.dart';
 import '../domain/device_command.dart';
 import '../domain/home_backend.dart';
 import 'device_providers.dart';

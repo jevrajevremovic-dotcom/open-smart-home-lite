@@ -1456,14 +1456,14 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get weatherHomeLocationHint =>
-      'Home Assistant nema entitet za vreme. Dodajte integraciju Met.no u Home Assistantu ili uključite prognozu u aplikaciji.';
+      'Uključite prognozu: aplikacija će zapamtiti približnu lokaciju ovog telefona kao lokaciju doma.';
 
   @override
   String get weatherHomeLocationEnable => 'Uključi prognozu';
 
   @override
   String get weatherHomeLocationDisclosure =>
-      'Aplikacija će slati približnu lokaciju doma iz Home Assistanta, zaokruženu na oko 1 km, servisu MET Norway (api.met.no) svakih 30 minuta. Ništa drugo se ne šalje. Možete je isključiti u Podešavanjima.';
+      'Aplikacija će jednom uzeti približnu lokaciju ovog telefona (zaokruženu na oko 1 km) kao lokaciju doma i slati je servisu MET Norway (api.met.no) svakih 30 minuta. Ništa drugo se ne šalje. Možete je isključiti u Podešavanjima.';
 
   @override
   String get weatherHomeLocationSetting =>
@@ -1471,7 +1471,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get weatherHomeLocationSettingHint =>
-      'Samo kad Home Assistant nema entitet za vreme. Šalje približnu lokaciju doma.';
+      'Šalje približnu lokaciju doma (zapamćenu kad ste uključili prognozu).';
 
   @override
   String get weatherNoHomeCoordinates =>
@@ -5109,6 +5109,26 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get serviceLicensesHint => 'Aplikacija i svi paketi koje koristi';
+
+  @override
+  String get settingsHomeSection => 'Dom';
+
+  @override
+  String get settingsHomeHint => 'Uređaji i sobe';
+
+  @override
+  String get demoHomeNotice =>
+      'Za sada je ovo demo dom. Pravi uređaji (Shelly, WLED, Tasmota, ESPHome) dolaze u sledećoj verziji.';
+
+  @override
+  String get firstRunWelcomeBodyLite =>
+      'Telefon sam upravlja vašim uređajima, bez servera. Podesimo aplikaciju — traje minut, a sve se kasnije može promeniti u Podešavanjima.';
+
+  @override
+  String get settingsAboutSection => 'O aplikaciji';
+
+  @override
+  String get settingsAboutHint => 'Verzija i ažuriranja';
 }
 
 /// The translations for Serbian, using the Latin script (`sr_Latn`).

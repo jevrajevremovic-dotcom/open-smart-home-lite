@@ -1,35 +1,92 @@
+import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:flutter/services.dart';
-
-import 'dart:async';
-
-import 'package:open_smart_home_lite/features/add_device/data/matter_pairing.dart';
-import 'package:open_smart_home_lite/features/clap/clap_platform.dart';
-import 'package:open_smart_home_lite/features/kiosk/data/approach_platform.dart';
-import 'package:open_smart_home_lite/features/ha_notify/ha_push.dart';
-import 'package:open_smart_home_lite/features/shortcuts/home_screen_widget.dart';
-import 'package:open_smart_home_lite/features/alerts/alert_notifications.dart';
-import 'package:open_smart_home_lite/features/shortcuts/app_shortcuts.dart';
-import 'package:open_smart_home_lite/features/app_lock/application/app_lock.dart';
-import 'package:open_smart_home_lite/features/app_lock/data/device_auth.dart';
-import 'package:open_smart_home_lite/features/assist/application/voice_providers.dart';
-import 'package:open_smart_home_lite/features/assist/data/voice_input.dart';
-import 'package:open_smart_home_lite/integrations/home_assistant/mock/mock_home_assistant.dart';
-import 'package:open_smart_home_lite/integrations/home_assistant/home_assistant_providers.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:open_smart_home_lite/core/config/app_config.dart';
-import 'package:open_smart_home_lite/core/platform/browser_port.dart';
+import 'package:open_smart_home_lite/core/platform/speech_output.dart';
 import 'package:open_smart_home_lite/core/storage/app_preferences.dart';
 import 'package:open_smart_home_lite/core/storage/credential_store.dart';
-import 'package:open_smart_home_lite/features/devices/data/cache/snapshot_cache.dart';
+import 'package:open_smart_home_lite/features/alerts/alert_notifications.dart';
+import 'package:open_smart_home_lite/features/app_lock/application/app_lock.dart';
+import 'package:open_smart_home_lite/features/app_lock/data/device_auth.dart';
+import 'package:open_smart_home_lite/features/clap/clap_platform.dart';
+import 'package:open_smart_home_lite/features/devices/application/device_providers.dart';
+import 'package:open_smart_home_lite/features/devices/data/local/demo_adapter.dart';
+import 'package:open_smart_home_lite/features/devices/data/local/device_adapter.dart';
+import 'package:open_smart_home_lite/features/devices/data/local/local_backend.dart';
+import 'package:open_smart_home_lite/features/devices/domain/capability.dart';
+import 'package:open_smart_home_lite/features/devices/domain/device_command.dart';
+import 'package:open_smart_home_lite/features/devices/domain/device_kind.dart';
+import 'package:open_smart_home_lite/features/devices/domain/smart_home_device.dart';
 import 'package:open_smart_home_lite/features/kiosk/application/kiosk_controller.dart';
-import 'package:open_smart_home_lite/features/device_sensors/device_sensors.dart';
-import 'package:open_smart_home_lite/features/nfc_tags/nfc_tags.dart';
-import 'package:open_smart_home_lite/features/shortcuts/quick_tiles.dart';
-import 'package:open_smart_home_lite/features/assist/data/speech_output.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:open_smart_home_lite/features/kiosk/data/approach_platform.dart';
 import 'package:open_smart_home_lite/features/media/now_playing_notification.dart';
+import 'package:open_smart_home_lite/features/shortcuts/app_shortcuts.dart';
+import 'package:open_smart_home_lite/features/shortcuts/home_screen_widget.dart';
+import 'package:open_smart_home_lite/features/shortcuts/quick_tiles.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+/// Devices of a test home. Commands are recorded in [sent]; [onCommand]
+/// may return the device's new state (else nothing changes).
+class TestAdapter implements DeviceAdapter {
+  TestAdapter(List<SmartHomeDevice> devices, {this.onCommand})
+    : _devices = {for (final d in devices) d.id: d};
+
+  final Map<String, SmartHomeDevice> _devices;
+  final SmartHomeDevice? Function(SmartHomeDevice, DeviceCommand)? onCommand;
+  final List<(String, DeviceCommand)> sent = [];
+  final _controller = StreamController<List<SmartHomeDevice>>.broadcast();
+
+  @override
+  String get id => 'test';
+
+  @override
+  Stream<List<SmartHomeDevice>> get devices => _controller.stream;
+
+  @override
+  List<SmartHomeDevice> get current => List.unmodifiable(_devices.values);
+
+  @override
+  Future<void> start() async {}
+
+  @override
+  Future<void> send(SmartHomeDevice device, DeviceCommand command) async {
+    sent.add((device.id, command));
+    final next = onCommand?.call(device, command);
+    if (next != null) update(next);
+  }
+
+  /// A device changed (or appeared) by itself.
+  void update(SmartHomeDevice device) {
+    _devices[device.id] = device;
+    _controller.add(current);
+  }
+
+  @override
+  Future<void> dispose() => _controller.close();
+}
+
+/// A device for [TestAdapter] (id `test:<id>`).
+SmartHomeDevice testDevice(
+  String id, {
+  String? name,
+  DeviceKind kind = DeviceKind.switchDevice,
+  Set<Capability> capabilities = const {Capability.power},
+  DeviceState state = const DeviceState(raw: 'off', isOn: false),
+  String? roomId,
+  bool available = true,
+  DeviceLimits limits = DeviceLimits.none,
+}) => SmartHomeDevice(
+  id: 'test:$id',
+  sourceId: 'test:$id',
+  name: name ?? id,
+  kind: kind,
+  available: available,
+  capabilities: capabilities,
+  state: state,
+  roomId: roomId,
+  limits: limits,
+);
 
 /// In-memory replacement for the platform keychain/keystore.
 class InMemoryCredentialStore implements CredentialStore {
@@ -53,34 +110,6 @@ class InMemoryCredentialStore implements CredentialStore {
   Future<void> deleteAll() async => values.clear();
 }
 
-/// A scriptable browser for testing the web sign-in on the VM.
-class FakeBrowserPort implements BrowserPort {
-  FakeBrowserPort(this.currentUrl);
-
-  @override
-  Uri currentUrl;
-  final Map<String, String> session = {};
-  final List<Uri> navigations = [];
-
-  @override
-  bool get isAvailable => true;
-
-  @override
-  String? sessionGet(String key) => session[key];
-
-  @override
-  void sessionSet(String key, String value) => session[key] = value;
-
-  @override
-  void sessionRemove(String key) => session.remove(key);
-
-  @override
-  void navigate(Uri url) => navigations.add(url);
-
-  @override
-  void replaceUrl(Uri url) => currentUrl = url;
-}
-
 /// Records kiosk platform calls instead of touching platform channels.
 class FakeKioskPlatform implements KioskPlatform {
   bool fullscreen = false;
@@ -102,14 +131,16 @@ class FakeKioskPlatform implements KioskPlatform {
   Future<void> setBrightness(double? level) async => brightness = level;
 }
 
-/// Overrides for running the app against the in-memory mock server.
+/// Overrides for running the app in tests: the demo home (answering at
+/// once), or [adapter]'s devices in [rooms]. The first-run wizard is done
+/// unless [firstRun].
 Future<List<Override>> testOverrides({
   InMemoryCredentialStore? credentials,
   KioskPlatform? kioskPlatform,
-  SnapshotCache? snapshotCache,
   Map<String, Object> preferences = const {},
-  MockHomeAssistantServer? server,
-  VoiceInput? voiceInput,
+  TestAdapter? adapter,
+  Map<String, Room> rooms = const {},
+  bool firstRun = false,
   DeviceAuth? deviceAuth,
   AppShortcutsPlatform? shortcuts,
   AlertNotifier? alerts,
@@ -117,43 +148,37 @@ Future<List<Override>> testOverrides({
   NowPlayingPlatform? nowPlaying,
   ClapPlatform? clap,
   ApproachPlatform? approach,
-  DeviceBatteryPlatform? battery,
-  NfcPlatform? nfc,
   QuickTilesPlatform? tiles,
   SpeechOutput? speech,
-  AssistLaunchPlatform? assistLaunch,
-  BackgroundConnectionPlatform? background,
-  MatterNewDevicePlatform? matter,
   List<Override> overrides = const [],
 }) async {
-  SharedPreferences.setMockInitialValues(preferences);
+  SharedPreferences.setMockInitialValues({
+    if (!firstRun) 'firstRun': '{"done":true}',
+    ...preferences,
+  });
   final prefs = await SharedPreferences.getInstance();
   return [
     appConfigProvider.overrideWithValue(const AppConfig(mockMode: true)),
     sharedPreferencesProvider.overrideWithValue(prefs),
-    snapshotCacheProvider.overrideWithValue(
-      snapshotCache ?? InMemorySnapshotCache(),
-    ),
+    homeBackendProvider.overrideWith((ref) {
+      final backend = adapter == null
+          ? LocalBackend([
+              DemoAdapter(latency: Duration.zero),
+            ], rooms: demoRooms)
+          : LocalBackend([adapter], rooms: rooms);
+      backend.start();
+      ref.onDispose(backend.dispose);
+      return backend;
+    }),
     kioskPlatformProvider.overrideWithValue(
       kioskPlatform ?? FakeKioskPlatform(),
     ),
     credentialStoreProvider.overrideWithValue(
       credentials ?? InMemoryCredentialStore(),
     ),
-    if (server != null)
-      mockHomeAssistantServerProvider.overrideWithValue(server),
-    voiceInputProvider.overrideWithValue(
-      voiceInput ?? FakeVoiceInput('turn off the lights'),
-    ),
     deviceAuthProvider.overrideWithValue(deviceAuth ?? FakeDeviceAuth()),
     appShortcutsPlatformProvider.overrideWithValue(
       shortcuts ?? FakeShortcuts(supported: false),
-    ),
-    matterNewDeviceProvider.overrideWithValue(
-      matter ?? FakeMatterNewDevice(supported: false),
-    ),
-    backgroundConnectionProvider.overrideWithValue(
-      background ?? FakeBackgroundConnection(supported: false),
     ),
     clapPlatformProvider.overrideWithValue(
       clap ?? FakeClapPlatform(supported: false),
@@ -161,18 +186,11 @@ Future<List<Override>> testOverrides({
     approachPlatformProvider.overrideWithValue(
       approach ?? FakeApproach(supported: false),
     ),
-    deviceBatteryProvider.overrideWithValue(
-      battery ?? FakeDeviceBattery(supported: false),
-    ),
-    nfcPlatformProvider.overrideWithValue(nfc ?? FakeNfc(supported: false)),
     quickTilesPlatformProvider.overrideWithValue(
       tiles ?? FakeQuickTiles(supported: false),
     ),
     speechOutputProvider.overrideWithValue(
       speech ?? FakeSpeechOutput(supported: false),
-    ),
-    assistLaunchProvider.overrideWithValue(
-      assistLaunch ?? FakeAssistLaunch(supported: false),
     ),
     nowPlayingPlatformProvider.overrideWithValue(
       nowPlaying ?? FakeNowPlaying(supported: false),
@@ -403,124 +421,6 @@ class FakeApproach implements ApproachPlatform {
   void move() => _motion.add(null);
 }
 
-/// Records whether the connection service would run.
-class FakeBackgroundConnection implements BackgroundConnectionPlatform {
-  FakeBackgroundConnection({this.supported = true});
-
-  @override
-  final bool supported;
-  bool running = false;
-  String? text;
-
-  @override
-  Future<void> start({required String title, required String text}) async {
-    running = true;
-    this.text = text;
-  }
-
-  @override
-  Future<void> stop() async => running = false;
-}
-
-/// Plays Google's part of adding a new Matter device: hands over [pin].
-class FakeMatterNewDevice implements MatterNewDevicePlatform {
-  FakeMatterNewDevice({this.supported = true, this.pin = 20202021, this.error});
-
-  @override
-  final bool supported;
-  final int pin;
-
-  /// Platform error code to throw instead (e.g. `unavailable`).
-  final String? error;
-  Future<void> Function(int pin, String? ip)? _handler;
-
-  @override
-  void onCommissionRequest(
-    Future<void> Function(int pin, String? ip) handler,
-  ) => _handler = handler;
-
-  @override
-  Future<bool> commissionNewDevice() async {
-    if (error != null) throw PlatformException(code: error!);
-    try {
-      await _handler!(pin, 'fe80::1%wlan0');
-      return true;
-    } on Object {
-      return false;
-    }
-  }
-}
-
-/// Battery readings pushed by the test.
-class FakeDeviceBattery implements DeviceBatteryPlatform {
-  FakeDeviceBattery({this.supported = true});
-
-  @override
-  final bool supported;
-
-  // ignore: close_sinks, lives as long as the test
-  final _readings = StreamController<BatteryReading>.broadcast();
-  BatteryReading? last;
-
-  void emit(BatteryReading r) {
-    last = r;
-    _readings.add(r);
-  }
-
-  @override
-  Stream<BatteryReading> readings() async* {
-    if (last case final r?) yield r;
-    yield* _readings.stream;
-  }
-}
-
-/// NFC driven by the test: [scan] a tag, finish or fail a [write].
-class FakeNfc implements NfcPlatform {
-  FakeNfc({this.supported = true, this.enabled = true, this.initial});
-
-  @override
-  final bool supported;
-  bool enabled;
-  String? initial;
-  String? writing;
-  Completer<void>? _write;
-
-  // ignore: close_sinks, lives as long as the test
-  final _scans = StreamController<String>.broadcast();
-
-  void scan(String id) => _scans.add(id);
-
-  void finishWrite([NfcWriteError? error]) {
-    final w = _write!;
-    _write = null;
-    error == null ? w.complete() : w.completeError(NfcWriteException(error));
-  }
-
-  @override
-  Future<(bool, bool)> availability() async => (true, enabled);
-
-  @override
-  Future<String?> initialTag() async {
-    final i = initial;
-    initial = null;
-    return i;
-  }
-
-  @override
-  Stream<String> get scans => _scans.stream;
-
-  @override
-  Future<void> write(String uri) {
-    writing = uri;
-    return (_write = Completer<void>()).future;
-  }
-
-  @override
-  Future<void> cancel() async {
-    if (_write != null) finishWrite(NfcWriteError.cancelled);
-  }
-}
-
 /// Quick Settings tiles: records what the menu would show, fakes taps.
 class FakeQuickTiles implements QuickTilesPlatform {
   FakeQuickTiles({this.supported = true});
@@ -559,7 +459,7 @@ class FakeQuickTiles implements QuickTilesPlatform {
   }
 }
 
-/// Records what Assist would say aloud.
+/// Records what would be said aloud.
 class FakeSpeechOutput implements SpeechOutput {
   FakeSpeechOutput({this.supported = true});
 
@@ -575,34 +475,6 @@ class FakeSpeechOutput implements SpeechOutput {
 
   @override
   Future<void> stop() async {}
-}
-
-/// Launches as the phone's assistant, driven by the test.
-class FakeAssistLaunch implements AssistLaunchPlatform {
-  FakeAssistLaunch({this.supported = true, this.initial = false});
-
-  @override
-  final bool supported;
-  bool initial;
-  int settingsOpened = 0;
-
-  // ignore: close_sinks, lives as long as the test
-  final _launches = StreamController<void>.broadcast();
-
-  void launch() => _launches.add(null);
-
-  @override
-  Future<bool> launchedAsAssistant() async {
-    final i = initial;
-    initial = false;
-    return i;
-  }
-
-  @override
-  Stream<void> get launches => _launches.stream;
-
-  @override
-  Future<void> openAssistantSettings() async => settingsOpened++;
 }
 
 class FakeNowPlaying implements NowPlayingPlatform {

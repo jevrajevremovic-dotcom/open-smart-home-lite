@@ -17,7 +17,7 @@ import '../../core/storage/app_preferences.dart';
 /// with `updates=` in brand.properties).
 const updateRepo = String.fromEnvironment(
   'UPDATE_REPO',
-  defaultValue: 'jevrajevremovic-dotcom/open-smart-home',
+  defaultValue: 'jevrajevremovic-dotcom/open-smart-home-lite',
 );
 
 /// A published release with an APK for this device.

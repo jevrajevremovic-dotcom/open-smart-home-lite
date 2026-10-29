@@ -9,17 +9,17 @@ void main() {
   testWidgets('room: all lights off and on; home: all off from summary', (
     tester,
   ) async {
-    await pumpApp(tester, signedIn: true, size: const Size(800, 1600));
+    await pumpApp(tester, size: const Size(800, 1600));
     await settle(tester, 10);
-    expect(find.text(en.lightsOnOf(2, 3)), findsOneWidget);
+    expect(find.text(en.lightsOnOf(1, 4)), findsOneWidget);
 
-    await goTo(tester, AppRoutes.room('living_room'));
+    await goTo(tester, AppRoutes.room('living'));
     await settle(tester, 4);
     await tapKey(tester, 'allLightsOff');
     await settle(tester, 6);
     await goTo(tester, AppRoutes.home);
     await settle(tester, 4);
-    expect(find.text(en.lightsOnOf(0, 3)), findsOneWidget);
+    expect(find.text(en.lightsOnOf(0, 4)), findsOneWidget);
 
     await tapKey(tester, 'summaryLights');
     await settle(tester, 4);
@@ -27,7 +27,7 @@ void main() {
     await settle(tester, 6);
     Navigator.of(tester.element(find.byKey(const Key('allLightsOn')))).pop();
     await settle(tester, 4);
-    expect(find.text(en.lightsOnOf(3, 3)), findsOneWidget);
+    expect(find.text(en.lightsOnOf(4, 4)), findsOneWidget);
     await unmount(tester);
   });
 }

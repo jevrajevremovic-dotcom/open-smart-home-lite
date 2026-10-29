@@ -4,23 +4,14 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 import '../../../app/localization/l10n.dart';
 import '../../../app/router/app_router.dart';
 import '../../../app/theme/app_theme.dart';
-import '../../assist/presentation/assist_sheet.dart';
-import '../../authentication/application/session_controller.dart';
-import '../../cameras/application/camera_providers.dart';
-import '../../cameras/presentation/camera_view.dart';
-import '../../calendar/presentation/calendar_browser.dart';
-import '../../calendar/presentation/calendar_widgets.dart';
 import '../../dashboard/application/home_sentence.dart';
 import '../../dashboard/presentation/dashboard_screen.dart'
-    show ConnectionProblemCard, CriticalAlertsBanner, NowPlayingCard;
+    show CriticalAlertsBanner, NowPlayingCard;
 import '../../devices/presentation/stale_data_banner.dart';
-import '../../todo/todo_lists.dart';
-import '../../todo/todo_screen.dart' show TodoListsCard;
 import '../../weather/presentation/weather_card.dart';
 import '../../dashboard/application/home_summaries.dart';
 import '../../dashboard/presentation/on_now_strip.dart';
@@ -31,15 +22,10 @@ import '../../devices/domain/device_kind.dart';
 import '../../devices/domain/smart_home_device.dart';
 import '../../devices/presentation/device_actions.dart';
 import '../../devices/presentation/big_slider.dart';
-import '../../devices/presentation/device_history.dart';
 import '../../devices/presentation/device_detail_screen.dart'
     show deviceControlsFor;
 import '../../devices/presentation/device_presentation.dart';
-import '../../energy/application/energy_providers.dart';
-import '../../energy/data/energy_repository.dart';
-import '../../energy/presentation/energy_format.dart';
 import '../../household/application/household_providers.dart';
-import '../../household/family_messages.dart';
 import '../../household/presentation/person_avatar.dart';
 import '../../rooms/presentation/room_look.dart';
 import '../../rooms/presentation/room_photo.dart';
@@ -47,7 +33,6 @@ import '../../timers/kiosk_timers.dart';
 import '../../extras/air_advice.dart';
 import '../../extras/celebrations.dart';
 import '../../extras/extras_sheet.dart';
-import '../../scenes/presentation/scene_colors.dart';
 import '../application/kiosk_controller.dart';
 import '../application/kiosk_people.dart';
 import '../data/kiosk_settings.dart';
@@ -97,18 +82,6 @@ class KioskColumnsDevice extends Notifier<String?> {
 
 final kioskColumnsDeviceProvider =
     NotifierProvider<KioskColumnsDevice, String?>(KioskColumnsDevice.new);
-
-/// This week's energy, by day, for the right column (refreshed hourly).
-final _weekEnergyProvider = FutureProvider.autoDispose<EnergyReport?>((
-  ref,
-) async {
-  final timer = Timer(const Duration(hours: 1), ref.invalidateSelf);
-  ref.onDispose(timer.cancel);
-  final prefs = await ref.watch(energyPrefsProvider.future);
-  final repository = ref.watch(energyRepositoryProvider);
-  if (prefs == null || repository == null) return null;
-  return repository.loadReport(prefs, EnergyRange.week, now: DateTime.now());
-});
 
 /// The "columns" kiosk (like a tablet home app): home, rooms, scenes and
 /// automations on the left; the home overview (weather, music, calendar,
@@ -212,7 +185,6 @@ class _KioskColumnsLayoutState extends ConsumerState<KioskColumnsLayout> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const StaleDataBanner(),
-                  const ConnectionProblemCard(),
                   const CriticalAlertsBanner(),
                   Expanded(
                     child: AnimatedSwitcher(
@@ -400,7 +372,6 @@ class _HomeOverview extends ConsumerWidget {
     final greeting = userName == null
         ? dayGreeting
         : l10n.kioskGreetingName(dayGreeting, firstName(userName));
-    final hasLists = ref.watch(todoListsProvider).isNotEmpty;
     final cards = ref.watch(kioskSettingsProvider.select((s) => s.homeCards));
     return Stack(
       children: [
@@ -455,25 +426,14 @@ class _HomeOverview extends ConsumerWidget {
             const SizedBox(height: 4),
             // The household's choice and order of cards (Edit, top right).
             for (final card in cards)
-              if (switch (card) {
-                HomeCard.cameras =>
-                  ref.watch(
-                        kioskSettingsProvider.select((s) => s.showCameras),
-                      ) &&
-                      ref.watch(cameraIdsProvider).isNotEmpty,
-                HomeCard.lists => hasLists,
-                HomeCard.floorPlan => ref.watch(hasFloorPlanProvider),
-                _ => true,
-              }) ...[
+              if (card != HomeCard.floorPlan ||
+                  ref.watch(hasFloorPlanProvider)) ...[
                 const SizedBox(height: 16),
                 switch (card) {
-                  HomeCard.cameras => const _OverviewCameras(),
                   HomeCard.weather => const WeatherSection(
                     allowDeviceLocation: false,
                   ),
                   HomeCard.media => const NowPlayingCard(),
-                  HomeCard.calendar => const _OverviewCalendar(),
-                  HomeCard.lists => const TodoListsCard(),
                   HomeCard.floorPlan => const FloorPlanCard(),
                 },
               ],
@@ -504,7 +464,6 @@ class _Sidebar extends ConsumerWidget {
     final scheme = theme.colorScheme;
     final title =
         ref.watch(homeSnapshotProvider.select((s) => s.locationName)) ??
-        ref.watch(serverConfigProvider).value?.locationName ??
         Brand.name(l10n);
     final rooms = ref.watch(roomsProvider);
     final devices = ref.watch(homeSnapshotProvider.select((s) => s.devices));
@@ -524,7 +483,6 @@ class _Sidebar extends ConsumerWidget {
             ),
           );
     final alarm = ref.watch(kioskAlarmProvider);
-    final messages = ref.watch(familyMessagesProvider.select((m) => m.length));
 
     Widget label(String text) => Padding(
       padding: const EdgeInsets.fromLTRB(4, 20, 4, 8),
@@ -577,13 +535,6 @@ class _Sidebar extends ConsumerWidget {
                     tooltip: l10n.extrasTitle,
                     onTap: () => showExtras(context),
                   ),
-                  _SideIcon(
-                    key: const Key('kioskMessages'),
-                    icon: Icons.forum_outlined,
-                    tooltip: l10n.familyMessages,
-                    badge: messages,
-                    onTap: () => showFamilyMessages(context),
-                  ),
                 ],
               ),
             ),
@@ -624,42 +575,6 @@ class _Sidebar extends ConsumerWidget {
           ],
         ),
         const SizedBox(height: 12),
-        // Search = ask Assist (by text or by voice).
-        Material(
-          color: scheme.surfaceContainerHigh,
-          borderRadius: BorderRadius.circular(14),
-          child: InkWell(
-            key: const Key('kioskAssist'),
-            borderRadius: BorderRadius.circular(14),
-            onTap: () => showAssist(context),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
-              child: Row(
-                children: [
-                  Icon(Icons.search, color: scheme.onSurfaceVariant),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      l10n.assistHint,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                        color: scheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    key: const Key('kioskAssistMic'),
-                    tooltip: l10n.assistMic,
-                    visualDensity: VisualDensity.compact,
-                    onPressed: () => showAssist(context, listen: true),
-                    icon: Icon(Icons.mic_none, color: scheme.onSurfaceVariant),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
         if (scenes.isNotEmpty) ...[
           label(l10n.scenesTitle),
           SizedBox(
@@ -783,13 +698,11 @@ class _SideIcon extends StatelessWidget {
     required this.icon,
     required this.tooltip,
     required this.onTap,
-    this.badge = 0,
   });
 
   final IconData icon;
   final String tooltip;
   final VoidCallback onTap;
-  final int badge;
 
   @override
   Widget build(BuildContext context) {
@@ -799,12 +712,7 @@ class _SideIcon extends StatelessWidget {
       onPressed: onTap,
       // Six fit in a row in the left column.
       visualDensity: VisualDensity.compact,
-      icon: badge > 0
-          ? Badge.count(
-              count: badge,
-              child: Icon(icon, color: color),
-            )
-          : Icon(icon, color: color),
+      icon: Icon(icon, color: color),
     );
   }
 }
@@ -830,10 +738,9 @@ class _SceneCircle extends ConsumerWidget {
               customBorder: const CircleBorder(),
               onTap: () =>
                   runDeviceCommand(context, ref, scene, const Activate()),
-              // The scene's own colours, when Home Assistant has them.
-              child: SceneSwatch(
-                sceneId: scene.id,
-                icon: DevicePresentation.icon(scene),
+              child: Padding(
+                padding: const EdgeInsets.all(18),
+                child: Icon(DevicePresentation.icon(scene)),
               ),
             ),
           ),
@@ -846,38 +753,6 @@ class _SceneCircle extends ConsumerWidget {
             style: theme.textTheme.labelMedium,
           ),
         ],
-      ),
-    );
-  }
-}
-
-/// Agenda on the left, the month on the right, half each.
-class _OverviewCalendar extends StatelessWidget {
-  const _OverviewCalendar();
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final theme = Theme.of(context);
-    return Card(
-      key: const Key('kioskColumnsCalendar'),
-      margin: EdgeInsets.zero,
-      clipBehavior: Clip.antiAlias,
-      child: SizedBox(
-        height: 330,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 14, 12, 10),
-          child: CalendarBrowser(
-            palette: CalendarPalette.of(theme),
-            evenSplit: true,
-            fitGrid: true,
-            gridScale: 1.1,
-            header: Text(
-              l10n.calendarTitle,
-              style: theme.textTheme.titleMedium,
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -905,19 +780,13 @@ class _HomeCardsDialogState extends ConsumerState<_HomeCardsDialog> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     String label(HomeCard c) => switch (c) {
-      HomeCard.cameras => l10n.camerasTitle,
       HomeCard.weather => l10n.dashCardWeather,
       HomeCard.media => l10n.mediaTitle,
-      HomeCard.calendar => l10n.calendarTitle,
-      HomeCard.lists => l10n.todoTitle,
       HomeCard.floorPlan => l10n.floorPlanTitle,
     };
     IconData icon(HomeCard c) => switch (c) {
-      HomeCard.cameras => Icons.videocam_outlined,
       HomeCard.weather => Icons.wb_cloudy_outlined,
       HomeCard.media => Icons.music_note_outlined,
-      HomeCard.calendar => Icons.calendar_month_outlined,
-      HomeCard.lists => Icons.checklist,
       HomeCard.floorPlan => Icons.map_outlined,
     };
     return AlertDialog(
@@ -977,59 +846,6 @@ class _HomeCardsDialogState extends ConsumerState<_HomeCardsDialog> {
           child: Text(l10n.save),
         ),
       ],
-    );
-  }
-}
-
-/// The home's cameras on the overview: one picture, chips to switch.
-class _OverviewCameras extends ConsumerStatefulWidget {
-  const _OverviewCameras();
-
-  @override
-  ConsumerState<_OverviewCameras> createState() => _OverviewCamerasState();
-}
-
-class _OverviewCamerasState extends ConsumerState<_OverviewCameras> {
-  String? _chosen;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final theme = Theme.of(context);
-    final ids = ref.watch(cameraIdsProvider);
-    final id = ids.contains(_chosen) ? _chosen! : ids.first;
-    final camera = ref.watch(deviceProvider(id));
-    return Card(
-      key: const Key('kioskColumnsCameras'),
-      margin: EdgeInsets.zero,
-      clipBehavior: Clip.antiAlias,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(l10n.camerasTitle, style: theme.textTheme.titleMedium),
-            if (ids.length > 1) ...[
-              const SizedBox(height: 10),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  for (final c in ids)
-                    ChoiceChip(
-                      key: ValueKey('kioskColumnsCamera-$c'),
-                      label: Text(ref.watch(deviceProvider(c))?.name ?? c),
-                      selected: c == id,
-                      onSelected: (_) => setState(() => _chosen = c),
-                    ),
-                ],
-              ),
-            ],
-            const SizedBox(height: 12),
-            if (camera != null) _CameraCard(camera: camera),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -1218,7 +1034,6 @@ class _RoomColumn extends ConsumerWidget {
               d.kind == DeviceKind.mediaPlayer || d.kind == DeviceKind.speaker,
         )
         .firstOrNull;
-    final cameras = devices.where((d) => d.kind == DeviceKind.camera).toList();
     // One card per physical device (its buttons, modes and sensors
     // together), not one per entity.
     final accessories = groupDevices([
@@ -1310,15 +1125,6 @@ class _RoomColumn extends ConsumerWidget {
         if (media != null) ...[
           const SizedBox(height: 16),
           SizedBox(height: 230, child: KioskMediaPanel(playerId: media.id)),
-        ],
-        if (cameras.isNotEmpty) ...[
-          const SizedBox(height: 24),
-          Text(l10n.camerasTitle, style: theme.textTheme.titleMedium),
-          const SizedBox(height: 10),
-          for (final c in cameras) ...[
-            _CameraCard(camera: c),
-            const SizedBox(height: 12),
-          ],
         ],
       ],
     );
@@ -1487,65 +1293,8 @@ class _AccessoryCard extends ConsumerWidget {
   }
 }
 
-class _CameraCard extends StatelessWidget {
-  const _CameraCard({required this.camera});
-
-  final SmartHomeDevice camera;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(22),
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            ColoredBox(
-              color: Colors.black,
-              child: CameraPicture(cameraId: camera.id, fit: BoxFit.cover),
-            ),
-            Positioned(
-              left: 12,
-              top: 12,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Colors.black54,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
-                  ),
-                  child: Text(
-                    camera.name,
-                    style: theme.textTheme.labelLarge?.copyWith(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Positioned.fill(
-              child: Material(
-                type: MaterialType.transparency,
-                child: InkWell(
-                  onTap: () =>
-                      context.push(AppRoutes.device(camera.id, kiosk: true)),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 // ---------------------------------------------------------------------------
-// Right: the chosen device, this week's energy
+// Right: the chosen device
 // ---------------------------------------------------------------------------
 
 class _DetailColumn extends ConsumerWidget {
@@ -1591,11 +1340,7 @@ class _DetailColumn extends ConsumerWidget {
         return ListView(
           key: const Key('kioskColumnsDetail'),
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
-          children: [
-            KioskBundleDetail(bundle: bundle),
-            const SizedBox(height: 20),
-            const _WeekEnergyCard(),
-          ],
+          children: [KioskBundleDetail(bundle: bundle)],
         );
       }
     }
@@ -1662,116 +1407,9 @@ class _DetailColumn extends ConsumerWidget {
             SizedBox(height: 440, child: KioskThermostatPanel(deviceId: d.id))
           else
             ...deviceControlsFor(d),
-          // A sensor's last day (or week) as a chart.
-          if (d.kind.isSensor || d.state.numericValue != null) ...[
-            const SizedBox(height: 16),
-            DeviceHistorySection(
-              key: ValueKey('kioskColumnsHistory-${d.id}'),
-              device: d,
-            ),
-          ],
           const SizedBox(height: 20),
         ],
-        const _WeekEnergyCard(),
       ],
-    );
-  }
-}
-
-class _WeekEnergyCard extends ConsumerWidget {
-  const _WeekEnergyCard();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.l10n;
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-    final report = ref.watch(_weekEnergyProvider).value;
-    if (report == null || report.buckets.isEmpty) {
-      return const SizedBox.shrink();
-    }
-    final values = [for (final b in report.buckets) b.consumption ?? 0];
-    final top = values.fold<double>(0, math.max);
-    final today = DateUtils.dateOnly(DateTime.now());
-    return Card(
-      key: const Key('kioskColumnsWeek'),
-      margin: EdgeInsets.zero,
-      color: scheme.surfaceContainerLowest,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(22),
-        side: BorderSide(color: scheme.outlineVariant),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(18),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              l10n.energyWeek,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 14),
-            SizedBox(
-              height: 110,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  for (final (i, b) in report.buckets.indexed)
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.bottomCenter,
-                              child: FractionallySizedBox(
-                                heightFactor: top <= 0
-                                    ? 0.02
-                                    : math.max(0.02, values[i] / top),
-                                child: Container(
-                                  width: 10,
-                                  decoration: BoxDecoration(
-                                    color: DateUtils.isSameDay(b.start, today)
-                                        ? scheme.primary
-                                        : scheme.surfaceContainerHighest,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            DateFormat.E(l10n.localeName)
-                                .format(b.start)
-                                .substring(0, 1)
-                                .toUpperCase(),
-                            style: theme.textTheme.labelSmall?.copyWith(
-                              color: DateUtils.isSameDay(b.start, today)
-                                  ? scheme.primary
-                                  : scheme.onSurfaceVariant,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 12),
-            if (report.consumption != null)
-              CountUpText(
-                value: report.consumption!,
-                format: (v) => formatKwh(l10n.localeName, v),
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -3,15 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/localization/l10n.dart';
 import '../kiosk/application/kiosk_controller.dart';
-import '../restricted/application/restricted_mode.dart';
-import 'batteries.dart';
-import 'bedtime.dart';
-import 'coming_home.dart';
 import 'guest_wifi.dart';
-import 'party.dart';
-import 'sunrise_wake.dart';
-import 'week_wrapped.dart';
-import 'vacation.dart';
 import '../floor_plan/floor_plan.dart';
 
 /// One tool in "More".
@@ -39,32 +31,7 @@ class _ExtrasSheet extends ConsumerWidget {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final kiosk = ref.watch(kioskActiveProvider);
-    // Children and guests: only the fun ones.
-    final restricted = ref.watch(
-      restrictedModeProvider.select((s) => s.enabled),
-    );
     final extras = <_Extra>[
-      if (!restricted)
-        (
-          key: const Key('extraBatteries'),
-          icon: Icons.battery_alert_outlined,
-          label: l10n.batteriesTitle,
-          open: showBatteries,
-        ),
-      if (!restricted)
-        (
-          key: const Key('extraVacation'),
-          icon: Icons.luggage_outlined,
-          label: l10n.vacationTitle,
-          open: showVacation,
-        ),
-      if (!restricted && !kiosk)
-        (
-          key: const Key('extraComingHome'),
-          icon: Icons.directions_car_outlined,
-          label: l10n.comingHomeTitle,
-          open: showComingHome,
-        ),
       (
         key: const Key('extraGuestWifi'),
         icon: Icons.wifi,
@@ -72,35 +39,10 @@ class _ExtrasSheet extends ConsumerWidget {
         open: showGuestWifi,
       ),
       (
-        key: const Key('extraParty'),
-        icon: Icons.celebration_outlined,
-        label: l10n.partyTitle,
-        open: showParty,
-      ),
-      if (!restricted)
-        (
-          key: const Key('extraSunrise'),
-          icon: Icons.wb_twilight,
-          label: l10n.sunriseTitle,
-          open: showSunriseWake,
-        ),
-      (
-        key: const Key('extraWrapped'),
-        icon: Icons.auto_awesome_outlined,
-        label: l10n.wrappedTitle,
-        open: showWeekWrapped,
-      ),
-      (
         key: const Key('extraFloorPlan'),
         icon: Icons.map_outlined,
         label: l10n.floorPlanTitle,
         open: showFloorPlan,
-      ),
-      (
-        key: const Key('extraBedtime'),
-        icon: Icons.nightlight_outlined,
-        label: l10n.bedtimeTitle,
-        open: showBedtime,
       ),
     ];
     // Opens the tool after this sheet is gone (from the caller's context).

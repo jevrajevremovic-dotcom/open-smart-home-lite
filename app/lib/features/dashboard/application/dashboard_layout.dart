@@ -9,8 +9,6 @@ enum DashboardCard {
   summary,
   weather,
   media,
-  notifications,
-  lists,
   shortcuts,
   scenes,
   attention,

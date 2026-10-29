@@ -9,10 +9,9 @@ import '../../app/localization/l10n.dart';
 import '../../app/router/app_router.dart';
 import '../../core/logging/app_logger.dart';
 import '../../core/storage/app_preferences.dart';
-import '../authentication/application/session_controller.dart';
 import '../dashboard/application/home_summaries.dart';
 import '../devices/application/device_providers.dart';
-import '../devices/data/home_state_repository.dart';
+import '../devices/domain/home_snapshot.dart';
 import '../devices/presentation/device_presentation.dart';
 import '../kiosk/application/kiosk_controller.dart';
 
@@ -271,7 +270,6 @@ class _AlertNotificationsHostState
     // Messages from Home Assistant carry JSON; alerts a device id.
     if (tap.payload.startsWith('{')) return;
     final deviceId = tap.payload;
-    if (ref.read(activeProfileProvider) == null) return;
     if (ref.read(deviceProvider(deviceId)) == null) return;
     ref
         .read(routerProvider)
@@ -289,7 +287,7 @@ class _AlertNotificationsHostState
     }
     final live = ref.read(syncStatusProvider) == SyncStatus.live;
     final ids = ref.read(dashboardSummaryProvider).criticalIds.toSet();
-    if (!enabled || ref.read(activeProfileProvider) == null) {
+    if (!enabled) {
       for (final id in _shown) {
         unawaited(notifier.cancel(id));
       }
@@ -318,8 +316,7 @@ class _AlertNotificationsHostState
         (_, _) => _sync(),
       )
       ..listen(syncStatusProvider, (_, _) => _sync())
-      ..listen(alertNotificationsProvider, (_, _) => _sync())
-      ..listen(activeProfileProvider, (_, _) => _sync());
+      ..listen(alertNotificationsProvider, (_, _) => _sync());
     return widget.child;
   }
 }

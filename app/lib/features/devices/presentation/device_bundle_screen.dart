@@ -6,13 +6,11 @@ import '../../../app/localization/l10n.dart';
 import '../../../app/router/app_router.dart';
 import '../../../core/widgets/responsive.dart';
 import 'device_detail_screen.dart' show EmptyHintPlaceholder;
-import '../../appliance_done/appliance_done_section.dart';
 import '../../kiosk/application/kiosk_controller.dart';
 import '../../kiosk/presentation/kiosk_bundle_detail.dart';
 import '../application/device_groups.dart';
 import '../application/device_providers.dart';
-import '../data/home_state_repository.dart';
-import '../domain/device_kind.dart';
+import '../domain/home_snapshot.dart';
 import 'stale_data_banner.dart';
 
 /// One physical device with all its parts (an air fryer: its main switch,
@@ -58,13 +56,6 @@ class DeviceBundleScreen extends ConsumerWidget {
                   onOpen: (d) =>
                       context.push(AppRoutes.device(d.id, kiosk: kiosk)),
                 ),
-                if (members
-                        .where((d) => d.kind == DeviceKind.powerMeter)
-                        .firstOrNull
-                    case final power? when !kiosk) ...[
-                  const SizedBox(height: 24),
-                  ApplianceDoneSection(power: power),
-                ],
               ],
             ),
           ),

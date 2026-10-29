@@ -24,11 +24,7 @@ void main() {
   testWidgets('set up once: a QR code; the password in secret storage', (
     tester,
   ) async {
-    final credentials = await pumpApp(
-      tester,
-      signedIn: true,
-      size: const Size(800, 1600),
-    );
+    final credentials = await pumpApp(tester, size: const Size(800, 1600));
     await settle(tester, 10);
     await tapKey(tester, 'openExtras');
     await settle(tester, 2);

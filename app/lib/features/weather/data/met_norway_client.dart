@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 
 import '../../../core/config/app_config.dart';
 import '../../../core/errors/app_failure.dart';
-import '../../../integrations/home_assistant/api/dio_error_mapper.dart';
 import '../domain/weather.dart';
 
 /// MET Norway Locationforecast 2.0 (https://api.met.no/weatherapi/locationforecast/2.0/documentation).
@@ -33,7 +32,7 @@ class MetNorwayClient implements LocationWeatherService {
   }
 
   static const userAgent =
-      'OpenSmartHome/0.1 github.com/jevrajevremovic-dotcom/open-smart-home';
+      'OpenSmartHomeLite/0.1 github.com/jevrajevremovic-dotcom/open-smart-home';
   final Dio _dio;
 
   static double roundCoordinate(double v) => (v * 100).roundToDouble() / 100;
@@ -58,7 +57,13 @@ class MetNorwayClient implements LocationWeatherService {
         source: source,
       );
     } on DioException catch (e) {
-      throw mapDioException(e);
+      throw AppFailure(switch (e.type) {
+        DioExceptionType.connectionTimeout ||
+        DioExceptionType.sendTimeout ||
+        DioExceptionType.receiveTimeout => FailureKind.timeout,
+        DioExceptionType.badResponse => FailureKind.server,
+        _ => FailureKind.network,
+      }, debugMessage: 'MET Norway: ${e.type.name}');
     }
   }
 }

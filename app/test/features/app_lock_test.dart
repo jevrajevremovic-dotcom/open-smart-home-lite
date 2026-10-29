@@ -25,12 +25,7 @@ void main() {
     tester,
   ) async {
     final auth = FakeDeviceAuth();
-    await pumpApp(
-      tester,
-      signedIn: true,
-      size: const Size(800, 1600),
-      deviceAuth: auth,
-    );
+    await pumpApp(tester, size: const Size(800, 1600), deviceAuth: auth);
     await settle(tester, 10);
     await goTo(tester, AppRoutes.settingsSection('security'));
     await tapKey(tester, 'appLockSwitch');
@@ -56,17 +51,12 @@ void main() {
     tester,
   ) async {
     final auth = FakeDeviceAuth(passes: false);
-    await pumpApp(
-      tester,
-      signedIn: true,
-      size: const Size(800, 1600),
-      deviceAuth: auth,
-    );
+    await pumpApp(tester, size: const Size(800, 1600), deviceAuth: auth);
     await settle(tester, 10);
     await goTo(tester, AppRoutes.settingsSection('security'));
     await tapKey(tester, 'appLockCriticalSwitch');
     await settle(tester, 2);
-    await goTo(tester, AppRoutes.device('lock.front_door'));
+    await goTo(tester, AppRoutes.device('demo:front_door'));
     await settle(tester, 4);
     await tapKey(tester, 'unlockButton');
     await settle(tester, 2);

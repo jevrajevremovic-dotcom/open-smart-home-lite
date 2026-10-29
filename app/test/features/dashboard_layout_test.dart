@@ -21,9 +21,9 @@ void main() {
   });
 
   testWidgets('hide a card and move favorites to the top', (tester) async {
-    await pumpApp(tester, signedIn: true, size: const Size(400, 1400));
+    await pumpApp(tester, size: const Size(400, 1400));
     await settle(tester, 10);
-    expect(find.text(en.weatherAtHome), findsOneWidget);
+    expect(find.text(en.weatherHomeLocationTitle), findsOneWidget);
 
     await goTo(tester, AppRoutes.dashboardLayout);
     await tester.tap(find.byKey(const ValueKey('dashCard-weather')));
@@ -37,7 +37,7 @@ void main() {
     await goTo(tester, AppRoutes.home);
     await settle(tester, 4);
 
-    expect(find.text(en.weatherAtHome), findsNothing);
+    expect(find.text(en.weatherHomeLocationTitle), findsNothing);
     final favorites = tester.getTopLeft(find.text(en.navFavorites).first).dy;
     final summary = tester.getTopLeft(find.text(en.summaryLights)).dy;
     expect(favorites, lessThan(summary));
@@ -47,7 +47,7 @@ void main() {
     await settle(tester, 2);
     await goTo(tester, AppRoutes.home);
     await settle(tester, 4);
-    expect(find.text(en.weatherAtHome), findsOneWidget);
+    expect(find.text(en.weatherHomeLocationTitle), findsOneWidget);
     await unmount(tester);
   });
 }

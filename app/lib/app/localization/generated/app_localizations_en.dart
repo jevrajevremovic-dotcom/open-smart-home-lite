@@ -1451,14 +1451,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get weatherHomeLocationHint =>
-      'Home Assistant has no weather entity. Add the Met.no integration in Home Assistant, or turn on the forecast in the app.';
+      'Turn the forecast on: the app will remember this phone\'s approximate location as the home location.';
 
   @override
   String get weatherHomeLocationEnable => 'Turn on forecast';
 
   @override
   String get weatherHomeLocationDisclosure =>
-      'The app will send your home\'s approximate location from Home Assistant, rounded to about 1 km, to MET Norway (api.met.no) every 30 minutes. Nothing else is sent. You can turn it off in Settings.';
+      'The app will take this phone\'s approximate location once (rounded to about 1 km) as the home location and send it to MET Norway (api.met.no) every 30 minutes. Nothing else is sent. You can turn it off in Settings.';
 
   @override
   String get weatherHomeLocationSetting =>
@@ -1466,7 +1466,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get weatherHomeLocationSettingHint =>
-      'Only when Home Assistant has no weather entity. Sends the home\'s approximate location.';
+      'Sends the home\'s approximate location (saved when you turned the forecast on).';
 
   @override
   String get weatherNoHomeCoordinates =>
@@ -5079,4 +5079,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get serviceLicensesHint => 'The app and every package it uses';
+
+  @override
+  String get settingsHomeSection => 'Home';
+
+  @override
+  String get settingsHomeHint => 'Devices and rooms';
+
+  @override
+  String get demoHomeNotice =>
+      'For now this is a demo home. Real devices (Shelly, WLED, Tasmota, ESPHome) come in the next version.';
+
+  @override
+  String get firstRunWelcomeBodyLite =>
+      'The phone controls your devices itself, no server needed. Let\'s set the app up — it takes a minute, and everything can be changed later in Settings.';
+
+  @override
+  String get settingsAboutSection => 'About';
+
+  @override
+  String get settingsAboutHint => 'Version and updates';
 }

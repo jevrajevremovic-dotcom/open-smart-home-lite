@@ -35,7 +35,7 @@ void main() {
       ),
     );
 
-    await pumpApp(tester, signedIn: true, size: const Size(800, 1600));
+    await pumpApp(tester, size: const Size(800, 1600));
     await settle(tester, 10);
     final c = ProviderScope.containerOf(
       tester.element(find.byType(SmartHomeApp)),

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/localization/l10n.dart';
 import '../../../core/widgets/status_widgets.dart';
 import '../application/device_providers.dart';
-import '../data/home_state_repository.dart';
+import '../domain/home_snapshot.dart';
 import 'device_presentation.dart';
 
 /// Shown whenever the visible data is not live (loaded from the offline

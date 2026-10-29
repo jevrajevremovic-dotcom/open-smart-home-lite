@@ -6,11 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../app/router/app_router.dart';
-import '../../assist/presentation/wake_word_listener.dart';
 import '../application/device_admin.dart';
 import '../../extras/celebrations.dart';
 import '../application/kiosk_controller.dart';
-import 'camera_popup.dart';
 import '../../timers/kiosk_timers.dart';
 import 'kiosk_alert_overlay.dart';
 import 'kiosk_ambient.dart';
@@ -137,39 +135,34 @@ class _KioskShellState extends ConsumerState<KioskShell> {
         // While idle, the idle screen decides what a tap does (it may be
         // the night light rather than waking up).
         onPointerDown: (_) => _dimmed ? null : _onInteraction(),
-        child: KioskCameraPopup(
-          onShow: _onInteraction,
-          child: KioskAlertOverlay(
-            child: KioskGreeter(
-              child: KioskTimersLayer(
-                child: KioskApproachWaker(
-                  child: KioskWakeWordListener(
-                    child: Stack(
-                      children: [
-                        widget.child,
-                        // Snow in December, confetti on a birthday…
-                        const Positioned.fill(child: CelebrationLayer()),
-                        // The idle screen fades in slowly (the clock rises
-                        // a little); waking is immediate.
-                        if (_dimmed)
-                          Positioned.fill(
-                            child: TweenAnimationBuilder<double>(
-                              tween: Tween(begin: 0, end: 1),
-                              duration: const Duration(milliseconds: 700),
-                              curve: Curves.easeOut,
-                              builder: (_, t, child) => Opacity(
-                                opacity: t,
-                                child: Transform.scale(
-                                  scale: 0.98 + 0.02 * t,
-                                  child: child,
-                                ),
-                              ),
-                              child: KioskAmbient(onWake: _onInteraction),
+        child: KioskAlertOverlay(
+          child: KioskGreeter(
+            child: KioskTimersLayer(
+              child: KioskApproachWaker(
+                child: Stack(
+                  children: [
+                    widget.child,
+                    // Snow in December, confetti on a birthday…
+                    const Positioned.fill(child: CelebrationLayer()),
+                    // The idle screen fades in slowly (the clock rises
+                    // a little); waking is immediate.
+                    if (_dimmed)
+                      Positioned.fill(
+                        child: TweenAnimationBuilder<double>(
+                          tween: Tween(begin: 0, end: 1),
+                          duration: const Duration(milliseconds: 700),
+                          curve: Curves.easeOut,
+                          builder: (_, t, child) => Opacity(
+                            opacity: t,
+                            child: Transform.scale(
+                              scale: 0.98 + 0.02 * t,
+                              child: child,
                             ),
                           ),
-                      ],
-                    ),
-                  ),
+                          child: KioskAmbient(onWake: _onInteraction),
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),

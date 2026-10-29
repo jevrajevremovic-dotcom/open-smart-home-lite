@@ -3,131 +3,76 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/config/app_config.dart';
-import '../../../core/errors/app_failure.dart';
 import '../../../core/storage/app_preferences.dart';
-import '../../authentication/application/session_controller.dart';
-import '../../devices/application/device_providers.dart';
-import '../../devices/data/home_state_repository.dart';
-import '../../devices/domain/device_kind.dart';
 import '../data/device_location.dart';
-import '../data/ha_weather.dart';
 import '../data/met_norway_client.dart';
-import '../../../core/utils/value_list.dart';
 import '../domain/weather.dart';
 
 const _refreshEvery = Duration(minutes: 30);
 
-/// The Home Assistant weather entity to show (`weather.forecast_home` – the
-/// default Met.no entity – if present, else the first weather entity).
-final homeWeatherEntityIdProvider = Provider<String?>((ref) {
-  final ids = ref.watch(
-    homeSnapshotProvider.select(
-      (s) => ValueList(
-        [
-          for (final d in s.devices.values)
-            if (d.kind == DeviceKind.weather && d.available) d.id,
-        ]..sort(),
-      ),
-    ),
-  );
-  if (ids.isEmpty) return null;
-  return ids.contains('weather.forecast_home')
-      ? 'weather.forecast_home'
-      : ids.first;
-});
+/// The home's approximate location, saved on this phone when the user
+/// turns the home forecast on (where the phone was then, rounded to
+/// ~1 km). `null` until then.
+typedef HomeLocation = ({double latitude, double longitude});
 
-/// Daily forecast via the documented `weather.get_forecasts` service.
-final homeForecastProvider = FutureProvider<List<DailyForecast>>((ref) async {
-  final id = ref.watch(homeWeatherEntityIdProvider);
-  final api = ref.watch(homeAssistantApiProvider);
-  final live = ref.watch(syncStatusProvider) == SyncStatus.live;
-  if (id == null || api == null || !live) return const [];
-  final timer = Timer(_refreshEvery, ref.invalidateSelf);
-  ref.onDispose(timer.cancel);
-  final response = await api.callServiceForResponse(
-    'weather',
-    'get_forecasts',
-    data: {'entity_id': id, 'type': 'daily'},
-  );
-  return parseHaForecast(response, id);
-});
-
-/// Hourly forecast. Not every weather integration offers one; then empty.
-final homeHourlyForecastProvider = FutureProvider<List<HourlyForecast>>((
-  ref,
-) async {
-  final id = ref.watch(homeWeatherEntityIdProvider);
-  final api = ref.watch(homeAssistantApiProvider);
-  final live = ref.watch(syncStatusProvider) == SyncStatus.live;
-  if (id == null || api == null || !live) return const [];
-  final timer = Timer(_refreshEvery, ref.invalidateSelf);
-  ref.onDispose(timer.cancel);
-  try {
-    final response = await api.callServiceForResponse(
-      'weather',
-      'get_forecasts',
-      data: {'entity_id': id, 'type': 'hourly'},
-    );
-    return parseHaHourlyForecast(response, id, now: DateTime.now());
-  } on AppFailure catch (e) {
-    if (e.isTransient) rethrow;
-    return const []; // entity does not support hourly forecasts
-  }
-});
-
-/// Off until the user agrees to send the home's approximate location
-/// (from Home Assistant, rounded to ~1 km) to MET Norway. Only used when
-/// Home Assistant has no weather entity.
-class HomeLocationWeatherController extends Notifier<bool> {
+/// Off until the user agrees to send the home's approximate location to
+/// MET Norway.
+class HomeLocationWeatherController extends Notifier<HomeLocation?> {
   static const _key = 'weather.homeLocation';
 
   @override
-  bool build() =>
-      ref.watch(appPreferencesProvider).readJson(_key)?['enabled'] == true;
+  HomeLocation? build() {
+    final json = ref.watch(appPreferencesProvider).readJson(_key);
+    final lat = json?['latitude'];
+    final lon = json?['longitude'];
+    return lat is num && lon is num
+        ? (latitude: lat.toDouble(), longitude: lon.toDouble())
+        : null;
+  }
 
-  Future<void> set(bool enabled) async {
-    state = enabled;
+  Future<void> set(HomeLocation? location) async {
+    state = location == null
+        ? null
+        : (
+            latitude: MetNorwayClient.roundCoordinate(location.latitude),
+            longitude: MetNorwayClient.roundCoordinate(location.longitude),
+          );
+    final saved = state;
     await ref
         .read(appPreferencesProvider)
-        .writeJson(_key, enabled ? {'enabled': true} : null);
+        .writeJson(
+          _key,
+          saved == null
+              ? null
+              : {'latitude': saved.latitude, 'longitude': saved.longitude},
+        );
   }
 }
 
 final homeLocationWeatherEnabledProvider =
-    NotifierProvider<HomeLocationWeatherController, bool>(
+    NotifierProvider<HomeLocationWeatherController, HomeLocation?>(
       HomeLocationWeatherController.new,
     );
 
-/// MET Norway forecast for the home location; `null` when not enabled,
-/// when HA has its own weather entity, or HA has no home coordinates.
+/// MET Norway forecast for the home location; `null` when not enabled.
 final homeLocationWeatherProvider = FutureProvider<WeatherReport?>((ref) async {
-  if (!ref.watch(homeLocationWeatherEnabledProvider)) return null;
-  if (ref.watch(homeWeatherEntityIdProvider) != null) return null;
-  final config = await ref.watch(serverConfigProvider.future);
-  final lat = config?.latitude;
-  final lon = config?.longitude;
-  if (lat == null || lon == null) return null;
+  final home = ref.watch(homeLocationWeatherEnabledProvider);
+  if (home == null) return null;
   final timer = Timer(_refreshEvery, ref.invalidateSelf);
   ref.onDispose(timer.cancel);
   return ref
       .read(locationWeatherServiceProvider)
       .forecast(
-        latitude: lat,
-        longitude: lon,
+        latitude: home.latitude,
+        longitude: home.longitude,
         source: WeatherSource.homeLocation,
       );
 });
 
-/// Weather at home: the Home Assistant weather entity (nothing leaves the
-/// network) or, if there is none and the user opted in, MET Norway.
-final homeWeatherProvider = Provider<WeatherReport?>((ref) {
-  final id = ref.watch(homeWeatherEntityIdProvider);
-  final device = id == null ? null : ref.watch(deviceProvider(id));
-  if (device == null) return ref.watch(homeLocationWeatherProvider).value;
-  final daily = ref.watch(homeForecastProvider).value ?? const [];
-  final hourly = ref.watch(homeHourlyForecastProvider).value ?? const [];
-  return weatherFromEntity(device, daily: daily, hourly: hourly);
-});
+/// Weather at home, if the user turned it on.
+final homeWeatherProvider = Provider<WeatherReport?>(
+  (ref) => ref.watch(homeLocationWeatherProvider).value,
+);
 
 // ---------------------------------------------------------------------------
 // Optional: weather at the device's location (opt-in, mobile only)
@@ -171,7 +116,7 @@ final class DeviceWeatherReady extends DeviceWeatherState {
   const DeviceWeatherReady(this.report, {this.kmFromHome});
   final WeatherReport report;
 
-  /// Distance to Home Assistant's home location, when both are known.
+  /// Distance to the saved home location, when both are known.
   final double? kmFromHome;
 
   /// Within this distance the device is "at home" and its own forecast
@@ -199,14 +144,14 @@ final deviceWeatherProvider = FutureProvider<DeviceWeatherState?>((ref) async {
   final report = await ref
       .read(locationWeatherServiceProvider)
       .forecast(latitude: location.latitude, longitude: location.longitude);
-  final config = ref.read(serverConfigProvider).value;
-  final km = config?.latitude == null || config?.longitude == null
+  final home = ref.read(homeLocationWeatherEnabledProvider);
+  final km = home == null
       ? null
       : distanceKm(
           location.latitude,
           location.longitude,
-          config!.latitude!,
-          config.longitude!,
+          home.latitude,
+          home.longitude,
         );
   return DeviceWeatherReady(report, kmFromHome: km);
 });

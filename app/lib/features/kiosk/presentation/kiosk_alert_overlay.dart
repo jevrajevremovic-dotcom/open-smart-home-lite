@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/localization/l10n.dart';
 import '../../../app/router/app_router.dart';
-import '../../assist/application/voice_providers.dart';
+import '../../../core/platform/speech_output.dart';
 import '../../dashboard/application/home_summaries.dart';
 import '../../devices/application/device_providers.dart';
 import '../../devices/domain/smart_home_device.dart';

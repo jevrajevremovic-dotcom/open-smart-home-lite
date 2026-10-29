@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 
 import '../../app/localization/l10n.dart';
 import '../../core/storage/app_preferences.dart';
-import '../authentication/application/session_controller.dart';
 import '../dashboard/application/home_summaries.dart';
 import '../devices/application/device_command_service.dart';
 import '../devices/application/device_providers.dart';
@@ -18,7 +17,7 @@ import '../devices/presentation/device_presentation.dart';
 import '../favorites/application/favorites_controller.dart';
 import '../kiosk/presentation/kiosk_alarm.dart';
 import 'home_screen_widget.dart';
-import '../devices/data/home_state_repository.dart';
+import '../devices/domain/home_snapshot.dart';
 
 /// Which thermostat and light the home screen widgets show (this device).
 @immutable
@@ -206,9 +205,7 @@ class _HomeWidgetsSyncState extends ConsumerState<HomeWidgetsSync> {
   void _push(AppLocalizations l10n) {
     final platform = ref.read(homeScreenWidgetProvider);
     if (!platform.supported) return;
-    final signedIn = ref.read(activeProfileProvider) != null;
-    final live = ref.read(syncStatusProvider) == SyncStatus.live;
-    if (!signedIn || !live) return;
+    if (ref.read(syncStatusProvider) != SyncStatus.live) return;
     final devices = ref.read(homeSnapshotProvider).devices;
     final thermostat = ref.read(widgetThermostatProvider);
     final light = ref.read(widgetLightProvider);

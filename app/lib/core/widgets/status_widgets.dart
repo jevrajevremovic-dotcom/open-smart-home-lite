@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/localization/l10n.dart';
 import '../../app/theme/app_theme.dart';
-import '../../integrations/home_assistant/websocket/connection_status.dart';
 import '../config/app_config.dart';
 
 /// Inline message with icon + text (never colour alone).
@@ -47,76 +46,6 @@ class InlineNotice extends StatelessWidget {
 }
 
 enum _Severity { critical, warning, info, ok }
-
-/// Compact connection indicator: icon + label, colour as a secondary cue.
-class ConnectionStatusChip extends StatelessWidget {
-  const ConnectionStatusChip({super.key, required this.status});
-
-  final HaConnectionStatus status;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final colors = context.statusColors;
-    final (IconData icon, Color color, String label) = switch (status.state) {
-      HaConnectionState.connected => (
-        Icons.cloud_done_outlined,
-        colors.ok,
-        l10n.statusConnected,
-      ),
-      HaConnectionState.connecting => (
-        Icons.sync,
-        colors.warning,
-        l10n.statusConnecting,
-      ),
-      HaConnectionState.authenticating => (
-        Icons.key,
-        colors.warning,
-        l10n.statusAuthenticating,
-      ),
-      HaConnectionState.reconnecting => (
-        Icons.sync_problem,
-        colors.warning,
-        status.nextRetryIn == null
-            ? l10n.statusReconnecting
-            : l10n.statusReconnectingIn(
-                status.nextRetryIn!.inSeconds.clamp(1, 999),
-              ),
-      ),
-      HaConnectionState.serverUnavailable => (
-        Icons.cloud_off,
-        colors.critical,
-        l10n.statusServerUnavailable,
-      ),
-      HaConnectionState.authenticationFailed => (
-        Icons.lock_outline,
-        colors.critical,
-        l10n.statusAuthFailed,
-      ),
-      HaConnectionState.error => (
-        Icons.error_outline,
-        colors.critical,
-        l10n.statusError,
-      ),
-      HaConnectionState.disconnected => (
-        Icons.link_off,
-        colors.unavailable,
-        l10n.statusDisconnected,
-      ),
-    };
-    return Semantics(
-      container: true,
-      liveRegion: true,
-      label: label,
-      excludeSemantics: true,
-      child: Chip(
-        avatar: Icon(icon, color: color, size: 20),
-        label: Text(label),
-        side: BorderSide(color: color),
-      ),
-    );
-  }
-}
 
 /// Visible on every screen while mock mode is active.
 class MockModeBanner extends ConsumerWidget {

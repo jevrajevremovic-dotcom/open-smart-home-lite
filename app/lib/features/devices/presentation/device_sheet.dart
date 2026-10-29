@@ -6,9 +6,8 @@ import '../../../app/localization/l10n.dart';
 import '../../../app/router/app_router.dart';
 import '../../../app/theme/app_theme.dart';
 import '../application/device_providers.dart';
-import '../data/home_state_repository.dart';
+import '../domain/home_snapshot.dart';
 import 'device_detail_screen.dart' show deviceControlsFor;
-import 'device_history.dart';
 import 'device_presentation.dart';
 
 /// A device's main controls in a sheet over the list (a tap on its card),
@@ -105,11 +104,6 @@ class _DeviceSheet extends ConsumerWidget {
               ),
             ),
           ),
-          // A sensor is mostly its history.
-          if (d.kind.isSensor && hasHistory(d)) ...[
-            const SizedBox(height: 16),
-            DeviceHistorySection(device: d),
-          ],
         ],
       ),
     );

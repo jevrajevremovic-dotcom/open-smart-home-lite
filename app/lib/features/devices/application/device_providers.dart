@@ -5,27 +5,21 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/utils/value_list.dart';
-import '../../../integrations/home_assistant/ha_backend.dart';
-import '../../authentication/application/session_controller.dart';
-import '../data/cache/snapshot_cache.dart';
-import '../data/home_state_repository.dart';
+import '../data/local/demo_adapter.dart';
+import '../data/local/local_backend.dart';
+import '../domain/home_snapshot.dart';
 import '../domain/home_backend.dart';
 import '../domain/device_kind.dart';
 import '../domain/smart_home_device.dart';
 
-/// The active home's backend; lives as long as the session's connection.
+/// Id of the home on this phone, for what is kept per home (favourites,
+/// layout, tiles). There is one home for now.
+final homeIdProvider = Provider<String>((ref) => 'local');
+
+/// The home's backend: the devices the phone talks to itself. Until the
+/// first real adapters (Shelly, WLED…) it is the demo home.
 final homeBackendProvider = Provider<HomeBackend?>((ref) {
-  final manager = ref.watch(webSocketManagerProvider);
-  final api = ref.watch(homeAssistantApiProvider);
-  if (manager == null || api == null) return null;
-  final backend = HaBackend(
-    HomeStateRepository(
-      manager,
-      cache: ref.watch(snapshotCacheProvider),
-      serverId: ref.watch(activeProfileProvider)?.id,
-    ),
-    HaCommandSink(api),
-  )..start();
+  final backend = LocalBackend([DemoAdapter()], rooms: demoRooms)..start();
   ref.onDispose(() => unawaited(backend.dispose()));
   return backend;
 });

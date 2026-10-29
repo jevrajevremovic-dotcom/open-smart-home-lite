@@ -8,11 +8,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/logging/app_logger.dart';
 import '../../core/storage/app_preferences.dart';
-import '../authentication/application/session_controller.dart';
 import '../clap/clap_listener.dart';
 import '../devices/application/device_command_service.dart';
 import '../devices/application/device_providers.dart';
-import '../devices/data/home_state_repository.dart';
+import '../devices/domain/home_snapshot.dart';
 import '../devices/domain/device_command.dart';
 import '../devices/domain/device_kind.dart';
 import '../devices/domain/smart_home_device.dart';
@@ -123,18 +122,13 @@ DeviceCommand? quickTileCommand(SmartHomeDevice d) {
 
 /// The device of each tile, per home.
 class QuickTilesController extends Notifier<List<String?>> {
-  String? get _key {
-    final p = ref.read(activeProfileProvider);
-    return p == null ? null : 'quickTiles::${p.id}';
-  }
+  String get _key => 'quickTiles::${ref.read(homeIdProvider)}';
 
   @override
   List<String?> build() {
-    final p = ref.watch(activeProfileProvider);
-    if (p == null) return List.filled(quickTileCount, null);
     final json = ref
         .watch(appPreferencesProvider)
-        .readJson('quickTiles::${p.id}');
+        .readJson('quickTiles::${ref.watch(homeIdProvider)}');
     final ids = json?['ids'];
     return [
       for (var i = 0; i < quickTileCount; i++)
@@ -147,10 +141,7 @@ class QuickTilesController extends Notifier<List<String?>> {
   Future<void> set(int index, String? deviceId) async {
     final next = [...state]..[index] = deviceId;
     state = next;
-    final key = _key;
-    if (key != null) {
-      await ref.read(appPreferencesProvider).writeJson(key, {'ids': next});
-    }
+    await ref.read(appPreferencesProvider).writeJson(_key, {'ids': next});
   }
 }
 

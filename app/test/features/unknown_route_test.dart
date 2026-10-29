@@ -6,7 +6,7 @@ import '../widgets/app_widget_test.dart'
 
 void main() {
   testWidgets('an unknown location goes home, no error page', (tester) async {
-    await pumpApp(tester, signedIn: true, size: const Size(400, 860));
+    await pumpApp(tester, size: const Size(400, 860));
     await settle(tester, 6);
     await goTo(tester, '/does-not-exist?x=1');
     await settle(tester, 4);

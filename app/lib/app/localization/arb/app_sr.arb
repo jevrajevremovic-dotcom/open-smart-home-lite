@@ -421,11 +421,11 @@
   "setUpSaved": "Sačuvano.",
   "setUpFailed": "Ime i prostorija ne mogu da se promene odavde. Uradite to u Home Assistantu, u Podešavanja → Uređaji.",
   "weatherHomeLocationTitle": "Prognoza za vaš dom",
-  "weatherHomeLocationHint": "Home Assistant nema entitet za vreme. Dodajte integraciju Met.no u Home Assistantu ili uključite prognozu u aplikaciji.",
+  "weatherHomeLocationHint": "Uključite prognozu: aplikacija će zapamtiti približnu lokaciju ovog telefona kao lokaciju doma.",
   "weatherHomeLocationEnable": "Uključi prognozu",
-  "weatherHomeLocationDisclosure": "Aplikacija će slati približnu lokaciju doma iz Home Assistanta, zaokruženu na oko 1 km, servisu MET Norway (api.met.no) svakih 30 minuta. Ništa drugo se ne šalje. Možete je isključiti u Podešavanjima.",
+  "weatherHomeLocationDisclosure": "Aplikacija će jednom uzeti približnu lokaciju ovog telefona (zaokruženu na oko 1 km) kao lokaciju doma i slati je servisu MET Norway (api.met.no) svakih 30 minuta. Ništa drugo se ne šalje. Možete je isključiti u Podešavanjima.",
   "weatherHomeLocationSetting": "Prognoza za lokaciju doma (MET Norway)",
-  "weatherHomeLocationSettingHint": "Samo kad Home Assistant nema entitet za vreme. Šalje približnu lokaciju doma.",
+  "weatherHomeLocationSettingHint": "Šalje približnu lokaciju doma (zapamćenu kad ste uključili prognozu).",
   "weatherNoHomeCoordinates": "U Home Assistantu nije podešena lokacija doma.",
   "calendarNoneShort": "U Home Assistantu nema kalendara",
   "mediaTitle": "Muzika i mediji",
@@ -1424,5 +1424,11 @@
   "simpleWarmer": "Toplije",
   "simpleCooler": "Hladnije",
   "serviceLicenses": "Licence otvorenog koda",
-  "serviceLicensesHint": "Aplikacija i svi paketi koje koristi"
+  "serviceLicensesHint": "Aplikacija i svi paketi koje koristi",
+  "settingsHomeSection": "Dom",
+  "settingsHomeHint": "Uređaji i sobe",
+  "demoHomeNotice": "Za sada je ovo demo dom. Pravi uređaji (Shelly, WLED, Tasmota, ESPHome) dolaze u sledećoj verziji.",
+  "firstRunWelcomeBodyLite": "Telefon sam upravlja vašim uređajima, bez servera. Podesimo aplikaciju — traje minut, a sve se kasnije može promeniti u Podešavanjima.",
+  "settingsAboutSection": "O aplikaciji",
+  "settingsAboutHint": "Verzija i ažuriranja"
 }

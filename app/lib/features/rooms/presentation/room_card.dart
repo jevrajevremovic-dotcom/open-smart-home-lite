@@ -12,7 +12,6 @@ import '../../devices/presentation/device_presentation.dart';
 import '../../kiosk/presentation/glass.dart' show kioskPhotoStoreProvider;
 import 'room_look.dart';
 import 'room_photo.dart' show roomPhotosProvider;
-import 'room_sparkline.dart';
 
 /// Maps common Material Design Icons names used for HA areas to Material
 /// icons. Unknown names fall back to a generic room icon.
@@ -242,9 +241,6 @@ class RoomCard extends ConsumerWidget {
                                           fontWeight: FontWeight.w300,
                                         ),
                                   ),
-                                  const SizedBox(width: 8),
-                                  // The last day: warming or cooling?
-                                  RoomSparkline(roomId: roomId, color: fg),
                                 ],
                               ),
                             ),

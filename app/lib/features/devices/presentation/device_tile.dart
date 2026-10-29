@@ -10,7 +10,7 @@ import '../../../app/router/app_router.dart';
 import '../../kiosk/application/kiosk_controller.dart';
 import '../../../app/theme/app_theme.dart';
 import '../application/device_providers.dart';
-import '../data/home_state_repository.dart';
+import '../domain/home_snapshot.dart';
 import '../domain/capability.dart';
 import '../domain/device_command.dart';
 import '../domain/device_kind.dart';

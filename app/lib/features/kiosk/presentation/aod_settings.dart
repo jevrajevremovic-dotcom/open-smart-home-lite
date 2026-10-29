@@ -36,15 +36,12 @@ class AodSettings extends ConsumerWidget {
 
     String focusLabel(AodFocus f) => switch (f) {
       AodFocus.none => l10n.aodFocusNone,
-      AodFocus.nextEvent => l10n.aodFocusNextEvent,
-      AodFocus.list => l10n.aodFocusList,
       AodFocus.device => l10n.aodFocusDevice,
       AodFocus.energy => l10n.aodFocusEnergy,
       AodFocus.media => l10n.aodFocusMedia,
       AodFocus.home => l10n.aodFocusHome,
     };
-    final needsEntity =
-        s.aodFocus == AodFocus.list || s.aodFocus == AodFocus.device;
+    final needsEntity = s.aodFocus == AodFocus.device;
     final entity = s.aodEntityId == null
         ? null
         : ref.watch(deviceProvider(s.aodEntityId!));
@@ -85,8 +82,7 @@ class AodSettings extends ConsumerWidget {
             onTap: () async {
               final id = await showDialog<String>(
                 context: context,
-                builder: (_) =>
-                    _DevicePickerDialog(lists: s.aodFocus == AodFocus.list),
+                builder: (_) => const _DevicePickerDialog(),
               );
               if (id != null) {
                 await controller.update((k) => k.copyWith(aodEntityId: id));
@@ -277,11 +273,9 @@ class _PhotoFrameSettingsState extends ConsumerState<PhotoFrameSettings> {
   }
 }
 
-/// Picks a list ([lists]) or a device for the always-on screen.
+/// Picks a device for the always-on screen.
 class _DevicePickerDialog extends ConsumerStatefulWidget {
-  const _DevicePickerDialog({required this.lists});
-
-  final bool lists;
+  const _DevicePickerDialog();
 
   @override
   ConsumerState<_DevicePickerDialog> createState() =>
@@ -301,7 +295,7 @@ class _DevicePickerDialogState extends ConsumerState<_DevicePickerDialog> {
               (d) =>
                   !d.isAuxiliary &&
                   d.kind != DeviceKind.unknown &&
-                  widget.lists == (d.kind == DeviceKind.todoList) &&
+                  d.kind != DeviceKind.todoList &&
                   d.name.toLowerCase().contains(_q.toLowerCase()),
             )
             .toList()

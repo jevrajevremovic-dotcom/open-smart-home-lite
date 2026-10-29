@@ -10,7 +10,6 @@ import '../../devices/application/device_command_service.dart'
     show isGroupCover;
 import '../../devices/application/device_providers.dart';
 import '../../devices/presentation/all_lights.dart';
-import '../../restricted/application/restricted_mode.dart';
 import '../../devices/presentation/device_grid.dart';
 import '../../devices/presentation/device_presentation.dart';
 import '../../devices/presentation/stale_data_banner.dart';
@@ -67,13 +66,6 @@ class RoomsScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(l10n.navRooms),
         actions: [
-          if (!ref.watch(restrictedModeProvider).enabled)
-            IconButton(
-              key: const Key('openAddDevice'),
-              tooltip: l10n.addDeviceTitle,
-              onPressed: () => context.push(AppRoutes.addDevice),
-              icon: const Icon(Icons.add),
-            ),
           TextButton.icon(
             onPressed: () => context.push(AppRoutes.allDevices),
             icon: const Icon(Icons.list),

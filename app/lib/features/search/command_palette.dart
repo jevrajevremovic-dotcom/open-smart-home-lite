@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/localization/l10n.dart';
 import '../../app/router/app_router.dart';
-import '../authentication/application/session_controller.dart';
 import '../devices/application/device_providers.dart';
 import '../devices/domain/device_command.dart';
 import '../devices/domain/smart_home_device.dart';
@@ -91,7 +90,7 @@ class _CommandPaletteHostState extends ConsumerState<CommandPaletteHost> {
         !(keyboard.isControlPressed || keyboard.isMetaPressed)) {
       return false;
     }
-    if (_open || ref.read(activeProfileProvider) == null) return false;
+    if (_open) return false;
     final context = ref
         .read(routerProvider)
         .routerDelegate

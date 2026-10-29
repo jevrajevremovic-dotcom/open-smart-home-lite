@@ -18,16 +18,16 @@ void main() {
         return null;
       },
     );
-    await pumpApp(tester, signedIn: true, size: const Size(800, 1600));
+    await pumpApp(tester, size: const Size(800, 1600));
     await settle(tester, 10);
-    await goTo(tester, AppRoutes.room('living_room'));
+    await goTo(tester, AppRoutes.room('living'));
     await settle(tester, 4);
     vibrations.clear();
     await tester.tap(
       find
           .descendant(
             of: find.ancestor(
-              of: find.text('Glavno svetlo'),
+              of: find.text('Plafonjera'),
               matching: find.byType(DeviceTile),
             ),
             matching: find.byType(Switch),

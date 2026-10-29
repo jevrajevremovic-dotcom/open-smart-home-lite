@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../appliance_done/appliance_done.dart';
-import '../../appliance_done/appliance_done_section.dart';
-import '../../heating_schedule/heating_schedule_section.dart';
-import '../../timers/device_timer.dart';
 import '../../../app/localization/l10n.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../core/widgets/responsive.dart';
 import '../../../core/widgets/status_widgets.dart';
-import '../../cameras/presentation/camera_view.dart';
 import '../../favorites/application/favorites_controller.dart';
 import '../application/device_providers.dart';
-import '../data/home_state_repository.dart';
+import '../domain/home_snapshot.dart';
 import '../domain/capability.dart';
 import '../domain/device_kind.dart';
 import '../domain/smart_home_device.dart';
@@ -21,11 +16,8 @@ import 'controls/climate_controls.dart';
 import 'controls/light_controls.dart';
 import 'controls/more_controls.dart';
 import 'controls/other_controls.dart';
-import '../../kiosk/application/kiosk_controller.dart';
 import '../../restricted/application/restricted_mode.dart';
 import '../../media/presentation/tv_remote.dart';
-import 'device_edit.dart';
-import 'device_history.dart';
 import 'device_presentation.dart';
 import 'stale_data_banner.dart';
 import '../../../core/widgets/skeleton.dart';
@@ -63,14 +55,6 @@ class DeviceDetailScreen extends ConsumerWidget {
       appBar: AppBar(
         title: _DeviceTitle(device: device),
         actions: [
-          // Not on the wall panel: editing belongs to the household's phones.
-          if (!ref.watch(kioskActiveProvider))
-            IconButton(
-              key: const Key('editDevice'),
-              tooltip: l10n.editDevice,
-              icon: const Icon(Icons.edit_outlined),
-              onPressed: () => editDevice(context, ref, device),
-            ),
           IconButton(
             key: const Key('favoriteToggle'),
             tooltip: favorite ? l10n.removeFavorite : l10n.addFavorite,
@@ -112,26 +96,6 @@ class DeviceDetailScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-                if (supportsTimer(device) && syncStatus == SyncStatus.live) ...[
-                  const SizedBox(height: 16),
-                  DeviceTimerSection(device: device),
-                ],
-                if (ref.watch(appliancePowerProvider(deviceId))
-                    case final power? when !ref.watch(kioskActiveProvider)) ...[
-                  const SizedBox(height: 16),
-                  ApplianceDoneSection(power: power),
-                ],
-                if ((device.kind == DeviceKind.climate ||
-                        device.kind == DeviceKind.thermostat) &&
-                    device.supports(Capability.targetTemperature) &&
-                    !ref.watch(kioskActiveProvider)) ...[
-                  const SizedBox(height: 16),
-                  HeatingScheduleSection(device: device),
-                ],
-                if (hasHistory(device)) ...[
-                  const SizedBox(height: 24),
-                  DeviceHistorySection(device: device),
-                ],
                 const SizedBox(height: 24),
                 _InfoSection(device: device),
               ],
@@ -175,7 +139,6 @@ List<Widget> deviceControlsFor(SmartHomeDevice d) {
       _ when d.kind.isRoutine || d.kind == DeviceKind.button => [
         RoutineControls(device: d),
       ],
-      DeviceKind.camera => [CameraDetail(device: d)],
       _ when d.kind.isSensor => [SensorReadout(device: d)],
       _ => const <Widget>[],
     },

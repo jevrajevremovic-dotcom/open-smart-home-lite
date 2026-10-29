@@ -2622,7 +2622,7 @@ abstract class AppLocalizations {
   /// No description provided for @weatherHomeLocationHint.
   ///
   /// In en, this message translates to:
-  /// **'Home Assistant has no weather entity. Add the Met.no integration in Home Assistant, or turn on the forecast in the app.'**
+  /// **'Turn the forecast on: the app will remember this phone\'s approximate location as the home location.'**
   String get weatherHomeLocationHint;
 
   /// No description provided for @weatherHomeLocationEnable.
@@ -2634,7 +2634,7 @@ abstract class AppLocalizations {
   /// No description provided for @weatherHomeLocationDisclosure.
   ///
   /// In en, this message translates to:
-  /// **'The app will send your home\'s approximate location from Home Assistant, rounded to about 1 km, to MET Norway (api.met.no) every 30 minutes. Nothing else is sent. You can turn it off in Settings.'**
+  /// **'The app will take this phone\'s approximate location once (rounded to about 1 km) as the home location and send it to MET Norway (api.met.no) every 30 minutes. Nothing else is sent. You can turn it off in Settings.'**
   String get weatherHomeLocationDisclosure;
 
   /// No description provided for @weatherHomeLocationSetting.
@@ -2646,7 +2646,7 @@ abstract class AppLocalizations {
   /// No description provided for @weatherHomeLocationSettingHint.
   ///
   /// In en, this message translates to:
-  /// **'Only when Home Assistant has no weather entity. Sends the home\'s approximate location.'**
+  /// **'Sends the home\'s approximate location (saved when you turned the forecast on).'**
   String get weatherHomeLocationSettingHint;
 
   /// No description provided for @weatherNoHomeCoordinates.
@@ -8642,6 +8642,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The app and every package it uses'**
   String get serviceLicensesHint;
+
+  /// No description provided for @settingsHomeSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get settingsHomeSection;
+
+  /// No description provided for @settingsHomeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Devices and rooms'**
+  String get settingsHomeHint;
+
+  /// No description provided for @demoHomeNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'For now this is a demo home. Real devices (Shelly, WLED, Tasmota, ESPHome) come in the next version.'**
+  String get demoHomeNotice;
+
+  /// No description provided for @firstRunWelcomeBodyLite.
+  ///
+  /// In en, this message translates to:
+  /// **'The phone controls your devices itself, no server needed. Let\'s set the app up — it takes a minute, and everything can be changed later in Settings.'**
+  String get firstRunWelcomeBodyLite;
+
+  /// No description provided for @settingsAboutSection.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settingsAboutSection;
+
+  /// No description provided for @settingsAboutHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Version and updates'**
+  String get settingsAboutHint;
 }
 
 class _AppLocalizationsDelegate

@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/localization/l10n.dart';
 import '../../app/theme/app_theme.dart';
-import '../assist/application/voice_providers.dart';
+import '../../core/platform/speech_output.dart';
 import '../kiosk/application/kiosk_controller.dart';
 import 'kitchen_timers.dart';
 

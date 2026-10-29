@@ -32,12 +32,11 @@ class WeatherSection extends ConsumerWidget {
     final deviceEnabled = ref.watch(deviceWeatherEnabledProvider);
     final offerDevice = allowDeviceLocation && locator.isSupported;
 
-    final noEntity = ref.watch(homeWeatherEntityIdProvider) == null;
-    final homeMetOn = ref.watch(homeLocationWeatherEnabledProvider);
+    final homeOn = ref.watch(homeLocationWeatherEnabledProvider) != null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (home == null && noEntity && !homeMetOn) ...[
+        if (home == null && !homeOn) ...[
           const SizedBox(height: 12),
           Card(
             key: const Key('homeWeatherPrompt'),
@@ -120,8 +119,14 @@ Future<void> enableHomeLocationWeather(
       );
     },
   );
-  if (ok == true) {
-    await ref.read(homeLocationWeatherEnabledProvider.notifier).set(true);
+  if (ok != true) return;
+  // The home is where the phone is now.
+  final location = await ref.read(deviceLocatorProvider).approximateLocation();
+  if (location is LocationFound) {
+    await ref.read(homeLocationWeatherEnabledProvider.notifier).set((
+      latitude: location.latitude,
+      longitude: location.longitude,
+    ));
   }
 }
 
@@ -181,15 +186,6 @@ class _DeviceWeather extends ConsumerWidget {
               title: l10n.weatherAtMyLocation,
               attribution: l10n.weatherMetAttribution,
             ),
-            // A home location hundreds of km away is usually HA's default,
-            // never changed – worth pointing out.
-            if (hasHomeWeather && (ready.kmFromHome ?? 0) > 50)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: InlineNotice.info(
-                  l10n.weatherHomeLocationFar(ready.kmFromHome!.round()),
-                ),
-              ),
           ],
         ),
       ),

@@ -657,11 +657,11 @@
   "setUpSaved": "Saved.",
   "setUpFailed": "Name and room can't be changed from here. Do it in Home Assistant under Settings, Devices.",
   "weatherHomeLocationTitle": "Forecast for your home",
-  "weatherHomeLocationHint": "Home Assistant has no weather entity. Add the Met.no integration in Home Assistant, or turn on the forecast in the app.",
+  "weatherHomeLocationHint": "Turn the forecast on: the app will remember this phone's approximate location as the home location.",
   "weatherHomeLocationEnable": "Turn on forecast",
-  "weatherHomeLocationDisclosure": "The app will send your home's approximate location from Home Assistant, rounded to about 1 km, to MET Norway (api.met.no) every 30 minutes. Nothing else is sent. You can turn it off in Settings.",
+  "weatherHomeLocationDisclosure": "The app will take this phone's approximate location once (rounded to about 1 km) as the home location and send it to MET Norway (api.met.no) every 30 minutes. Nothing else is sent. You can turn it off in Settings.",
   "weatherHomeLocationSetting": "Forecast for the home location (MET Norway)",
-  "weatherHomeLocationSettingHint": "Only when Home Assistant has no weather entity. Sends the home's approximate location.",
+  "weatherHomeLocationSettingHint": "Sends the home's approximate location (saved when you turned the forecast on).",
   "weatherNoHomeCoordinates": "Home Assistant has no home location set.",
   "calendarNoneShort": "No calendars in Home Assistant",
   "mediaTitle": "Music and media",
@@ -1986,5 +1986,11 @@
   "simpleWarmer": "Warmer",
   "simpleCooler": "Cooler",
   "serviceLicenses": "Open source licences",
-  "serviceLicensesHint": "The app and every package it uses"
+  "serviceLicensesHint": "The app and every package it uses",
+  "settingsHomeSection": "Home",
+  "settingsHomeHint": "Devices and rooms",
+  "demoHomeNotice": "For now this is a demo home. Real devices (Shelly, WLED, Tasmota, ESPHome) come in the next version.",
+  "firstRunWelcomeBodyLite": "The phone controls your devices itself, no server needed. Let's set the app up — it takes a minute, and everything can be changed later in Settings.",
+  "settingsAboutSection": "About",
+  "settingsAboutHint": "Version and updates"
 }

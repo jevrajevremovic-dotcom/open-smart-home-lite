@@ -5,12 +5,10 @@ import 'package:go_router/go_router.dart';
 import '../../../app/localization/l10n.dart';
 import '../../../app/router/app_router.dart';
 import '../../../core/widgets/status_widgets.dart';
-import '../../assist/presentation/wake_word_settings.dart';
 import '../../clap/clap_settings.dart';
 import 'approach_settings.dart';
 import '../application/kiosk_controller.dart';
 import '../data/kiosk_settings.dart';
-import 'camera_popup_settings.dart';
 import 'aod_settings.dart';
 import '../../extras/celebrations.dart';
 import 'kiosk_people_settings.dart';
@@ -79,18 +77,7 @@ class KioskSettingsSection extends ConsumerWidget {
           onChanged: (v) =>
               controller.update((s) => s.copyWith(keepScreenOn: v)),
         ),
-        SwitchListTile(
-          key: const Key('kioskShowCameras'),
-          contentPadding: EdgeInsets.zero,
-          title: Text(l10n.kioskShowCameras),
-          subtitle: Text(l10n.kioskShowCamerasHint),
-          value: settings.showCameras,
-          onChanged: (v) =>
-              controller.update((s) => s.copyWith(showCameras: v)),
-        ),
-        const CameraPopupSettingsTile(),
         const ClapSettings(),
-        const WakeWordSettings(),
         const ApproachSettings(),
         SwitchListTile(
           key: const Key('kioskGreetSwitch'),

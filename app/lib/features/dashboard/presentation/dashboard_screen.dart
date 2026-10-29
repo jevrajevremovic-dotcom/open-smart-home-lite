@@ -10,42 +10,33 @@ import '../../extras/extras_sheet.dart';
 import '../../../app/localization/l10n.dart';
 import '../../../app/router/app_router.dart';
 import '../../../app/theme/app_theme.dart';
-import '../../../core/errors/failure_messages.dart';
 import '../../../core/widgets/responsive.dart';
 import '../../../core/widgets/skeleton.dart';
 import '../../../core/widgets/status_widgets.dart';
-import '../../../integrations/home_assistant/websocket/connection_status.dart';
-import '../../authentication/application/session_controller.dart';
 import '../../devices/application/device_providers.dart';
-import '../../devices/data/home_state_repository.dart';
+import '../../devices/domain/home_snapshot.dart';
 import '../../devices/domain/device_command.dart';
 import '../../devices/presentation/all_lights.dart';
 import '../../devices/presentation/device_actions.dart';
 import '../../devices/presentation/device_grid.dart';
 import '../../devices/presentation/device_presentation.dart';
 import '../../devices/presentation/stale_data_banner.dart';
-import '../../assist/presentation/assist_sheet.dart';
 import '../../devices/domain/capability.dart';
 import '../../favorites/presentation/favorites_screen.dart';
 import '../../media/application/media_providers.dart';
 import '../../media/presentation/media_artwork.dart';
 import '../../media/presentation/media_player_view.dart';
 import '../../media/presentation/media_sheet.dart';
-import '../../notifications/presentation/notifications.dart';
-import '../../restricted/application/restricted_mode.dart';
 import '../../rooms/presentation/room_card.dart';
 import '../../kiosk/application/kiosk_controller.dart';
 import '../../weather/application/weather_providers.dart';
 import '../../weather/presentation/weather_card.dart';
-import '../../todo/todo_screen.dart';
-import '../../household/family_messages.dart';
 import '../application/home_summaries.dart';
 
 import 'on_now_strip.dart';
 import '../../updates/update_section.dart';
 import 'weather_sky.dart';
 import '../../../app/brand.dart';
-import '../../scenes/presentation/scene_colors.dart';
 part 'dashboard_summary.dart';
 part 'dashboard_sections.dart';
 
@@ -62,63 +53,23 @@ class DashboardScreen extends ConsumerWidget {
         // A faint wash of the sky outside behind the greeting.
         flexibleSpace: const WeatherSky(),
         title: const _HomeSwitcher(),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 12),
-            child: ConnectionIndicator(),
-          ),
-        ],
       ),
-      // Assist can unlock doors by voice: not in child / guest mode.
-      floatingActionButton: ref.watch(restrictedModeProvider).enabled
-          ? null
-          : FloatingActionButton(
-              key: const Key('openAssist'),
-              tooltip: context.l10n.assistTitle,
-              onPressed: () => showAssist(context),
-              child: const Icon(Icons.assistant_outlined),
-            ),
       body: const MockModeBanner(child: DashboardBody()),
     );
   }
 }
 
-/// The greeting; with several homes, tapping it switches between them.
+/// The greeting with the home's name.
 class _HomeSwitcher extends ConsumerWidget {
   const _HomeSwitcher();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final title =
+  Widget build(BuildContext context, WidgetRef ref) => DashboardGreeting(
+    homeName:
         ref.watch(homeSnapshotProvider.select((s) => s.locationName)) ??
-        ref.watch(serverConfigProvider).value?.locationName ??
-        Brand.name(context.l10n);
-    final homes = ref.watch(savedHomesProvider).value ?? const [];
-    final greeting = DashboardGreeting(
-      homeName: title,
-      showSwitcher: homes.length > 1,
-    );
-    if (homes.length < 2) return greeting;
-    final active = ref.watch(activeProfileProvider);
-    return PopupMenuButton<String>(
-      key: const Key('homeSwitcher'),
-      tooltip: context.l10n.homesTitle,
-      onSelected: (id) {
-        final home = homes.firstWhere((h) => h.profile.id == id);
-        ref.read(sessionControllerProvider.notifier).switchTo(home.profile);
-      },
-      itemBuilder: (_) => [
-        for (final h in homes)
-          CheckedPopupMenuItem(
-            key: ValueKey('switchHome-${h.profile.id}'),
-            value: h.profile.id,
-            checked: h.profile.id == active?.id,
-            child: Text(h.name),
-          ),
-      ],
-      child: greeting,
-    );
-  }
+        Brand.name(context.l10n),
+    showSwitcher: false,
+  );
 }
 
 /// The home in one sentence under the greeting.
@@ -231,7 +182,6 @@ class DashboardBody extends ConsumerWidget {
         final twoPanes =
             width >= Breakpoints.large ||
             (width >= Breakpoints.expanded && width > constraints.maxHeight);
-        final refresh = ref.read(webSocketManagerProvider)?.retryNow;
         if (loading) {
           return CustomScrollView(
             slivers: [
@@ -246,15 +196,12 @@ class DashboardBody extends ConsumerWidget {
           );
         }
         if (!twoPanes) {
-          return RefreshIndicator(
-            onRefresh: () async => refresh?.call(),
-            child: CustomScrollView(
-              slivers: [
-                ..._fixedSlivers(ref),
-                ..._cards(context, ref),
-                const SliverToBoxAdapter(child: SizedBox(height: 32)),
-              ],
-            ),
+          return CustomScrollView(
+            slivers: [
+              ..._fixedSlivers(ref),
+              ..._cards(context, ref),
+              const SliverToBoxAdapter(child: SizedBox(height: 32)),
+            ],
           );
         }
         return Row(
@@ -272,14 +219,11 @@ class DashboardBody extends ConsumerWidget {
               ),
             ),
             Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async => refresh?.call(),
-                child: CustomScrollView(
-                  slivers: [
-                    ..._cards(context, ref, content: true),
-                    const SliverToBoxAdapter(child: SizedBox(height: 32)),
-                  ],
-                ),
+              child: CustomScrollView(
+                slivers: [
+                  ..._cards(context, ref, content: true),
+                  const SliverToBoxAdapter(child: SizedBox(height: 32)),
+                ],
               ),
             ),
           ],
@@ -303,10 +247,6 @@ class DashboardBody extends ConsumerWidget {
       const SliverPadding(
         padding: _pad,
         sliver: SliverToBoxAdapter(child: StaleDataBanner()),
-      ),
-      const SliverPadding(
-        padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
-        sliver: SliverToBoxAdapter(child: ConnectionProblemCard()),
       ),
       if (syncing) const SliverToBoxAdapter(child: LinearProgressIndicator()),
       const SliverPadding(
@@ -336,14 +276,6 @@ class DashboardBody extends ConsumerWidget {
         return [box(WeatherSection(allowDeviceLocation: !kiosk))];
       case DashboardCard.media:
         return [box(const NowPlayingCard())];
-      case DashboardCard.notifications:
-        return [box(const NotificationsBanner())];
-      case DashboardCard.lists:
-        if (kiosk) return const [];
-        return [
-          box(SectionHeader(l10n.dashCardLists)),
-          box(const TodoListsCard()),
-        ];
       case DashboardCard.shortcuts:
         if (kiosk) return const [];
         return [
@@ -358,30 +290,6 @@ class DashboardBody extends ConsumerWidget {
                       onPressed: () => context.push(AppRoutes.houseCheck),
                       icon: Icons.fact_check_outlined,
                       label: l10n.houseCheckShort,
-                    ),
-                    _QuickLink(
-                      key: const Key('openMessages'),
-                      onPressed: () => showFamilyMessages(context),
-                      icon: Icons.forum_outlined,
-                      label: l10n.familyMessages,
-                    ),
-                    _QuickLink(
-                      key: const Key('openEnergy'),
-                      onPressed: () => context.push(AppRoutes.energy),
-                      icon: Icons.bolt,
-                      label: l10n.energyTitle,
-                    ),
-                    _QuickLink(
-                      key: const Key('openCalendar'),
-                      onPressed: () => context.push(AppRoutes.calendar),
-                      icon: Icons.calendar_month_outlined,
-                      label: l10n.calendarTitle,
-                    ),
-                    _QuickLink(
-                      key: const Key('openActivity'),
-                      onPressed: () => context.push(AppRoutes.activity),
-                      icon: Icons.history,
-                      label: l10n.activityTitle,
                     ),
                     _QuickLink(
                       key: const Key('openExtras'),

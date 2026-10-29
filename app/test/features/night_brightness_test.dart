@@ -48,7 +48,7 @@ void main() {
   testWidgets('screensaver turns the backlight down; leaving restores it', (
     tester,
   ) async {
-    await pumpApp(tester, signedIn: true, size: const Size(1280, 800));
+    await pumpApp(tester, size: const Size(1280, 800));
     await settle(tester, 10);
     final container = ProviderScope.containerOf(
       tester.element(find.byType(SmartHomeApp)),

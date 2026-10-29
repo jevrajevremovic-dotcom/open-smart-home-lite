@@ -1,39 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 import '../../app/brand.dart';
 import '../../app/localization/l10n.dart';
 import '../../app/router/app_router.dart';
-import '../alerts/alert_notifications.dart';
+import '../settings/presentation/settings_screen.dart' show SettingsSection;
 import '../app_lock/application/app_lock.dart';
-import '../authentication/application/session_controller.dart';
 import '../devices/application/device_providers.dart';
 import '../devices/domain/device_kind.dart';
 import '../devices/presentation/device_presentation.dart';
 import '../favorites/application/favorites_controller.dart';
-import '../ha_notify/ha_push_tile.dart';
 import '../settings/application/appearance_controllers.dart';
-import '../settings/data/ha_backup.dart';
 import 'first_run_controller.dart';
 
-enum _Page { welcome, restore, look, favorites, messages, security, done }
+enum _Page { welcome, look, favorites, security, done }
 
-/// Saved copies of the settings in Home Assistant; none when unreachable.
-final _backupsProvider = FutureProvider.autoDispose<List<HaBackup>>((
-  ref,
-) async {
-  final service = ref.watch(haBackupServiceProvider);
-  if (service == null) return const [];
-  try {
-    return await service.list();
-  } on Object {
-    return const [];
-  }
-});
-
-/// Right after the first sign-in: a few short, skippable pages that set
+/// On the first start: a few short, skippable pages that set
 /// the app up for this household. Everything here is also in Settings.
 class FirstRunScreen extends ConsumerStatefulWidget {
   const FirstRunScreen({super.key});
@@ -49,14 +32,11 @@ class _FirstRunScreenState extends ConsumerState<FirstRunScreen> {
   bool get _isWall => _wall ?? MediaQuery.sizeOf(context).shortestSide >= 600;
 
   List<_Page> _pages() {
-    final hasBackups = ref.watch(_backupsProvider).value?.isNotEmpty ?? false;
     return [
       _Page.welcome,
-      if (hasBackups) _Page.restore,
       if (!_isWall) ...[
         _Page.look,
         _Page.favorites,
-        if (ref.watch(alertNotifierProvider).supported) _Page.messages,
         // Only where the device can lock (not on the web).
         if (ref.watch(deviceAuthAvailableProvider).value ?? false)
           _Page.security,
@@ -74,8 +54,12 @@ class _FirstRunScreenState extends ConsumerState<FirstRunScreen> {
     if (_index < pages.length - 1) {
       setState(() => _index++);
     } else {
-      // A wall panel continues in the installer's checklist (kiosk, PIN).
-      _finish(_isWall ? AppRoutes.installerSetup : AppRoutes.home);
+      // A wall panel continues in the kiosk settings (start in kiosk, PIN).
+      _finish(
+        _isWall
+            ? AppRoutes.settingsSection(SettingsSection.kiosk.name)
+            : AppRoutes.home,
+      );
     }
   }
 
@@ -127,15 +111,8 @@ class _FirstRunScreenState extends ConsumerState<FirstRunScreen> {
                         constraints: const BoxConstraints(maxWidth: 560),
                         child: switch (page) {
                           _Page.welcome => _welcome(context),
-                          _Page.restore => const _RestorePage(),
                           _Page.look => const _LookPage(),
                           _Page.favorites => const _FavoritesPage(),
-                          _Page.messages => _PageBody(
-                            icon: Icons.campaign_outlined,
-                            title: l10n.firstRunMessagesTitle,
-                            body: l10n.firstRunMessagesBody,
-                            child: const HaPushTile(),
-                          ),
                           _Page.security => const _SecurityPage(),
                           _Page.done => _PageBody(
                             icon: Icons.check_circle_outline,
@@ -182,7 +159,6 @@ class _FirstRunScreenState extends ConsumerState<FirstRunScreen> {
 
   Widget _welcome(BuildContext context) {
     final l10n = context.l10n;
-    final host = ref.watch(activeProfileProvider)?.address.baseUri.host ?? '';
     Widget role(bool wall, IconData icon, String title, String hint) {
       final selected = _isWall == wall;
       final scheme = Theme.of(context).colorScheme;
@@ -214,7 +190,7 @@ class _FirstRunScreenState extends ConsumerState<FirstRunScreen> {
     return _PageBody(
       leading: const BrandLogo(size: 64),
       title: l10n.firstRunWelcomeTitle,
-      body: l10n.firstRunWelcomeBody(host),
+      body: l10n.firstRunWelcomeBodyLite,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -280,83 +256,6 @@ class _PageBody extends StatelessWidget {
         ),
         if (child != null) ...[const SizedBox(height: 24), child!],
       ],
-    );
-  }
-}
-
-class _RestorePage extends ConsumerStatefulWidget {
-  const _RestorePage();
-
-  @override
-  ConsumerState<_RestorePage> createState() => _RestorePageState();
-}
-
-class _RestorePageState extends ConsumerState<_RestorePage> {
-  String? _restored;
-
-  Future<void> _restore(HaBackup backup) async {
-    final l10n = context.l10n;
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (dialog) => AlertDialog(
-        title: Text(l10n.haBackupRestoreTitle(backup.name)),
-        content: Text(l10n.haBackupRestoreBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialog).pop(false),
-            child: Text(l10n.cancel),
-          ),
-          FilledButton(
-            key: const Key('firstRunRestoreConfirm'),
-            onPressed: () => Navigator.of(dialog).pop(true),
-            child: Text(l10n.haBackupRestore),
-          ),
-        ],
-      ),
-    );
-    if (ok != true || !mounted) return;
-    if (await restoreHaBackup(ref, backup) && mounted) {
-      setState(() => _restored = backup.name);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final backups = ref.watch(_backupsProvider).value ?? const [];
-    final date = DateFormat.yMd(l10n.localeName).add_Hm();
-    return _PageBody(
-      icon: Icons.settings_backup_restore,
-      title: l10n.firstRunRestoreTitle,
-      body: l10n.firstRunRestoreBody,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          for (final b in backups)
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: Icon(
-                _restored == b.name ? Icons.check_circle : Icons.devices,
-                color: _restored == b.name ? Colors.green.shade600 : null,
-              ),
-              title: Text(b.name),
-              subtitle: Text(
-                [
-                  b.scope == BackupScope.home
-                      ? l10n.haBackupScopeHome
-                      : l10n.haBackupScopeUser,
-                  if (b.savedAt != null) date.format(b.savedAt!.toLocal()),
-                ].join(' · '),
-              ),
-              trailing: _restored == b.name
-                  ? null
-                  : OutlinedButton(
-                      onPressed: () => _restore(b),
-                      child: Text(l10n.haBackupRestore),
-                    ),
-            ),
-        ],
-      ),
     );
   }
 }
