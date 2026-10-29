@@ -13,6 +13,8 @@ import 'package:open_smart_home_lite/core/platform/speech_output.dart';
 import 'package:open_smart_home_lite/core/storage/app_preferences.dart';
 import 'package:open_smart_home_lite/core/storage/credential_store.dart';
 import 'package:open_smart_home_lite/features/alerts/alert_notifications.dart';
+import 'package:open_smart_home_lite/features/automations/application/automation_engine.dart';
+import 'package:open_smart_home_lite/features/automations/application/background_run.dart';
 import 'package:open_smart_home_lite/features/app_lock/application/app_lock.dart';
 import 'package:open_smart_home_lite/features/app_lock/data/device_auth.dart';
 import 'package:open_smart_home_lite/features/clap/clap_platform.dart';
@@ -180,6 +182,22 @@ class FakeKasa implements KasaTransport {
       found.isEmpty ? const Stream.empty() : Stream.value(found);
 }
 
+/// Records the background service being started and stopped.
+class FakeBackground implements BackgroundPlatform {
+  FakeBackground({this.supported = true});
+
+  @override
+  final bool supported;
+  bool running = false;
+
+  @override
+  Future<void> start({required String title, required String text}) async =>
+      running = true;
+
+  @override
+  Future<void> stop() async => running = false;
+}
+
 /// No ESPHome device anywhere.
 Future<EsphomeSocket> noEsphome(String host, int port) async =>
     throw const AppFailure(FailureKind.network, debugMessage: 'refused');
@@ -287,6 +305,7 @@ Future<List<Override>> testOverrides({
   EsphomeConnector? esphome,
   YeelightTransport? yeelight,
   KasaTransport? kasa,
+  BackgroundPlatform? background,
   List<Override> overrides = const [],
 }) async {
   SharedPreferences.setMockInitialValues({
@@ -302,13 +321,14 @@ Future<List<Override>> testOverrides({
     if (adapter != null || http == null)
       homeBackendProvider.overrideWith((ref) {
         final home = ref.read(localHomeProvider);
+        final routines = ref.watch(routineAdapterProvider);
         final backend = adapter == null
             ? LocalBackend(
-                [DemoAdapter(latency: Duration.zero)],
+                [DemoAdapter(latency: Duration.zero), routines],
                 rooms: demoRooms,
                 home: home,
               )
-            : LocalBackend([adapter], rooms: rooms, home: home);
+            : LocalBackend([adapter, routines], rooms: rooms, home: home);
         ref.listen(localHomeProvider, (_, h) => backend.configure(h));
         backend.start();
         ref.onDispose(backend.dispose);
@@ -318,6 +338,9 @@ Future<List<Override>> testOverrides({
     esphomeConnectorProvider.overrideWithValue(esphome ?? noEsphome),
     yeelightTransportProvider.overrideWithValue(yeelight ?? FakeYeelight()),
     kasaTransportProvider.overrideWithValue(kasa ?? FakeKasa()),
+    backgroundPlatformProvider.overrideWithValue(
+      background ?? FakeBackground(supported: false),
+    ),
     lanDiscoveryProvider.overrideWithValue(
       discovery ?? FakeLanDiscovery(const []),
     ),

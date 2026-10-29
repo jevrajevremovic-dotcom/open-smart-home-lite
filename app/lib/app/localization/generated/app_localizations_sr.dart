@@ -5234,6 +5234,110 @@ class AppLocalizationsSr extends AppLocalizations {
   @override
   String get hueLinkFailed =>
       'Dugme na mostu nije pritisnuto. Pokušajte ponovo.';
+
+  @override
+  String get sceneHintLocal =>
+      'Čuva kako su izabrani uređaji podešeni sada (uključeno/isključeno, jačina, boja, roletne, temperatura). Pokretanje scene ih vraća tako.';
+
+  @override
+  String get sceneSavedLocal => 'Scena je sačuvana.';
+
+  @override
+  String get autoSavedLocal => 'Automatizacija je sačuvana.';
+
+  @override
+  String get autoHintLocal =>
+      'Radi na ovom telefonu: dok je aplikacija otvorena, na zidnom tabletu u kiosku, ili kad je uključen rad u pozadini (Podešavanja → Dom).';
+
+  @override
+  String get autoSunNeedsHome =>
+      'Za izlazak i zalazak sunca potrebna je lokacija doma: uključite prognozu za dom (Podešavanja → Privatnost).';
+
+  @override
+  String get autoActionTurnOn => 'Uključi';
+
+  @override
+  String get autoActionTurnOff => 'Isključi';
+
+  @override
+  String get autoActionToggle => 'Promeni (uključi/isključi)';
+
+  @override
+  String autoActionBrightness(int percent) {
+    return 'Jačina $percent %';
+  }
+
+  @override
+  String get autoActionScene => 'Pokreni scenu';
+
+  @override
+  String get autoPickAction => 'Šta da uradi';
+
+  @override
+  String autoTriggerAt(String time) {
+    return 'U $time';
+  }
+
+  @override
+  String get autoDays => 'Dani';
+
+  @override
+  String autoStateIs(String device, String state) {
+    return '$device: $state';
+  }
+
+  @override
+  String autoValueAbove(String device, String value) {
+    return '$device iznad $value';
+  }
+
+  @override
+  String autoValueBelow(String device, String value) {
+    return '$device ispod $value';
+  }
+
+  @override
+  String get autoTargetOn => 'uključen';
+
+  @override
+  String get autoTargetOff => 'isključen';
+
+  @override
+  String get autoTargetOpen => 'otvoren';
+
+  @override
+  String get autoTargetClosed => 'zatvoren';
+
+  @override
+  String get autoTargetActive => 'aktivan';
+
+  @override
+  String get autoTargetInactive => 'neaktivan';
+
+  @override
+  String get autoTargetLocked => 'zaključan';
+
+  @override
+  String get autoTargetUnlocked => 'otključan';
+
+  @override
+  String get autoBefore => 'pre';
+
+  @override
+  String get autoAfter => 'posle';
+
+  @override
+  String get backgroundAutomations => 'Automatizacije u pozadini';
+
+  @override
+  String get backgroundAutomationsHint =>
+      'Aplikacija nastavlja da radi i kad je zatvorite, da bi automatizacije radile. Android tada prikazuje stalno obaveštenje.';
+
+  @override
+  String get backgroundNotificationText => 'Automatizacije rade';
+
+  @override
+  String get sceneEdit => 'Izmeni scenu';
 }
 
 /// The translations for Serbian, using the Latin script (`sr_Latn`).

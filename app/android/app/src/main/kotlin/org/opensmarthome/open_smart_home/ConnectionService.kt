@@ -15,14 +15,14 @@ import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
 
 /**
- * Keeps the app running after it is closed, so its connection to Home
- * Assistant stays open and messages from automations still arrive. Opt-in;
- * shows a quiet, permanent notification as Android requires. It does no
- * networking itself: the Flutter part does, as when the app is open.
+ * Keeps the app running after it is closed, so the household's
+ * automations keep running on the phone. Opt-in; shows a quiet, permanent
+ * notification as Android requires. It does no work itself: the Flutter
+ * part does, as when the app is open.
  */
 class ConnectionService : Service() {
     companion object {
-        private const val CHANNEL = "ha_connection"
+        private const val CHANNEL = "automations"
         private const val NOTIFICATION_ID = 1001
         private const val PREFS = "connection_service"
 
@@ -61,7 +61,7 @@ class ConnectionService : Service() {
         val manager = getSystemService(NotificationManager::class.java)
         if (Build.VERSION.SDK_INT >= 26) {
             manager.createNotificationChannel(
-                NotificationChannel(CHANNEL, prefs.getString("title", "Home Assistant"), NotificationManager.IMPORTANCE_MIN),
+                NotificationChannel(CHANNEL, prefs.getString("title", "Open Smart Home Lite"), NotificationManager.IMPORTANCE_MIN),
             )
         }
         val open = PendingIntent.getActivity(
@@ -72,7 +72,7 @@ class ConnectionService : Service() {
         )
         val notification: Notification = NotificationCompat.Builder(this, CHANNEL)
             .setSmallIcon(R.drawable.ic_stat_home)
-            .setContentTitle(prefs.getString("title", "Open Smart Home"))
+            .setContentTitle(prefs.getString("title", "Open Smart Home Lite"))
             .setContentText(prefs.getString("text", ""))
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_MIN)

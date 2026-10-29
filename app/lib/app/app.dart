@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../features/add_device/application/address_keeper.dart';
 import '../features/alerts/alert_notifications.dart';
+import '../features/automations/application/automation_engine.dart';
+import '../features/automations/application/background_run.dart';
 import '../features/app_lock/application/app_lock.dart';
 import '../features/app_lock/presentation/app_lock_gate.dart';
 import '../features/devices/application/device_providers.dart';
@@ -44,16 +46,32 @@ class _SmartHomeAppState extends ConsumerState<SmartHomeApp> {
       onHide: () {
         ref.read(appLockProvider.notifier).onBackground();
         ref.read(homeBackendProvider)?.flush();
-        // A wall panel stays in front; a phone stops asking its devices.
-        if (!ref.read(kioskActiveProvider)) {
+        // A wall panel stays in front, and with automations in the
+        // background the devices are followed; else the phone rests.
+        if (!ref.read(kioskActiveProvider) &&
+            !ref.read(backgroundAutomationsProvider)) {
           ref.read(homeBackendProvider)?.setActive(false);
         }
       },
     );
-    // Devices that got a new address while the app was closed.
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => ref.read(addressKeeperProvider).check(),
-    );
+    // Devices that got a new address while the app was closed; the
+    // automations start with the app.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(addressKeeperProvider).check();
+      ref.read(automationEngineProvider);
+      AppLocalizations l10n;
+      try {
+        l10n = lookupAppLocalizations(
+          ref.read(localeProvider) ??
+              WidgetsBinding.instance.platformDispatcher.locale,
+        );
+      } on FlutterError {
+        l10n = lookupAppLocalizations(const Locale('en'));
+      }
+      ref
+          .read(backgroundAutomationsProvider.notifier)
+          .apply(title: l10n.appTitle, text: l10n.backgroundNotificationText);
+    });
   }
 
   @override

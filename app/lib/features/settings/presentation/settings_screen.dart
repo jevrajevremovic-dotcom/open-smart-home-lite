@@ -10,6 +10,7 @@ import '../../../app/localization/l10n.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../core/widgets/responsive.dart';
 import '../../../core/widgets/status_widgets.dart';
+import '../../automations/application/background_run.dart';
 import '../../devices/application/device_providers.dart';
 import '../../devices/data/local/local_home.dart';
 import '../../devices/presentation/device_edit.dart'
@@ -375,6 +376,22 @@ class _SectionBody extends ConsumerWidget {
         ),
       ),
       const Divider(height: 24),
+      if (ref.watch(backgroundPlatformProvider).supported)
+        SwitchListTile(
+          key: const Key('backgroundAutomationsSwitch'),
+          contentPadding: EdgeInsets.zero,
+          secondary: const Icon(Icons.auto_mode),
+          title: Text(l10n.backgroundAutomations),
+          subtitle: Text(l10n.backgroundAutomationsHint),
+          value: ref.watch(backgroundAutomationsProvider),
+          onChanged: (v) => ref
+              .read(backgroundAutomationsProvider.notifier)
+              .set(
+                v,
+                title: l10n.appTitle,
+                text: l10n.backgroundNotificationText,
+              ),
+        ),
       SwitchListTile(
         key: const Key('demoDevicesSwitch'),
         contentPadding: EdgeInsets.zero,

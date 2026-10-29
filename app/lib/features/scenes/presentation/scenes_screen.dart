@@ -13,6 +13,9 @@ import '../../devices/domain/device_kind.dart';
 import '../../devices/presentation/device_actions.dart';
 import '../../devices/presentation/device_grid.dart';
 import '../../devices/presentation/device_presentation.dart';
+import '../../automations/presentation/automation_editor_screen.dart';
+import '../../automations/presentation/scene_editor_screen.dart';
+import '../../restricted/application/restricted_mode.dart';
 
 /// Ids of routines of one kind, sorted by name.
 final routineIdsProvider = Provider.family<ValueList<String>, DeviceKind>((
@@ -35,6 +38,7 @@ class ScenesScreen extends ConsumerWidget {
     final scenes = ref.watch(routineIdsProvider(DeviceKind.scene));
     final scripts = ref.watch(routineIdsProvider(DeviceKind.script));
     final automations = ref.watch(routineIdsProvider(DeviceKind.automation));
+    final restricted = ref.watch(restrictedModeProvider).enabled;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navScenes)),
@@ -47,7 +51,21 @@ class ScenesScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SectionHeader(l10n.scenesTitle),
+                  SectionHeader(
+                    l10n.scenesTitle,
+                    trailing: restricted
+                        ? null
+                        : IconButton.filledTonal(
+                            key: const Key('newScene'),
+                            tooltip: l10n.sceneNew,
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => const SceneEditorScreen(),
+                              ),
+                            ),
+                            icon: const Icon(Icons.add),
+                          ),
+                  ),
                   if (scenes.isEmpty)
                     EmptyHint(
                       icon: Icons.palette_outlined,
@@ -58,10 +76,23 @@ class ScenesScreen extends ConsumerWidget {
                     SectionHeader(l10n.scriptsTitle),
                     for (final id in scripts) _RoutineTile(deviceId: id),
                   ],
-                  if (automations.isNotEmpty) ...[
-                    SectionHeader(l10n.automationsTitle),
-                    for (final id in automations) _AutomationTile(deviceId: id),
-                  ],
+                  SectionHeader(
+                    l10n.automationsTitle,
+                    // Not for children / guests.
+                    trailing: restricted
+                        ? null
+                        : IconButton.filledTonal(
+                            key: const Key('newAutomation'),
+                            tooltip: l10n.autoNew,
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => const AutomationEditorScreen(),
+                              ),
+                            ),
+                            icon: const Icon(Icons.add),
+                          ),
+                  ),
+                  for (final id in automations) _AutomationTile(deviceId: id),
                 ],
               ),
             ),

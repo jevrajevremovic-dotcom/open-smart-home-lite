@@ -15,6 +15,7 @@ Nastala je od Open Smart Home 1.0 i deli njen model uređaja i korisnički inter
 | 1c | ESPHome (native API, sa Noise šifrovanjem) | ✅ |
 | 2 | Hue most, Yeelight, TP-Link Kasa (stari lokalni protokol) | ✅ |
 | 2b | LIFX; Kasa/Tapo sa novim protokolom (KLAP) | |
+| A | Lokalne scene i automatizacije, rad u pozadini | ✅ |
 | 3 | Bluetooth LE: SwitchBot, Xiaomi/Govee senzori | |
 | 4 | Matter | |
 
@@ -62,6 +63,15 @@ Shelly sa lozinkom: Gen2+ preko HTTP Digest (SHA-256), Gen1 preko Basic, korisni
 
 Ograničenja: uređaji na baterije koji spavaju (Shelly H&T) prikazuju se kao nedostupni. Tasmota se obično ne oglašava preko mDNS-a, pa se dodaje preko IP adrese. Stanje se proverava svakih 5 s dok je aplikacija otvorena (zidni tablet u kiosku i u pozadini). Pri pokretanju i povratku u aplikaciju telefon 30 s osluškuje mrežu; dodati uređaj koji se javi sa nove IP adrese (DHCP) se sam prati.
 
+## Scene i automatizacije
+
+Čuvaju se na telefonu (`app/lib/features/automations/`) i prikazuju kao uređaji (`routine:scene_…`, `routine:auto_…`), pa ih početna, kiosk, brze pločice i prečice prikazuju kao i ranije HA scene.
+
+- **Scena** pamti kako su izabrani uređaji podešeni sada (uključeno/isključeno, jačina, boja, roletne, temperatura).
+- **Automatizacija**: kada (vreme, izlazak/zalazak sunca ± minuti, uređaj pređe u stanje, vrednost poraste iznad / padne ispod), samo ako (dani, vreme od–do, stanje uređaja, mrak/dan), uradi (komanda uređaju ili scena).
+- Izlazak i zalazak sunca računaju se na telefonu iz lokacije doma (Podešavanja → Privatnost → prognoza za dom); bez nje sunčevi okidači ne rade, a „mrak“ je 20–6 h.
+- Rade dok aplikacija radi: otvorena, na zidnom tabletu u kiosku, ili uz **Automatizacije u pozadini** (Podešavanja → Dom), kad Androidov servis drži aplikaciju živom uz stalno obaveštenje i posle restarta telefona.
+
 ## Šta je uklonjeno iz 1.0 i kad se vraća
 
 Sve što je radilo preko Home Assistanta je izbačeno (kod je u istoriji originalnog projekta):
@@ -70,7 +80,6 @@ Sve što je radilo preko Home Assistanta je izbačeno (kod je u istoriji origina
 |---|---|
 | Prijava, povezivanje na server, više domova, van kuće | — (nema servera) |
 | Dodavanje Zigbee, Z-Wave i Matter uređaja | faza 4 (Matter) |
-| Editor scena i automatizacija | uz lokalne automatizacije |
 | Zabava, laku noć, buđenje uz svetlo, odmor, dolazak kući, baterije, tajmer uređaja, raspored grejanja, gotov uređaj, simulacija prisustva | uz lokalne automatizacije / prebacivanje na `DeviceCommand` |
 | Istorija, energija, aktivnost, nedeljni pregled | uz lokalnu istoriju stanja |
 | Assist (glas), wake word, kalendar, liste, tabla, porodične poruke, HA obaveštenja i najave, NFC scene, kamere, HA backup podešavanja, servisni ekran instalatera | — |
@@ -83,7 +92,7 @@ Prognoza za dom sada koristi lokaciju telefona zapamćenu kad se prognoza uklju�
 
 ## Ograničenja lite verzije
 
-- Automatizacije rade samo dok aplikacija radi (Android: foreground servis).
+- Automatizacije rade samo dok aplikacija radi (kiosk ili rad u pozadini); telefon je centrala, nema servera koji radi kad je telefon ugašen.
 - Nema pristupa van kuće ni Zigbee/Z-Wave uređaja (osim preko Hue bridge-a / Dirigera).
 - Samo Android; web ne može (nema mDNS ni BLE u pregledaču).
 

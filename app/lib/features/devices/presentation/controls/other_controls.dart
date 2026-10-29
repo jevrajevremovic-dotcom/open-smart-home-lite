@@ -7,6 +7,11 @@ import '../../domain/device_command.dart';
 import '../../domain/device_kind.dart';
 import '../../domain/smart_home_device.dart';
 import '../../../media/presentation/media_player_view.dart';
+import '../../../automations/application/routines_controller.dart';
+import '../../../automations/presentation/automation_editor_screen.dart';
+import '../../../automations/presentation/scene_editor_screen.dart';
+import '../../../kiosk/application/kiosk_controller.dart';
+import '../../../restricted/application/restricted_mode.dart';
 import '../device_actions.dart';
 import '../device_presentation.dart';
 import 'command_slider.dart';
@@ -206,9 +211,82 @@ class RoutineControls extends ConsumerWidget {
             icon: const Icon(Icons.play_arrow),
             label: Text(isAutomation ? l10n.runNow : l10n.activate),
           ),
+        // The household's own: changed and deleted here (not in kiosk /
+        // child mode).
+        if (device.id.startsWith('routine:') &&
+            !ref.watch(kioskActiveProvider) &&
+            !ref.watch(restrictedModeProvider).enabled) ...[
+          const SizedBox(height: 12),
+          OutlinedButton.icon(
+            key: const Key('editRoutine'),
+            onPressed: () => _editRoutine(context, ref, device),
+            icon: const Icon(Icons.edit_outlined),
+            label: Text(isAutomation ? l10n.autoEdit : l10n.sceneEdit),
+          ),
+          TextButton.icon(
+            key: const Key('deleteRoutine'),
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(context).colorScheme.error,
+            ),
+            onPressed: () => _deleteRoutine(context, ref, device),
+            icon: const Icon(Icons.delete_outline),
+            label: Text(isAutomation ? l10n.autoDelete : l10n.sceneDelete),
+          ),
+        ],
       ],
     );
   }
+}
+
+void _editRoutine(BuildContext context, WidgetRef ref, SmartHomeDevice d) {
+  final routines = ref.read(routinesProvider);
+  final Widget? screen = d.kind == DeviceKind.automation
+      ? switch (routines.automations
+            .where((a) => a.id == d.sourceId)
+            .firstOrNull) {
+          final a? => AutomationEditorScreen(automation: a),
+          null => null,
+        }
+      : switch (routines.scenes.where((s) => s.id == d.sourceId).firstOrNull) {
+          final s? => SceneEditorScreen(scene: s),
+          null => null,
+        };
+  if (screen == null) return;
+  Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => screen));
+}
+
+Future<void> _deleteRoutine(
+  BuildContext context,
+  WidgetRef ref,
+  SmartHomeDevice d,
+) async {
+  final l10n = context.l10n;
+  final navigator = Navigator.of(context);
+  final automation = d.kind == DeviceKind.automation;
+  final ok = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(automation ? l10n.autoDelete : l10n.sceneDelete),
+      content: Text(l10n.autoDeleteConfirm(d.name)),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text(l10n.cancel),
+        ),
+        FilledButton(
+          key: const Key('confirmDeleteRoutine'),
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text(l10n.delete),
+        ),
+      ],
+    ),
+  );
+  if (ok != true) return;
+  final controller = ref.read(routinesProvider.notifier);
+  await (automation
+      ? controller.deleteAutomation(d.sourceId)
+      : controller.deleteScene(d.sourceId));
+  if (navigator.canPop()) navigator.pop();
 }
 
 /// The player (artwork, seek bar, transport, volume, source).

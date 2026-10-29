@@ -8858,6 +8858,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The bridge\'s button was not pressed. Try again.'**
   String get hueLinkFailed;
+
+  /// No description provided for @sceneHintLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'Keeps how the chosen devices are set now (on/off, brightness, colour, blinds, temperature). Running the scene sets them so again.'**
+  String get sceneHintLocal;
+
+  /// No description provided for @sceneSavedLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'Scene saved.'**
+  String get sceneSavedLocal;
+
+  /// No description provided for @autoSavedLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'Automation saved.'**
+  String get autoSavedLocal;
+
+  /// No description provided for @autoHintLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'Runs on this phone: while the app is open, on a wall panel in kiosk mode, or with running in the background on (Settings → Home).'**
+  String get autoHintLocal;
+
+  /// No description provided for @autoSunNeedsHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunrise and sunset need the home\'s location: turn on the home forecast (Settings → Privacy).'**
+  String get autoSunNeedsHome;
+
+  /// No description provided for @autoActionTurnOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on'**
+  String get autoActionTurnOn;
+
+  /// No description provided for @autoActionTurnOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off'**
+  String get autoActionTurnOff;
+
+  /// No description provided for @autoActionToggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle'**
+  String get autoActionToggle;
+
+  /// No description provided for @autoActionBrightness.
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness {percent} %'**
+  String autoActionBrightness(int percent);
+
+  /// No description provided for @autoActionScene.
+  ///
+  /// In en, this message translates to:
+  /// **'Run scene'**
+  String get autoActionScene;
+
+  /// No description provided for @autoPickAction.
+  ///
+  /// In en, this message translates to:
+  /// **'What to do'**
+  String get autoPickAction;
+
+  /// No description provided for @autoTriggerAt.
+  ///
+  /// In en, this message translates to:
+  /// **'At {time}'**
+  String autoTriggerAt(String time);
+
+  /// No description provided for @autoDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Days'**
+  String get autoDays;
+
+  /// No description provided for @autoStateIs.
+  ///
+  /// In en, this message translates to:
+  /// **'{device}: {state}'**
+  String autoStateIs(String device, String state);
+
+  /// No description provided for @autoValueAbove.
+  ///
+  /// In en, this message translates to:
+  /// **'{device} above {value}'**
+  String autoValueAbove(String device, String value);
+
+  /// No description provided for @autoValueBelow.
+  ///
+  /// In en, this message translates to:
+  /// **'{device} below {value}'**
+  String autoValueBelow(String device, String value);
+
+  /// No description provided for @autoTargetOn.
+  ///
+  /// In en, this message translates to:
+  /// **'on'**
+  String get autoTargetOn;
+
+  /// No description provided for @autoTargetOff.
+  ///
+  /// In en, this message translates to:
+  /// **'off'**
+  String get autoTargetOff;
+
+  /// No description provided for @autoTargetOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'open'**
+  String get autoTargetOpen;
+
+  /// No description provided for @autoTargetClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'closed'**
+  String get autoTargetClosed;
+
+  /// No description provided for @autoTargetActive.
+  ///
+  /// In en, this message translates to:
+  /// **'active'**
+  String get autoTargetActive;
+
+  /// No description provided for @autoTargetInactive.
+  ///
+  /// In en, this message translates to:
+  /// **'inactive'**
+  String get autoTargetInactive;
+
+  /// No description provided for @autoTargetLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'locked'**
+  String get autoTargetLocked;
+
+  /// No description provided for @autoTargetUnlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'unlocked'**
+  String get autoTargetUnlocked;
+
+  /// No description provided for @autoBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'before'**
+  String get autoBefore;
+
+  /// No description provided for @autoAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'after'**
+  String get autoAfter;
+
+  /// No description provided for @backgroundAutomations.
+  ///
+  /// In en, this message translates to:
+  /// **'Automations in the background'**
+  String get backgroundAutomations;
+
+  /// No description provided for @backgroundAutomationsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The app keeps running when closed, so automations work. Android then shows a permanent notification.'**
+  String get backgroundAutomationsHint;
+
+  /// No description provided for @backgroundNotificationText.
+  ///
+  /// In en, this message translates to:
+  /// **'Automations are running'**
+  String get backgroundNotificationText;
+
+  /// No description provided for @sceneEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit scene'**
+  String get sceneEdit;
 }
 
 class _AppLocalizationsDelegate

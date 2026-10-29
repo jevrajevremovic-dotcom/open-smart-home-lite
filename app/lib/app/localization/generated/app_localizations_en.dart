@@ -5203,4 +5203,108 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get hueLinkFailed =>
       'The bridge\'s button was not pressed. Try again.';
+
+  @override
+  String get sceneHintLocal =>
+      'Keeps how the chosen devices are set now (on/off, brightness, colour, blinds, temperature). Running the scene sets them so again.';
+
+  @override
+  String get sceneSavedLocal => 'Scene saved.';
+
+  @override
+  String get autoSavedLocal => 'Automation saved.';
+
+  @override
+  String get autoHintLocal =>
+      'Runs on this phone: while the app is open, on a wall panel in kiosk mode, or with running in the background on (Settings → Home).';
+
+  @override
+  String get autoSunNeedsHome =>
+      'Sunrise and sunset need the home\'s location: turn on the home forecast (Settings → Privacy).';
+
+  @override
+  String get autoActionTurnOn => 'Turn on';
+
+  @override
+  String get autoActionTurnOff => 'Turn off';
+
+  @override
+  String get autoActionToggle => 'Toggle';
+
+  @override
+  String autoActionBrightness(int percent) {
+    return 'Brightness $percent %';
+  }
+
+  @override
+  String get autoActionScene => 'Run scene';
+
+  @override
+  String get autoPickAction => 'What to do';
+
+  @override
+  String autoTriggerAt(String time) {
+    return 'At $time';
+  }
+
+  @override
+  String get autoDays => 'Days';
+
+  @override
+  String autoStateIs(String device, String state) {
+    return '$device: $state';
+  }
+
+  @override
+  String autoValueAbove(String device, String value) {
+    return '$device above $value';
+  }
+
+  @override
+  String autoValueBelow(String device, String value) {
+    return '$device below $value';
+  }
+
+  @override
+  String get autoTargetOn => 'on';
+
+  @override
+  String get autoTargetOff => 'off';
+
+  @override
+  String get autoTargetOpen => 'open';
+
+  @override
+  String get autoTargetClosed => 'closed';
+
+  @override
+  String get autoTargetActive => 'active';
+
+  @override
+  String get autoTargetInactive => 'inactive';
+
+  @override
+  String get autoTargetLocked => 'locked';
+
+  @override
+  String get autoTargetUnlocked => 'unlocked';
+
+  @override
+  String get autoBefore => 'before';
+
+  @override
+  String get autoAfter => 'after';
+
+  @override
+  String get backgroundAutomations => 'Automations in the background';
+
+  @override
+  String get backgroundAutomationsHint =>
+      'The app keeps running when closed, so automations work. Android then shows a permanent notification.';
+
+  @override
+  String get backgroundNotificationText => 'Automations are running';
+
+  @override
+  String get sceneEdit => 'Edit scene';
 }
