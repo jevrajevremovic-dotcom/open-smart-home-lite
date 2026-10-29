@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Home Assistant on a local network is usually served over plain HTTP
+  (http://homeassistant.local:8123), and Android cannot scope cleartext
+  permission to private IP ranges. Cleartext is therefore allowed here and
+  the policy is enforced in app code (ServerAddress.risk): plain HTTP to a
+  public address requires an explicit, warned acknowledgement.
+  Only system CAs are trusted; user CAs and self-signed certificates are
+  accepted solely through an explicit per-server fingerprint pin.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

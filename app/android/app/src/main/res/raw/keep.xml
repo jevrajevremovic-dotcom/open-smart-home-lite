@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Referenced by name from Dart (notifications, app shortcuts), so resource
+     shrinking cannot see it. -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/ic_stat_home,@drawable/ic_scene,@drawable/ic_assist,@drawable/ic_kiosk,@drawable/ic_check" />

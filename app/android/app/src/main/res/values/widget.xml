@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Warm theme of the app (light). -->
+    <color name="widget_background">#FFF7F1EA</color>
+    <color name="widget_button">#FFF2DCC8</color>
+    <color name="widget_text">#FF3A2A1E</color>
+    <color name="widget_on">#FFFFE2B8</color>
+
+    <style name="SceneWidgetButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:background">@drawable/widget_button</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:textColor">@color/widget_text</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="HomeWidgetTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/widget_text</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginBottom">4dp</item>
+    </style>
+
+    <style name="HomeWidgetLine">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/widget_text</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="HomeWidgetSmall">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/widget_text</item>
+        <item name="android:alpha">0.7</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="HomeWidgetRound">
+        <item name="android:layout_width">44dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:background">@drawable/widget_button</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/widget_text</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <string name="status_widget_label">Home</string>
+    <string name="status_widget_description">Lights, doors, locks and alarm at a glance</string>
+    <string name="thermostat_widget_label">Thermostat</string>
+    <string name="thermostat_widget_description">Warmer or cooler from the home screen</string>
+    <string name="thermostat_widget_down">Cooler</string>
+    <string name="thermostat_widget_up">Warmer</string>
+    <string name="light_widget_label">Light</string>
+    <string name="light_widget_description">One light, on and off with a tap</string>
+    <string name="home_widget_open">Open the app to set this up</string>
+    <string name="scenes_widget_label">Scenes</string>
+    <string name="scenes_widget_description">Run your favourite scenes from the home screen</string>
+    <string name="scenes_widget_empty">Open Smart Home</string>
+    <string name="scenes_widget_sample_1">Movie night</string>
+    <string name="scenes_widget_sample_2">Good morning</string>
+    <string name="scenes_widget_sample_3">Leaving home</string>
+</resources>

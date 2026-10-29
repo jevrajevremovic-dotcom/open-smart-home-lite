@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="quick_tile_1">Smart Home 1</string>
+    <string name="quick_tile_2">Smart Home 2</string>
+    <string name="quick_tile_3">Smart Home 3</string>
+    <string name="quick_tile_unset">Not set up</string>
+</resources>

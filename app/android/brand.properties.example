@@ -1,0 +1,13 @@
+# Copy to brand.properties (not in git) and fill in; build with tool/build_brand.sh.
+# Name under the icon and in the app.
+name=Pametna Kuća Jagodina
+# Own Android id: the branded app installs next to the community one.
+applicationId=rs.example.pametnakuca
+# Brand colour (#RRGGBB).
+accent=#1F6FB2
+# Shown on the service screen: who to call.
+support=+381 60 000 0000 · servis@example.rs
+# Where the app looks for updates: a public GitHub repository (owner/repo).
+updates=
+# Optional: path to a square PNG logo (copied into the build).
+logo=

@@ -1,0 +1,112 @@
+import '../../../features/devices/domain/tv_key.dart';
+
+/// Remote-control key names per Home Assistant integration, as their
+/// documentation lists them (`remote.send_command`, or `webostv.button`
+/// for LG). A key missing here is not offered for that TV.
+const Map<String, Map<TvKey, String>> haTvKeyNames = {
+  // Android / Google TV (androidtv_remote): Android key codes.
+  'androidtv_remote': {
+    TvKey.up: 'DPAD_UP',
+    TvKey.down: 'DPAD_DOWN',
+    TvKey.left: 'DPAD_LEFT',
+    TvKey.right: 'DPAD_RIGHT',
+    TvKey.ok: 'DPAD_CENTER',
+    TvKey.back: 'BACK',
+    TvKey.home: 'HOME',
+    TvKey.menu: 'MENU',
+    TvKey.volumeUp: 'VOLUME_UP',
+    TvKey.volumeDown: 'VOLUME_DOWN',
+    TvKey.mute: 'VOLUME_MUTE',
+    TvKey.channelUp: 'CHANNEL_UP',
+    TvKey.channelDown: 'CHANNEL_DOWN',
+    TvKey.playPause: 'MEDIA_PLAY_PAUSE',
+  },
+  // Samsung (samsungtv).
+  'samsungtv': {
+    TvKey.up: 'KEY_UP',
+    TvKey.down: 'KEY_DOWN',
+    TvKey.left: 'KEY_LEFT',
+    TvKey.right: 'KEY_RIGHT',
+    TvKey.ok: 'KEY_ENTER',
+    TvKey.back: 'KEY_RETURN',
+    TvKey.home: 'KEY_HOME',
+    TvKey.menu: 'KEY_MENU',
+    TvKey.volumeUp: 'KEY_VOLUP',
+    TvKey.volumeDown: 'KEY_VOLDOWN',
+    TvKey.mute: 'KEY_MUTE',
+    TvKey.channelUp: 'KEY_CHUP',
+    TvKey.channelDown: 'KEY_CHDOWN',
+  },
+  // LG webOS (webostv.button on the media player).
+  'webostv': {
+    TvKey.up: 'UP',
+    TvKey.down: 'DOWN',
+    TvKey.left: 'LEFT',
+    TvKey.right: 'RIGHT',
+    TvKey.ok: 'ENTER',
+    TvKey.back: 'BACK',
+    TvKey.home: 'HOME',
+    TvKey.menu: 'MENU',
+    TvKey.volumeUp: 'VOLUMEUP',
+    TvKey.volumeDown: 'VOLUMEDOWN',
+    TvKey.mute: 'MUTE',
+    TvKey.channelUp: 'CHANNELUP',
+    TvKey.channelDown: 'CHANNELDOWN',
+  },
+  // Sony Bravia (braviatv): only the documented common commands.
+  'braviatv': {
+    TvKey.up: 'Up',
+    TvKey.down: 'Down',
+    TvKey.left: 'Left',
+    TvKey.right: 'Right',
+    TvKey.ok: 'Confirm',
+    TvKey.back: 'Return',
+    TvKey.home: 'Home',
+    TvKey.menu: 'ActionMenu',
+  },
+  // Roku.
+  'roku': {
+    TvKey.up: 'up',
+    TvKey.down: 'down',
+    TvKey.left: 'left',
+    TvKey.right: 'right',
+    TvKey.ok: 'select',
+    TvKey.back: 'back',
+    TvKey.home: 'home',
+    TvKey.volumeUp: 'volume_up',
+    TvKey.volumeDown: 'volume_down',
+    TvKey.mute: 'volume_mute',
+    TvKey.channelUp: 'channel_up',
+    TvKey.channelDown: 'channel_down',
+    TvKey.playPause: 'play',
+  },
+  // Apple TV: "menu" is its back key.
+  'apple_tv': {
+    TvKey.up: 'up',
+    TvKey.down: 'down',
+    TvKey.left: 'left',
+    TvKey.right: 'right',
+    TvKey.ok: 'select',
+    TvKey.back: 'menu',
+    TvKey.home: 'home',
+    TvKey.volumeUp: 'volume_up',
+    TvKey.volumeDown: 'volume_down',
+  },
+  // Philips (philips_js).
+  'philips_js': {
+    TvKey.up: 'CursorUp',
+    TvKey.down: 'CursorDown',
+    TvKey.left: 'CursorLeft',
+    TvKey.right: 'CursorRight',
+    TvKey.ok: 'Confirm',
+    TvKey.back: 'Back',
+    TvKey.home: 'Home',
+    TvKey.menu: 'Options',
+    TvKey.volumeUp: 'VolumeUp',
+    TvKey.volumeDown: 'VolumeDown',
+    TvKey.mute: 'Mute',
+    TvKey.channelUp: 'ChannelStepUp',
+    TvKey.channelDown: 'ChannelStepDown',
+    TvKey.playPause: 'PlayPause',
+  },
+};

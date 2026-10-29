@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="quick_tile_1">Pametna kuća 1</string>
+    <string name="quick_tile_2">Pametna kuća 2</string>
+    <string name="quick_tile_3">Pametna kuća 3</string>
+    <string name="quick_tile_unset">Nije podešeno</string>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Shown in the launcher's widget gallery only. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_background"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="6dp">
+
+    <TextView style="@style/SceneWidgetButton" android:text="@string/scenes_widget_sample_1" />
+    <TextView style="@style/SceneWidgetButton" android:text="@string/scenes_widget_sample_2" />
+    <TextView style="@style/SceneWidgetButton" android:text="@string/scenes_widget_sample_3" />
+</LinearLayout>
