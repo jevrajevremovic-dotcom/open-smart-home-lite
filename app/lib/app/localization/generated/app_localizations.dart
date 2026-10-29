@@ -7668,7 +7668,7 @@ abstract class AppLocalizations {
   /// No description provided for @batteryReminderHint.
   ///
   /// In en, this message translates to:
-  /// **'Home Assistant leaves the household a message (and tells this phone, if registered) when a battery drops to {percent} % or below.'**
+  /// **'This phone or tablet tells you with a notification when a device\'s battery drops to {percent} % or lower (while the app runs, or with automations in the background).'**
   String batteryReminderHint(int percent);
 
   /// No description provided for @batteryReminderAlias.

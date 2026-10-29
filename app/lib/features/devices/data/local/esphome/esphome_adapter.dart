@@ -390,7 +390,9 @@ class _Entity {
       capabilities: capabilities,
       state: state,
       limits: limits,
-      isAuxiliary: auxiliary,
+      // A battery level is shown with its device (and in Batteries).
+      isAuxiliary:
+          auxiliary || (platform == 'sensor' && deviceClass == 'battery'),
       metadata: DeviceMetadata(
         haDeviceClass: deviceClass.isEmpty ? null : deviceClass,
       ),
@@ -530,6 +532,7 @@ class _Entity {
           'power' => (DeviceKind.powerMeter, Capability.powerConsumption),
           'energy' => (DeviceKind.energyMeter, Capability.energyConsumption),
           'illuminance' => (DeviceKind.illuminanceSensor, null),
+          'battery' => (DeviceKind.batterySensor, Capability.battery),
           _ => (DeviceKind.sensor, null),
         };
         return (

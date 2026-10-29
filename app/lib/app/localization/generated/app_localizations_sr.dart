@@ -4498,7 +4498,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String batteryReminderHint(int percent) {
-    return 'Home Assistant ostavlja poruku ukućanima (i šalje na ovaj telefon, ako je registrovan) kad baterija padne na $percent % ili niže.';
+    return 'Ovaj telefon ili tablet javi obaveštenjem kad baterija nekog uređaja padne na $percent % ili niže (dok aplikacija radi, ili uz automatizacije u pozadini).';
   }
 
   @override

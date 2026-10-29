@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/localization/l10n.dart';
 import '../kiosk/application/kiosk_controller.dart';
 import '../restricted/application/restricted_mode.dart';
+import 'batteries.dart';
 import 'bedtime.dart';
 import 'guest_wifi.dart';
 import 'party.dart';
@@ -41,6 +42,13 @@ class _ExtrasSheet extends ConsumerWidget {
       restrictedModeProvider.select((s) => s.enabled),
     );
     final extras = <_Extra>[
+      if (!restricted)
+        (
+          key: const Key('extraBatteries'),
+          icon: Icons.battery_alert_outlined,
+          label: l10n.batteriesTitle,
+          open: showBatteries,
+        ),
       if (!restricted)
         (
           key: const Key('extraVacation'),

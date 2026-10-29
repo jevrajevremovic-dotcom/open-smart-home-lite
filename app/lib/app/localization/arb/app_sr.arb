@@ -1262,7 +1262,7 @@
   "batteriesNone": "Nijedan uređaj ne javlja bateriju.",
   "batteriesSummary": "{count, plural, =1{1 uređaj na bateriju} few{{count} uređaja na baterije} other{{count} uređaja na baterije}} · {low, plural, =0{sve u redu} =1{1 pri kraju} few{{low} pri kraju} other{{low} pri kraju}}",
   "batteryReminder": "Javi kad je baterija pri kraju",
-  "batteryReminderHint": "Home Assistant ostavlja poruku ukućanima (i šalje na ovaj telefon, ako je registrovan) kad baterija padne na {percent} % ili niže.",
+  "batteryReminderHint": "Ovaj telefon ili tablet javi obaveštenjem kad baterija nekog uređaja padne na {percent} % ili niže (dok aplikacija radi, ili uz automatizacije u pozadini).",
   "batteryReminderAlias": "Baterija pri kraju (Open Smart Home)",
   "batteryReminderMessage": "Baterija je pri kraju: {name} ({percent} %)",
   "batteryLowShort": "Slaba baterija",

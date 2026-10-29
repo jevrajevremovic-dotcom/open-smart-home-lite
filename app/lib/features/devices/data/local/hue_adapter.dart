@@ -159,6 +159,7 @@ List<SmartHomeDevice> parseHue(
     bool available = true,
   }) {
     final unique = json['uniqueid'] as String? ?? part;
+    final battery = _num(_map(json['config'])['battery'])?.round();
     return SmartHomeDevice(
       id: '${bridge.key}:$part',
       sourceId: part,
@@ -173,6 +174,7 @@ List<SmartHomeDevice> parseHue(
       capabilities: capabilities,
       state: state,
       limits: limits,
+      metadata: DeviceMetadata(batteryPercent: battery),
     );
   }
 

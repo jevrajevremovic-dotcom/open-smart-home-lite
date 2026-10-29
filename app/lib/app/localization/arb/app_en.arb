@@ -1795,7 +1795,7 @@
   "batteriesSummary": "{count, plural, =1{1 battery device} other{{count} battery devices}} · {low, plural, =0{all fine} =1{1 running low} other{{low} running low}}",
   "@batteriesSummary": {"placeholders": {"count": {"type": "int"}, "low": {"type": "int"}}},
   "batteryReminder": "Tell me when a battery runs low",
-  "batteryReminderHint": "Home Assistant leaves the household a message (and tells this phone, if registered) when a battery drops to {percent} % or below.",
+  "batteryReminderHint": "This phone or tablet tells you with a notification when a device's battery drops to {percent} % or lower (while the app runs, or with automations in the background).",
   "@batteryReminderHint": {"placeholders": {"percent": {"type": "int"}}},
   "batteryReminderAlias": "Battery running low (Open Smart Home)",
   "batteryReminderMessage": "Battery running low: {name} ({percent} %)",

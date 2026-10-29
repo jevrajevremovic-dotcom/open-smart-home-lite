@@ -204,6 +204,9 @@ List<SmartHomeDevice> parseShellyGen2(
   final metadata = DeviceMetadata(
     signalStrength: _num(_map(status['wifi'])['rssi']),
     signalUnit: 'dBm',
+    batteryPercent: _num(
+      _map(_map(status['devicepower:0'])['battery'])['percent'],
+    )?.round(),
   );
   final keys = status.keys.where((k) => k.contains(':')).toList()..sort();
   int countOf(String component) =>
@@ -352,6 +355,7 @@ List<SmartHomeDevice> parseShellyGen1(
   final metadata = DeviceMetadata(
     signalStrength: _num(_map(status['wifi_sta'])['rssi']),
     signalUnit: 'dBm',
+    batteryPercent: _num(_map(status['bat'])['value'])?.round(),
   );
   final out = <SmartHomeDevice>[];
   List<Map<String, Object?>> list(Object? l) => [

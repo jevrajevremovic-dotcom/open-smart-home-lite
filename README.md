@@ -74,7 +74,7 @@ Ograničenja: uređaji na baterije koji spavaju (Shelly H&T) prikazuju se kao ne
 
 ## Dodaci (meni „Još“ i ekran uređaja)
 
-Vraćeni iz 1.0, sada rade na telefonu umesto u Home Assistantu: **zabava** (boje svetala se smenjuju, posle se sve vraća), **laku noć** (priča uz prigušivanje u koracima), **buđenje svetlom** (svakog minuta svetlije i hladnije do vremena buđenja), **odmor** (grejanje dole, simulacija prisustva uključena; posle sve kako je bilo), **simulacija prisustva** (Podešavanja → Bezbednost), **tajmer uređaja** („isključi za 30 min“), **raspored grejanja** (čuva se kao automatizacije doma) i **javi kad je gotov** (prati snagu uređaja, javlja obaveštenjem). Sve što radi po vremenu radi dok aplikacija radi (kiosk ili automatizacije u pozadini); simulacija prisustva traži uređaj koji ostaje kod kuće.
+Vraćeni iz 1.0, sada rade na telefonu umesto u Home Assistantu: **zabava** (boje svetala se smenjuju, posle se sve vraća), **laku noć** (priča uz prigušivanje u koracima), **buđenje svetlom** (svakog minuta svetlije i hladnije do vremena buđenja), **odmor** (grejanje dole, simulacija prisustva uključena; posle sve kako je bilo), **simulacija prisustva** (Podešavanja → Bezbednost), **tajmer uređaja** („isključi za 30 min“), **raspored grejanja** (čuva se kao automatizacije doma) i **javi kad je gotov** (prati snagu uređaja, javlja obaveštenjem), **baterije** (lista, najprazniji prvi; podsetnik obaveštenjem jednom po uređaju kad padne na 15 %; nivo javljaju Hue senzori, ESPHome senzori klase `battery` i Shelly uređaji na baterije). Sve što radi po vremenu radi dok aplikacija radi (kiosk ili automatizacije u pozadini); simulacija prisustva traži uređaj koji ostaje kod kuće.
 
 ## Šta je uklonjeno iz 1.0 i kad se vraća
 
@@ -84,7 +84,6 @@ Sve što je radilo preko Home Assistanta je izbačeno (kod je u istoriji origina
 |---|---|
 | Prijava, povezivanje na server, više domova, van kuće | — (nema servera) |
 | Dodavanje Zigbee, Z-Wave i Matter uređaja | faza 4 (Matter) |
-| Baterije (podsetnik) | kad adapteri budu javljali nivo baterije |
 | Dolazak kući | — (bez pristupa van kuće dugme ne može da stigne do uređaja) |
 | Istorija, energija, aktivnost, nedeljni pregled | uz lokalnu istoriju stanja |
 | Assist (glas), wake word, kalendar, liste, tabla, porodične poruke, HA obaveštenja i najave, NFC scene, kamere, HA backup podešavanja, servisni ekran instalatera | — |
