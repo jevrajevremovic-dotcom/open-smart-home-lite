@@ -5118,7 +5118,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get demoHomeNotice =>
-      'Ovo je demo dom. Dodajte svoje Shelly ili WLED uređaje i demo će se sam ugasiti.';
+      'Ovo je demo dom. Dodajte svoje Shelly, WLED ili Tasmota uređaje i demo će se sam ugasiti.';
 
   @override
   String get firstRunWelcomeBodyLite =>
@@ -5132,7 +5132,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get addDeviceLanHint =>
-      'Shelly i WLED uređaji na istoj Wi-Fi mreži kao telefon pojavljuju se ovde sami.';
+      'Shelly i WLED uređaji na istoj Wi-Fi mreži kao telefon pojavljuju se ovde sami. Tasmota uređaje dodajte preko IP adrese.';
 
   @override
   String get addDeviceSearching => 'Tražim uređaje…';
@@ -5151,7 +5151,8 @@ class AppLocalizationsSr extends AppLocalizations {
   String get addDeviceChecking => 'Proveravam…';
 
   @override
-  String get addDeviceNotFound => 'Na toj adresi nije pronađen Shelly ni WLED.';
+  String get addDeviceNotFound =>
+      'Na toj adresi nije pronađen Shelly, WLED ni Tasmota.';
 
   @override
   String get addDeviceAdded => 'Dodat';
@@ -5197,6 +5198,16 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get homeDevicesTitle => 'Uređaji';
+
+  @override
+  String get devicePasswordLabel => 'Lozinka uređaja';
+
+  @override
+  String get devicePasswordHint =>
+      'Ovaj uređaj traži lozinku (korisnik admin). Čuva se samo na ovom telefonu, u bezbednom skladištu.';
+
+  @override
+  String get devicePasswordChange => 'Lozinka uređaja…';
 }
 
 /// The translations for Serbian, using the Latin script (`sr_Latn`).

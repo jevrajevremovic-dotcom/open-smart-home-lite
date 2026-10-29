@@ -51,11 +51,11 @@ class AddDeviceScreen extends ConsumerWidget {
                   Card.outlined(
                     child: ListTile(
                       key: ValueKey('found-${p.device.key}'),
-                      leading: Icon(
-                        p.brand == 'WLED'
-                            ? Icons.light_outlined
-                            : Icons.power_outlined,
-                      ),
+                      leading: Icon(switch (p.brand) {
+                        'WLED' => Icons.light_outlined,
+                        'Tasmota' => Icons.outlet_outlined,
+                        _ => Icons.power_outlined,
+                      }),
                       title: Text(p.title),
                       subtitle: Text(
                         [p.brand, ?p.device.model, p.device.host].join(' · '),
@@ -113,14 +113,16 @@ class AddDeviceScreen extends ConsumerWidget {
   ) async {
     final l10n = context.l10n;
     final messenger = ScaffoldMessenger.of(context);
-    final room = await showDialog<(String?,)>(
+    final choice = await showDialog<(String?, String?)>(
       context: context,
-      builder: (_) => _RoomDialog(title: found.title),
+      builder: (_) =>
+          _RoomDialog(title: found.title, needsPassword: found.needsPassword),
     );
-    if (room == null) return;
+    if (choice == null) return;
+    final (roomId, password) = choice;
     await ref
         .read(localHomeProvider.notifier)
-        .addDevice(found.device, roomId: room.$1);
+        .addDevice(found.device, roomId: roomId, password: password);
     messenger
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(content: Text(l10n.addDeviceDone(found.title))));
@@ -175,11 +177,13 @@ class _AddressDialogState extends State<_AddressDialog> {
   }
 }
 
-/// Which room the new device goes to; returns `(roomId,)` or `null`.
+/// Which room the new device goes to, and its password if it asks for
+/// one; returns `(roomId, password)` or `null`.
 class _RoomDialog extends StatefulWidget {
-  const _RoomDialog({required this.title});
+  const _RoomDialog({required this.title, this.needsPassword = false});
 
   final String title;
+  final bool needsPassword;
 
   @override
   State<_RoomDialog> createState() => _RoomDialogState();
@@ -187,6 +191,13 @@ class _RoomDialog extends StatefulWidget {
 
 class _RoomDialogState extends State<_RoomDialog> {
   String? _room;
+  final _password = TextEditingController();
+
+  @override
+  void dispose() {
+    _password.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -200,6 +211,19 @@ class _RoomDialogState extends State<_RoomDialog> {
           Text(l10n.addDeviceWhere),
           const SizedBox(height: 12),
           RoomPicker(value: _room, onChanged: (v) => setState(() => _room = v)),
+          if (widget.needsPassword) ...[
+            const SizedBox(height: 16),
+            Text(l10n.devicePasswordHint),
+            const SizedBox(height: 8),
+            TextField(
+              key: const Key('addDevicePassword'),
+              controller: _password,
+              obscureText: true,
+              autocorrect: false,
+              enableSuggestions: false,
+              decoration: InputDecoration(labelText: l10n.devicePasswordLabel),
+            ),
+          ],
         ],
       ),
       actions: [
@@ -209,7 +233,9 @@ class _RoomDialogState extends State<_RoomDialog> {
         ),
         FilledButton(
           key: const Key('addDeviceConfirm'),
-          onPressed: () => Navigator.of(context).pop((_room,)),
+          onPressed: () =>
+              Navigator.of(context)
+                  .pop((_room, widget.needsPassword ? _password.text : null)),
           child: Text(l10n.addDeviceAdd),
         ),
       ],

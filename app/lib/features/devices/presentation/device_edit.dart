@@ -221,3 +221,65 @@ class _DeviceEditDialogState extends ConsumerState<DeviceEditDialog> {
 /// Whether [device] belongs to a device the household added (not the demo).
 bool isAddedDevice(LocalHome home, SmartHomeDevice device) =>
     home.devices.any((d) => d.key == device.deviceId);
+
+/// Sets (or, left empty, removes) a device's password.
+class DevicePasswordDialog extends ConsumerStatefulWidget {
+  const DevicePasswordDialog({super.key, required this.deviceKey});
+
+  final String deviceKey;
+
+  @override
+  ConsumerState<DevicePasswordDialog> createState() =>
+      _DevicePasswordDialogState();
+}
+
+class _DevicePasswordDialogState extends ConsumerState<DevicePasswordDialog> {
+  final _password = TextEditingController();
+
+  @override
+  void dispose() {
+    _password.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return AlertDialog(
+      title: Text(l10n.devicePasswordLabel),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.devicePasswordHint),
+          const SizedBox(height: 8),
+          TextField(
+            key: const Key('devicePassword'),
+            controller: _password,
+            obscureText: true,
+            autocorrect: false,
+            enableSuggestions: false,
+            decoration: InputDecoration(labelText: l10n.devicePasswordLabel),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.cancel),
+        ),
+        FilledButton(
+          key: const Key('devicePasswordSave'),
+          onPressed: () async {
+            final navigator = Navigator.of(context);
+            await ref
+                .read(localHomeProvider.notifier)
+                .setPassword(widget.deviceKey, _password.text);
+            navigator.pop();
+          },
+          child: Text(l10n.save),
+        ),
+      ],
+    );
+  }
+}

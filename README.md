@@ -2,7 +2,7 @@
 
 Lite verzija [Open Smart Home](https://github.com/jevrajevremovic-dotcom/open-smart-home) aplikacije: uređaji koji se povezuju na telefon preko **Wi-Fi-ja** (lokalna mreža) i **Bluetooth-a**, u jednoj aplikaciji, **bez Home Assistanta i bez Raspberry Pi-ja**. Telefon je centrala.
 
-Nastala je od Open Smart Home 1.0 i deli njen model uređaja i korisnički interfejs. Aplikacija se instalira pored originala (`org.opensmarthome.lite`). Radi sa Shelly i WLED uređajima na lokalnoj mreži; dok se ne doda prvi uređaj, prikazuje demo dom.
+Nastala je od Open Smart Home 1.0 i deli njen model uređaja i korisnički interfejs. Aplikacija se instalira pored originala (`org.opensmarthome.lite`). Radi sa Shelly, WLED i Tasmota uređajima na lokalnoj mreži; dok se ne doda prvi uređaj, prikazuje demo dom.
 
 ## Plan
 
@@ -11,7 +11,8 @@ Nastala je od Open Smart Home 1.0 i deli njen model uređaja i korisnički inter
 | 0 | `HomeBackend` interfejs: stanje i komande idu kroz njega | ✅ |
 | 0b | Bez Home Assistanta: `LocalBackend` + adapteri, demo dom, prvo pokretanje bez prijave | ✅ |
 | 1 | Lokalna lista uređaja i soba, mDNS otkrivanje, Shelly i WLED | ✅ |
-| 1b | Tasmota, ESPHome; Shelly sa lozinkom; WLED efekti i preseti | |
+| 1b | Tasmota, Shelly sa lozinkom, WLED efekti i preseti, praćenje promenjene IP adrese | ✅ |
+| 1c | ESPHome (native API) | |
 | 2 | Hue bridge, LIFX, Yeelight, TP-Link Kasa | |
 | 3 | Bluetooth LE: SwitchBot, Xiaomi/Govee senzori | |
 | 4 | Matter | |
@@ -25,14 +26,15 @@ DeviceCommandService  (provere: dostupnost, mogućnost, potvrda)
    │
 HomeBackend ── LocalBackend ── DeviceAdapter (jedan po vrsti uređaja)
                                  ├─ DemoAdapter
-                                 ├─ ShellyAdapter ─┐ PolledAdapter (HTTP, svakih 5 s)
-                                 └─ WledAdapter  ──┘
+                                 ├─ ShellyAdapter  ─┐
+                                 ├─ WledAdapter    ─┼ PolledAdapter (HTTP, svakih 5 s)
+                                 └─ TasmotaAdapter ─┘
 ```
 
 - `app/lib/features/devices/domain/home_backend.dart`: `HomeBackend`, `DeviceCommandSink`
 - `app/lib/features/devices/domain/home_snapshot.dart`: `HomeSnapshot`, `SyncStatus`
 - `app/lib/features/devices/data/local/`: `LocalBackend`, `DeviceAdapter`, `PolledAdapter`, `DemoAdapter`, `ShellyAdapter`, `WledAdapter`, `LocalHome` (sobe, dodati uređaji, imena; čuva se na telefonu)
-- `app/lib/features/add_device/`: mDNS otkrivanje (`_http._tcp`), prepoznavanje (`/shelly`, `/json/info`), ekran za dodavanje
+- `app/lib/features/add_device/`: mDNS otkrivanje (`_http._tcp`), prepoznavanje (`/shelly`, `/json/info`, `Status 0`), ekran za dodavanje, `AddressKeeper` (prati promenjene IP adrese)
 
 ID uređaja je `<adapter>:<MAC>:<kanal>` (npr. `shelly:a8032ab12345:switch0`, `wled:e8db84aabbcc:light`), pa `LocalBackend` zna kom adapteru ide komanda. Jedan fizički uređaj (`deviceId` = `<adapter>:<MAC>`) daje po jedan uređaj za svaki kanal, i merač snage gde ga ima.
 
@@ -42,9 +44,12 @@ ID uređaja je `<adapter>:<MAC>:<kanal>` (npr. `shelly:a8032ab12345:switch0`, `w
 |---|---|
 | Shelly Gen2+ (Plus, Pro, Gen3, Gen4) | releji i utičnice (`switch`), dimeri (`light`), roletne (`cover`, sa pozicijom ako je kalibrisana), snaga (`apower`), temperatura i vlažnost |
 | Shelly Gen1 | releji (`relay`), dimeri (`light`), roletne (`roller`), snaga (`meters`) |
-| WLED | uključi/isključi, jačina, boja glavnog segmenta |
+| WLED | uključi/isključi, jačina, boja glavnog segmenta; efekat i preset kao izbori |
+| Tasmota | releji (`POWER1…`, imena iz `FriendlyName`), svetlo sa jačinom i bojom, snaga (`ENERGY`), temperatura i vlažnost |
 
-Ograničenja: Shelly sa uključenom lozinkom (odgovara 401) i uređaji na baterije koji spavaju (H&T) za sada se prikazuju kao nedostupni. Stanje se proverava svakih 5 s dok je aplikacija otvorena (zidni tablet u kiosku i u pozadini). Ako ruter da uređaju novu IP adresu, ekran „Dodaj uređaj“ je sam ažurira kad ga ponovo pronađe.
+Shelly sa lozinkom: Gen2+ preko HTTP Digest (SHA-256), Gen1 preko Basic, korisnik `admin`. Lozinka se unosi pri dodavanju ili u Podešavanja → Dom i čuva samo u bezbednom skladištu telefona (Keystore), nikad u podešavanjima ili rezervnoj kopiji.
+
+Ograničenja: uređaji na baterije koji spavaju (Shelly H&T) prikazuju se kao nedostupni. Tasmota se obično ne oglašava preko mDNS-a, pa se dodaje preko IP adrese. Stanje se proverava svakih 5 s dok je aplikacija otvorena (zidni tablet u kiosku i u pozadini). Pri pokretanju i povratku u aplikaciju telefon 30 s osluškuje mrežu; dodati uređaj koji se javi sa nove IP adrese (DHCP) se sam prati.
 
 ## Šta je uklonjeno iz 1.0 i kad se vraća
 

@@ -12,7 +12,8 @@ import '../../../core/widgets/responsive.dart';
 import '../../../core/widgets/status_widgets.dart';
 import '../../devices/application/device_providers.dart';
 import '../../devices/data/local/local_home.dart';
-import '../../devices/presentation/device_edit.dart' show createRoom;
+import '../../devices/presentation/device_edit.dart'
+    show DevicePasswordDialog, createRoom;
 import '../../kiosk/presentation/kiosk_settings_section.dart';
 import '../../app_lock/application/app_lock.dart';
 import '../../../core/storage/app_preferences.dart';
@@ -312,11 +313,24 @@ class _SectionBody extends ConsumerWidget {
           ListTile(
             key: ValueKey('homeDevice-${d.key}'),
             contentPadding: EdgeInsets.zero,
-            leading: Icon(
-              d.adapter == 'wled' ? Icons.light_outlined : Icons.power_outlined,
-            ),
+            leading: Icon(switch (d.adapter) {
+              'wled' => Icons.light_outlined,
+              'tasmota' => Icons.outlet_outlined,
+              _ => Icons.power_outlined,
+            }),
             title: Text(d.label ?? d.model ?? d.host),
             subtitle: Text([?d.model, d.host].join(' · ')),
+            trailing: d.adapter == 'shelly'
+                ? IconButton(
+                    key: ValueKey('devicePassword-${d.key}'),
+                    tooltip: l10n.devicePasswordChange,
+                    icon: Icon(d.secured ? Icons.lock : Icons.lock_open),
+                    onPressed: () => showDialog<void>(
+                      context: context,
+                      builder: (_) => DevicePasswordDialog(deviceKey: d.key),
+                    ),
+                  )
+                : null,
           ),
       ],
       const SizedBox(height: 16),

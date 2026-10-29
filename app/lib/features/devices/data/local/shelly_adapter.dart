@@ -13,12 +13,16 @@ import 'polled_adapter.dart';
 ///
 /// One physical Shelly gives one device per channel (`switch0`, `cover0`,
 /// `relay1`…), plus a power meter where the channel measures power.
-/// Devices with a password are not supported yet (they answer 401 and are
-/// shown unavailable).
+/// A device with a password is asked with HTTP Digest (Gen2+, user
+/// `admin`) or Basic (Gen1, user `admin`); [passwords] looks it up.
 class ShellyAdapter extends PolledAdapter {
-  ShellyAdapter(this._http, {super.pollEvery});
+  ShellyAdapter(this._http, {this.passwords, super.pollEvery});
 
   final LanHttp _http;
+
+  /// The password of a device by [ConfiguredDevice.key].
+  final Future<String?> Function(String key)? passwords;
+  final Map<String, String?> _passwords = {};
 
   /// API generation by [ConfiguredDevice.key] (1, or 2 for RPC).
   final Map<String, int> _gen = {};
@@ -30,24 +34,41 @@ class ShellyAdapter extends PolledAdapter {
   String get id => 'shelly';
 
   @override
+  void configure(List<ConfiguredDevice> devices) {
+    _passwords.clear(); // one may have changed
+    super.configure(devices);
+  }
+
+  Future<LanAuth?> _auth(ConfiguredDevice device, int gen) async {
+    if (!device.secured) return null;
+    final password = _passwords[device.key] ??= await passwords?.call(
+      device.key,
+    );
+    if (password == null) return null;
+    return gen >= 2
+        ? LanAuth.digest('admin', password)
+        : LanAuth.basic('admin', password);
+  }
+
+  @override
   Future<List<SmartHomeDevice>> read(ConfiguredDevice device) async {
+    // `/shelly` answers without a password.
     final gen = _gen[device.key] ??= shellyGeneration(
       await _http.get(device.host, '/shelly'),
     );
+    final auth = await _auth(device, gen);
+    Future<Map<String, Object?>> get(String path) async =>
+        _map(await _http.get(device.host, path, auth: auth));
     if (gen >= 2) {
-      final config = _config[device.key] ??= _map(
-        await _http.get(device.host, '/rpc/Shelly.GetConfig'),
+      final config = _config[device.key] ??= await get('/rpc/Shelly.GetConfig');
+      return parseShellyGen2(
+        device,
+        config,
+        await get('/rpc/Shelly.GetStatus'),
       );
-      final status = _map(
-        await _http.get(device.host, '/rpc/Shelly.GetStatus'),
-      );
-      return parseShellyGen2(device, config, status);
     }
-    final settings = _config[device.key] ??= _map(
-      await _http.get(device.host, '/settings'),
-    );
-    final status = _map(await _http.get(device.host, '/status'));
-    return parseShellyGen1(device, settings, status);
+    final settings = _config[device.key] ??= await get('/settings');
+    return parseShellyGen1(device, settings, await get('/status'));
   }
 
   @override
@@ -61,7 +82,12 @@ class ShellyAdapter extends PolledAdapter {
     final (path, query) = gen >= 2
         ? _gen2Call(component, index, channel, command)
         : _gen1Call(component, index, channel, command);
-    await _http.get(device.host, path, query: query);
+    await _http.get(
+      device.host,
+      path,
+      query: query,
+      auth: await _auth(device, gen),
+    );
   }
 
   (String, Map<String, Object?>) _gen2Call(
@@ -132,8 +158,15 @@ class ShellyAdapter extends PolledAdapter {
   }
 }
 
-/// What `GET /shelly` says about a device, if it is a Shelly.
-typedef ShellyInfo = ({String mac, String model, String? name, int gen});
+/// What `GET /shelly` says about a device, if it is a Shelly ([auth]: it
+/// asks for a password).
+typedef ShellyInfo = ({
+  String mac,
+  String model,
+  String? name,
+  int gen,
+  bool auth,
+});
 
 ShellyInfo? parseShellyInfo(Object? json) {
   final j = _map(json);
@@ -145,6 +178,7 @@ ShellyInfo? parseShellyInfo(Object? json) {
     model: (j['app'] ?? j['model'] ?? j['type'] ?? 'Shelly') as String,
     name: j['name'] as String?,
     gen: gen,
+    auth: j['auth_en'] == true || j['auth'] == true,
   );
 }
 

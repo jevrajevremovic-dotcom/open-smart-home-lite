@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../features/add_device/application/address_keeper.dart';
 import '../features/alerts/alert_notifications.dart';
 import '../features/app_lock/application/app_lock.dart';
 import '../features/app_lock/presentation/app_lock_gate.dart';
@@ -36,6 +37,7 @@ class _SmartHomeAppState extends ConsumerState<SmartHomeApp> {
       onResume: () {
         ref.read(appLockProvider.notifier).onForeground();
         ref.read(homeBackendProvider)?.setActive(true);
+        ref.read(addressKeeperProvider).check();
       },
       // Save before the OS may suspend or kill us.
       onPause: () => ref.read(homeBackendProvider)?.flush(),
@@ -47,6 +49,10 @@ class _SmartHomeAppState extends ConsumerState<SmartHomeApp> {
           ref.read(homeBackendProvider)?.setActive(false);
         }
       },
+    );
+    // Devices that got a new address while the app was closed.
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => ref.read(addressKeeperProvider).check(),
     );
   }
 

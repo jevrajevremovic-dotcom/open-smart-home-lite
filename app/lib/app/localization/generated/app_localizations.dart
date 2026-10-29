@@ -8658,7 +8658,7 @@ abstract class AppLocalizations {
   /// No description provided for @demoHomeNotice.
   ///
   /// In en, this message translates to:
-  /// **'This is the demo home. Add your Shelly or WLED devices and the demo turns itself off.'**
+  /// **'This is the demo home. Add your Shelly, WLED or Tasmota devices and the demo turns itself off.'**
   String get demoHomeNotice;
 
   /// No description provided for @firstRunWelcomeBodyLite.
@@ -8682,7 +8682,7 @@ abstract class AppLocalizations {
   /// No description provided for @addDeviceLanHint.
   ///
   /// In en, this message translates to:
-  /// **'Shelly and WLED devices on the same Wi-Fi network as the phone show up here by themselves.'**
+  /// **'Shelly and WLED devices on the same Wi-Fi network as the phone show up here by themselves. Add Tasmota devices by their IP address.'**
   String get addDeviceLanHint;
 
   /// No description provided for @addDeviceSearching.
@@ -8718,7 +8718,7 @@ abstract class AppLocalizations {
   /// No description provided for @addDeviceNotFound.
   ///
   /// In en, this message translates to:
-  /// **'No Shelly or WLED found at that address.'**
+  /// **'No Shelly, WLED or Tasmota found at that address.'**
   String get addDeviceNotFound;
 
   /// No description provided for @addDeviceAdded.
@@ -8798,6 +8798,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Devices'**
   String get homeDevicesTitle;
+
+  /// No description provided for @devicePasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Device password'**
+  String get devicePasswordLabel;
+
+  /// No description provided for @devicePasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'This device asks for a password (user admin). It is kept only on this phone, in secure storage.'**
+  String get devicePasswordHint;
+
+  /// No description provided for @devicePasswordChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Device password…'**
+  String get devicePasswordChange;
 }
 
 class _AppLocalizationsDelegate

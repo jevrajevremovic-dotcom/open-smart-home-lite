@@ -4,7 +4,9 @@ import 'package:open_smart_home_lite/features/devices/application/device_command
 import 'package:open_smart_home_lite/features/devices/data/local/local_backend.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/local_home.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/shelly_adapter.dart';
+import 'package:open_smart_home_lite/features/devices/data/local/tasmota_adapter.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/wled_adapter.dart';
+import 'package:open_smart_home_lite/features/devices/data/local/lan_http.dart';
 import 'package:open_smart_home_lite/features/devices/domain/capability.dart';
 import 'package:open_smart_home_lite/features/devices/domain/device_command.dart';
 import 'package:open_smart_home_lite/features/devices/domain/device_kind.dart';
@@ -18,16 +20,20 @@ const plus1pm = '192.168.1.21';
 const plus2pmCover = '192.168.1.22';
 const shelly25 = '192.168.1.23';
 const wled = '192.168.1.30';
+const tasmota = '192.168.1.40';
 
 Map<String, Map<String, Object? Function(Map<String, Object?>)>> network() {
   var switchOn = true;
   var coverPos = 40;
   final relays = [true, false];
+  final tasmotaPower = ['ON', 'OFF'];
   var wledState = <String, Object?>{
     'on': true,
     'bri': 128,
+    'ps': 2,
     'seg': [
       {
+        'fx': 1,
         'col': [
           [255, 160, 0],
           [0, 0, 0],
@@ -124,10 +130,50 @@ Map<String, Map<String, Object? Function(Map<String, Object?>)>> network() {
         'mac': 'e8db84aabbcc',
         'wifi': {'rssi': -60},
       },
+      '/json/eff': (_) => ['Solid', 'Blink', 'Rainbow'],
+      '/presets.json': (_) => {
+        '0': <String, Object?>{},
+        '1': {'n': 'Jutro'},
+        '2': {'n': 'Veče'},
+      },
       '/json/state': (data) {
         final body = data['body'];
         if (body is Map<String, Object?>) wledState = {...wledState, ...body};
         return wledState;
+      },
+    },
+    tasmota: {
+      '/cm': (q) {
+        final cmnd = q['cmnd']! as String;
+        if (cmnd == 'Status 0') {
+          return {
+            'Status': {
+              'DeviceName': 'Sonoff',
+              'FriendlyName': ['Bojler', 'Pumpa'],
+            },
+            'StatusFWR': {'Hardware': 'ESP8266EX'},
+            'StatusNET': {'Mac': 'DC:4F:22:11:22:33'},
+            'StatusSTS': {
+              'POWER1': tasmotaPower[0],
+              'POWER2': tasmotaPower[1],
+              'Wifi': {'Signal': -62},
+            },
+            'StatusSNS': {
+              'ENERGY': {'Power': 1800},
+              'DS18B20': {'Temperature': 54.5},
+              'TempUnit': 'C',
+            },
+          };
+        }
+        final m = RegExp(r'^Power(\d) (On|Off|Toggle)$').firstMatch(cmnd);
+        if (m == null) return {'Command': 'Unknown'};
+        final i = int.parse(m.group(1)!) - 1;
+        tasmotaPower[i] = switch (m.group(2)) {
+          'On' => 'ON',
+          'Off' => 'OFF',
+          _ => tasmotaPower[i] == 'ON' ? 'OFF' : 'ON',
+        };
+        return {'POWER${i + 1}': tasmotaPower[i]};
       },
     },
   };
@@ -163,6 +209,7 @@ void main() {
       [
         ShellyAdapter(http, pollEvery: const Duration(hours: 1)),
         WledAdapter(http, pollEvery: const Duration(hours: 1)),
+        TasmotaAdapter(http, pollEvery: const Duration(hours: 1)),
       ],
       home: LocalHome(
         demo: false,
@@ -175,6 +222,7 @@ void main() {
             shelly25,
           ).copyWith(model: 'SHSW-25'),
           configured('wled', 'e8db84aabbcc', wled),
+          configured('tasmota', 'dc4f22112233', tasmota),
         ],
       ),
     )..start();
@@ -345,6 +393,172 @@ void main() {
     final strip = (await probe.probe(wled))!;
     expect((strip.brand, strip.device.key), ('WLED', 'wled:e8db84aabbcc'));
     expect(await probe.probe('192.168.1.99'), isNull);
+  });
+
+  test('WLED: the effect and the preset are choices', () async {
+    final devices = (await settled()).devices;
+    final fx = devices['wled:e8db84aabbcc:effect']!;
+    expect(fx.kind, DeviceKind.select);
+    expect(fx.limits.options, ['Solid', 'Blink', 'Rainbow']);
+    expect(fx.state.textValue, 'Blink');
+    final preset = devices['wled:e8db84aabbcc:preset']!;
+    expect(preset.limits.options, ['Jutro', 'Veče']);
+    expect(preset.state.textValue, 'Veče');
+
+    await backend.send(fx, const SelectOption('Rainbow'));
+    expect(
+      http.requests,
+      hasRequest((
+        wled,
+        '/json/state',
+        {
+          'body': {
+            'on': true,
+            'seg': [
+              {'fx': 2},
+            ],
+          },
+        },
+      )),
+    );
+    await backend.send(preset, const SelectOption('Jutro'));
+    expect(
+      http.requests,
+      hasRequest((
+        wled,
+        '/json/state',
+        {
+          'body': {'ps': 1},
+        },
+      )),
+    );
+  });
+
+  test(
+    'Tasmota: two relays by their friendly names, power and a sensor',
+    () async {
+      final devices = (await settled()).devices;
+      final boiler = devices['tasmota:dc4f22112233:power1']!;
+      final pump = devices['tasmota:dc4f22112233:power2']!;
+      expect((boiler.name, boiler.state.isOn), ('Bojler', true));
+      expect((pump.name, pump.state.isOn), ('Pumpa', false));
+      expect(boiler.metadata.signalStrength, -62);
+      expect(
+        devices['tasmota:dc4f22112233:energy_power']!.state.numericValue,
+        1800,
+      );
+      final water = devices['tasmota:dc4f22112233:ds18b20_temperature']!;
+      expect(
+        (water.kind, water.state.currentTemperature),
+        (DeviceKind.temperatureSensor, 54.5),
+      );
+
+      await backend.send(pump, const TurnOn());
+      expect(
+        http.requests,
+        hasRequest((tasmota, '/cm', {'cmnd': 'Power2 On'})),
+      );
+      await Future<void>.delayed(Duration.zero);
+      expect(
+        backend.current.devices['tasmota:dc4f22112233:power2']!.state.isOn,
+        isTrue,
+      );
+    },
+  );
+
+  test(
+    'Shelly with a password: asked with it; without it, unavailable',
+    () async {
+      final locked = FakeLanHttp(network(), passwords: {plus1pm: 'tajna'});
+      String? password;
+      final b = LocalBackend(
+        [
+          ShellyAdapter(
+            locked,
+            passwords: (_) async => password,
+            pollEvery: const Duration(hours: 1),
+          ),
+        ],
+        home: LocalHome(
+          demo: false,
+          devices: [
+            configured(
+              'shelly',
+              'a8032ab12345',
+              plus1pm,
+            ).copyWith(secured: true),
+          ],
+        ),
+      )..start();
+      addTearDown(b.dispose);
+      await b.refresh();
+      await Future<void>.delayed(Duration.zero);
+      expect(
+        b.current.devices['shelly:a8032ab12345:device']!.available,
+        isFalse,
+      );
+
+      password = 'tajna';
+      b.configure(b.home); // a new password clears what the adapter knew
+      await b.refresh();
+      await Future<void>.delayed(Duration.zero);
+      expect(
+        b.current.devices['shelly:a8032ab12345:switch0']!.available,
+        isTrue,
+      );
+    },
+  );
+
+  test('HTTP Digest answer (RFC 7616, SHA-256 example)', () {
+    final header = digestAuthorization(
+      challenge:
+          'Digest realm="http-auth@example.org", qop="auth, auth-int", '
+          'algorithm=SHA-256, '
+          'nonce="7ypf/xlj9XXwfDPEoM4URrv/xwf94BcCAzFZH4GiTo0v", '
+          'opaque="FQhe/qaU925kfnzjCev0ciny7QMkPqMAFRtzCUYo5tdS"',
+      method: 'GET',
+      uri: '/dir/index.html',
+      auth: const LanAuth.digest('Mufasa', 'Circle of Life'),
+      cnonce: 'f2/wE4q74E6zIJEtWaHKaf5wv/H5QzzpXusqGemxURZJ',
+    )!;
+    expect(
+      header,
+      contains(
+        'response="753927fa0e85d155564e2e272a28d1802ca10daf4496794697cf8db5856cb6c1"',
+      ),
+    );
+    expect(
+      header,
+      contains('opaque="FQhe/qaU925kfnzjCev0ciny7QMkPqMAFRtzCUYo5tdS"'),
+    );
+    expect(
+      digestAuthorization(
+        challenge: 'Basic realm="x"',
+        method: 'GET',
+        uri: '/',
+        auth: const LanAuth.digest('a', 'b'),
+        cnonce: 'c',
+      ),
+      isNull,
+    );
+  });
+
+  test('probe: Tasmota, and a Shelly that asks for a password', () async {
+    final probe = DeviceProbe(
+      FakeLanHttp({
+        ...network(),
+        '192.168.1.24': {
+          '/shelly': (_) => {'mac': 'A8032AB00003', 'gen': 2, 'auth_en': true},
+        },
+      }),
+    );
+    final t = (await probe.probe(tasmota))!;
+    expect(
+      (t.brand, t.title, t.device.key),
+      ('Tasmota', 'Sonoff', 'tasmota:dc4f22112233'),
+    );
+    expect((await probe.probe('192.168.1.24'))!.needsPassword, isTrue);
+    expect((await probe.probe(plus1pm))!.needsPassword, isFalse);
   });
 
   test('stored home is read tolerantly', () {

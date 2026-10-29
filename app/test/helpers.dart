@@ -72,16 +72,27 @@ class TestAdapter extends DeviceAdapter {
 
 /// Devices on a pretend local network: answers by `host` and `path`
 /// (a value, or a function of the query/body); records every request.
-/// A host that is not in [answers] does not answer.
+/// A host that is not in [answers] does not answer; one in [passwords]
+/// answers 401 without that password (except `/shelly`, as real ones).
 class FakeLanHttp implements LanHttp {
-  FakeLanHttp(this.answers);
+  FakeLanHttp(this.answers, {this.passwords = const {}});
 
   final Map<String, Map<String, Object? Function(Map<String, Object?>)>>
   answers;
+  final Map<String, String> passwords;
   final List<(String host, String path, Object? data)> requests = [];
 
-  Object? _answer(String host, String path, Map<String, Object?> data) {
+  Object? _answer(
+    String host,
+    String path,
+    Map<String, Object?> data,
+    LanAuth? auth,
+  ) {
     requests.add((host, path, data));
+    final password = passwords[host];
+    if (password != null && path != '/shelly' && auth?.password != password) {
+      throw const AppFailure(FailureKind.authentication, debugMessage: '401');
+    }
     final answer = answers[host]?[path];
     if (answer == null) {
       throw const AppFailure(FailureKind.network, debugMessage: 'no answer');
@@ -94,11 +105,16 @@ class FakeLanHttp implements LanHttp {
     String host,
     String path, {
     Map<String, Object?> query = const {},
-  }) async => _answer(host, path, query);
+    LanAuth? auth,
+  }) async => _answer(host, path, query, auth);
 
   @override
-  Future<Object?> post(String host, String path, Object? body) async =>
-      _answer(host, path, {'body': body});
+  Future<Object?> post(
+    String host,
+    String path,
+    Object? body, {
+    LanAuth? auth,
+  }) async => _answer(host, path, {'body': body}, auth);
 }
 
 /// Finds the given services, as mDNS would.

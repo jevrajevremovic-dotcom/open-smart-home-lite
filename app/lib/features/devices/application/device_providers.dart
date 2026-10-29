@@ -4,12 +4,14 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/storage/credential_store.dart';
 import '../../../core/utils/value_list.dart';
 import '../data/local/demo_adapter.dart';
 import '../data/local/lan_http.dart';
 import '../data/local/local_backend.dart';
 import '../data/local/local_home.dart';
 import '../data/local/shelly_adapter.dart';
+import '../data/local/tasmota_adapter.dart';
 import '../data/local/wled_adapter.dart';
 import '../domain/home_snapshot.dart';
 import '../domain/device_kind.dart';
@@ -25,7 +27,17 @@ final homeIdProvider = Provider<String>((ref) => 'local');
 final homeBackendProvider = Provider<LocalBackend?>((ref) {
   final http = ref.watch(lanHttpProvider);
   final backend = LocalBackend(
-    [DemoAdapter(), ShellyAdapter(http), WledAdapter(http)],
+    [
+      DemoAdapter(),
+      ShellyAdapter(
+        http,
+        passwords: (key) => ref
+            .read(credentialStoreProvider)
+            .readCredential(devicePasswordId(key)),
+      ),
+      WledAdapter(http),
+      TasmotaAdapter(http),
+    ],
     rooms: demoRooms,
     home: ref.read(localHomeProvider),
   )..start();

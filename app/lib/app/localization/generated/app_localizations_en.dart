@@ -5088,7 +5088,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get demoHomeNotice =>
-      'This is the demo home. Add your Shelly or WLED devices and the demo turns itself off.';
+      'This is the demo home. Add your Shelly, WLED or Tasmota devices and the demo turns itself off.';
 
   @override
   String get firstRunWelcomeBodyLite =>
@@ -5102,7 +5102,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addDeviceLanHint =>
-      'Shelly and WLED devices on the same Wi-Fi network as the phone show up here by themselves.';
+      'Shelly and WLED devices on the same Wi-Fi network as the phone show up here by themselves. Add Tasmota devices by their IP address.';
 
   @override
   String get addDeviceSearching => 'Looking for devices…';
@@ -5121,7 +5121,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addDeviceChecking => 'Checking…';
 
   @override
-  String get addDeviceNotFound => 'No Shelly or WLED found at that address.';
+  String get addDeviceNotFound =>
+      'No Shelly, WLED or Tasmota found at that address.';
 
   @override
   String get addDeviceAdded => 'Added';
@@ -5167,4 +5168,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeDevicesTitle => 'Devices';
+
+  @override
+  String get devicePasswordLabel => 'Device password';
+
+  @override
+  String get devicePasswordHint =>
+      'This device asks for a password (user admin). It is kept only on this phone, in secure storage.';
+
+  @override
+  String get devicePasswordChange => 'Device password…';
 }

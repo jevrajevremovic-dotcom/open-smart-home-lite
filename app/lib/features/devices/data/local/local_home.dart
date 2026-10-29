@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/storage/app_preferences.dart';
+import '../../../../core/storage/credential_store.dart';
 import '../../domain/smart_home_device.dart';
 
 /// A physical device the household added: where it is on the network and
@@ -14,6 +15,7 @@ class ConfiguredDevice {
     required this.host,
     this.model,
     this.label,
+    this.secured = false,
   });
 
   /// [DeviceAdapter.id] (`shelly`, `wled`).
@@ -29,18 +31,27 @@ class ConfiguredDevice {
   /// Name shown while the device has not answered yet.
   final String? label;
 
+  /// The device asks for a password; it is in the phone's secure storage
+  /// ([devicePasswordId]), never here.
+  final bool secured;
+
   /// Id of the physical device, shared by its channels
   /// (`SmartHomeDevice.deviceId`).
   String get key => '$adapter:$id';
 
-  ConfiguredDevice copyWith({String? host, String? model, String? label}) =>
-      ConfiguredDevice(
-        adapter: adapter,
-        id: id,
-        host: host ?? this.host,
-        model: model ?? this.model,
-        label: label ?? this.label,
-      );
+  ConfiguredDevice copyWith({
+    String? host,
+    String? model,
+    String? label,
+    bool? secured,
+  }) => ConfiguredDevice(
+    adapter: adapter,
+    id: id,
+    host: host ?? this.host,
+    model: model ?? this.model,
+    label: label ?? this.label,
+    secured: secured ?? this.secured,
+  );
 
   Map<String, Object?> toJson() => {
     'adapter': adapter,
@@ -48,6 +59,7 @@ class ConfiguredDevice {
     'host': host,
     'model': ?model,
     'label': ?label,
+    if (secured) 'secured': true,
   };
 
   static ConfiguredDevice? fromJson(Object? json) {
@@ -62,6 +74,7 @@ class ConfiguredDevice {
       host: host,
       model: json['model'] as String?,
       label: json['label'] as String?,
+      secured: json['secured'] == true,
     );
   }
 
@@ -72,11 +85,15 @@ class ConfiguredDevice {
       other.id == id &&
       other.host == host &&
       other.model == model &&
-      other.label == label;
+      other.label == label &&
+      other.secured == secured;
 
   @override
-  int get hashCode => Object.hash(adapter, id, host, model, label);
+  int get hashCode => Object.hash(adapter, id, host, model, label, secured);
 }
+
+/// Where the password of the device [key] is kept (`CredentialStore`).
+String devicePasswordId(String key) => 'device:$key';
 
 /// The home on this phone: its rooms, the devices added to it, and the
 /// household's names and rooms for them. Stored locally.
@@ -201,14 +218,24 @@ class LocalHomeController extends Notifier<LocalHome> {
     await ref.read(appPreferencesProvider).writeJson(_key, home.toJson());
   }
 
-  /// Adds [device] (or updates its address), in [roomId]. The first real
-  /// device ends the demo.
-  Future<void> addDevice(ConfiguredDevice device, {String? roomId}) {
+  /// Adds [device] (or updates its address), in [roomId], with its
+  /// [password] if it asks for one. The first real device ends the demo.
+  Future<void> addDevice(
+    ConfiguredDevice device, {
+    String? roomId,
+    String? password,
+  }) async {
+    if (password != null && password.isNotEmpty) {
+      await ref
+          .read(credentialStoreProvider)
+          .writeCredential(devicePasswordId(device.key), password);
+      device = device.copyWith(secured: true);
+    }
     final rest = [
       for (final d in state.devices)
         if (d.key != device.key) d,
     ];
-    return _save(
+    await _save(
       state.copyWith(
         devices: [...rest, device],
         roomOf: {...state.roomOf, device.key: ?roomId},
@@ -217,10 +244,33 @@ class LocalHomeController extends Notifier<LocalHome> {
     );
   }
 
-  /// Removes a physical device, with its names and rooms.
-  Future<void> removeDevice(String key) {
+  /// A device's new password (`null`: it no longer has one).
+  Future<void> setPassword(String key, String? password) async {
+    final store = ref.read(credentialStoreProvider);
+    final secured = password != null && password.isNotEmpty;
+    if (secured) {
+      await store.writeCredential(devicePasswordId(key), password);
+    } else {
+      await store.deleteCredential(devicePasswordId(key));
+    }
+    // A changed device is asked again, with the new password.
+    await _save(
+      state.copyWith(
+        devices: [
+          for (final d in state.devices)
+            d.key == key ? d.copyWith(secured: secured) : d,
+        ],
+      ),
+    );
+  }
+
+  /// Removes a physical device, with its names, rooms and password.
+  Future<void> removeDevice(String key) async {
     bool ofDevice(String id) => id == key || id.startsWith('$key:');
-    return _save(
+    await ref
+        .read(credentialStoreProvider)
+        .deleteCredential(devicePasswordId(key));
+    await _save(
       state.copyWith(
         devices: [
           for (final d in state.devices)

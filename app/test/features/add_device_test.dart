@@ -114,4 +114,45 @@ void main() {
     expect((room.name, d.roomId), ('Dečja soba', room.id));
     await unmount(tester);
   });
+
+  testWidgets('a Shelly with a password: asked when adding, kept secret', (
+    tester,
+  ) async {
+    final net = network();
+    net[plus1pm]!['/shelly'] = (_) => {
+      'name': 'Hodnik',
+      'mac': 'A8032AB12345',
+      'gen': 2,
+      'app': 'Plus1PM',
+      'auth_en': true,
+    };
+    final http = FakeLanHttp(net, passwords: {plus1pm: 'tajna'});
+    final credentials = await pumpApp(
+      tester,
+      http: http,
+      discovery: FakeLanDiscovery(const [
+        LanService(name: 'shellyplus1pm-a8032ab12345', host: plus1pm),
+      ]),
+    );
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(SmartHomeApp)),
+    );
+    await goTo(tester, AppRoutes.addDevice);
+    await settle(tester, 4);
+    await tapKey(tester, 'add-shelly:a8032ab12345');
+    await settle(tester, 3);
+    await tester.enterText(find.byKey(const Key('addDevicePassword')), 'tajna');
+    await tapKey(tester, 'addDeviceConfirm');
+    await settle(tester, 6);
+
+    final device = container.read(localHomeProvider).devices.single;
+    expect(device.secured, isTrue);
+    expect(device.toJson().toString(), isNot(contains('tajna')));
+    expect(credentials.values['device:shelly:a8032ab12345'], 'tajna');
+    expect(
+      container.read(deviceProvider('shelly:a8032ab12345:switch0'))?.available,
+      isTrue,
+    );
+    await unmount(tester);
+  });
 }

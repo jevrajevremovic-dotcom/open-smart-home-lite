@@ -4,27 +4,37 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../devices/data/local/lan_http.dart';
 import '../../devices/data/local/local_home.dart';
 import '../../devices/data/local/shelly_adapter.dart';
+import '../../devices/data/local/tasmota_adapter.dart';
 import '../../devices/data/local/wled_adapter.dart';
 
 /// A device recognised at an address, ready to be added.
 @immutable
 class ProbedDevice {
-  const ProbedDevice({required this.device, required this.brand, this.name});
+  const ProbedDevice({
+    required this.device,
+    required this.brand,
+    this.name,
+    this.needsPassword = false,
+  });
 
   final ConfiguredDevice device;
 
-  /// `Shelly` or `WLED`.
+  /// `Shelly`, `WLED` or `Tasmota`.
   final String brand;
 
   /// The name set on the device itself, if any.
   final String? name;
 
+  /// The device asks for a password.
+  final bool needsPassword;
+
   /// The device's name, else its model.
   String get title => name ?? device.model ?? brand;
 }
 
-/// Asks a web server on the local network what it is: Shelly (`/shelly`)
-/// or WLED (`/json/info`). Only reads; `null` for anything else.
+/// Asks a web server on the local network what it is: Shelly (`/shelly`),
+/// WLED (`/json/info`) or Tasmota (`Status 0`). Only reads; `null` for
+/// anything else.
 class DeviceProbe {
   const DeviceProbe(this._http);
 
@@ -36,6 +46,7 @@ class DeviceProbe {
       return ProbedDevice(
         brand: 'Shelly',
         name: shelly.name,
+        needsPassword: shelly.auth,
         device: ConfiguredDevice(
           adapter: 'shelly',
           id: shelly.mac,
@@ -59,12 +70,32 @@ class DeviceProbe {
         ),
       );
     }
+    final tasmota = parseTasmotaInfo(
+      await _quiet(host, '/cm', {'cmnd': 'Status 0'}),
+    );
+    if (tasmota != null) {
+      return ProbedDevice(
+        brand: 'Tasmota',
+        name: tasmota.name,
+        device: ConfiguredDevice(
+          adapter: 'tasmota',
+          id: tasmota.mac,
+          host: host,
+          model: tasmota.module,
+          label: tasmota.name ?? 'Tasmota',
+        ),
+      );
+    }
     return null;
   }
 
-  Future<Object?> _quiet(String host, String path) async {
+  Future<Object?> _quiet(
+    String host,
+    String path, [
+    Map<String, Object?> query = const {},
+  ]) async {
     try {
-      return await _http.get(host, path);
+      return await _http.get(host, path, query: query);
     } on Object {
       return null;
     }
