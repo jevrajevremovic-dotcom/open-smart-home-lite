@@ -14,9 +14,9 @@ import io.flutter.plugin.common.MethodChannel
 
 /**
  * "Now playing" in the notification shade with play/pause and next, for
- * the house's speakers (Home Assistant media players), while the app runs.
+ * the house's speakers, while the app runs.
  * The buttons go back to the app's Flutter part, which sends the command
- * over its own connection; nothing here talks to Home Assistant.
+ * over its own connection; nothing here talks to the devices.
  */
 object NowPlaying {
     private const val CHANNEL = "org.opensmarthome/nowplaying"

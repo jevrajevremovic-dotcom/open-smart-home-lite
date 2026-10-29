@@ -2133,11 +2133,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'This automation does more than the app\'s editor can show. Change it in Home Assistant.';
 
   @override
-  String get backupSection => 'Move to another device';
+  String get backupSection => 'Backup and transfer';
 
   @override
   String get backupHint =>
-      'Copies theme, language, favourites and kiosk layout as text, to paste in the app on another phone or tablet. Tokens, PINs and privacy choices are never included.';
+      'The whole home — devices, rooms, names, scenes, automations and programs — and the app\'s look, to keep or to move to another phone or wall panel. PINs, photos and this device\'s own choices stay here.';
 
   @override
   String get backupCopy => 'Copy settings';
@@ -2147,14 +2147,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backupCopied =>
-      'Settings copied. Paste them in the app on the other device.';
+      'Copied. Paste it into the app on the other device.';
 
   @override
   String get backupImported => 'Settings applied.';
 
   @override
-  String get backupInvalid =>
-      'The clipboard doesn\'t contain Open Smart Home settings.';
+  String get backupInvalid => 'That is not an Open Smart Home backup.';
 
   @override
   String get autoAddTrigger => 'Add a trigger';
@@ -2640,7 +2639,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsPrivacyHint => 'Location, voice, deleting data';
 
   @override
-  String get settingsBackupHint => 'Copy settings to another phone or tablet';
+  String get settingsBackupHint =>
+      'Keep your home or move it to another device';
 
   @override
   String get loadingContent => 'Loading…';
@@ -4224,7 +4224,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Copies in Home Assistant aren\'t available right now (no connection).';
 
   @override
-  String get backupFileTitle => 'As text (manually)';
+  String get backupFileTitle => 'As text';
 
   @override
   String get updateTitle => 'App updates';
@@ -5332,4 +5332,80 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bleUnsupported => 'This device has no Bluetooth.';
+
+  @override
+  String get backupWithSecrets => 'With the devices\' passwords and keys';
+
+  @override
+  String get backupWithSecretsHint =>
+      'Encrypted with a password you choose; without it nobody can read them.';
+
+  @override
+  String get backupPassword => 'Backup password';
+
+  @override
+  String get backupPasswordShort => 'At least 6 characters.';
+
+  @override
+  String get backupSaveFile => 'Save to a file';
+
+  @override
+  String get backupOpenFile => 'Load from a file';
+
+  @override
+  String get backupSend => 'Send to another device';
+
+  @override
+  String get backupReceive => 'Receive from another device';
+
+  @override
+  String get backupSendTitle =>
+      'On the other device choose “Receive from another device” and enter:';
+
+  @override
+  String get backupAddress => 'Address';
+
+  @override
+  String get backupCode => 'Code';
+
+  @override
+  String get backupSendWaiting =>
+      'Waiting for the other device (5 minutes at most). Both have to be on the same Wi-Fi.';
+
+  @override
+  String get backupSent => 'Sent.';
+
+  @override
+  String get backupUnreachable =>
+      'The other device does not answer. Check the address and that both are on the same Wi-Fi.';
+
+  @override
+  String get backupWrongCode => 'That code is not right.';
+
+  @override
+  String get backupNoWifi => 'This device is not on a Wi-Fi network.';
+
+  @override
+  String get backupHowTitle => 'How to import?';
+
+  @override
+  String get backupReplace => 'Replace all';
+
+  @override
+  String get backupReplaceHint =>
+      'The devices, rooms, scenes and automations here are replaced by the backup\'s.';
+
+  @override
+  String get backupMerge => 'Add only what is new';
+
+  @override
+  String get backupMergeHint =>
+      'Everything here stays; what is missing is added.';
+
+  @override
+  String get backupAskPassword =>
+      'This backup has the devices\' passwords and keys. Enter the password it was made with.';
+
+  @override
+  String get backupWrongPassword => 'That password is not right.';
 }

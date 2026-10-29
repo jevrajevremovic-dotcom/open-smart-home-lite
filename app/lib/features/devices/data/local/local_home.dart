@@ -340,6 +340,30 @@ class LocalHomeController extends Notifier<LocalHome> {
   );
 
   Future<void> setDemo(bool demo) => _save(state.copyWith(demo: demo));
+
+  /// From a backup: all of it ([replace]), or only what is missing here
+  /// (devices, rooms, names and rooms of devices not set here).
+  Future<void> importHome(LocalHome other, {required bool replace}) {
+    if (replace) return _save(other);
+    final here = state;
+    return _save(
+      here.copyWith(
+        rooms: [
+          ...here.rooms,
+          for (final r in other.rooms)
+            if (!here.rooms.any((x) => x.id == r.id)) r,
+        ],
+        devices: [
+          ...here.devices,
+          for (final d in other.devices)
+            if (!here.devices.any((x) => x.key == d.key)) d,
+        ],
+        names: {...other.names, ...here.names},
+        roomOf: {...other.roomOf, ...here.roomOf},
+        demo: here.demo && other.demo,
+      ),
+    );
+  }
 }
 
 final localHomeProvider = NotifierProvider<LocalHomeController, LocalHome>(

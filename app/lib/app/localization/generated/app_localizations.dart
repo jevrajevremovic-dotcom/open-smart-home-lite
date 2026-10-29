@@ -3816,13 +3816,13 @@ abstract class AppLocalizations {
   /// No description provided for @backupSection.
   ///
   /// In en, this message translates to:
-  /// **'Move to another device'**
+  /// **'Backup and transfer'**
   String get backupSection;
 
   /// No description provided for @backupHint.
   ///
   /// In en, this message translates to:
-  /// **'Copies theme, language, favourites and kiosk layout as text, to paste in the app on another phone or tablet. Tokens, PINs and privacy choices are never included.'**
+  /// **'The whole home — devices, rooms, names, scenes, automations and programs — and the app\'s look, to keep or to move to another phone or wall panel. PINs, photos and this device\'s own choices stay here.'**
   String get backupHint;
 
   /// No description provided for @backupCopy.
@@ -3840,7 +3840,7 @@ abstract class AppLocalizations {
   /// No description provided for @backupCopied.
   ///
   /// In en, this message translates to:
-  /// **'Settings copied. Paste them in the app on the other device.'**
+  /// **'Copied. Paste it into the app on the other device.'**
   String get backupCopied;
 
   /// No description provided for @backupImported.
@@ -3852,7 +3852,7 @@ abstract class AppLocalizations {
   /// No description provided for @backupInvalid.
   ///
   /// In en, this message translates to:
-  /// **'The clipboard doesn\'t contain Open Smart Home settings.'**
+  /// **'That is not an Open Smart Home backup.'**
   String get backupInvalid;
 
   /// No description provided for @autoAddTrigger.
@@ -4698,7 +4698,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsBackupHint.
   ///
   /// In en, this message translates to:
-  /// **'Copy settings to another phone or tablet'**
+  /// **'Keep your home or move it to another device'**
   String get settingsBackupHint;
 
   /// No description provided for @loadingContent.
@@ -7296,7 +7296,7 @@ abstract class AppLocalizations {
   /// No description provided for @backupFileTitle.
   ///
   /// In en, this message translates to:
-  /// **'As text (manually)'**
+  /// **'As text'**
   String get backupFileTitle;
 
   /// No description provided for @updateTitle.
@@ -9080,6 +9080,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This device has no Bluetooth.'**
   String get bleUnsupported;
+
+  /// No description provided for @backupWithSecrets.
+  ///
+  /// In en, this message translates to:
+  /// **'With the devices\' passwords and keys'**
+  String get backupWithSecrets;
+
+  /// No description provided for @backupWithSecretsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypted with a password you choose; without it nobody can read them.'**
+  String get backupWithSecretsHint;
+
+  /// No description provided for @backupPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup password'**
+  String get backupPassword;
+
+  /// No description provided for @backupPasswordShort.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 6 characters.'**
+  String get backupPasswordShort;
+
+  /// No description provided for @backupSaveFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to a file'**
+  String get backupSaveFile;
+
+  /// No description provided for @backupOpenFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Load from a file'**
+  String get backupOpenFile;
+
+  /// No description provided for @backupSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to another device'**
+  String get backupSend;
+
+  /// No description provided for @backupReceive.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive from another device'**
+  String get backupReceive;
+
+  /// No description provided for @backupSendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'On the other device choose “Receive from another device” and enter:'**
+  String get backupSendTitle;
+
+  /// No description provided for @backupAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get backupAddress;
+
+  /// No description provided for @backupCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Code'**
+  String get backupCode;
+
+  /// No description provided for @backupSendWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the other device (5 minutes at most). Both have to be on the same Wi-Fi.'**
+  String get backupSendWaiting;
+
+  /// No description provided for @backupSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent.'**
+  String get backupSent;
+
+  /// No description provided for @backupUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'The other device does not answer. Check the address and that both are on the same Wi-Fi.'**
+  String get backupUnreachable;
+
+  /// No description provided for @backupWrongCode.
+  ///
+  /// In en, this message translates to:
+  /// **'That code is not right.'**
+  String get backupWrongCode;
+
+  /// No description provided for @backupNoWifi.
+  ///
+  /// In en, this message translates to:
+  /// **'This device is not on a Wi-Fi network.'**
+  String get backupNoWifi;
+
+  /// No description provided for @backupHowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How to import?'**
+  String get backupHowTitle;
+
+  /// No description provided for @backupReplace.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace all'**
+  String get backupReplace;
+
+  /// No description provided for @backupReplaceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The devices, rooms, scenes and automations here are replaced by the backup\'s.'**
+  String get backupReplaceHint;
+
+  /// No description provided for @backupMerge.
+  ///
+  /// In en, this message translates to:
+  /// **'Add only what is new'**
+  String get backupMerge;
+
+  /// No description provided for @backupMergeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything here stays; what is missing is added.'**
+  String get backupMergeHint;
+
+  /// No description provided for @backupAskPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'This backup has the devices\' passwords and keys. Enter the password it was made with.'**
+  String get backupAskPassword;
+
+  /// No description provided for @backupWrongPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'That password is not right.'**
+  String get backupWrongPassword;
 }
 
 class _AppLocalizationsDelegate

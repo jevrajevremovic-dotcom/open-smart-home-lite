@@ -1,11 +1,6 @@
 package org.opensmarthome.open_smart_home
 
 import android.Manifest
-import android.content.ComponentName
-import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
-import com.google.android.gms.home.matter.Matter
-import com.google.android.gms.home.matter.commissioning.CommissioningRequest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.view.WindowManager
@@ -20,21 +15,11 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterFragmentActivity() {
     private var nsd: NsdDiscoveryHandler? = null
     private var widget: MethodChannel? = null
-    private var nfc: NfcHandler? = null
-    private var assist: MethodChannel? = null
     private var audio: AudioLevelHandler? = null
     private var motion: MotionHandler? = null
     private var micResult: MethodChannel.Result? = null
     private var cameraResult: MethodChannel.Result? = null
     private var bleResult: MethodChannel.Result? = null
-    private var matterResult: MethodChannel.Result? = null
-
-    // Google's Matter screens (scan, Bluetooth, network) return here.
-    private val matterLauncher =
-        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
-            matterResult?.success(result.resultCode == RESULT_OK)
-            matterResult = null
-        }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -47,66 +32,6 @@ class MainActivity : FlutterFragmentActivity() {
         MethodChannel(messenger, "org.opensmarthome/updater")
             .setMethodCallHandler(UpdateInstaller(this))
 
-        // Opened as the phone's assistant (long press of home / power).
-        assist = MethodChannel(messenger, "org.opensmarthome/assist").apply {
-            setMethodCallHandler { call, result ->
-                when (call.method) {
-                    "initial" -> {
-                        result.success(intent?.action == Intent.ACTION_ASSIST)
-                        if (intent?.action == Intent.ACTION_ASSIST) intent?.action = Intent.ACTION_MAIN
-                    }
-                    "openSettings" -> {
-                        // "Digital assistant app" lives under voice input /
-                        // default apps, depending on the Android version.
-                        val opened = listOf(
-                            android.provider.Settings.ACTION_VOICE_INPUT_SETTINGS,
-                            android.provider.Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS,
-                        ).any { action ->
-                            runCatching { startActivity(Intent(action)) }.isSuccess
-                        }
-                        result.success(opened)
-                    }
-                    else -> result.notImplemented()
-                }
-            }
-        }
-
-        val nfcChannel = MethodChannel(messenger, "org.opensmarthome/nfc")
-        nfc = NfcHandler(this, nfcChannel).also { nfcChannel.setMethodCallHandler(it) }
-
-        // One per process: keeps reporting while the cached engine runs in
-        // the background service, after this activity is gone.
-        EventChannel(messenger, "org.opensmarthome/battery")
-            .setStreamHandler(BatteryHandler.get(applicationContext))
-
-        val microphone = AudioLevelHandler(applicationContext)
-        audio = microphone
-        EventChannel(messenger, "org.opensmarthome/audio_level").setStreamHandler(microphone.levels)
-        EventChannel(messenger, "org.opensmarthome/audio_pcm").setStreamHandler(microphone.pcm)
-        val motionHandler = MotionHandler(this)
-        motion = motionHandler
-        EventChannel(messenger, "org.opensmarthome/motion").setStreamHandler(motionHandler)
-        MethodChannel(messenger, "org.opensmarthome/camera").setMethodCallHandler { call, result ->
-            when (call.method) {
-                "request" -> requestCamera(result)
-                else -> result.notImplemented()
-            }
-        }
-        MethodChannel(messenger, "org.opensmarthome/ble_permission").setMethodCallHandler { call, result ->
-            when (call.method) {
-                "granted" -> result.success(BleScanHandler.hasPermission(this))
-                "request" -> requestBle(result)
-                else -> result.notImplemented()
-            }
-        }
-        MethodChannel(messenger, "org.opensmarthome/microphone").setMethodCallHandler { call, result ->
-            when (call.method) {
-                "request" -> requestMicrophone(result)
-                else -> result.notImplemented()
-            }
-        }
-
-        // Kiosk night brightness: this window only, never the system setting.
         MethodChannel(messenger, "org.opensmarthome/brightness").setMethodCallHandler { call, result ->
             if (call.method != "set") {
                 result.notImplemented()
@@ -123,35 +48,12 @@ class MainActivity : FlutterFragmentActivity() {
             result.success(null)
         }
 
-        MethodChannel(messenger, MatterCommissioningService.CHANNEL).setMethodCallHandler { call, result ->
-            if (call.method != "commissionNewDevice") {
-                result.notImplemented()
-                return@setMethodCallHandler
-            }
-            val request = CommissioningRequest.builder()
-                .setCommissioningService(ComponentName(this, MatterCommissioningService::class.java))
-                .build()
-            Matter.getCommissioningClient(this)
-                .commissionDevice(request)
-                .addOnSuccessListener { sender ->
-                    matterResult?.success(false)
-                    matterResult = result
-                    matterLauncher.launch(IntentSenderRequest.Builder(sender).build())
-                }
-                // No Google Play services (or too old): the app says so.
-                .addOnFailureListener { e ->
-                    val status = (e as? com.google.android.gms.common.api.ApiException)?.statusCode
-                    android.util.Log.w("OpenSmartHome", "Matter commissioning unavailable: status=$status ${e.message}")
-                    result.error("unavailable", e.message, status)
-                }
-        }
-
         MethodChannel(messenger, "org.opensmarthome/background").setMethodCallHandler { call, result ->
             when (call.method) {
                 "start" -> {
                     ConnectionService.start(
                         applicationContext,
-                        call.argument<String>("title") ?: "Open Smart Home",
+                        call.argument<String>("title") ?: "Open Smart Home Lite",
                         call.argument<String>("text") ?: "",
                     )
                     result.success(null)
@@ -195,7 +97,7 @@ class MainActivity : FlutterFragmentActivity() {
     }
 
     // The engine outlives this screen (see Engines): while the connection
-    // service runs, closing the app keeps it connected to Home Assistant.
+    // service runs, closing the app keeps the automations running.
     override fun getCachedEngineId(): String {
         Engines.ensure(this)
         return Engines.MAIN
@@ -211,8 +113,6 @@ class MainActivity : FlutterFragmentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         widgetLink(intent)?.let { widget?.invokeMethod("link", it) }
-        nfc?.onNewIntent(intent)
-        if (intent.action == Intent.ACTION_ASSIST) assist?.invokeMethod("open", null)
     }
 
     // Dart may not get to cancel the stream when the activity goes away.
@@ -223,10 +123,6 @@ class MainActivity : FlutterFragmentActivity() {
         audio = null
         motion?.dispose()
         motion = null
-        nfc?.dispose()
-        nfc = null
-        assist?.setMethodCallHandler(null)
-        assist = null
         widget?.setMethodCallHandler(null)
         widget = null
         super.cleanUpFlutterEngine(flutterEngine)

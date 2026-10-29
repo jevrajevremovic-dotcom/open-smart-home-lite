@@ -98,8 +98,6 @@ flutter {
 
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
-    // Adding new Matter devices over Bluetooth (Google Play services).
-    implementation("com.google.android.gms:play-services-home:16.0.0")
     // Kiosk wake-on-approach (front camera); same version mobile_scanner uses.
     implementation("androidx.camera:camera-camera2:1.6.1")
     implementation("androidx.camera:camera-lifecycle:1.6.1")

@@ -4,17 +4,14 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.front" android:required="false" />
-    <!-- Optional: stay connected for Home Assistant messages when closed. -->
+    <!-- Optional: automations keep running when the app is closed. -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_REMOTE_MESSAGING" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- In-app updates (GitHub Releases, verified; see UpdateInstaller.kt). -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-    <!-- Home Assistant NFC tags; the app installs on phones without NFC. -->
-    <uses-permission android:name="android.permission.NFC" />
-    <uses-feature android:name="android.hardware.nfc" android:required="false" />
-    <!-- mDNS discovery of Home Assistant on the local network -->
+    <!-- mDNS discovery of devices on the local network -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <!-- Bluetooth LE sensors: listening to their advertisements only. -->
     <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
@@ -59,31 +56,6 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <!-- Can be chosen as the phone's digital assistant: a long press
-                 of home / power opens Assist, listening. -->
-            <intent-filter>
-                <action android:name="android.intent.action.ASSIST" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <!-- Home Assistant tags (same format as the official apps). -->
-            <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data
-                    android:scheme="https"
-                    android:host="www.home-assistant.io"
-                    android:pathPrefix="/tag/" />
-            </intent-filter>
-            <!-- The same link in a QR code. -->
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="https"
-                    android:host="www.home-assistant.io"
-                    android:pathPrefix="/tag/" />
-            </intent-filter>
         </activity>
         <!-- Quick Settings tiles: what each does is chosen in the app. -->
         <service
@@ -125,10 +97,6 @@
                 android:name="android.service.quicksettings.ACTIVE_TILE"
                 android:value="false" />
         </service>
-        <!-- Google Play services hands new Matter devices to this service. -->
-        <service
-            android:name=".MatterCommissioningService"
-            android:exported="true" />
         <service
             android:name=".ConnectionService"
             android:exported="false"

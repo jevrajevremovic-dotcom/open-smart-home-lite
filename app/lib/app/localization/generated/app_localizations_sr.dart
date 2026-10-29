@@ -2139,11 +2139,11 @@ class AppLocalizationsSr extends AppLocalizations {
       'Ova automatizacija radi više nego što editor u aplikaciji može da prikaže. Izmenite je u Home Assistantu.';
 
   @override
-  String get backupSection => 'Prenos na drugi uređaj';
+  String get backupSection => 'Rezervna kopija i prenos';
 
   @override
   String get backupHint =>
-      'Kopira temu, jezik, omiljene i kiosk raspored kao tekst, koji nalepite u aplikaciju na drugom telefonu ili tabletu. Tokeni, PIN-ovi i izbori privatnosti se nikad ne kopiraju.';
+      'Ceo dom — uređaji, sobe, imena, scene, automatizacije i dodaci — i izgled aplikacije, da ih sačuvate ili prenesete na drugi telefon ili zidni tablet. PIN-ovi, fotografije i izbori ovog uređaja se ne prenose.';
 
   @override
   String get backupCopy => 'Kopiraj podešavanja';
@@ -2153,14 +2153,13 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get backupCopied =>
-      'Podešavanja su kopirana. Nalepite ih u aplikaciju na drugom uređaju.';
+      'Kopirano. Nalepite u aplikaciju na drugom uređaju.';
 
   @override
   String get backupImported => 'Podešavanja su primenjena.';
 
   @override
-  String get backupInvalid =>
-      'U međuspremniku nisu Open Smart Home podešavanja.';
+  String get backupInvalid => 'To nisu Open Smart Home podešavanja.';
 
   @override
   String get autoAddTrigger => 'Dodaj okidač';
@@ -2648,7 +2647,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get settingsBackupHint =>
-      'Kopiranje podešavanja na drugi telefon ili tablet';
+      'Sačuvajte dom ili ga prenesite na drugi uređaj';
 
   @override
   String get loadingContent => 'Učitavanje…';
@@ -4245,7 +4244,7 @@ class AppLocalizationsSr extends AppLocalizations {
       'Kopije iz Home Assistanta trenutno nisu dostupne (nema veze).';
 
   @override
-  String get backupFileTitle => 'Kao tekst (ručno)';
+  String get backupFileTitle => 'Kao tekst';
 
   @override
   String get updateTitle => 'Ažuriranje aplikacije';
@@ -5362,6 +5361,82 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get bleUnsupported => 'Ovaj uređaj nema Bluetooth.';
+
+  @override
+  String get backupWithSecrets => 'Sa lozinkama i ključevima uređaja';
+
+  @override
+  String get backupWithSecretsHint =>
+      'Šifruju se lozinkom koju izaberete; bez nje ih niko ne može pročitati.';
+
+  @override
+  String get backupPassword => 'Lozinka za rezervnu kopiju';
+
+  @override
+  String get backupPasswordShort => 'Najmanje 6 znakova.';
+
+  @override
+  String get backupSaveFile => 'Sačuvaj u fajl';
+
+  @override
+  String get backupOpenFile => 'Učitaj iz fajla';
+
+  @override
+  String get backupSend => 'Pošalji na drugi uređaj';
+
+  @override
+  String get backupReceive => 'Primi sa drugog uređaja';
+
+  @override
+  String get backupSendTitle =>
+      'Na drugom uređaju izaberite „Primi sa drugog uređaja“ i unesite:';
+
+  @override
+  String get backupAddress => 'Adresa';
+
+  @override
+  String get backupCode => 'Kod';
+
+  @override
+  String get backupSendWaiting =>
+      'Čeka se drugi uređaj (najviše 5 minuta). Oba moraju biti na istoj Wi-Fi mreži.';
+
+  @override
+  String get backupSent => 'Poslato.';
+
+  @override
+  String get backupUnreachable =>
+      'Drugi uređaj se ne javlja. Proverite adresu i da su oba na istoj Wi-Fi mreži.';
+
+  @override
+  String get backupWrongCode => 'Kod nije dobar.';
+
+  @override
+  String get backupNoWifi => 'Ovaj uređaj nije na Wi-Fi mreži.';
+
+  @override
+  String get backupHowTitle => 'Kako da uvezem?';
+
+  @override
+  String get backupReplace => 'Zameni sve';
+
+  @override
+  String get backupReplaceHint =>
+      'Uređaji, sobe, scene i automatizacije ovde zamenjuju se onima iz kopije.';
+
+  @override
+  String get backupMerge => 'Dodaj samo novo';
+
+  @override
+  String get backupMergeHint =>
+      'Sve što je ovde ostaje; dodaje se ono čega nema.';
+
+  @override
+  String get backupAskPassword =>
+      'Ova kopija ima lozinke i ključeve uređaja. Unesite lozinku kojom je napravljena.';
+
+  @override
+  String get backupWrongPassword => 'Lozinka nije dobra.';
 }
 
 /// The translations for Serbian, using the Latin script (`sr_Latn`).

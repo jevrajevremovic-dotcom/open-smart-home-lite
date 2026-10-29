@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,10 +20,10 @@ import '../../../core/storage/app_preferences.dart';
 import '../../first_run/first_run_controller.dart';
 import '../../restricted/application/restricted_mode.dart';
 import '../../restricted/presentation/restricted_settings.dart';
-import '../data/settings_backup.dart';
 import '../../weather/application/weather_providers.dart';
 import '../../weather/presentation/weather_card.dart';
 import '../../shortcuts/quick_tiles_settings.dart';
+import 'backup_section.dart';
 import 'language_selector.dart';
 import '../../simple_mode/simple_mode.dart';
 import '../../shortcuts/home_widgets.dart';
@@ -484,55 +483,9 @@ class _SectionBody extends ConsumerWidget {
     ];
   }
 
-  List<Widget> _backup(BuildContext context, WidgetRef ref) {
-    final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
-    return [
-      Text(l10n.backupFileTitle, style: textTheme.titleSmall),
-      const SizedBox(height: 4),
-      Text(l10n.backupHint, style: textTheme.bodySmall),
-      const SizedBox(height: 8),
-      Wrap(
-        spacing: 8,
-        runSpacing: 8,
-        children: [
-          OutlinedButton.icon(
-            key: const Key('backupCopy'),
-            onPressed: () async {
-              final messenger = ScaffoldMessenger.of(context);
-              await Clipboard.setData(
-                ClipboardData(text: SettingsBackup.export(ref)),
-              );
-              messenger
-                ..hideCurrentSnackBar()
-                ..showSnackBar(SnackBar(content: Text(l10n.backupCopied)));
-            },
-            icon: const Icon(Icons.copy),
-            label: Text(l10n.backupCopy),
-          ),
-          OutlinedButton.icon(
-            key: const Key('backupPaste'),
-            onPressed: () async {
-              final messenger = ScaffoldMessenger.of(context);
-              final text = (await Clipboard.getData('text/plain'))?.text;
-              final ok = text != null && await SettingsBackup.import(ref, text);
-              messenger
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      ok ? l10n.backupImported : l10n.backupInvalid,
-                    ),
-                  ),
-                );
-            },
-            icon: const Icon(Icons.paste),
-            label: Text(l10n.backupPaste),
-          ),
-        ],
-      ),
-    ];
-  }
+  List<Widget> _backup(BuildContext context, WidgetRef ref) => const [
+    BackupSection(),
+  ];
 
   List<Widget> _privacy(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;

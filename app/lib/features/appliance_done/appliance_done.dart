@@ -80,6 +80,19 @@ class ApplianceDoneController extends Notifier<Map<String, ApplianceDone>> {
       _save({...state, config.powerId: config});
 
   Future<void> remove(String powerId) => _save({...state}..remove(powerId));
+
+  Map<String, Object?> toJson() => {
+    for (final MapEntry(:key, :value) in state.entries) key: value.toJson(),
+  };
+
+  /// From a backup.
+  Future<void> importJson(Map<Object?, Object?> json, {required bool replace}) {
+    final other = {
+      for (final MapEntry(:key, :value) in json.entries)
+        if (key is String) key: ?ApplianceDone.fromJson(key, value),
+    };
+    return _save(replace ? other : {...other, ...state});
+  }
 }
 
 final applianceDoneProvider =

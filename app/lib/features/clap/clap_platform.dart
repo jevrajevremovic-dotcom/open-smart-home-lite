@@ -15,16 +15,11 @@ abstract interface class ClapPlatform {
   /// the device. Listening starts with the subscription and stops when it is
   /// cancelled.
   Stream<double> levels();
-
-  /// Raw 16 kHz 16-bit mono PCM in 100 ms chunks, for the wake word (sent to
-  /// the user's own Home Assistant only). Same lifetime as [levels].
-  Stream<Uint8List> pcm();
 }
 
 /// MainActivity's `audio_level` stream (AudioLevelHandler.kt).
 class AndroidClapPlatform implements ClapPlatform {
   static const _levels = EventChannel('org.opensmarthome/audio_level');
-  static const _pcm = EventChannel('org.opensmarthome/audio_pcm');
   static const _microphone = MethodChannel('org.opensmarthome/microphone');
 
   @override
@@ -44,10 +39,6 @@ class AndroidClapPlatform implements ClapPlatform {
   Stream<double> levels() =>
       _levels.receiveBroadcastStream().map((e) => e is num ? e.toDouble() : 0);
 
-  @override
-  Stream<Uint8List> pcm() => _pcm.receiveBroadcastStream().map(
-    (e) => e is Uint8List ? e : Uint8List(0),
-  );
 }
 
 final clapPlatformProvider = Provider<ClapPlatform>(

@@ -16,7 +16,7 @@ import org.json.JSONArray
 /**
  * Three Quick Settings tiles. The app tells them what to show ("update":
  * label, on/off); a tap is queued and handed to the app, which starts in
- * the background if needed and sends the command to Home Assistant.
+ * the background if needed and sends the command to the device.
  * Only labels and on/off are stored here; no tokens, no addresses.
  */
 object QuickTiles {

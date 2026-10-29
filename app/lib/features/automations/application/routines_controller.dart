@@ -88,6 +88,26 @@ class RoutinesController extends Notifier<Routines> {
     ),
   );
 
+  /// From a backup: all of it ([replace]), or the scenes and automations
+  /// not here yet.
+  Future<void> importAll(Routines other, {required bool replace}) {
+    if (replace) return _save(other);
+    return _save(
+      Routines(
+        scenes: [
+          ...state.scenes,
+          for (final s in other.scenes)
+            if (!state.scenes.any((x) => x.id == s.id)) s,
+        ],
+        automations: [
+          ...state.automations,
+          for (final a in other.automations)
+            if (!state.automations.any((x) => x.id == a.id)) a,
+        ],
+      ),
+    );
+  }
+
   /// Replaces the automations whose ids start with [prefix] (a heating
   /// schedule) by [automations].
   Future<void> replaceGroup(String prefix, List<LocalAutomation> automations) =>

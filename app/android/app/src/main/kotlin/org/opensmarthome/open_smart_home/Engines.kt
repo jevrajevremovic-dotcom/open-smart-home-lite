@@ -8,8 +8,8 @@ import io.flutter.embedding.engine.dart.DartExecutor
 /**
  * One Flutter engine for the whole process, created by whoever needs it
  * first: the screen, or the connection service when the app was closed
- * (or the phone restarted). Then the app keeps its connection to Home
- * Assistant, and receives its messages, without a screen.
+ * (or the phone restarted). Then the app keeps following its devices and
+ * running the automations, without a screen.
  */
 object Engines {
     const val MAIN = "main"
