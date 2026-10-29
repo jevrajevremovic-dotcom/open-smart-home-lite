@@ -19,6 +19,8 @@ import 'package:open_smart_home_lite/features/app_lock/application/app_lock.dart
 import 'package:open_smart_home_lite/features/app_lock/data/device_auth.dart';
 import 'package:open_smart_home_lite/features/clap/clap_platform.dart';
 import 'package:open_smart_home_lite/features/devices/application/device_providers.dart';
+import 'package:open_smart_home_lite/features/devices/data/local/ble/ble_advert.dart';
+import 'package:open_smart_home_lite/features/devices/data/local/ble/ble_scanner.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/demo_adapter.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/device_adapter.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/local_backend.dart';
@@ -182,6 +184,31 @@ class FakeKasa implements KasaTransport {
       found.isEmpty ? const Stream.empty() : Stream.value(found);
 }
 
+/// Bluetooth advertisements the test sends with [hear].
+class FakeBleScanner implements BleScanner {
+  FakeBleScanner({this.supported = true, this.permitted = true});
+
+  @override
+  final bool supported;
+  bool permitted;
+  int asked = 0;
+  final _adverts = StreamController<BleAdvert>.broadcast();
+
+  void hear(BleAdvert advert) => _adverts.add(advert);
+
+  @override
+  Future<bool> hasPermission() async => permitted;
+
+  @override
+  Future<bool> requestPermission() async {
+    asked++;
+    return permitted = true;
+  }
+
+  @override
+  Stream<BleAdvert> scan() => _adverts.stream;
+}
+
 /// Records the background service being started and stopped.
 class FakeBackground implements BackgroundPlatform {
   FakeBackground({this.supported = true});
@@ -306,6 +333,7 @@ Future<List<Override>> testOverrides({
   YeelightTransport? yeelight,
   KasaTransport? kasa,
   BackgroundPlatform? background,
+  BleScanner? ble,
   List<Override> overrides = const [],
 }) async {
   SharedPreferences.setMockInitialValues({
@@ -338,6 +366,9 @@ Future<List<Override>> testOverrides({
     esphomeConnectorProvider.overrideWithValue(esphome ?? noEsphome),
     yeelightTransportProvider.overrideWithValue(yeelight ?? FakeYeelight()),
     kasaTransportProvider.overrideWithValue(kasa ?? FakeKasa()),
+    bleScannerProvider.overrideWithValue(
+      ble ?? FakeBleScanner(supported: false),
+    ),
     backgroundPlatformProvider.overrideWithValue(
       background ?? FakeBackground(supported: false),
     ),

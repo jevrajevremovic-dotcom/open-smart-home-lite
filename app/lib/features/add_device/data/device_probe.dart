@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../devices/data/local/esphome/esphome_client.dart';
+import '../../devices/data/local/ble/ble_advert.dart';
 import '../../devices/data/local/hue_adapter.dart';
 import '../../devices/data/local/kasa_adapter.dart';
 import '../../devices/data/local/lan_http.dart';
@@ -24,6 +25,7 @@ class ProbedDevice {
     this.needsPassword = false,
     this.needsKey = false,
     this.needsLink = false,
+    this.detail,
   });
 
   final ConfiguredDevice device;
@@ -43,6 +45,9 @@ class ProbedDevice {
 
   /// A Hue bridge: paired with its button before it can be added.
   final bool needsLink;
+
+  /// What it reports now (a Bluetooth thermometer's `21.4 °C · 48 %`).
+  final String? detail;
 
   /// The device's name, else its model.
   String get title => name ?? device.model ?? brand;
@@ -71,6 +76,30 @@ class DeviceProbe {
       label: bulb.name.isEmpty ? 'Yeelight' : bulb.name,
     ),
   );
+
+  /// A Bluetooth sensor heard nearby; `null` when its format is unknown.
+  static ProbedDevice? fromBle(BleAdvert advert) {
+    final r = parseAdvert(advert);
+    if (r == null) return null;
+    String n(double v) => v.toStringAsFixed(1);
+    return ProbedDevice(
+      brand: 'Bluetooth',
+      name: advert.name,
+      detail: [
+        if (r.temperature case final t?) '${n(t)} °C',
+        if (r.humidity case final h?) '${h.round()} %',
+        if (r.illuminance case final lx?) '${lx.round()} lx',
+        if (r.battery case final b?) '🔋 $b %',
+      ].join(' · '),
+      device: ConfiguredDevice(
+        adapter: 'ble',
+        id: advert.id,
+        host: advert.address,
+        model: r.model,
+        label: advert.name ?? r.model,
+      ),
+    );
+  }
 
   /// A Kasa device by its `get_sysinfo`; `null` without a MAC.
   static ProbedDevice? fromKasa(String host, Map<String, Object?> sysinfo) {

@@ -7,6 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/storage/credential_store.dart';
 import '../../../core/utils/value_list.dart';
 import '../../automations/application/automation_engine.dart';
+import '../data/local/ble/ble_adapter.dart';
+import '../data/local/ble/ble_scanner.dart';
 import '../data/local/demo_adapter.dart';
 import '../data/local/esphome/esphome_adapter.dart';
 import '../data/local/esphome/esphome_client.dart';
@@ -51,6 +53,7 @@ final homeBackendProvider = Provider<LocalBackend?>((ref) {
       ),
       YeelightAdapter(ref.watch(yeelightTransportProvider)),
       KasaAdapter(ref.watch(kasaTransportProvider)),
+      BleAdapter(ref.watch(bleScannerProvider)),
       ref.watch(routineAdapterProvider),
       EsphomeAdapter(
         connector: ref.watch(esphomeConnectorProvider),

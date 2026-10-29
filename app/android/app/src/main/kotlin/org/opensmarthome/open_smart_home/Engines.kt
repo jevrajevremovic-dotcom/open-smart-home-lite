@@ -21,6 +21,7 @@ object Engines {
         QuickTiles.attach(context, engine)
         Speech.attach(context, engine)
         NowPlaying.attach(context, engine)
+        BleScanHandler.attach(context, engine)
         engine.dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
         FlutterEngineCache.getInstance().put(MAIN, engine)
         return engine

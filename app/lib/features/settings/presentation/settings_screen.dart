@@ -321,6 +321,7 @@ class _SectionBody extends ConsumerWidget {
               'hue' => Icons.hub_outlined,
               'yeelight' => Icons.lightbulb_outline,
               'kasa' => Icons.outlet_outlined,
+              'ble' => Icons.bluetooth,
               _ => Icons.power_outlined,
             }),
             title: Text(d.label ?? d.model ?? d.host),

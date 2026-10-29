@@ -9,6 +9,7 @@ import 'package:open_smart_home_lite/app/router/app_router.dart';
 import 'package:open_smart_home_lite/core/platform/speech_output.dart';
 import 'package:open_smart_home_lite/features/add_device/data/lan_discovery.dart';
 import 'package:open_smart_home_lite/features/alerts/alert_notifications.dart';
+import 'package:open_smart_home_lite/features/devices/data/local/ble/ble_scanner.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/esphome/esphome_client.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/lan_http.dart';
 import 'package:open_smart_home_lite/features/app_lock/data/device_auth.dart';
@@ -45,6 +46,7 @@ Future<InMemoryCredentialStore> pumpApp(
   LanHttp? http,
   LanDiscovery? discovery,
   EsphomeConnector? esphome,
+  BleScanner? ble,
   List<Override> overrides = const [],
 }) async {
   tester.view
@@ -70,6 +72,7 @@ Future<InMemoryCredentialStore> pumpApp(
     http: http,
     discovery: discovery,
     esphome: esphome,
+    ble: ble,
     overrides: overrides,
   );
   await tester.pumpWidget(

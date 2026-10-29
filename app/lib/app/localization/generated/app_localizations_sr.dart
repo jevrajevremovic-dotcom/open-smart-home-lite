@@ -5337,6 +5337,31 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get sceneEdit => 'Izmeni scenu';
+
+  @override
+  String get bleNearbyTitle => 'Bluetooth senzori u blizini';
+
+  @override
+  String get bleNearbyHint =>
+      'Termometri i senzori vrata, pokreta i curenja koji šalju svoje vrednosti preko Bluetootha (BTHome, Shelly BLU, Xiaomi sa pvvx/ATC firmverom, SwitchBot Meter, Govee). Telefon samo sluša, ne povezuje se.';
+
+  @override
+  String get blePermission => 'Dozvoli Bluetooth';
+
+  @override
+  String get blePermissionHint =>
+      'Za Bluetooth senzore aplikaciji treba dozvola za uređaje u blizini.';
+
+  @override
+  String get bleOff =>
+      'Bluetooth je isključen. Uključite ga da bi se senzori pojavili.';
+
+  @override
+  String get bleNoneYet =>
+      'Još ništa. Senzori se javljaju na nekoliko sekundi do minuta.';
+
+  @override
+  String get bleUnsupported => 'Ovaj uređaj nema Bluetooth.';
 }
 
 /// The translations for Serbian, using the Latin script (`sr_Latn`).

@@ -26,6 +26,7 @@ class MainActivity : FlutterFragmentActivity() {
     private var motion: MotionHandler? = null
     private var micResult: MethodChannel.Result? = null
     private var cameraResult: MethodChannel.Result? = null
+    private var bleResult: MethodChannel.Result? = null
     private var matterResult: MethodChannel.Result? = null
 
     // Google's Matter screens (scan, Bluetooth, network) return here.
@@ -88,6 +89,13 @@ class MainActivity : FlutterFragmentActivity() {
         MethodChannel(messenger, "org.opensmarthome/camera").setMethodCallHandler { call, result ->
             when (call.method) {
                 "request" -> requestCamera(result)
+                else -> result.notImplemented()
+            }
+        }
+        MethodChannel(messenger, "org.opensmarthome/ble_permission").setMethodCallHandler { call, result ->
+            when (call.method) {
+                "granted" -> result.success(BleScanHandler.hasPermission(this))
+                "request" -> requestBle(result)
                 else -> result.notImplemented()
             }
         }
@@ -236,6 +244,16 @@ class MainActivity : FlutterFragmentActivity() {
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), MIC_REQUEST)
     }
 
+    private fun requestBle(result: MethodChannel.Result) {
+        if (BleScanHandler.hasPermission(this)) {
+            result.success(true)
+            return
+        }
+        bleResult?.success(false)
+        bleResult = result
+        ActivityCompat.requestPermissions(this, arrayOf(BleScanHandler.permission), BLE_REQUEST)
+    }
+
     private fun requestCamera(result: MethodChannel.Result) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
             == PackageManager.PERMISSION_GRANTED
@@ -265,6 +283,10 @@ class MainActivity : FlutterFragmentActivity() {
                 cameraResult?.success(granted)
                 cameraResult = null
             }
+            BLE_REQUEST -> {
+                bleResult?.success(granted)
+                bleResult = null
+            }
         }
     }
 
@@ -273,6 +295,7 @@ class MainActivity : FlutterFragmentActivity() {
 
     companion object {
         private const val MIC_REQUEST = 4711
+        private const val BLE_REQUEST = 4713
         private const val CAMERA_REQUEST = 4712
     }
 }

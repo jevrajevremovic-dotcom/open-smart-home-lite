@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../devices/data/local/ble/ble_scanner.dart';
 import '../../devices/data/local/kasa_adapter.dart';
 import '../../devices/data/local/local_home.dart';
 import '../../devices/data/local/yeelight_adapter.dart';
@@ -84,3 +85,25 @@ final discoveredDevicesProvider =
       controller.add(const []);
       return controller.stream;
     });
+
+/// Bluetooth sensors heard nearby while the screen is open (strongest
+/// first). Fails with `BleScanError` (no permission, Bluetooth off).
+final bleNearbyProvider = StreamProvider.autoDispose<List<ProbedDevice>>((
+  ref,
+) async* {
+  final scanner = ref.watch(bleScannerProvider);
+  if (!scanner.supported) throw const BleScanError('unsupported');
+  if (!await scanner.hasPermission()) throw const BleScanError('permission');
+  final heard = <String, (ProbedDevice, int)>{};
+  yield const [];
+  await for (final advert in scanner.scan()) {
+    final found = DeviceProbe.fromBle(advert);
+    if (found == null) continue;
+    heard[advert.id] = (found, advert.rssi ?? -100);
+    yield [
+      for (final e
+          in heard.values.toList()..sort((a, b) => b.$2.compareTo(a.$2)))
+        e.$1,
+    ];
+  }
+});

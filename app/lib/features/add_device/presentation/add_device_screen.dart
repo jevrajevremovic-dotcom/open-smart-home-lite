@@ -9,6 +9,7 @@ import '../../../core/widgets/status_widgets.dart';
 import '../../devices/data/local/local_home.dart';
 import '../../devices/presentation/device_edit.dart';
 import '../application/add_device_providers.dart';
+import '../../devices/data/local/ble/ble_scanner.dart';
 import '../../devices/data/local/esphome/esphome_client.dart';
 import '../../devices/data/local/hue_adapter.dart';
 import '../../devices/data/local/lan_http.dart';
@@ -88,6 +89,8 @@ class AddDeviceScreen extends ConsumerWidget {
                     label: Text(l10n.addDeviceManual),
                   ),
                 ),
+                const SizedBox(height: 24),
+                _BleSection(added: added, onAdd: (p) => _add(context, ref, p)),
               ],
             ),
           ),
@@ -365,6 +368,80 @@ class _RoomDialogState extends State<_RoomDialog> {
           ).pop((_room, widget.secret == null ? null : _password.text.trim())),
           child: Text(l10n.addDeviceAdd),
         ),
+      ],
+    );
+  }
+}
+
+/// Bluetooth sensors heard nearby, or why there are none.
+class _BleSection extends ConsumerWidget {
+  const _BleSection({required this.added, required this.onAdd});
+
+  final Set<String> added;
+  final void Function(ProbedDevice) onAdd;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final nearby = ref.watch(bleNearbyProvider);
+    final reason = switch (nearby.error) {
+      BleScanError(:final reason) => reason,
+      null => null,
+      _ => 'failed',
+    };
+    if (reason == 'unsupported') return const SizedBox.shrink();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(l10n.bleNearbyTitle, style: theme.textTheme.titleMedium),
+        const SizedBox(height: 4),
+        Text(l10n.bleNearbyHint, style: theme.textTheme.bodySmall),
+        const SizedBox(height: 12),
+        if (reason == 'permission')
+          Card.outlined(
+            child: ListTile(
+              leading: const Icon(Icons.bluetooth_searching),
+              title: Text(l10n.blePermissionHint),
+              trailing: FilledButton.tonal(
+                key: const Key('blePermission'),
+                onPressed: () async {
+                  if (await ref.read(bleScannerProvider).requestPermission()) {
+                    ref.invalidate(bleNearbyProvider);
+                  }
+                },
+                child: Text(l10n.blePermission),
+              ),
+            ),
+          )
+        else if (reason == 'off')
+          InlineNotice.warning(l10n.bleOff)
+        else if (reason != null)
+          InlineNotice.warning(l10n.bleOff)
+        else if (nearby.value?.isEmpty ?? true)
+          InlineNotice.info(l10n.bleNoneYet)
+        else
+          for (final p in nearby.value!)
+            Card.outlined(
+              child: ListTile(
+                key: ValueKey('found-${p.device.key}'),
+                leading: const Icon(Icons.bluetooth),
+                title: Text(p.title),
+                subtitle: Text(
+                  [
+                    ?p.device.model,
+                    if (p.detail case final d? when d.isNotEmpty) d,
+                  ].join(' · '),
+                ),
+                trailing: added.contains(p.device.key)
+                    ? Chip(label: Text(l10n.addDeviceAdded))
+                    : FilledButton.tonal(
+                        key: ValueKey('add-${p.device.key}'),
+                        onPressed: () => onAdd(p),
+                        child: Text(l10n.addDeviceAdd),
+                      ),
+              ),
+            ),
       ],
     );
   }

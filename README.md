@@ -2,7 +2,7 @@
 
 Lite verzija [Open Smart Home](https://github.com/jevrajevremovic-dotcom/open-smart-home) aplikacije: uređaji koji se povezuju na telefon preko **Wi-Fi-ja** (lokalna mreža) i **Bluetooth-a**, u jednoj aplikaciji, **bez Home Assistanta i bez Raspberry Pi-ja**. Telefon je centrala.
 
-Nastala je od Open Smart Home 1.0 i deli njen model uređaja i korisnički interfejs. Aplikacija se instalira pored originala (`org.opensmarthome.lite`). Radi sa Shelly, WLED, Tasmota, ESPHome, Philips Hue, Yeelight i TP-Link Kasa uređajima na lokalnoj mreži; dok se ne doda prvi uređaj, prikazuje demo dom.
+Nastala je od Open Smart Home 1.0 i deli njen model uređaja i korisnički interfejs. Aplikacija se instalira pored originala (`org.opensmarthome.lite`). Radi sa Shelly, WLED, Tasmota, ESPHome, Philips Hue, Yeelight i TP-Link Kasa uređajima na lokalnoj mreži i sa Bluetooth LE senzorima; dok se ne doda prvi uređaj, prikazuje demo dom.
 
 ## Plan
 
@@ -16,7 +16,8 @@ Nastala je od Open Smart Home 1.0 i deli njen model uređaja i korisnički inter
 | 2 | Hue most, Yeelight, TP-Link Kasa (stari lokalni protokol) | ✅ |
 | 2b | LIFX; Kasa/Tapo sa novim protokolom (KLAP) | |
 | A | Lokalne scene i automatizacije, rad u pozadini | ✅ |
-| 3 | Bluetooth LE: SwitchBot, Xiaomi/Govee senzori | |
+| 3 | Bluetooth LE senzori (čitanje oglasa): BTHome/Shelly BLU, Xiaomi pvvx/ATC, SwitchBot Meter, Govee | ✅ |
+| 3b | Bluetooth uređaji koji se kontrolišu (SwitchBot Bot/Curtain, povezivanje) | |
 | 4 | Matter | |
 
 ## Granica
@@ -34,6 +35,7 @@ HomeBackend ── LocalBackend ── DeviceAdapter (jedan po vrsti uređaja)
                                  ├─ HueAdapter     ─┤ (most, v1 API)
                                  ├─ YeelightAdapter ┤ (TCP 55443, svakih 10 s)
                                  ├─ KasaAdapter    ─┘ (TCP 9999, XOR)
+                                 ├─ BleAdapter (Bluetooth LE oglasi, bez povezivanja)
                                  └─ EsphomeAdapter (TCP 6053, trajna veza, promene stižu same)
 ```
 
@@ -55,6 +57,7 @@ ID uređaja je `<adapter>:<MAC>:<kanal>` (npr. `shelly:a8032ab12345:switch0`, `w
 | Philips Hue (preko mosta) | svetla (uključi/isključi, jačina, temperatura boje, boja), utičnice, senzori temperature i pokreta; uparuje se dugmetom na mostu |
 | Yeelight | sijalice, trake, plafonjere: jačina, temperatura boje, boja (treba uključiti „LAN Control“ u Yeelight aplikaciji) |
 | TP-Link Kasa | utičnice, prekidači, dimeri, razdelnici (svaka utičnica posebno), sijalice; snaga gde je meri; samo stariji lokalni protokol — novi firmver (KLAP) i Tapo ne odgovaraju |
+| Bluetooth LE senzori | temperatura, vlažnost, osvetljenost, vrata/prozor, pokret, curenje, dugme, baterija — iz oglasa, bez povezivanja: BTHome v2 (Shelly BLU, DIY), Xiaomi LYWSD03MMC i slični sa pvvx/ATC firmverom, SwitchBot Meter, Govee H5072/H5075; šifrovani BTHome i Xiaomi MiBeacon ne |
 | ESPHome | prekidači, svetla (jačina, boja, temperatura boje), roletne, dugmad, senzori, binarni senzori (vrata, pokret, curenje…), tekstualni senzori; dijagnostički entiteti se ne prikazuju u listama |
 
 ESPHome: veza je trajna (native API, port 6053) i uređaj sam šalje promene. Ako uređaj ima `api: encryption: key:`, ključ se unosi pri dodavanju i proverava pre nego što se uređaj doda (Noise `NNpsk0_25519_ChaChaPoly_SHA256`, `app/lib/features/devices/data/local/esphome/`). Ventilatori, klima, `number` i `select` entiteti još nisu podržani. Šifrovanje je testirano samo protiv sopstvene implementacije uređajske strane (`test/esphome_fake.dart`), ne protiv pravog uređaja.

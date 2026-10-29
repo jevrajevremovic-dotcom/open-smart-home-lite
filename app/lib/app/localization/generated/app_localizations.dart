@@ -9038,6 +9038,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Edit scene'**
   String get sceneEdit;
+
+  /// No description provided for @bleNearbyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth sensors nearby'**
+  String get bleNearbyTitle;
+
+  /// No description provided for @bleNearbyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Thermometers and door, motion and leak sensors that send their values over Bluetooth (BTHome, Shelly BLU, Xiaomi with pvvx/ATC firmware, SwitchBot Meter, Govee). The phone only listens, it does not connect.'**
+  String get bleNearbyHint;
+
+  /// No description provided for @blePermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Bluetooth'**
+  String get blePermission;
+
+  /// No description provided for @blePermissionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth sensors need the nearby devices permission.'**
+  String get blePermissionHint;
+
+  /// No description provided for @bleOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth is off. Turn it on for the sensors to show up.'**
+  String get bleOff;
+
+  /// No description provided for @bleNoneYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing yet. Sensors call in every few seconds to a minute.'**
+  String get bleNoneYet;
+
+  /// No description provided for @bleUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no Bluetooth.'**
+  String get bleUnsupported;
 }
 
 class _AppLocalizationsDelegate

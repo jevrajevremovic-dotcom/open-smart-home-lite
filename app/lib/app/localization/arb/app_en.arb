@@ -2060,5 +2060,12 @@
   "backgroundAutomations": "Automations in the background",
   "backgroundAutomationsHint": "The app keeps running when closed, so automations work. Android then shows a permanent notification.",
   "backgroundNotificationText": "Automations are running",
-  "sceneEdit": "Edit scene"
+  "sceneEdit": "Edit scene",
+  "bleNearbyTitle": "Bluetooth sensors nearby",
+  "bleNearbyHint": "Thermometers and door, motion and leak sensors that send their values over Bluetooth (BTHome, Shelly BLU, Xiaomi with pvvx/ATC firmware, SwitchBot Meter, Govee). The phone only listens, it does not connect.",
+  "blePermission": "Allow Bluetooth",
+  "blePermissionHint": "Bluetooth sensors need the nearby devices permission.",
+  "bleOff": "Bluetooth is off. Turn it on for the sensors to show up.",
+  "bleNoneYet": "Nothing yet. Sensors call in every few seconds to a minute.",
+  "bleUnsupported": "This device has no Bluetooth."
 }

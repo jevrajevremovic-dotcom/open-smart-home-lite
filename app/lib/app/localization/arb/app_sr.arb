@@ -1490,5 +1490,12 @@
   "backgroundAutomations": "Automatizacije u pozadini",
   "backgroundAutomationsHint": "Aplikacija nastavlja da radi i kad je zatvorite, da bi automatizacije radile. Android tada prikazuje stalno obaveštenje.",
   "backgroundNotificationText": "Automatizacije rade",
-  "sceneEdit": "Izmeni scenu"
+  "sceneEdit": "Izmeni scenu",
+  "bleNearbyTitle": "Bluetooth senzori u blizini",
+  "bleNearbyHint": "Termometri i senzori vrata, pokreta i curenja koji šalju svoje vrednosti preko Bluetootha (BTHome, Shelly BLU, Xiaomi sa pvvx/ATC firmverom, SwitchBot Meter, Govee). Telefon samo sluša, ne povezuje se.",
+  "blePermission": "Dozvoli Bluetooth",
+  "blePermissionHint": "Za Bluetooth senzore aplikaciji treba dozvola za uređaje u blizini.",
+  "bleOff": "Bluetooth je isključen. Uključite ga da bi se senzori pojavili.",
+  "bleNoneYet": "Još ništa. Senzori se javljaju na nekoliko sekundi do minuta.",
+  "bleUnsupported": "Ovaj uređaj nema Bluetooth."
 }

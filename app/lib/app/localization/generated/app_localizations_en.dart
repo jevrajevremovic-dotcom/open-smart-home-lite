@@ -5307,4 +5307,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sceneEdit => 'Edit scene';
+
+  @override
+  String get bleNearbyTitle => 'Bluetooth sensors nearby';
+
+  @override
+  String get bleNearbyHint =>
+      'Thermometers and door, motion and leak sensors that send their values over Bluetooth (BTHome, Shelly BLU, Xiaomi with pvvx/ATC firmware, SwitchBot Meter, Govee). The phone only listens, it does not connect.';
+
+  @override
+  String get blePermission => 'Allow Bluetooth';
+
+  @override
+  String get blePermissionHint =>
+      'Bluetooth sensors need the nearby devices permission.';
+
+  @override
+  String get bleOff =>
+      'Bluetooth is off. Turn it on for the sensors to show up.';
+
+  @override
+  String get bleNoneYet =>
+      'Nothing yet. Sensors call in every few seconds to a minute.';
+
+  @override
+  String get bleUnsupported => 'This device has no Bluetooth.';
 }
