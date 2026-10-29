@@ -2568,7 +2568,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get timerHint =>
-      'Home Assistant counts down, so it also works when this phone is off. It creates a small script for this device (visible in Home Assistant); this needs an administrator account.';
+      'This phone or wall panel counts down while the app runs (or with automations in the background).';
 
   @override
   String get timerRunning => 'Timer is running';
@@ -3339,7 +3339,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get presenceIntro =>
-      'While nobody is home, Home Assistant switches one of the chosen lights on or off every 15 minutes in the evening (with a random wait of up to 10 minutes), and turns them all off at the end time. It runs in Home Assistant, so it works even when this device is off. Saving needs an administrator account.';
+      'While it is on, one of the chosen lights is switched on or off every 15 minutes in the evening (with a random wait of up to 10 minutes), and all go off at the end time. The phone or tablet running it has to stay at home, running.';
 
   @override
   String get presenceOn => 'Simulation on';
@@ -3351,7 +3351,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get presenceLights => 'Lights';
 
   @override
-  String get presenceNoLights => 'Home Assistant has no lights.';
+  String get presenceNoLights => 'The home has no lights.';
 
   @override
   String get presenceWhen => 'When';
@@ -3379,10 +3379,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get presenceEnd => 'End (all chosen lights go off)';
 
   @override
-  String get presenceSave => 'Save to Home Assistant';
+  String get presenceSave => 'Save';
 
   @override
-  String get presenceSaved => 'Presence simulation saved in Home Assistant.';
+  String get presenceSaved => 'Presence simulation saved.';
 
   @override
   String get presenceRemove => 'Remove';
@@ -3727,7 +3727,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get applianceDoneHint =>
-      'Home Assistant watches the power: once the appliance has run (above the threshold) and then goes quiet, it tells you it\'s done. Works with the app closed; everything stays on your network.';
+      'The app watches the power: once the appliance has run (above the threshold) and then goes quiet, this phone or tablet says it\'s done. Runs on this phone or wall panel while the app runs (or with automations in the background).';
 
   @override
   String get applianceDoneName => 'Name (e.g. Washing machine)';
@@ -3786,7 +3786,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get applianceDoneOn => 'Tells you when it\'s done';
 
   @override
-  String get applianceDoneOnHint => 'Automation in Home Assistant';
+  String get applianceDoneOnHint => 'Watched by this phone';
 
   @override
   String get applianceDoneChange => 'Change';
@@ -3812,7 +3812,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get heatingScheduleHint =>
-      'From each time on, that temperature holds until the next one. Home Assistant keeps and runs the schedule, also with the app closed. A manual change holds until the next time.';
+      'From each time on, that temperature holds until the next one. The schedule is kept as the home\'s automations. Runs on this phone or wall panel while the app runs (or with automations in the background). A manual change holds until the next time.';
 
   @override
   String get heatingScheduleWorkdays => 'Workdays (Mon–Fri)';
@@ -3836,7 +3836,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get heatingScheduleRemoved => 'Schedule removed.';
 
   @override
-  String get heatingScheduleSaved => 'Schedule saved in Home Assistant.';
+  String get heatingScheduleSaved => 'Schedule saved.';
 
   @override
   String heatingScheduleNext(String time, String temperature) {
@@ -4735,7 +4735,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sunriseHint =>
-      'The light comes up slowly before you wake, from a dim warm glow to daylight, like a real sunrise. Runs in Home Assistant, even with the phone off.';
+      'The light comes up slowly before you wake, from a dim warm glow to daylight, like a real sunrise. Runs on this phone or wall panel while the app runs (or with automations in the background).';
 
   @override
   String get sunriseWakeAt => 'Fully bright at';

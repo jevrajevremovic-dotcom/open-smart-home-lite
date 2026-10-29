@@ -6,6 +6,8 @@ import '../features/add_device/application/address_keeper.dart';
 import '../features/alerts/alert_notifications.dart';
 import '../features/automations/application/automation_engine.dart';
 import '../features/automations/application/background_run.dart';
+import '../features/extras/home_programs.dart';
+import '../features/timers/device_timer.dart';
 import '../features/app_lock/application/app_lock.dart';
 import '../features/app_lock/presentation/app_lock_gate.dart';
 import '../features/devices/application/device_providers.dart';
@@ -58,7 +60,10 @@ class _SmartHomeAppState extends ConsumerState<SmartHomeApp> {
     // automations start with the app.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(addressKeeperProvider).check();
-      ref.read(automationEngineProvider);
+      ref
+        ..read(automationEngineProvider)
+        ..read(homeProgramsProvider)
+        ..read(deviceTimersProvider);
       AppLocalizations l10n;
       try {
         l10n = lookupAppLocalizations(

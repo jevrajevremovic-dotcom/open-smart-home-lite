@@ -2574,7 +2574,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get timerHint =>
-      'Odbrojava Home Assistant, pa radi i kad je ovaj telefon ugašen. Za ovaj uređaj pravi malu skriptu (vidi se u Home Assistantu); potreban je administratorski nalog.';
+      'Odbrojava ovaj telefon ili zidni tablet, dok aplikacija radi (ili uz automatizacije u pozadini).';
 
   @override
   String get timerRunning => 'Tajmer je uključen';
@@ -3352,7 +3352,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get presenceIntro =>
-      'Dok niko nije kod kuće, Home Assistant uveče na svakih 15 minuta (uz nasumično čekanje do 10 minuta) upali ili ugasi jedno od izabranih svetala, a u vreme kraja ugasi sva. Radi u Home Assistantu, pa i kad je ovaj uređaj isključen. Za čuvanje je potreban administratorski nalog.';
+      'Dok je uključena, uveče se na svakih 15 minuta (uz nasumično čekanje do 10 minuta) upali ili ugasi jedno od izabranih svetala, a u vreme kraja ugase se sva. Telefon ili tablet koji je pokreće mora da ostane kod kuće i da radi.';
 
   @override
   String get presenceOn => 'Simulacija uključena';
@@ -3364,7 +3364,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get presenceLights => 'Svetla';
 
   @override
-  String get presenceNoLights => 'Home Assistant nema svetla.';
+  String get presenceNoLights => 'U domu nema svetala.';
 
   @override
   String get presenceWhen => 'Kada';
@@ -3392,11 +3392,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get presenceEnd => 'Kraj (sva izabrana svetla se gase)';
 
   @override
-  String get presenceSave => 'Sačuvaj u Home Assistant';
+  String get presenceSave => 'Sačuvaj';
 
   @override
-  String get presenceSaved =>
-      'Simulacija prisustva je sačuvana u Home Assistantu.';
+  String get presenceSaved => 'Simulacija prisustva je sačuvana.';
 
   @override
   String get presenceRemove => 'Ukloni';
@@ -3743,7 +3742,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get applianceDoneHint =>
-      'Home Assistant prati snagu: kad uređaj radi (iznad praga) pa se umiri, javlja da je gotovo. Radi i kad je aplikacija zatvorena; sve ostaje u vašoj mreži.';
+      'Aplikacija prati snagu: kad uređaj radi (iznad praga) pa se umiri, ovaj telefon ili tablet javi da je gotovo. Radi na ovom telefonu ili zidnom tabletu dok aplikacija radi (ili uz automatizacije u pozadini).';
 
   @override
   String get applianceDoneName => 'Naziv (npr. Veš mašina)';
@@ -3802,7 +3801,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get applianceDoneOn => 'Javlja kad završi';
 
   @override
-  String get applianceDoneOnHint => 'Automatizacija u Home Assistantu';
+  String get applianceDoneOnHint => 'Prati ovaj telefon';
 
   @override
   String get applianceDoneChange => 'Promeni';
@@ -3828,7 +3827,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get heatingScheduleHint =>
-      'Od svakog vremena važi ta temperatura, do sledećeg. Raspored čuva i izvršava Home Assistant, i kad je aplikacija zatvorena. Ručna promena važi do sledećeg vremena.';
+      'Od svakog vremena važi ta temperatura, do sledećeg. Raspored se čuva kao automatizacije doma. Radi na ovom telefonu ili zidnom tabletu dok aplikacija radi (ili uz automatizacije u pozadini). Ručna promena važi do sledećeg vremena.';
 
   @override
   String get heatingScheduleWorkdays => 'Radni dani (pon–pet)';
@@ -3852,7 +3851,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get heatingScheduleRemoved => 'Raspored je uklonjen.';
 
   @override
-  String get heatingScheduleSaved => 'Raspored je sačuvan u Home Assistantu.';
+  String get heatingScheduleSaved => 'Raspored je sačuvan.';
 
   @override
   String heatingScheduleNext(String time, String temperature) {
@@ -4763,7 +4762,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get sunriseHint =>
-      'Svetlo se pali polako pre buđenja, od tople prigušene svetlosti do dnevne, kao pravo svitanje. Radi u Home Assistantu, i kad je telefon ugašen.';
+      'Svetlo se pali polako pre buđenja, od tople prigušene svetlosti do dnevne, kao pravo svitanje. Radi na ovom telefonu ili zidnom tabletu dok aplikacija radi (ili uz automatizacije u pozadini).';
 
   @override
   String get sunriseWakeAt => 'Potpuno svetlo u';

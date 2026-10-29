@@ -88,6 +88,20 @@ class RoutinesController extends Notifier<Routines> {
     ),
   );
 
+  /// Replaces the automations whose ids start with [prefix] (a heating
+  /// schedule) by [automations].
+  Future<void> replaceGroup(String prefix, List<LocalAutomation> automations) =>
+      _save(
+        Routines(
+          scenes: state.scenes,
+          automations: [
+            for (final a in state.automations)
+              if (!a.id.startsWith(prefix)) a,
+            ...automations,
+          ],
+        ),
+      );
+
   Future<void> setEnabled(String id, bool enabled) async {
     final a = state.automations.where((a) => a.id == id).firstOrNull;
     if (a != null) await saveAutomation(a.copyWith(enabled: enabled));

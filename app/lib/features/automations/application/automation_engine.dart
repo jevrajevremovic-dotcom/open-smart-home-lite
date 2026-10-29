@@ -38,6 +38,16 @@ class AutomationEngine implements RoutineRunner {
 
   StreamSubscription<Object?>? _sub;
   Timer? _minute;
+  final _minutes = StreamController<DateTime>.broadcast();
+
+  /// Each minute, for the home's programs (sunrise, presence, timers).
+  Stream<DateTime> get minutes => _minutes.stream;
+
+  DateTime get now => _clock();
+
+  /// When the sun rises and sets today at home; `null` without the
+  /// home's location.
+  ({DateTime sunrise, DateTime sunset})? sunToday() => _sunToday(_clock());
   Map<String, SmartHomeDevice> _previous = const {};
 
   /// What already fired, so a minute or a change counts once.
@@ -71,6 +81,7 @@ class AutomationEngine implements RoutineRunner {
   /// Time and sun triggers for the current minute.
   void tick() {
     final now = _clock();
+    if (!_minutes.isClosed) _minutes.add(now);
     final minute = ClockTime(now.hour, now.minute);
     final stamp = '${now.year}-${now.month}-${now.day} $minute';
     final sun = _sunToday(now);
@@ -225,6 +236,7 @@ class AutomationEngine implements RoutineRunner {
   void dispose() {
     _minute?.cancel();
     unawaited(_sub?.cancel());
+    unawaited(_minutes.close());
   }
 }
 

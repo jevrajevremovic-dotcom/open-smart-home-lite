@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../appliance_done/appliance_done_section.dart';
+import '../domain/device_kind.dart';
+
 import '../../../app/localization/l10n.dart';
 import '../../../app/router/app_router.dart';
 import '../../../core/widgets/responsive.dart';
@@ -56,6 +59,13 @@ class DeviceBundleScreen extends ConsumerWidget {
                   onOpen: (d) =>
                       context.push(AppRoutes.device(d.id, kiosk: kiosk)),
                 ),
+                if (bundle.members
+                        .where((d) => d.kind == DeviceKind.powerMeter)
+                        .firstOrNull
+                    case final power? when !kiosk) ...[
+                  const SizedBox(height: 24),
+                  ApplianceDoneSection(power: power),
+                ],
               ],
             ),
           ),

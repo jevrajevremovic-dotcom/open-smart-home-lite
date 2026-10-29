@@ -4578,7 +4578,7 @@ abstract class AppLocalizations {
   /// No description provided for @timerHint.
   ///
   /// In en, this message translates to:
-  /// **'Home Assistant counts down, so it also works when this phone is off. It creates a small script for this device (visible in Home Assistant); this needs an administrator account.'**
+  /// **'This phone or wall panel counts down while the app runs (or with automations in the background).'**
   String get timerHint;
 
   /// No description provided for @timerRunning.
@@ -5838,7 +5838,7 @@ abstract class AppLocalizations {
   /// No description provided for @presenceIntro.
   ///
   /// In en, this message translates to:
-  /// **'While nobody is home, Home Assistant switches one of the chosen lights on or off every 15 minutes in the evening (with a random wait of up to 10 minutes), and turns them all off at the end time. It runs in Home Assistant, so it works even when this device is off. Saving needs an administrator account.'**
+  /// **'While it is on, one of the chosen lights is switched on or off every 15 minutes in the evening (with a random wait of up to 10 minutes), and all go off at the end time. The phone or tablet running it has to stay at home, running.'**
   String get presenceIntro;
 
   /// No description provided for @presenceOn.
@@ -5862,7 +5862,7 @@ abstract class AppLocalizations {
   /// No description provided for @presenceNoLights.
   ///
   /// In en, this message translates to:
-  /// **'Home Assistant has no lights.'**
+  /// **'The home has no lights.'**
   String get presenceNoLights;
 
   /// No description provided for @presenceWhen.
@@ -5916,13 +5916,13 @@ abstract class AppLocalizations {
   /// No description provided for @presenceSave.
   ///
   /// In en, this message translates to:
-  /// **'Save to Home Assistant'**
+  /// **'Save'**
   String get presenceSave;
 
   /// No description provided for @presenceSaved.
   ///
   /// In en, this message translates to:
-  /// **'Presence simulation saved in Home Assistant.'**
+  /// **'Presence simulation saved.'**
   String get presenceSaved;
 
   /// No description provided for @presenceRemove.
@@ -6456,7 +6456,7 @@ abstract class AppLocalizations {
   /// No description provided for @applianceDoneHint.
   ///
   /// In en, this message translates to:
-  /// **'Home Assistant watches the power: once the appliance has run (above the threshold) and then goes quiet, it tells you it\'s done. Works with the app closed; everything stays on your network.'**
+  /// **'The app watches the power: once the appliance has run (above the threshold) and then goes quiet, this phone or tablet says it\'s done. Runs on this phone or wall panel while the app runs (or with automations in the background).'**
   String get applianceDoneHint;
 
   /// No description provided for @applianceDoneName.
@@ -6552,7 +6552,7 @@ abstract class AppLocalizations {
   /// No description provided for @applianceDoneOnHint.
   ///
   /// In en, this message translates to:
-  /// **'Automation in Home Assistant'**
+  /// **'Watched by this phone'**
   String get applianceDoneOnHint;
 
   /// No description provided for @applianceDoneChange.
@@ -6594,7 +6594,7 @@ abstract class AppLocalizations {
   /// No description provided for @heatingScheduleHint.
   ///
   /// In en, this message translates to:
-  /// **'From each time on, that temperature holds until the next one. Home Assistant keeps and runs the schedule, also with the app closed. A manual change holds until the next time.'**
+  /// **'From each time on, that temperature holds until the next one. The schedule is kept as the home\'s automations. Runs on this phone or wall panel while the app runs (or with automations in the background). A manual change holds until the next time.'**
   String get heatingScheduleHint;
 
   /// No description provided for @heatingScheduleWorkdays.
@@ -6642,7 +6642,7 @@ abstract class AppLocalizations {
   /// No description provided for @heatingScheduleSaved.
   ///
   /// In en, this message translates to:
-  /// **'Schedule saved in Home Assistant.'**
+  /// **'Schedule saved.'**
   String get heatingScheduleSaved;
 
   /// No description provided for @heatingScheduleNext.
@@ -8088,7 +8088,7 @@ abstract class AppLocalizations {
   /// No description provided for @sunriseHint.
   ///
   /// In en, this message translates to:
-  /// **'The light comes up slowly before you wake, from a dim warm glow to daylight, like a real sunrise. Runs in Home Assistant, even with the phone off.'**
+  /// **'The light comes up slowly before you wake, from a dim warm glow to daylight, like a real sunrise. Runs on this phone or wall panel while the app runs (or with automations in the background).'**
   String get sunriseHint;
 
   /// No description provided for @sunriseWakeAt.

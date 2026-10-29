@@ -19,6 +19,7 @@ import '../../features/rooms/presentation/rooms_screen.dart';
 import '../../features/scenes/presentation/scenes_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/house_check/house_check.dart';
+import '../../features/presence_sim/presence_sim_screen.dart';
 import '../../features/house_check/house_check_screen.dart';
 import 'app_shell.dart';
 import '../../features/simple_mode/simple_mode.dart';
@@ -37,6 +38,7 @@ abstract final class AppRoutes {
   static String houseCheckFor(String mode) => '$houseCheck?mode=$mode';
   static const dashboardLayout = '/home-layout';
   static const addDevice = '/add-device';
+  static const presenceSim = '/presence';
   static String weatherFor({bool kiosk = false}) =>
       '${kiosk ? AppRoutes.kiosk : ''}$weather';
 
@@ -217,6 +219,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.dashboardLayout,
             builder: (_, _) => const DashboardLayoutScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.presenceSim,
+            builder: (_, _) => const PresenceSimScreen(),
           ),
           GoRoute(
             path: AppRoutes.addDevice,

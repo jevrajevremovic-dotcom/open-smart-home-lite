@@ -3,7 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/localization/l10n.dart';
 import '../kiosk/application/kiosk_controller.dart';
+import '../restricted/application/restricted_mode.dart';
+import 'bedtime.dart';
 import 'guest_wifi.dart';
+import 'party.dart';
+import 'sunrise_wake.dart';
+import 'vacation.dart';
 import '../floor_plan/floor_plan.dart';
 
 /// One tool in "More".
@@ -31,7 +36,37 @@ class _ExtrasSheet extends ConsumerWidget {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final kiosk = ref.watch(kioskActiveProvider);
+    // Children and guests: only the fun ones.
+    final restricted = ref.watch(
+      restrictedModeProvider.select((s) => s.enabled),
+    );
     final extras = <_Extra>[
+      if (!restricted)
+        (
+          key: const Key('extraVacation'),
+          icon: Icons.luggage_outlined,
+          label: l10n.vacationTitle,
+          open: showVacation,
+        ),
+      (
+        key: const Key('extraParty'),
+        icon: Icons.celebration_outlined,
+        label: l10n.partyTitle,
+        open: showParty,
+      ),
+      if (!restricted)
+        (
+          key: const Key('extraSunrise'),
+          icon: Icons.wb_twilight,
+          label: l10n.sunriseTitle,
+          open: showSunriseWake,
+        ),
+      (
+        key: const Key('extraBedtime'),
+        icon: Icons.nightlight_outlined,
+        label: l10n.bedtimeTitle,
+        open: showBedtime,
+      ),
       (
         key: const Key('extraGuestWifi'),
         icon: Icons.wifi,

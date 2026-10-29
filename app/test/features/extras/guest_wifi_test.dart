@@ -27,7 +27,7 @@ void main() {
     final credentials = await pumpApp(tester, size: const Size(800, 1600));
     await settle(tester, 10);
     await tapKey(tester, 'openExtras');
-    await settle(tester, 2);
+    await settle(tester, 5); // the sheet comes up
     await tapKey(tester, 'extraGuestWifi');
     await settle(tester, 2);
     expect(find.text(en.guestWifiNotSet), findsOneWidget);
