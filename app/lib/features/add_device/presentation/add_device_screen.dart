@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,6 +10,8 @@ import '../../devices/data/local/local_home.dart';
 import '../../devices/presentation/device_edit.dart';
 import '../application/add_device_providers.dart';
 import '../../devices/data/local/esphome/esphome_client.dart';
+import '../../devices/data/local/hue_adapter.dart';
+import '../../devices/data/local/lan_http.dart';
 import '../data/device_probe.dart';
 import '../data/lan_discovery.dart';
 
@@ -56,6 +60,9 @@ class AddDeviceScreen extends ConsumerWidget {
                         'WLED' => Icons.light_outlined,
                         'Tasmota' => Icons.outlet_outlined,
                         'ESPHome' => Icons.memory,
+                        'Hue' => Icons.hub_outlined,
+                        'Yeelight' => Icons.lightbulb_outline,
+                        'Kasa' => Icons.outlet_outlined,
                         _ => Icons.power_outlined,
                       }),
                       title: Text(p.title),
@@ -129,9 +136,20 @@ class AddDeviceScreen extends ConsumerWidget {
             : null,
       ),
     );
-    if (choice == null) return;
-    final (roomId, secret) = choice;
+    if (choice == null || !context.mounted) return;
+    var (roomId, secret) = choice;
     var device = found;
+    if (found.needsLink) {
+      secret = await showDialog<String>(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => _HueLinkDialog(host: found.device.host),
+      );
+      if (secret == null) {
+        say(l10n.hueLinkFailed);
+        return;
+      }
+    }
     if (found.needsKey) {
       // The key is checked (and, found by address, tells who it is).
       try {
@@ -208,6 +226,75 @@ class _AddressDialogState extends State<_AddressDialog> {
 }
 
 enum _Secret { password, key }
+
+/// Waits for the bridge's button (asking every 2 s for 30 s); returns the
+/// app's user name, or `null`.
+class _HueLinkDialog extends ConsumerStatefulWidget {
+  const _HueLinkDialog({required this.host});
+
+  final String host;
+
+  @override
+  ConsumerState<_HueLinkDialog> createState() => _HueLinkDialogState();
+}
+
+class _HueLinkDialogState extends ConsumerState<_HueLinkDialog> {
+  Timer? _timer;
+  int _tries = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 2), (_) => _try());
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _try() async {
+    if (++_tries > 15) {
+      _timer?.cancel();
+      if (mounted) Navigator.of(context).pop();
+      return;
+    }
+    String? user;
+    try {
+      user = await hueLink(ref.read(lanHttpProvider), widget.host);
+    } on Object {
+      return; // try again
+    }
+    if (user != null && mounted) {
+      _timer?.cancel();
+      Navigator.of(context).pop(user);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return AlertDialog(
+      key: const Key('hueLink'),
+      title: Text(l10n.hueLinkTitle),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(l10n.hueLinkBody),
+          const SizedBox(height: 16),
+          const LinearProgressIndicator(),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.cancel),
+        ),
+      ],
+    );
+  }
+}
 
 /// Which room the new device goes to, and its password or encryption key
 /// if it asks for one; returns `(roomId, secret)` or `null`.

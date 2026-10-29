@@ -33,6 +33,8 @@ abstract interface class LanHttp {
   });
 
   Future<Object?> post(String host, String path, Object? body, {LanAuth? auth});
+
+  Future<Object?> put(String host, String path, Object? body);
 }
 
 /// The `Authorization` header answering a Digest [challenge]
@@ -124,6 +126,10 @@ class DioLanHttp implements LanHttp {
     Object? body, {
     LanAuth? auth,
   }) => _run('POST', _uri(host, path, const {}), body, auth);
+
+  @override
+  Future<Object?> put(String host, String path, Object? body) =>
+      _run('PUT', _uri(host, path, const {}), body, null);
 
   Future<Object?> _run(
     String method,

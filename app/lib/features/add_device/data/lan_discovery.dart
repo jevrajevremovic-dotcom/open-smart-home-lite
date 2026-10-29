@@ -21,6 +21,7 @@ class LanService {
 
   static const httpType = '_http._tcp';
   static const esphomeType = '_esphomelib._tcp';
+  static const hueType = '_hue._tcp';
 
   final String name;
 
@@ -60,7 +61,11 @@ abstract interface class LanDiscovery {
 /// Android's NsdManager, through the app's channel (NsdDiscoveryHandler.kt).
 class AndroidLanDiscovery implements LanDiscovery {
   static const _channel = EventChannel('org.opensmarthome/nsd');
-  static const serviceTypes = [LanService.httpType, LanService.esphomeType];
+  static const serviceTypes = [
+    LanService.httpType,
+    LanService.esphomeType,
+    LanService.hueType,
+  ];
   static final _log = AppLogger('Discovery');
 
   @override

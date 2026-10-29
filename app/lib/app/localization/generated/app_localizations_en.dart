@@ -5088,7 +5088,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get demoHomeNotice =>
-      'This is the demo home. Add your Shelly, WLED, Tasmota or ESPHome devices and the demo turns itself off.';
+      'This is the demo home. Add your devices (Shelly, WLED, Tasmota, ESPHome, Hue, Yeelight, Kasa) and the demo turns itself off.';
 
   @override
   String get firstRunWelcomeBodyLite =>
@@ -5102,7 +5102,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addDeviceLanHint =>
-      'Shelly, WLED and ESPHome devices on the same Wi-Fi network as the phone show up here by themselves. Add Tasmota devices by their IP address.';
+      'Shelly, WLED, ESPHome, Hue, Yeelight and Kasa devices on the same Wi-Fi network as the phone show up here by themselves. Add Tasmota devices by their IP address.';
 
   @override
   String get addDeviceSearching => 'Looking for devices…';
@@ -5121,8 +5121,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addDeviceChecking => 'Checking…';
 
   @override
-  String get addDeviceNotFound =>
-      'No Shelly, WLED, Tasmota or ESPHome found at that address.';
+  String get addDeviceNotFound => 'No supported device found at that address.';
 
   @override
   String get addDeviceAdded => 'Added';
@@ -5193,4 +5192,15 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get deviceKeyNotEncrypted =>
       'This device does not encrypt its connection; leave the key empty.';
+
+  @override
+  String get hueLinkTitle => 'Pairing with the Hue bridge';
+
+  @override
+  String get hueLinkBody =>
+      'Press the round button on top of the Hue bridge. The app waits 30 seconds.';
+
+  @override
+  String get hueLinkFailed =>
+      'The bridge\'s button was not pressed. Try again.';
 }

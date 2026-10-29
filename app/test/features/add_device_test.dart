@@ -9,6 +9,7 @@ import 'package:open_smart_home_lite/features/devices/data/local/local_home.dart
 
 import '../esphome_fake.dart';
 import '../helpers.dart';
+import 'bridges_test.dart' show hueHost, hueNetwork;
 import 'esphome_test.dart' as esphome;
 import '../widgets/app_widget_test.dart'
     show en, goTo, pumpApp, settle, tapKey, unmount;
@@ -232,6 +233,44 @@ void main() {
           ?.state
           .isOn,
       isTrue,
+    );
+    await unmount(tester);
+  });
+
+  testWidgets('a Hue bridge: paired with its button, its lights come', (
+    tester,
+  ) async {
+    var pressed = false;
+    final credentials = await pumpApp(
+      tester,
+      http: FakeLanHttp(hueNetwork(pressed: () => pressed)),
+      discovery: FakeLanDiscovery(const [
+        LanService(name: 'Hue most', host: hueHost, type: LanService.hueType),
+      ]),
+    );
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(SmartHomeApp)),
+    );
+    await goTo(tester, AppRoutes.addDevice);
+    await settle(tester, 4);
+    expect(find.text('Hue most'), findsOneWidget);
+
+    await tapKey(tester, 'add-hue:ecb5fafffe0a1b2c');
+    await settle(tester, 3);
+    await tapKey(tester, 'addDeviceConfirm');
+    await settle(tester, 3);
+    expect(find.text(en.hueLinkBody), findsOneWidget);
+    await settle(tester, 25); // asked, not pressed yet
+    expect(container.read(localHomeProvider).devices, isEmpty);
+
+    pressed = true;
+    await settle(tester, 25);
+    expect(find.byKey(const Key('hueLink')), findsNothing);
+    expect(credentials.values['device:hue:ecb5fafffe0a1b2c'], 'user1');
+    await settle(tester, 4);
+    expect(
+      container.read(deviceProvider('hue:ecb5fafffe0a1b2c:light1'))?.name,
+      'Lampa',
     );
     await unmount(tester);
   });

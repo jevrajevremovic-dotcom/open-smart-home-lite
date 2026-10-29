@@ -9,12 +9,15 @@ import '../../../core/utils/value_list.dart';
 import '../data/local/demo_adapter.dart';
 import '../data/local/esphome/esphome_adapter.dart';
 import '../data/local/esphome/esphome_client.dart';
+import '../data/local/hue_adapter.dart';
+import '../data/local/kasa_adapter.dart';
 import '../data/local/lan_http.dart';
 import '../data/local/local_backend.dart';
 import '../data/local/local_home.dart';
 import '../data/local/shelly_adapter.dart';
 import '../data/local/tasmota_adapter.dart';
 import '../data/local/wled_adapter.dart';
+import '../data/local/yeelight_adapter.dart';
 import '../domain/home_snapshot.dart';
 import '../domain/device_kind.dart';
 import '../domain/smart_home_device.dart';
@@ -39,6 +42,14 @@ final homeBackendProvider = Provider<LocalBackend?>((ref) {
       ),
       WledAdapter(http),
       TasmotaAdapter(http),
+      HueAdapter(
+        http,
+        users: (key) => ref
+            .read(credentialStoreProvider)
+            .readCredential(devicePasswordId(key)),
+      ),
+      YeelightAdapter(ref.watch(yeelightTransportProvider)),
+      KasaAdapter(ref.watch(kasaTransportProvider)),
       EsphomeAdapter(
         connector: ref.watch(esphomeConnectorProvider),
         keys: (key) => ref

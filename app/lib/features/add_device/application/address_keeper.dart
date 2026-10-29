@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/logging/app_logger.dart';
 import '../../devices/data/local/local_home.dart';
 import '../data/device_probe.dart';
+import '../../devices/data/local/kasa_adapter.dart';
+import '../../devices/data/local/yeelight_adapter.dart';
 import '../data/lan_discovery.dart';
 
 /// Keeps the added devices' addresses current: when the app starts or
@@ -19,6 +21,7 @@ class AddressKeeper {
   static final _log = AppLogger('AddressKeeper');
 
   StreamSubscription<Object?>? _sub;
+  final List<StreamSubscription<Object?>> _searches = [];
   Timer? _stop;
 
   bool get running => _sub != null;
@@ -39,13 +42,37 @@ class AddressKeeper {
         unawaited(_ask(s));
       }
     }, onDone: stop);
+    // Yeelight and Kasa answer searches of their own.
+    final adapters = home.devices.map((d) => d.adapter).toSet();
+    if (adapters.contains('yeelight')) {
+      _searches.add(
+        _ref.read(yeelightTransportProvider).discover().listen((bulbs) {
+          for (final b in bulbs) {
+            unawaited(_follow(DeviceProbe.fromYeelight(b)));
+          }
+        }, onError: (Object _) {}),
+      );
+    }
+    if (adapters.contains('kasa')) {
+      _searches.add(
+        _ref.read(kasaTransportProvider).discover().listen((found) {
+          for (final f in found) {
+            final p = DeviceProbe.fromKasa(f.host, f.sysinfo);
+            if (p != null) unawaited(_follow(p));
+          }
+        }, onError: (Object _) {}),
+      );
+    }
     _stop = Timer(lookFor, stop);
   }
 
   Future<void> _ask(LanService service) async {
-    final host = service.host;
     final found = await _ref.read(deviceProbeProvider).probeService(service);
-    if (found == null) return;
+    if (found != null) await _follow(found);
+  }
+
+  Future<void> _follow(ProbedDevice found) async {
+    final host = found.device.host;
     final home = _ref.read(localHomeProvider);
     final known = home.devices
         .where((d) => d.key == found.device.key)
@@ -60,6 +87,10 @@ class AddressKeeper {
     _stop = null;
     unawaited(_sub?.cancel());
     _sub = null;
+    for (final s in _searches) {
+      unawaited(s.cancel());
+    }
+    _searches.clear();
   }
 }
 

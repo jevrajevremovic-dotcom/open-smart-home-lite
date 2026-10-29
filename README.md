@@ -2,7 +2,7 @@
 
 Lite verzija [Open Smart Home](https://github.com/jevrajevremovic-dotcom/open-smart-home) aplikacije: uređaji koji se povezuju na telefon preko **Wi-Fi-ja** (lokalna mreža) i **Bluetooth-a**, u jednoj aplikaciji, **bez Home Assistanta i bez Raspberry Pi-ja**. Telefon je centrala.
 
-Nastala je od Open Smart Home 1.0 i deli njen model uređaja i korisnički interfejs. Aplikacija se instalira pored originala (`org.opensmarthome.lite`). Radi sa Shelly, WLED, Tasmota i ESPHome uređajima na lokalnoj mreži; dok se ne doda prvi uređaj, prikazuje demo dom.
+Nastala je od Open Smart Home 1.0 i deli njen model uređaja i korisnički interfejs. Aplikacija se instalira pored originala (`org.opensmarthome.lite`). Radi sa Shelly, WLED, Tasmota, ESPHome, Philips Hue, Yeelight i TP-Link Kasa uređajima na lokalnoj mreži; dok se ne doda prvi uređaj, prikazuje demo dom.
 
 ## Plan
 
@@ -13,7 +13,8 @@ Nastala je od Open Smart Home 1.0 i deli njen model uređaja i korisnički inter
 | 1 | Lokalna lista uređaja i soba, mDNS otkrivanje, Shelly i WLED | ✅ |
 | 1b | Tasmota, Shelly sa lozinkom, WLED efekti i preseti, praćenje promenjene IP adrese | ✅ |
 | 1c | ESPHome (native API, sa Noise šifrovanjem) | ✅ |
-| 2 | Hue bridge, LIFX, Yeelight, TP-Link Kasa | |
+| 2 | Hue most, Yeelight, TP-Link Kasa (stari lokalni protokol) | ✅ |
+| 2b | LIFX; Kasa/Tapo sa novim protokolom (KLAP) | |
 | 3 | Bluetooth LE: SwitchBot, Xiaomi/Govee senzori | |
 | 4 | Matter | |
 
@@ -28,7 +29,10 @@ HomeBackend ── LocalBackend ── DeviceAdapter (jedan po vrsti uređaja)
                                  ├─ DemoAdapter
                                  ├─ ShellyAdapter  ─┐
                                  ├─ WledAdapter    ─┼ PolledAdapter (HTTP, svakih 5 s)
-                                 ├─ TasmotaAdapter ─┘
+                                 ├─ TasmotaAdapter ─┤
+                                 ├─ HueAdapter     ─┤ (most, v1 API)
+                                 ├─ YeelightAdapter ┤ (TCP 55443, svakih 10 s)
+                                 ├─ KasaAdapter    ─┘ (TCP 9999, XOR)
                                  └─ EsphomeAdapter (TCP 6053, trajna veza, promene stižu same)
 ```
 
@@ -47,6 +51,9 @@ ID uređaja je `<adapter>:<MAC>:<kanal>` (npr. `shelly:a8032ab12345:switch0`, `w
 | Shelly Gen1 | releji (`relay`), dimeri (`light`), roletne (`roller`), snaga (`meters`) |
 | WLED | uključi/isključi, jačina, boja glavnog segmenta; efekat i preset kao izbori |
 | Tasmota | releji (`POWER1…`, imena iz `FriendlyName`), svetlo sa jačinom i bojom, snaga (`ENERGY`), temperatura i vlažnost |
+| Philips Hue (preko mosta) | svetla (uključi/isključi, jačina, temperatura boje, boja), utičnice, senzori temperature i pokreta; uparuje se dugmetom na mostu |
+| Yeelight | sijalice, trake, plafonjere: jačina, temperatura boje, boja (treba uključiti „LAN Control“ u Yeelight aplikaciji) |
+| TP-Link Kasa | utičnice, prekidači, dimeri, razdelnici (svaka utičnica posebno), sijalice; snaga gde je meri; samo stariji lokalni protokol — novi firmver (KLAP) i Tapo ne odgovaraju |
 | ESPHome | prekidači, svetla (jačina, boja, temperatura boje), roletne, dugmad, senzori, binarni senzori (vrata, pokret, curenje…), tekstualni senzori; dijagnostički entiteti se ne prikazuju u listama |
 
 ESPHome: veza je trajna (native API, port 6053) i uređaj sam šalje promene. Ako uređaj ima `api: encryption: key:`, ključ se unosi pri dodavanju i proverava pre nego što se uređaj doda (Noise `NNpsk0_25519_ChaChaPoly_SHA256`, `app/lib/features/devices/data/local/esphome/`). Ventilatori, klima, `number` i `select` entiteti još nisu podržani. Šifrovanje je testirano samo protiv sopstvene implementacije uređajske strane (`test/esphome_fake.dart`), ne protiv pravog uređaja.

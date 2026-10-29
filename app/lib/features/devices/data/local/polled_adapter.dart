@@ -112,7 +112,11 @@ abstract class PolledAdapter extends DeviceAdapter {
 
   @override
   Future<void> send(SmartHomeDevice device, DeviceCommand command) async {
-    final config = _configs[device.deviceId];
+    // A channel's id starts with its device's key (a bridge's lights have
+    // ids of their own, under the bridge's).
+    final config = _configs.values
+        .where((c) => device.id.startsWith('${c.key}:'))
+        .firstOrNull;
     if (config == null || _unreachable.contains(config.key)) {
       throw AppFailure(
         FailureKind.unavailableEntity,

@@ -5118,7 +5118,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get demoHomeNotice =>
-      'Ovo je demo dom. Dodajte svoje Shelly, WLED, Tasmota ili ESPHome uređaje i demo će se sam ugasiti.';
+      'Ovo je demo dom. Dodajte svoje uređaje (Shelly, WLED, Tasmota, ESPHome, Hue, Yeelight, Kasa) i demo će se sam ugasiti.';
 
   @override
   String get firstRunWelcomeBodyLite =>
@@ -5132,7 +5132,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get addDeviceLanHint =>
-      'Shelly, WLED i ESPHome uređaji na istoj Wi-Fi mreži kao telefon pojavljuju se ovde sami. Tasmota uređaje dodajte preko IP adrese.';
+      'Shelly, WLED, ESPHome, Hue, Yeelight i Kasa uređaji na istoj Wi-Fi mreži kao telefon pojavljuju se ovde sami. Tasmota uređaje dodajte preko IP adrese.';
 
   @override
   String get addDeviceSearching => 'Tražim uređaje…';
@@ -5152,7 +5152,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get addDeviceNotFound =>
-      'Na toj adresi nije pronađen Shelly, WLED, Tasmota ni ESPHome.';
+      'Na toj adresi nije pronađen nijedan podržan uređaj.';
 
   @override
   String get addDeviceAdded => 'Dodat';
@@ -5223,6 +5223,17 @@ class AppLocalizationsSr extends AppLocalizations {
   @override
   String get deviceKeyNotEncrypted =>
       'Ovaj uređaj ne šifruje vezu; ostavite ključ prazan.';
+
+  @override
+  String get hueLinkTitle => 'Uparivanje sa Hue mostom';
+
+  @override
+  String get hueLinkBody =>
+      'Pritisnite okruglo dugme na vrhu Hue mosta. Aplikacija čeka 30 sekundi.';
+
+  @override
+  String get hueLinkFailed =>
+      'Dugme na mostu nije pritisnuto. Pokušajte ponovo.';
 }
 
 /// The translations for Serbian, using the Latin script (`sr_Latn`).

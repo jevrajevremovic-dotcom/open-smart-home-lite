@@ -6,7 +6,9 @@ import 'package:open_smart_home_lite/core/config/app_config.dart';
 import 'package:open_smart_home_lite/core/errors/app_failure.dart';
 import 'package:open_smart_home_lite/features/add_device/data/lan_discovery.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/esphome/esphome_client.dart';
+import 'package:open_smart_home_lite/features/devices/data/local/kasa_adapter.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/lan_http.dart';
+import 'package:open_smart_home_lite/features/devices/data/local/yeelight_adapter.dart';
 import 'package:open_smart_home_lite/core/platform/speech_output.dart';
 import 'package:open_smart_home_lite/core/storage/app_preferences.dart';
 import 'package:open_smart_home_lite/core/storage/credential_store.dart';
@@ -116,6 +118,66 @@ class FakeLanHttp implements LanHttp {
     Object? body, {
     LanAuth? auth,
   }) async => _answer(host, path, {'body': body}, auth);
+
+  @override
+  Future<Object?> put(String host, String path, Object? body) async =>
+      _answer(host, 'PUT $path', {'body': body}, null);
+}
+
+/// Yeelight bulbs on a pretend network: [bulbs] answer the search, and
+/// [answer] the commands (method, params → result).
+class FakeYeelight implements YeelightTransport {
+  FakeYeelight({this.bulbs = const [], this.answer});
+
+  final List<YeelightFound> bulbs;
+  final List<Object?> Function(String host, String method, List<Object?> p)?
+  answer;
+  final List<(String, String, List<Object?>)> calls = [];
+
+  @override
+  Future<List<Object?>> call(
+    String host,
+    String method,
+    List<Object?> params,
+  ) async {
+    calls.add((host, method, params));
+    final a = answer;
+    if (a == null) {
+      throw const AppFailure(FailureKind.network, debugMessage: 'no bulb');
+    }
+    return a(host, method, params);
+  }
+
+  @override
+  Stream<List<YeelightFound>> discover() =>
+      bulbs.isEmpty ? const Stream.empty() : Stream.value(bulbs);
+}
+
+/// Kasa devices on a pretend network.
+class FakeKasa implements KasaTransport {
+  FakeKasa({this.found = const [], this.answer});
+
+  final List<KasaFound> found;
+  final Map<String, Object?> Function(String host, Map<String, Object?> r)?
+  answer;
+  final List<(String, Map<String, Object?>)> requests = [];
+
+  @override
+  Future<Map<String, Object?>> send(
+    String host,
+    Map<String, Object?> request,
+  ) async {
+    requests.add((host, request));
+    final a = answer;
+    if (a == null) {
+      throw const AppFailure(FailureKind.network, debugMessage: 'no kasa');
+    }
+    return a(host, request);
+  }
+
+  @override
+  Stream<List<KasaFound>> discover() =>
+      found.isEmpty ? const Stream.empty() : Stream.value(found);
 }
 
 /// No ESPHome device anywhere.
@@ -223,6 +285,8 @@ Future<List<Override>> testOverrides({
   LanHttp? http,
   LanDiscovery? discovery,
   EsphomeConnector? esphome,
+  YeelightTransport? yeelight,
+  KasaTransport? kasa,
   List<Override> overrides = const [],
 }) async {
   SharedPreferences.setMockInitialValues({
@@ -252,6 +316,8 @@ Future<List<Override>> testOverrides({
       }),
     lanHttpProvider.overrideWithValue(http ?? FakeLanHttp(const {})),
     esphomeConnectorProvider.overrideWithValue(esphome ?? noEsphome),
+    yeelightTransportProvider.overrideWithValue(yeelight ?? FakeYeelight()),
+    kasaTransportProvider.overrideWithValue(kasa ?? FakeKasa()),
     lanDiscoveryProvider.overrideWithValue(
       discovery ?? FakeLanDiscovery(const []),
     ),

@@ -129,9 +129,13 @@ class LocalHome {
   /// [device] with the household's name and room.
   SmartHomeDevice overlay(SmartHomeDevice device) {
     final name = names[device.id];
+    // Its own room, else its physical device's, else (a bridge's light)
+    // the bridge's.
+    final added = device.id.split(':').take(2).join(':');
     final room =
         roomOf[device.id] ??
-        (device.deviceId == null ? null : roomOf[device.deviceId]);
+        (device.deviceId == null ? null : roomOf[device.deviceId]) ??
+        roomOf[added];
     if (name == null && room == null) return device;
     return SmartHomeDevice(
       id: device.id,

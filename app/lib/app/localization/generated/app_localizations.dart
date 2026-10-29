@@ -8658,7 +8658,7 @@ abstract class AppLocalizations {
   /// No description provided for @demoHomeNotice.
   ///
   /// In en, this message translates to:
-  /// **'This is the demo home. Add your Shelly, WLED, Tasmota or ESPHome devices and the demo turns itself off.'**
+  /// **'This is the demo home. Add your devices (Shelly, WLED, Tasmota, ESPHome, Hue, Yeelight, Kasa) and the demo turns itself off.'**
   String get demoHomeNotice;
 
   /// No description provided for @firstRunWelcomeBodyLite.
@@ -8682,7 +8682,7 @@ abstract class AppLocalizations {
   /// No description provided for @addDeviceLanHint.
   ///
   /// In en, this message translates to:
-  /// **'Shelly, WLED and ESPHome devices on the same Wi-Fi network as the phone show up here by themselves. Add Tasmota devices by their IP address.'**
+  /// **'Shelly, WLED, ESPHome, Hue, Yeelight and Kasa devices on the same Wi-Fi network as the phone show up here by themselves. Add Tasmota devices by their IP address.'**
   String get addDeviceLanHint;
 
   /// No description provided for @addDeviceSearching.
@@ -8718,7 +8718,7 @@ abstract class AppLocalizations {
   /// No description provided for @addDeviceNotFound.
   ///
   /// In en, this message translates to:
-  /// **'No Shelly, WLED, Tasmota or ESPHome found at that address.'**
+  /// **'No supported device found at that address.'**
   String get addDeviceNotFound;
 
   /// No description provided for @addDeviceAdded.
@@ -8840,6 +8840,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This device does not encrypt its connection; leave the key empty.'**
   String get deviceKeyNotEncrypted;
+
+  /// No description provided for @hueLinkTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pairing with the Hue bridge'**
+  String get hueLinkTitle;
+
+  /// No description provided for @hueLinkBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Press the round button on top of the Hue bridge. The app waits 30 seconds.'**
+  String get hueLinkBody;
+
+  /// No description provided for @hueLinkFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The bridge\'s button was not pressed. Try again.'**
+  String get hueLinkFailed;
 }
 
 class _AppLocalizationsDelegate
