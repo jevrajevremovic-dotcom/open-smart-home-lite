@@ -5088,7 +5088,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get demoHomeNotice =>
-      'This is the demo home. Add your Shelly, WLED or Tasmota devices and the demo turns itself off.';
+      'This is the demo home. Add your Shelly, WLED, Tasmota or ESPHome devices and the demo turns itself off.';
 
   @override
   String get firstRunWelcomeBodyLite =>
@@ -5102,7 +5102,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addDeviceLanHint =>
-      'Shelly and WLED devices on the same Wi-Fi network as the phone show up here by themselves. Add Tasmota devices by their IP address.';
+      'Shelly, WLED and ESPHome devices on the same Wi-Fi network as the phone show up here by themselves. Add Tasmota devices by their IP address.';
 
   @override
   String get addDeviceSearching => 'Looking for devices…';
@@ -5122,7 +5122,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addDeviceNotFound =>
-      'No Shelly, WLED or Tasmota found at that address.';
+      'No Shelly, WLED, Tasmota or ESPHome found at that address.';
 
   @override
   String get addDeviceAdded => 'Added';
@@ -5178,4 +5178,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get devicePasswordChange => 'Device password…';
+
+  @override
+  String get deviceKeyLabel => 'Encryption key';
+
+  @override
+  String get deviceKeyHint =>
+      'This ESPHome device encrypts its connection. Enter the key from its YAML (api → encryption → key). It is kept only on this phone, in secure storage.';
+
+  @override
+  String get deviceKeyWrong =>
+      'That key is not right. Check it in the device\'s YAML.';
+
+  @override
+  String get deviceKeyNotEncrypted =>
+      'This device does not encrypt its connection; leave the key empty.';
 }

@@ -17,18 +17,20 @@ final discoveredDevicesProvider =
       final controller = StreamController<List<ProbedDevice>>();
       final probed = <String, ProbedDevice?>{};
 
-      Future<void> ask(String host) async {
-        final found = await probe.probe(host);
+      Future<void> ask(LanService service, String id) async {
+        final found = await probe.probeService(service);
         if (controller.isClosed) return;
-        probed[host] = found;
+        probed[id] = found;
         if (found != null) {
           final home = ref.read(localHomeProvider);
           final known = home.devices
               .where((d) => d.key == found.device.key)
               .firstOrNull;
-          if (known != null && known.host != host) {
+          if (known != null && known.host != service.host) {
             unawaited(
-              ref.read(localHomeProvider.notifier).updateHost(known.key, host),
+              ref
+                  .read(localHomeProvider.notifier)
+                  .updateHost(known.key, service.host),
             );
           }
         }
@@ -37,9 +39,10 @@ final discoveredDevicesProvider =
 
       final sub = discovery.browse().listen((services) {
         for (final s in services) {
-          if (probed.containsKey(s.host)) continue;
-          probed[s.host] = null; // asking
-          unawaited(ask(s.host));
+          final id = '${s.type}/${s.host}';
+          if (probed.containsKey(id)) continue;
+          probed[id] = null; // asking
+          unawaited(ask(s, id));
         }
       });
       ref.onDispose(() {

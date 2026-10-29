@@ -8658,7 +8658,7 @@ abstract class AppLocalizations {
   /// No description provided for @demoHomeNotice.
   ///
   /// In en, this message translates to:
-  /// **'This is the demo home. Add your Shelly, WLED or Tasmota devices and the demo turns itself off.'**
+  /// **'This is the demo home. Add your Shelly, WLED, Tasmota or ESPHome devices and the demo turns itself off.'**
   String get demoHomeNotice;
 
   /// No description provided for @firstRunWelcomeBodyLite.
@@ -8682,7 +8682,7 @@ abstract class AppLocalizations {
   /// No description provided for @addDeviceLanHint.
   ///
   /// In en, this message translates to:
-  /// **'Shelly and WLED devices on the same Wi-Fi network as the phone show up here by themselves. Add Tasmota devices by their IP address.'**
+  /// **'Shelly, WLED and ESPHome devices on the same Wi-Fi network as the phone show up here by themselves. Add Tasmota devices by their IP address.'**
   String get addDeviceLanHint;
 
   /// No description provided for @addDeviceSearching.
@@ -8718,7 +8718,7 @@ abstract class AppLocalizations {
   /// No description provided for @addDeviceNotFound.
   ///
   /// In en, this message translates to:
-  /// **'No Shelly, WLED or Tasmota found at that address.'**
+  /// **'No Shelly, WLED, Tasmota or ESPHome found at that address.'**
   String get addDeviceNotFound;
 
   /// No description provided for @addDeviceAdded.
@@ -8816,6 +8816,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Device password…'**
   String get devicePasswordChange;
+
+  /// No description provided for @deviceKeyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Encryption key'**
+  String get deviceKeyLabel;
+
+  /// No description provided for @deviceKeyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'This ESPHome device encrypts its connection. Enter the key from its YAML (api → encryption → key). It is kept only on this phone, in secure storage.'**
+  String get deviceKeyHint;
+
+  /// No description provided for @deviceKeyWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'That key is not right. Check it in the device\'s YAML.'**
+  String get deviceKeyWrong;
+
+  /// No description provided for @deviceKeyNotEncrypted.
+  ///
+  /// In en, this message translates to:
+  /// **'This device does not encrypt its connection; leave the key empty.'**
+  String get deviceKeyNotEncrypted;
 }
 
 class _AppLocalizationsDelegate

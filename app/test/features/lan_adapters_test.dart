@@ -383,7 +383,7 @@ void main() {
   });
 
   test('probe: Shelly Gen1, Gen2 and WLED; anything else is nothing', () async {
-    final probe = DeviceProbe(http);
+    final probe = DeviceProbe(http, noEsphome);
     final gen2 = (await probe.probe(plus1pm))!;
     expect(gen2.brand, 'Shelly');
     expect(gen2.title, 'Hodnik');
@@ -551,6 +551,7 @@ void main() {
           '/shelly': (_) => {'mac': 'A8032AB00003', 'gen': 2, 'auth_en': true},
         },
       }),
+      noEsphome,
     );
     final t = (await probe.probe(tasmota))!;
     expect(

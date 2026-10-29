@@ -316,18 +316,22 @@ class _SectionBody extends ConsumerWidget {
             leading: Icon(switch (d.adapter) {
               'wled' => Icons.light_outlined,
               'tasmota' => Icons.outlet_outlined,
+              'esphome' => Icons.memory,
               _ => Icons.power_outlined,
             }),
             title: Text(d.label ?? d.model ?? d.host),
             subtitle: Text([?d.model, d.host].join(' · ')),
-            trailing: d.adapter == 'shelly'
+            trailing: d.adapter == 'shelly' || d.adapter == 'esphome'
                 ? IconButton(
                     key: ValueKey('devicePassword-${d.key}'),
                     tooltip: l10n.devicePasswordChange,
                     icon: Icon(d.secured ? Icons.lock : Icons.lock_open),
                     onPressed: () => showDialog<void>(
                       context: context,
-                      builder: (_) => DevicePasswordDialog(deviceKey: d.key),
+                      builder: (_) => DevicePasswordDialog(
+                        deviceKey: d.key,
+                        isKey: d.adapter == 'esphome',
+                      ),
                     ),
                   )
                 : null,

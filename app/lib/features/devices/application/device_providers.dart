@@ -7,6 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/storage/credential_store.dart';
 import '../../../core/utils/value_list.dart';
 import '../data/local/demo_adapter.dart';
+import '../data/local/esphome/esphome_adapter.dart';
+import '../data/local/esphome/esphome_client.dart';
 import '../data/local/lan_http.dart';
 import '../data/local/local_backend.dart';
 import '../data/local/local_home.dart';
@@ -37,6 +39,12 @@ final homeBackendProvider = Provider<LocalBackend?>((ref) {
       ),
       WledAdapter(http),
       TasmotaAdapter(http),
+      EsphomeAdapter(
+        connector: ref.watch(esphomeConnectorProvider),
+        keys: (key) => ref
+            .read(credentialStoreProvider)
+            .readCredential(devicePasswordId(key)),
+      ),
     ],
     rooms: demoRooms,
     home: ref.read(localHomeProvider),

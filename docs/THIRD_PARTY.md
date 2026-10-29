@@ -5,6 +5,7 @@ Aplikacija koristi sledeće pakete sa [pub.dev](https://pub.dev) (direktne zavis
 | Paket | Verzija | Licenca |
 |---|---|---|
 | [crypto](https://pub.dev/packages/crypto) | 3.0.7 | BSD-3-Clause |
+| [cryptography](https://pub.dev/packages/cryptography) | 2.9.0 | Apache-2.0 |
 | [dio](https://pub.dev/packages/dio) | 5.11.1 | MIT |
 | [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications) | 22.3.2 | BSD-3-Clause |
 | [flutter_riverpod](https://pub.dev/packages/flutter_riverpod) | 3.4.3 | MIT |

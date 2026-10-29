@@ -33,15 +33,18 @@ class AddressKeeper {
         for (final d in _ref.read(localHomeProvider).devices) d.host,
       };
       for (final s in services) {
-        if (known.contains(s.host) || !asked.add(s.host)) continue;
-        unawaited(_ask(s.host));
+        if (known.contains(s.host) || !asked.add('${s.type}/${s.host}')) {
+          continue;
+        }
+        unawaited(_ask(s));
       }
     }, onDone: stop);
     _stop = Timer(lookFor, stop);
   }
 
-  Future<void> _ask(String host) async {
-    final found = await _ref.read(deviceProbeProvider).probe(host);
+  Future<void> _ask(LanService service) async {
+    final host = service.host;
+    final found = await _ref.read(deviceProbeProvider).probeService(service);
     if (found == null) return;
     final home = _ref.read(localHomeProvider);
     final known = home.devices

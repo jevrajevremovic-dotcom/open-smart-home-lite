@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:open_smart_home_lite/core/config/app_config.dart';
 import 'package:open_smart_home_lite/core/errors/app_failure.dart';
 import 'package:open_smart_home_lite/features/add_device/data/lan_discovery.dart';
+import 'package:open_smart_home_lite/features/devices/data/local/esphome/esphome_client.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/lan_http.dart';
 import 'package:open_smart_home_lite/core/platform/speech_output.dart';
 import 'package:open_smart_home_lite/core/storage/app_preferences.dart';
@@ -117,6 +118,10 @@ class FakeLanHttp implements LanHttp {
   }) async => _answer(host, path, {'body': body}, auth);
 }
 
+/// No ESPHome device anywhere.
+Future<EsphomeSocket> noEsphome(String host, int port) async =>
+    throw const AppFailure(FailureKind.network, debugMessage: 'refused');
+
 /// Finds the given services, as mDNS would.
 class FakeLanDiscovery implements LanDiscovery {
   FakeLanDiscovery(this.services);
@@ -217,6 +222,7 @@ Future<List<Override>> testOverrides({
   SpeechOutput? speech,
   LanHttp? http,
   LanDiscovery? discovery,
+  EsphomeConnector? esphome,
   List<Override> overrides = const [],
 }) async {
   SharedPreferences.setMockInitialValues({
@@ -245,6 +251,7 @@ Future<List<Override>> testOverrides({
         return backend;
       }),
     lanHttpProvider.overrideWithValue(http ?? FakeLanHttp(const {})),
+    esphomeConnectorProvider.overrideWithValue(esphome ?? noEsphome),
     lanDiscoveryProvider.overrideWithValue(
       discovery ?? FakeLanDiscovery(const []),
     ),

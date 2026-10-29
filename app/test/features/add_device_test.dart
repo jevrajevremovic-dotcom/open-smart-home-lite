@@ -7,7 +7,9 @@ import 'package:open_smart_home_lite/features/add_device/data/lan_discovery.dart
 import 'package:open_smart_home_lite/features/devices/application/device_providers.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/local_home.dart';
 
+import '../esphome_fake.dart';
 import '../helpers.dart';
+import 'esphome_test.dart' as esphome;
 import '../widgets/app_widget_test.dart'
     show en, goTo, pumpApp, settle, tapKey, unmount;
 import 'lan_adapters_test.dart' show hasRequest, network, plus1pm;
@@ -151,6 +153,84 @@ void main() {
     expect(credentials.values['device:shelly:a8032ab12345'], 'tajna');
     expect(
       container.read(deviceProvider('shelly:a8032ab12345:switch0'))?.available,
+      isTrue,
+    );
+    await unmount(tester);
+  });
+
+  testWidgets('an encrypted ESPHome: found by mDNS, its key asked, connected', (
+    tester,
+  ) async {
+    final fake = FakeEsphomeDevice(
+      key: esphome.key,
+      mac: 'AA:BB:CC:DD:EE:02',
+      entities: esphome.entities,
+      states: esphome.states,
+    );
+    final credentials = await pumpApp(
+      tester,
+      http: FakeLanHttp(const {}),
+      esphome: fake.connect,
+      discovery: FakeLanDiscovery(const [
+        LanService(
+          name: 'kuhinja',
+          host: '192.168.1.50',
+          port: 6053,
+          type: LanService.esphomeType,
+          txt: {
+            'mac': 'aabbccddee02',
+            'friendly_name': 'Kuhinja',
+            'api_encryption': 'Noise_NNpsk0_25519_ChaChaPoly_SHA256',
+          },
+        ),
+      ]),
+    );
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(SmartHomeApp)),
+    );
+    await goTo(tester, AppRoutes.addDevice);
+    await settle(tester, 4);
+    expect(find.text('Kuhinja'), findsOneWidget);
+
+    // A wrong key first.
+    await tapKey(tester, 'add-esphome:aabbccddee02');
+    await settle(tester, 3);
+    expect(find.text(en.deviceKeyHint), findsOneWidget);
+    await tester.enterText(
+      find.byKey(const Key('addDevicePassword')),
+      'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=',
+    );
+    await tapKey(tester, 'addDeviceConfirm');
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 300)),
+    );
+    await settle(tester, 6);
+    expect(find.text(en.deviceKeyWrong), findsOneWidget);
+    expect(container.read(localHomeProvider).devices, isEmpty);
+
+    await tapKey(tester, 'add-esphome:aabbccddee02');
+    await settle(tester, 3);
+    await tester.enterText(
+      find.byKey(const Key('addDevicePassword')),
+      esphome.key,
+    );
+    await tapKey(tester, 'addDeviceConfirm');
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 300)),
+    );
+    await settle(tester, 10);
+    expect(credentials.values['device:esphome:aabbccddee02'], esphome.key);
+    expect(container.read(localHomeProvider).devices.single.secured, isTrue);
+
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 300)),
+    );
+    await settle(tester, 4);
+    expect(
+      container
+          .read(deviceProvider('esphome:aabbccddee02:switch_relej'))
+          ?.state
+          .isOn,
       isTrue,
     );
     await unmount(tester);

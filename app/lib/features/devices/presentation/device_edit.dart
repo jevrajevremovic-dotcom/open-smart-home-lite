@@ -222,11 +222,17 @@ class _DeviceEditDialogState extends ConsumerState<DeviceEditDialog> {
 bool isAddedDevice(LocalHome home, SmartHomeDevice device) =>
     home.devices.any((d) => d.key == device.deviceId);
 
-/// Sets (or, left empty, removes) a device's password.
+/// Sets (or, left empty, removes) a device's password, or an ESPHome
+/// device's encryption key ([isKey]).
 class DevicePasswordDialog extends ConsumerStatefulWidget {
-  const DevicePasswordDialog({super.key, required this.deviceKey});
+  const DevicePasswordDialog({
+    super.key,
+    required this.deviceKey,
+    this.isKey = false,
+  });
 
   final String deviceKey;
+  final bool isKey;
 
   @override
   ConsumerState<DevicePasswordDialog> createState() =>
@@ -245,13 +251,14 @@ class _DevicePasswordDialogState extends ConsumerState<DevicePasswordDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final label = widget.isKey ? l10n.deviceKeyLabel : l10n.devicePasswordLabel;
     return AlertDialog(
-      title: Text(l10n.devicePasswordLabel),
+      title: Text(label),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.devicePasswordHint),
+          Text(widget.isKey ? l10n.deviceKeyHint : l10n.devicePasswordHint),
           const SizedBox(height: 8),
           TextField(
             key: const Key('devicePassword'),
@@ -259,7 +266,7 @@ class _DevicePasswordDialogState extends ConsumerState<DevicePasswordDialog> {
             obscureText: true,
             autocorrect: false,
             enableSuggestions: false,
-            decoration: InputDecoration(labelText: l10n.devicePasswordLabel),
+            decoration: InputDecoration(labelText: label),
           ),
         ],
       ),
@@ -274,7 +281,7 @@ class _DevicePasswordDialogState extends ConsumerState<DevicePasswordDialog> {
             final navigator = Navigator.of(context);
             await ref
                 .read(localHomeProvider.notifier)
-                .setPassword(widget.deviceKey, _password.text);
+                .setPassword(widget.deviceKey, _password.text.trim());
             navigator.pop();
           },
           child: Text(l10n.save),

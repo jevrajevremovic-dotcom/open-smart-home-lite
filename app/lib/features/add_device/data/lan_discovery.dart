@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -6,30 +7,48 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/logging/app_logger.dart';
 
-/// A web server announced on the local network (mDNS `_http._tcp`).
+/// A service announced on the local network: a web server (`_http._tcp`)
+/// or an ESPHome device (`_esphomelib._tcp`).
 @immutable
 class LanService {
-  const LanService({required this.name, required this.host, this.port = 80});
+  const LanService({
+    required this.name,
+    required this.host,
+    this.port = 80,
+    this.type = httpType,
+    this.txt = const {},
+  });
+
+  static const httpType = '_http._tcp';
+  static const esphomeType = '_esphomelib._tcp';
 
   final String name;
 
   /// IPv4 address.
   final String host;
   final int port;
+  final String type;
+
+  /// TXT records (ESPHome: `mac`, `friendly_name`, `api_encryption`…).
+  final Map<String, String> txt;
+
+  bool get isEsphome => type.contains('_esphomelib');
 
   @override
   bool operator ==(Object other) =>
       other is LanService &&
       other.name == name &&
       other.host == host &&
-      other.port == port;
+      other.port == port &&
+      other.type == type &&
+      mapEquals(other.txt, txt);
 
   @override
-  int get hashCode => Object.hash(name, host, port);
+  int get hashCode => Object.hash(name, host, port, type);
 }
 
-/// Finds web servers on the local network. Shelly and WLED announce
-/// themselves this way; what each one is, the probe tells.
+/// Finds services on the local network. Shelly and WLED announce web
+/// servers, ESPHome devices their API; what each one is, the probe tells.
 abstract interface class LanDiscovery {
   bool get isSupported;
 
@@ -41,7 +60,7 @@ abstract interface class LanDiscovery {
 /// Android's NsdManager, through the app's channel (NsdDiscoveryHandler.kt).
 class AndroidLanDiscovery implements LanDiscovery {
   static const _channel = EventChannel('org.opensmarthome/nsd');
-  static const serviceType = '_http._tcp';
+  static const serviceTypes = [LanService.httpType, LanService.esphomeType];
   static final _log = AppLogger('Discovery');
 
   @override
@@ -58,8 +77,10 @@ class AndroidLanDiscovery implements LanDiscovery {
       if (event is! Map) return;
       final name = event['name'];
       if (name is! String) return;
+      final type = event['type'] as String? ?? LanService.httpType;
+      final id = '$type/$name';
       if (event['status'] == 'lost') {
-        if (found.remove(name) != null) {
+        if (found.remove(id) != null) {
           controller.add(List.unmodifiable(found.values));
         }
         return;
@@ -69,10 +90,19 @@ class AndroidLanDiscovery implements LanDiscovery {
           ? addresses.whereType<String>().firstOrNull
           : null;
       if (host == null) return;
-      found[name] = LanService(
+      found[id] = LanService(
         name: name,
         host: host,
         port: event['port'] as int? ?? 80,
+        type: type,
+        txt: {
+          for (final e in ((event['txt'] as Map?) ?? const {}).entries)
+            if (e.key is String)
+              e.key as String: switch (e.value) {
+                final Uint8List b => utf8.decode(b, allowMalformed: true),
+                _ => '',
+              },
+        },
       );
       controller.add(List.unmodifiable(found.values));
     }
@@ -80,7 +110,7 @@ class AndroidLanDiscovery implements LanDiscovery {
     controller = StreamController<List<LanService>>(
       onListen: () {
         sub = _channel
-            .receiveBroadcastStream(serviceType)
+            .receiveBroadcastStream(serviceTypes)
             .listen(
               onEvent,
               onError: (Object e) {

@@ -7,6 +7,7 @@ import '../../../core/widgets/status_widgets.dart';
 import '../../devices/data/local/local_home.dart';
 import '../../devices/presentation/device_edit.dart';
 import '../application/add_device_providers.dart';
+import '../../devices/data/local/esphome/esphome_client.dart';
 import '../data/device_probe.dart';
 import '../data/lan_discovery.dart';
 
@@ -54,6 +55,7 @@ class AddDeviceScreen extends ConsumerWidget {
                       leading: Icon(switch (p.brand) {
                         'WLED' => Icons.light_outlined,
                         'Tasmota' => Icons.outlet_outlined,
+                        'ESPHome' => Icons.memory,
                         _ => Icons.power_outlined,
                       }),
                       title: Text(p.title),
@@ -95,7 +97,7 @@ class AddDeviceScreen extends ConsumerWidget {
       builder: (_) => const _AddressDialog(),
     );
     if (host == null || host.isEmpty || !context.mounted) return;
-    final found = await ref.read(deviceProbeProvider).probe(host);
+    final found = await ref.read(deviceProbeProvider).probeAddress(host);
     if (!context.mounted) return;
     if (found == null) {
       messenger
@@ -113,19 +115,47 @@ class AddDeviceScreen extends ConsumerWidget {
   ) async {
     final l10n = context.l10n;
     final messenger = ScaffoldMessenger.of(context);
+    void say(String text) => messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(text)));
     final choice = await showDialog<(String?, String?)>(
       context: context,
-      builder: (_) =>
-          _RoomDialog(title: found.title, needsPassword: found.needsPassword),
+      builder: (_) => _RoomDialog(
+        title: found.title,
+        secret: found.needsKey
+            ? _Secret.key
+            : found.needsPassword
+            ? _Secret.password
+            : null,
+      ),
     );
     if (choice == null) return;
-    final (roomId, password) = choice;
+    final (roomId, secret) = choice;
+    var device = found;
+    if (found.needsKey) {
+      // The key is checked (and, found by address, tells who it is).
+      try {
+        final checked = await ref
+            .read(deviceProbeProvider)
+            .probeEsphome(found.device.host, key: secret ?? '');
+        if (checked == null) {
+          say(l10n.addDeviceNotFound);
+          return;
+        }
+        device = checked;
+      } on EsphomeKeyError catch (e) {
+        say(
+          e.reason == 'notEncrypted'
+              ? l10n.deviceKeyNotEncrypted
+              : l10n.deviceKeyWrong,
+        );
+        return;
+      }
+    }
     await ref
         .read(localHomeProvider.notifier)
-        .addDevice(found.device, roomId: roomId, password: password);
-    messenger
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(l10n.addDeviceDone(found.title))));
+        .addDevice(device.device, roomId: roomId, password: secret);
+    say(l10n.addDeviceDone(device.title));
   }
 }
 
@@ -177,13 +207,15 @@ class _AddressDialogState extends State<_AddressDialog> {
   }
 }
 
-/// Which room the new device goes to, and its password if it asks for
-/// one; returns `(roomId, password)` or `null`.
+enum _Secret { password, key }
+
+/// Which room the new device goes to, and its password or encryption key
+/// if it asks for one; returns `(roomId, secret)` or `null`.
 class _RoomDialog extends StatefulWidget {
-  const _RoomDialog({required this.title, this.needsPassword = false});
+  const _RoomDialog({required this.title, this.secret});
 
   final String title;
-  final bool needsPassword;
+  final _Secret? secret;
 
   @override
   State<_RoomDialog> createState() => _RoomDialogState();
@@ -211,9 +243,13 @@ class _RoomDialogState extends State<_RoomDialog> {
           Text(l10n.addDeviceWhere),
           const SizedBox(height: 12),
           RoomPicker(value: _room, onChanged: (v) => setState(() => _room = v)),
-          if (widget.needsPassword) ...[
+          if (widget.secret case final secret?) ...[
             const SizedBox(height: 16),
-            Text(l10n.devicePasswordHint),
+            Text(
+              secret == _Secret.key
+                  ? l10n.deviceKeyHint
+                  : l10n.devicePasswordHint,
+            ),
             const SizedBox(height: 8),
             TextField(
               key: const Key('addDevicePassword'),
@@ -221,7 +257,11 @@ class _RoomDialogState extends State<_RoomDialog> {
               obscureText: true,
               autocorrect: false,
               enableSuggestions: false,
-              decoration: InputDecoration(labelText: l10n.devicePasswordLabel),
+              decoration: InputDecoration(
+                labelText: secret == _Secret.key
+                    ? l10n.deviceKeyLabel
+                    : l10n.devicePasswordLabel,
+              ),
             ),
           ],
         ],
@@ -233,9 +273,9 @@ class _RoomDialogState extends State<_RoomDialog> {
         ),
         FilledButton(
           key: const Key('addDeviceConfirm'),
-          onPressed: () =>
-              Navigator.of(context)
-                  .pop((_room, widget.needsPassword ? _password.text : null)),
+          onPressed: () => Navigator.of(
+            context,
+          ).pop((_room, widget.secret == null ? null : _password.text.trim())),
           child: Text(l10n.addDeviceAdd),
         ),
       ],
