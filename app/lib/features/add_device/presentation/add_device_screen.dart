@@ -48,7 +48,7 @@ class AddDeviceScreen extends ConsumerWidget {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       ),
                       const SizedBox(width: 12),
-                      Text(l10n.addDeviceSearching),
+                      Expanded(child: Text(l10n.addDeviceSearching)),
                     ],
                   ),
                 const SizedBox(height: 8),

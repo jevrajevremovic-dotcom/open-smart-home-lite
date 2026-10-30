@@ -5,7 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/localization/app_locales.dart';
 import '../../../core/storage/app_preferences.dart';
-import '../../devices/application/device_providers.dart';
+import '../../automations/domain/sun.dart';
+import '../../weather/application/weather_providers.dart';
 import '../../../app/brand.dart';
 
 class ThemeModeController extends Notifier<ThemeMode> {
@@ -80,21 +81,33 @@ class OledController extends Notifier<bool> {
 final oledProvider = NotifierProvider<OledController, bool>(OledController.new);
 
 /// Minute clock for the fallback without `sun.sun`.
-final _minuteProvider = Provider<DateTime>((ref) {
+/// The time, renewed every minute.
+final minuteClockProvider = Provider<DateTime>((ref) {
   final now = DateTime.now();
   final timer = Timer(Duration(seconds: 60 - now.second), ref.invalidateSelf);
   ref.onDispose(timer.cancel);
   return now;
 });
 
+/// Whether the sun is down at the home's location; `null` without it.
+final sunDownProvider = Provider<bool?>((ref) {
+  final now = ref.watch(minuteClockProvider);
+  final home = ref.watch(homeLocationWeatherEnabledProvider);
+  final sun = home == null
+      ? null
+      : sunTimes(now, home.latitude, home.longitude);
+  return sun == null
+      ? null
+      : now.isBefore(sun.sunrise) || now.isAfter(sun.sunset);
+});
+
 /// The theme mode the app uses.
 final effectiveThemeModeProvider = Provider<ThemeMode>((ref) {
   if (!ref.watch(autoDarkProvider)) return ref.watch(themeModeProvider);
-  final sun = ref.watch(deviceProvider('sun.sun'))?.state.raw;
-  if (sun == 'below_horizon') return ThemeMode.dark;
-  if (sun == 'above_horizon') return ThemeMode.light;
-  final hour = ref.watch(_minuteProvider).hour;
-  return hour >= 20 || hour < 7 ? ThemeMode.dark : ThemeMode.light;
+  // After sunset at home; without the home's location, 20:00 to 7:00.
+  final hour = ref.watch(minuteClockProvider).hour;
+  final dark = ref.watch(sunDownProvider) ?? (hour >= 20 || hour < 7);
+  return dark ? ThemeMode.dark : ThemeMode.light;
 });
 
 /// The app's accent colour.

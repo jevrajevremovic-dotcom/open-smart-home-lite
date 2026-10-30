@@ -10,6 +10,7 @@ import '../../features/devices/presentation/device_bundle_screen.dart';
 import '../../features/dashboard/presentation/dashboard_layout_screen.dart';
 import '../../features/favorites/presentation/favorites_screen.dart';
 import '../../features/kiosk/application/kiosk_controller.dart';
+import '../../features/restricted/application/restricted_mode.dart';
 import '../../features/kiosk/presentation/kiosk_dashboard_screen.dart';
 import '../../features/kiosk/presentation/kiosk_shell.dart';
 import '../../features/weather/presentation/weather_screen.dart';
@@ -85,6 +86,7 @@ String? resolveRedirect({
   bool kioskActive = false,
   bool firstRun = false,
   bool simple = false,
+  bool restricted = false,
 }) {
   final inKiosk =
       location == AppRoutes.kiosk || location.startsWith('${AppRoutes.kiosk}/');
@@ -99,6 +101,8 @@ String? resolveRedirect({
   if (firstRun) {
     return location == AppRoutes.firstRun ? null : AppRoutes.firstRun;
   }
+  // Restricted mode: no adding devices, even through a link.
+  if (restricted && location == AppRoutes.addDevice) return AppRoutes.home;
   return null;
 }
 
@@ -107,7 +111,8 @@ final routerProvider = Provider<GoRouter>((ref) {
   ref
     ..listen(kioskActiveProvider, (_, _) => refresh.value++)
     ..listen(firstRunProvider, (_, _) => refresh.value++)
-    ..listen(simpleModeActiveProvider, (_, _) => refresh.value++);
+    ..listen(simpleModeActiveProvider, (_, _) => refresh.value++)
+    ..listen(restrictedModeProvider, (_, _) => refresh.value++);
 
   final router = GoRouter(
     initialLocation: AppRoutes.home,
@@ -120,6 +125,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       kioskActive: ref.read(kioskActiveProvider),
       firstRun: ref.read(firstRunProvider),
       simple: ref.read(simpleModeActiveProvider),
+      restricted: ref.read(restrictedModeProvider).enabled,
     ),
     routes: [
       ShellRoute(

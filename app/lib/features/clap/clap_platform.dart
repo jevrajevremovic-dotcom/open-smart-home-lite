@@ -38,7 +38,6 @@ class AndroidClapPlatform implements ClapPlatform {
   @override
   Stream<double> levels() =>
       _levels.receiveBroadcastStream().map((e) => e is num ? e.toDouble() : 0);
-
 }
 
 final clapPlatformProvider = Provider<ClapPlatform>(

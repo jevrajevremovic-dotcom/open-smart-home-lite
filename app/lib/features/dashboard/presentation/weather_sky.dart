@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../devices/application/device_providers.dart';
+import '../../settings/application/appearance_controllers.dart';
 import '../../weather/application/weather_providers.dart';
 import '../../weather/domain/weather.dart';
 
@@ -36,8 +36,7 @@ class WeatherSky extends ConsumerWidget {
     final condition = ref.watch(
       homeWeatherProvider.select((w) => w?.now.condition),
     );
-    final night =
-        ref.watch(deviceProvider('sun.sun'))?.state.raw == 'below_horizon';
+    final night = ref.watch(sunDownProvider) ?? false;
     final color = skyColor(condition, night: night);
     final dark = Theme.of(context).brightness == Brightness.dark;
     return AnimatedContainer(

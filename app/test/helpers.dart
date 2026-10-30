@@ -36,6 +36,8 @@ import 'package:open_smart_home_lite/features/shortcuts/home_screen_widget.dart'
 import 'package:open_smart_home_lite/features/shortcuts/quick_tiles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'home_fixture.dart';
+
 /// Devices of a test home. Commands are recorded in [sent]; [onCommand]
 /// may return the device's new state (else nothing changes).
 class TestAdapter extends DeviceAdapter {
@@ -314,7 +316,7 @@ Future<List<Override>> testOverrides({
   InMemoryCredentialStore? credentials,
   KioskPlatform? kioskPlatform,
   Map<String, Object> preferences = const {},
-  TestAdapter? adapter,
+  DeviceAdapter? adapter,
   Map<String, Room> rooms = const {},
   bool firstRun = false,
   DeviceAuth? deviceAuth,
@@ -337,6 +339,7 @@ Future<List<Override>> testOverrides({
 }) async {
   SharedPreferences.setMockInitialValues({
     if (!firstRun) 'firstRun': '{"done":true}',
+    if (adapter is HomeFixture) 'routines': fixtureRoutines,
     ...preferences,
   });
   final prefs = await SharedPreferences.getInstance();
@@ -355,7 +358,13 @@ Future<List<Override>> testOverrides({
                 rooms: demoRooms,
                 home: home,
               )
-            : LocalBackend([adapter, routines], rooms: rooms, home: home);
+            : LocalBackend(
+                [adapter, routines],
+                rooms: adapter is HomeFixture && rooms.isEmpty
+                    ? fixtureRooms
+                    : rooms,
+                home: home,
+              );
         ref.listen(localHomeProvider, (_, h) => backend.configure(h));
         backend.start();
         ref.onDispose(backend.dispose);

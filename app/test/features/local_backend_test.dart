@@ -49,4 +49,30 @@ void main() {
     await backend.send(blind, const SetCoverPosition(30));
     expect((await next).devices['demo:living_blind']!.state.position, 30);
   });
+
+  test('when a device last changed, when its adapter does not say', () async {
+    var now = DateTime(2026, 10, 30, 8);
+    final a = TestAdapter([testDevice('door')]);
+    final backend = LocalBackend([a], clock: () => now)..start();
+    addTearDown(backend.dispose);
+    DateTime? changed() =>
+        backend.current.devices['test:door']!.metadata.lastChanged;
+    expect(changed(), DateTime(2026, 10, 30, 8), reason: 'first seen');
+
+    now = DateTime(2026, 10, 30, 9);
+    final next = backend.snapshots.first;
+    a.update(testDevice('door', state: const DeviceState(raw: 'on')));
+    await next;
+    expect(changed(), DateTime(2026, 10, 30, 9));
+    // Something else changed, the state did not: still 9:00.
+    now = DateTime(2026, 10, 30, 10);
+    a.update(
+      testDevice(
+        'door',
+        name: 'Vrata',
+        state: const DeviceState(raw: 'on'),
+      ),
+    );
+    expect(changed(), DateTime(2026, 10, 30, 9));
+  });
 }

@@ -23,11 +23,17 @@ class LocalBackend implements HomeBackend {
     Map<String, Room> rooms = const {},
     LocalHome? home,
     String? homeName,
-  }) : _extraRooms = rooms,
+    DateTime Function()? clock,
+  }) : _clock = clock ?? DateTime.now,
+       _extraRooms = rooms,
        _home = home ?? const LocalHome(),
        _snapshot = HomeSnapshot(locationName: homeName);
 
   final List<DeviceAdapter> _adapters;
+  final DateTime Function() _clock;
+
+  /// Each device's state and when it became that (adapters rarely know).
+  final Map<String, (String, DateTime)> _changed = {};
 
   /// Rooms not in [LocalHome] (the demo's, tests').
   final Map<String, Room> _extraRooms;
@@ -89,8 +95,9 @@ class LocalBackend implements HomeBackend {
     final devices = <String, SmartHomeDevice>{
       for (final adapter in _adapters)
         if (adapter is! DemoAdapter || _home.demo)
-          for (final d in adapter.current) d.id: _home.overlay(d),
+          for (final d in adapter.current) d.id: _stamped(_home.overlay(d)),
     };
+    _changed.removeWhere((id, _) => !devices.containsKey(id));
     final rooms = <String, Room>{
       if (_home.demo || _adapters.every((a) => a is! DemoAdapter))
         ..._extraRooms,
@@ -103,6 +110,44 @@ class LocalBackend implements HomeBackend {
         status: SyncStatus.live,
         lastSyncedAt: DateTime.now(),
       ),
+    );
+  }
+
+  /// [d] with the time its state last changed, as seen here when its
+  /// adapter does not say (a door open for a while, "changed at").
+  SmartHomeDevice _stamped(SmartHomeDevice d) {
+    if (d.metadata.lastChanged != null) return d;
+    final seen = _changed[d.id];
+    final at = seen != null && seen.$1 == d.state.raw ? seen.$2 : _clock();
+    _changed[d.id] = (d.state.raw, at);
+    final m = d.metadata;
+    return SmartHomeDevice(
+      id: d.id,
+      sourceId: d.sourceId,
+      deviceId: d.deviceId,
+      name: d.name,
+      roomId: d.roomId,
+      kind: d.kind,
+      protocol: d.protocol,
+      manufacturer: d.manufacturer,
+      model: d.model,
+      available: d.available,
+      capabilities: d.capabilities,
+      state: d.state,
+      limits: d.limits,
+      metadata: DeviceMetadata(
+        batteryPercent: m.batteryPercent,
+        batteryLow: m.batteryLow,
+        signalStrength: m.signalStrength,
+        signalUnit: m.signalUnit,
+        haDeviceClass: m.haDeviceClass,
+        lastChanged: at,
+        lastUpdated: m.lastUpdated,
+        picturePath: m.picturePath,
+        configId: m.configId,
+        integration: m.integration,
+      ),
+      isAuxiliary: d.isAuxiliary,
     );
   }
 

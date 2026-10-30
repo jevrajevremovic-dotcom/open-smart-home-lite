@@ -745,12 +745,15 @@ class _SceneCircle extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 6),
-          Text(
-            scene.name,
-            maxLines: 2,
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.labelMedium,
+          // The row's height is fixed: very large text is cut, not spilled.
+          Flexible(
+            child: Text(
+              scene.name,
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.labelMedium,
+            ),
           ),
         ],
       ),

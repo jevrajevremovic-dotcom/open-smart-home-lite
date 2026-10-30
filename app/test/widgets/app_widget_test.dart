@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:open_smart_home_lite/features/devices/data/local/device_adapter.dart';
 import 'package:open_smart_home_lite/app/app.dart';
 import 'package:open_smart_home_lite/app/localization/generated/app_localizations_en.dart';
 import 'package:open_smart_home_lite/app/localization/generated/app_localizations_sr.dart';
@@ -32,7 +33,7 @@ Future<InMemoryCredentialStore> pumpApp(
   WidgetTester tester, {
   Size size = const Size(400, 860),
   bool firstRun = false,
-  TestAdapter? adapter,
+  DeviceAdapter? adapter,
   Map<String, Object> preferences = const {},
   DeviceAuth? deviceAuth,
   AppShortcutsPlatform? shortcuts,

@@ -95,9 +95,10 @@ final homeScreenWidgetProvider = Provider<HomeScreenWidgetPlatform>(
   (ref) => AndroidHomeScreenWidget(),
 );
 
-final _sceneId = RegExp(r'^scene\.[a-z0-9_]+$');
+final _sceneId = RegExp(r'^routine:scene_[a-z0-9_]+$');
 
-/// `opensmarthome://scene?id=scene.x` → `scene.x`; anything else → null.
+/// `opensmarthome://scene?id=routine:scene_x` → `routine:scene_x`; anything
+/// else → null.
 String? sceneIdFromWidgetUri(Uri? uri) {
   if (uri == null || uri.scheme != 'opensmarthome' || uri.host != 'scene') {
     return null;
