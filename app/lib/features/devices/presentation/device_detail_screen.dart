@@ -22,6 +22,7 @@ import 'controls/alarm_controls.dart';
 import 'controls/climate_controls.dart';
 import 'controls/light_controls.dart';
 import 'controls/more_controls.dart';
+import '../../add_device/presentation/setup_tips.dart';
 import 'controls/camera_view.dart';
 import 'controls/ir_remote_controls.dart';
 import 'controls/other_controls.dart';
@@ -112,6 +113,16 @@ class DeviceDetailScreen extends ConsumerWidget {
                 if (!device.available) ...[
                   const SizedBox(height: 12),
                   InlineNotice.warning(l10n.unavailableBanner),
+                  // What this maker's devices need, in case it is that.
+                  if (setupTip(l10n, device.id.split(':').first)
+                      case final tip?) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      tip,
+                      key: const Key('deviceSetupTip'),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
                 ],
                 if (syncStatus != SyncStatus.live) ...[
                   const StaleDataBanner(padding: EdgeInsets.only(top: 12)),

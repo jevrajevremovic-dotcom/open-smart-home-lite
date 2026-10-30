@@ -1141,9 +1141,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get autoAddAction => 'Add an action';
 
   @override
-  String get autoSave => 'Save to Home Assistant';
-
-  @override
   String get autoDelete => 'Delete automation';
 
   @override
@@ -1447,7 +1444,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dashCardMedia => 'Now playing';
 
   @override
-  String get dashCardShortcuts => 'Energy, calendar, activity';
+  String get dashCardShortcuts => 'House check, More';
 
   @override
   String get dashCardAttention => 'Needs attention (batteries, unavailable)';
@@ -3380,4 +3377,99 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get personMember => 'Member';
+
+  @override
+  String get setupHelpTitle => 'Device not showing up?';
+
+  @override
+  String get setupHelpHint =>
+      'The phone and the device must be on the same Wi-Fi. What else is needed, by maker:';
+
+  @override
+  String get tipShelly =>
+      'Works as is. If the device has a password (Restrict login), enter it when adding.';
+
+  @override
+  String get tipWled => 'Works as is.';
+
+  @override
+  String get tipTasmota =>
+      'Usually does not announce itself: add it by its IP address.';
+
+  @override
+  String get tipEsphome =>
+      'The device\'s configuration needs api:. With encryption on (api: encryption: key), enter that key.';
+
+  @override
+  String get tipHue =>
+      'Add the Hue bridge; when pairing, press the round button on top of it. The bridge\'s lights and sensors come with it.';
+
+  @override
+  String get tipYeelight =>
+      'In the Yeelight app, turn on \"LAN Control\" for each bulb.';
+
+  @override
+  String get tipWiz =>
+      'In the WiZ app, local communication must be allowed (Settings → Security → Allow local communication).';
+
+  @override
+  String get tipLifx => 'Works as is.';
+
+  @override
+  String get tipGovee =>
+      'In the Govee app, turn on \"LAN Control\" in the device\'s settings. Not every model has it.';
+
+  @override
+  String get tipNanoleaf =>
+      'When pairing, hold the power button for 5–7 seconds, until the lights flash.';
+
+  @override
+  String get tipSonoff =>
+      'Works in DIY mode only: turn it on in the eWeLink app or with the device\'s DIY switch.';
+
+  @override
+  String get tipTpLink =>
+      'Older Kasa devices work as is. Tapo and newer Kasa need the TP-Link account\'s e-mail and password; add them by IP address.';
+
+  @override
+  String get tipDirigera =>
+      'When pairing, press the action button on the back of the hub. The hub\'s IKEA devices come with it.';
+
+  @override
+  String get tipTuya =>
+      'Needs the device\'s local key (16 characters), taken once from the Tuya account, e.g. with the tinytuya wizard. Devices on protocol 3.5 do not work yet.';
+
+  @override
+  String get tipXiaomi =>
+      'Needs the device\'s token (32 characters), e.g. from Xiaomi Cloud Tokens Extractor. Plugs and lights (MIoT), Chuangmi plugs and Roborock vacuums work.';
+
+  @override
+  String get tipBroadlink =>
+      'In the Broadlink app the device must be unlocked (Unlock device); then learn buttons on the device\'s screen.';
+
+  @override
+  String get tipSamsung =>
+      'On the first connection choose Allow on the TV. To turn it on from the phone, enable \"Power On with Mobile\" (or IP Remote) in the TV\'s settings.';
+
+  @override
+  String get tipLg =>
+      'On the first connection accept on the TV. To turn it on from the phone, enable \"Turn on via Wi-Fi\" (Mobile TV On).';
+
+  @override
+  String get tipRoku =>
+      'In the Roku\'s settings (System → Advanced system settings → Control by mobile apps) allow network access.';
+
+  @override
+  String get tipSonos => 'Works as is.';
+
+  @override
+  String get tipCamera =>
+      'The \"Add a camera\" button: the camera\'s image address (examples in the dialog) and a user, if the camera asks.';
+
+  @override
+  String get tipBluetooth =>
+      'The phone must be near (up to ~10 m). BTHome (Shelly BLU), Xiaomi with pvvx/ATC firmware, SwitchBot and Govee thermometers work; encrypted BTHome and Xiaomi MiBeacon do not.';
+
+  @override
+  String get tipUnavailable => 'The device is not answering right now.';
 }

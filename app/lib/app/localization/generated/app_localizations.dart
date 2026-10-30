@@ -2073,12 +2073,6 @@ abstract class AppLocalizations {
   /// **'Add an action'**
   String get autoAddAction;
 
-  /// No description provided for @autoSave.
-  ///
-  /// In en, this message translates to:
-  /// **'Save to Home Assistant'**
-  String get autoSave;
-
   /// No description provided for @autoDelete.
   ///
   /// In en, this message translates to:
@@ -2634,7 +2628,7 @@ abstract class AppLocalizations {
   /// No description provided for @dashCardShortcuts.
   ///
   /// In en, this message translates to:
-  /// **'Energy, calendar, activity'**
+  /// **'House check, More'**
   String get dashCardShortcuts;
 
   /// No description provided for @dashCardAttention.
@@ -5768,6 +5762,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Member'**
   String get personMember;
+
+  /// No description provided for @setupHelpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Device not showing up?'**
+  String get setupHelpTitle;
+
+  /// No description provided for @setupHelpHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The phone and the device must be on the same Wi-Fi. What else is needed, by maker:'**
+  String get setupHelpHint;
+
+  /// No description provided for @tipShelly.
+  ///
+  /// In en, this message translates to:
+  /// **'Works as is. If the device has a password (Restrict login), enter it when adding.'**
+  String get tipShelly;
+
+  /// No description provided for @tipWled.
+  ///
+  /// In en, this message translates to:
+  /// **'Works as is.'**
+  String get tipWled;
+
+  /// No description provided for @tipTasmota.
+  ///
+  /// In en, this message translates to:
+  /// **'Usually does not announce itself: add it by its IP address.'**
+  String get tipTasmota;
+
+  /// No description provided for @tipEsphome.
+  ///
+  /// In en, this message translates to:
+  /// **'The device\'s configuration needs api:. With encryption on (api: encryption: key), enter that key.'**
+  String get tipEsphome;
+
+  /// No description provided for @tipHue.
+  ///
+  /// In en, this message translates to:
+  /// **'Add the Hue bridge; when pairing, press the round button on top of it. The bridge\'s lights and sensors come with it.'**
+  String get tipHue;
+
+  /// No description provided for @tipYeelight.
+  ///
+  /// In en, this message translates to:
+  /// **'In the Yeelight app, turn on \"LAN Control\" for each bulb.'**
+  String get tipYeelight;
+
+  /// No description provided for @tipWiz.
+  ///
+  /// In en, this message translates to:
+  /// **'In the WiZ app, local communication must be allowed (Settings → Security → Allow local communication).'**
+  String get tipWiz;
+
+  /// No description provided for @tipLifx.
+  ///
+  /// In en, this message translates to:
+  /// **'Works as is.'**
+  String get tipLifx;
+
+  /// No description provided for @tipGovee.
+  ///
+  /// In en, this message translates to:
+  /// **'In the Govee app, turn on \"LAN Control\" in the device\'s settings. Not every model has it.'**
+  String get tipGovee;
+
+  /// No description provided for @tipNanoleaf.
+  ///
+  /// In en, this message translates to:
+  /// **'When pairing, hold the power button for 5–7 seconds, until the lights flash.'**
+  String get tipNanoleaf;
+
+  /// No description provided for @tipSonoff.
+  ///
+  /// In en, this message translates to:
+  /// **'Works in DIY mode only: turn it on in the eWeLink app or with the device\'s DIY switch.'**
+  String get tipSonoff;
+
+  /// No description provided for @tipTpLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Older Kasa devices work as is. Tapo and newer Kasa need the TP-Link account\'s e-mail and password; add them by IP address.'**
+  String get tipTpLink;
+
+  /// No description provided for @tipDirigera.
+  ///
+  /// In en, this message translates to:
+  /// **'When pairing, press the action button on the back of the hub. The hub\'s IKEA devices come with it.'**
+  String get tipDirigera;
+
+  /// No description provided for @tipTuya.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs the device\'s local key (16 characters), taken once from the Tuya account, e.g. with the tinytuya wizard. Devices on protocol 3.5 do not work yet.'**
+  String get tipTuya;
+
+  /// No description provided for @tipXiaomi.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs the device\'s token (32 characters), e.g. from Xiaomi Cloud Tokens Extractor. Plugs and lights (MIoT), Chuangmi plugs and Roborock vacuums work.'**
+  String get tipXiaomi;
+
+  /// No description provided for @tipBroadlink.
+  ///
+  /// In en, this message translates to:
+  /// **'In the Broadlink app the device must be unlocked (Unlock device); then learn buttons on the device\'s screen.'**
+  String get tipBroadlink;
+
+  /// No description provided for @tipSamsung.
+  ///
+  /// In en, this message translates to:
+  /// **'On the first connection choose Allow on the TV. To turn it on from the phone, enable \"Power On with Mobile\" (or IP Remote) in the TV\'s settings.'**
+  String get tipSamsung;
+
+  /// No description provided for @tipLg.
+  ///
+  /// In en, this message translates to:
+  /// **'On the first connection accept on the TV. To turn it on from the phone, enable \"Turn on via Wi-Fi\" (Mobile TV On).'**
+  String get tipLg;
+
+  /// No description provided for @tipRoku.
+  ///
+  /// In en, this message translates to:
+  /// **'In the Roku\'s settings (System → Advanced system settings → Control by mobile apps) allow network access.'**
+  String get tipRoku;
+
+  /// No description provided for @tipSonos.
+  ///
+  /// In en, this message translates to:
+  /// **'Works as is.'**
+  String get tipSonos;
+
+  /// No description provided for @tipCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'The \"Add a camera\" button: the camera\'s image address (examples in the dialog) and a user, if the camera asks.'**
+  String get tipCamera;
+
+  /// No description provided for @tipBluetooth.
+  ///
+  /// In en, this message translates to:
+  /// **'The phone must be near (up to ~10 m). BTHome (Shelly BLU), Xiaomi with pvvx/ATC firmware, SwitchBot and Govee thermometers work; encrypted BTHome and Xiaomi MiBeacon do not.'**
+  String get tipBluetooth;
+
+  /// No description provided for @tipUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The device is not answering right now.'**
+  String get tipUnavailable;
 }
 
 class _AppLocalizationsDelegate

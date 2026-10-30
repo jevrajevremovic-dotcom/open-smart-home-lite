@@ -17,6 +17,7 @@ import '../../devices/data/local/ble/ble_scanner.dart';
 import '../../devices/data/local/esphome/esphome_client.dart';
 import '../data/device_probe.dart';
 import '../data/lan_discovery.dart';
+import 'setup_tips.dart';
 
 /// Shelly and WLED devices on the Wi-Fi network, found by themselves or
 /// by their IP address, added to the home with a room.
@@ -110,6 +111,8 @@ class AddDeviceScreen extends ConsumerWidget {
                     label: Text(l10n.cameraAdd),
                   ),
                 ),
+                const SizedBox(height: 16),
+                const SetupHelp(),
                 const SizedBox(height: 24),
                 _BleSection(added: added, onAdd: (p) => _add(context, ref, p)),
               ],

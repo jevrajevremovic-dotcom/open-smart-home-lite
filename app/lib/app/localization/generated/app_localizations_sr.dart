@@ -1146,9 +1146,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get autoAddAction => 'Dodaj radnju';
 
   @override
-  String get autoSave => 'Sačuvaj u Home Assistant';
-
-  @override
   String get autoDelete => 'Obriši automatizaciju';
 
   @override
@@ -1451,7 +1448,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get dashCardMedia => 'Sada svira';
 
   @override
-  String get dashCardShortcuts => 'Energija, kalendar, aktivnost';
+  String get dashCardShortcuts => 'Provera kuće, Još';
 
   @override
   String get dashCardAttention => 'Potrebna pažnja (baterije, nedostupni)';
@@ -3399,6 +3396,101 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get personMember => 'Ukućanin';
+
+  @override
+  String get setupHelpTitle => 'Uređaj se ne pojavljuje?';
+
+  @override
+  String get setupHelpHint =>
+      'Telefon i uređaj moraju biti na istoj Wi-Fi mreži. Šta još treba, po proizvođaču:';
+
+  @override
+  String get tipShelly =>
+      'Radi odmah. Ako je na uređaju uključena lozinka (Restrict login), unesite je pri dodavanju.';
+
+  @override
+  String get tipWled => 'Radi odmah.';
+
+  @override
+  String get tipTasmota =>
+      'Obično se ne oglašava na mreži: dodajte je preko IP adrese.';
+
+  @override
+  String get tipEsphome =>
+      'U konfiguraciji uređaja treba da postoji api:. Ako je uključeno šifrovanje (api: encryption: key), unesite taj ključ.';
+
+  @override
+  String get tipHue =>
+      'Dodaje se Hue most; pri uparivanju pritisnite okruglo dugme na vrhu mosta. Svetla i senzori mosta dolaze sami.';
+
+  @override
+  String get tipYeelight =>
+      'U Yeelight aplikaciji, za svaku sijalicu, uključite „LAN Control“.';
+
+  @override
+  String get tipWiz =>
+      'U WiZ aplikaciji lokalna komunikacija mora biti dozvoljena (Podešavanja → Bezbednost → Dozvoli lokalnu komunikaciju).';
+
+  @override
+  String get tipLifx => 'Radi odmah.';
+
+  @override
+  String get tipGovee =>
+      'U Govee aplikaciji, u podešavanjima uređaja, uključite „LAN Control“. Nemaju ga svi modeli.';
+
+  @override
+  String get tipNanoleaf =>
+      'Pri uparivanju držite dugme za uključivanje 5–7 sekundi, dok svetla ne zatrepću.';
+
+  @override
+  String get tipSonoff =>
+      'Radi samo u DIY režimu: uključite ga u eWeLink aplikaciji ili DIY prekidačem na uređaju.';
+
+  @override
+  String get tipTpLink =>
+      'Stariji Kasa uređaji rade odmah. Tapo i noviji Kasa traže e-poštu i lozinku TP-Link naloga; dodajte ih preko IP adrese.';
+
+  @override
+  String get tipDirigera =>
+      'Pri uparivanju pritisnite dugme za radnju na poleđini čvorišta. IKEA uređaji čvorišta dolaze sami.';
+
+  @override
+  String get tipTuya =>
+      'Treba lokalni ključ uređaja (16 znakova), koji se jednom uzima iz Tuya naloga, npr. alatom tinytuya wizard. Uređaji sa protokolom 3.5 još ne rade.';
+
+  @override
+  String get tipXiaomi =>
+      'Treba token uređaja (32 znaka), npr. iz alata Xiaomi Cloud Tokens Extractor. Rade utičnice i svetla (MIoT), Chuangmi utičnice i Roborock usisivači.';
+
+  @override
+  String get tipBroadlink =>
+      'U Broadlink aplikaciji uređaj mora biti otključan (Unlock device); posle toga dugmad učite na ekranu uređaja.';
+
+  @override
+  String get tipSamsung =>
+      'Pri prvom povezivanju izaberite Dozvoli na televizoru. Za paljenje sa telefona uključite „Power On with Mobile“ (ili IP Remote) u podešavanjima televizora.';
+
+  @override
+  String get tipLg =>
+      'Pri prvom povezivanju potvrdite na televizoru. Za paljenje sa telefona uključite „Turn on via Wi-Fi“ (Mobile TV On).';
+
+  @override
+  String get tipRoku =>
+      'U podešavanjima Roku-a (Sistem → Napredna podešavanja → Kontrola mobilnim aplikacijama) dozvolite pristup mreži.';
+
+  @override
+  String get tipSonos => 'Radi odmah.';
+
+  @override
+  String get tipCamera =>
+      'Dugme „Dodaj kameru“: adresa slike sa kamere (primeri su u dijalogu) i korisnik, ako ga kamera traži.';
+
+  @override
+  String get tipBluetooth =>
+      'Telefon mora biti blizu (do ~10 m). Rade BTHome (Shelly BLU), Xiaomi sa pvvx/ATC firmverom, SwitchBot i Govee termometri; šifrovani BTHome i Xiaomi MiBeacon ne.';
+
+  @override
+  String get tipUnavailable => 'Uređaj trenutno ne odgovara.';
 }
 
 /// The translations for Serbian, using the Latin script (`sr_Latn`).

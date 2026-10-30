@@ -165,6 +165,11 @@ void main() {
     await settle(tester, 4);
     expect(find.text(en.addDeviceTitle), findsWidgets);
     expect(find.byKey(const Key('addDeviceManual')), findsOneWidget);
+    // Why a device may not show up, by maker.
+    await tapKey(tester, 'setupHelp');
+    await settle(tester, 4);
+    await tester.ensureVisible(find.text(en.tipTuya));
+    expect(find.text(en.tipTuya), findsOneWidget);
     await unmount(tester);
   });
 }
