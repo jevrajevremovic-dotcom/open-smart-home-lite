@@ -3476,4 +3476,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get backupTransferLocked =>
       'The transfer was stopped: a wrong code was entered three times. Send again.';
+
+  @override
+  String get blePermissionDenied =>
+      'Android did not allow Bluetooth. Allow \"Nearby devices\" in the app\'s settings.';
+
+  @override
+  String get openAppSettings => 'Settings';
 }

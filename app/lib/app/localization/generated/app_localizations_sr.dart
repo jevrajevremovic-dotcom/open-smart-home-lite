@@ -3495,6 +3495,13 @@ class AppLocalizationsSr extends AppLocalizations {
   @override
   String get backupTransferLocked =>
       'Prenos je prekinut: tri puta je unet pogrešan kod. Pošaljite ponovo.';
+
+  @override
+  String get blePermissionDenied =>
+      'Android nije dozvolio Bluetooth. Dozvolite „Uređaji u blizini“ u podešavanjima aplikacije.';
+
+  @override
+  String get openAppSettings => 'Podešavanja';
 }
 
 /// The translations for Serbian, using the Latin script (`sr_Latn`).

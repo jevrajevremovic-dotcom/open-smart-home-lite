@@ -970,5 +970,7 @@
   "tipCamera": "Dugme „Dodaj kameru“: adresa slike sa kamere (primeri su u dijalogu) i korisnik, ako ga kamera traži.",
   "tipBluetooth": "Telefon mora biti blizu (do ~10 m). Rade BTHome (Shelly BLU), Xiaomi sa pvvx/ATC firmverom, SwitchBot i Govee termometri; šifrovani BTHome i Xiaomi MiBeacon ne.",
   "tipUnavailable": "Uređaj trenutno ne odgovara.",
-  "backupTransferLocked": "Prenos je prekinut: tri puta je unet pogrešan kod. Pošaljite ponovo."
+  "backupTransferLocked": "Prenos je prekinut: tri puta je unet pogrešan kod. Pošaljite ponovo.",
+  "blePermissionDenied": "Android nije dozvolio Bluetooth. Dozvolite „Uređaji u blizini“ u podešavanjima aplikacije.",
+  "openAppSettings": "Podešavanja"
 }

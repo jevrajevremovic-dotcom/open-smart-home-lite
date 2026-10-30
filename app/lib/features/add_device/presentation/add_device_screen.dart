@@ -622,9 +622,25 @@ class _BleSection extends ConsumerWidget {
               trailing: FilledButton.tonal(
                 key: const Key('blePermission'),
                 onPressed: () async {
-                  if (await ref.read(bleScannerProvider).requestPermission()) {
+                  final scanner = ref.read(bleScannerProvider);
+                  final messenger = ScaffoldMessenger.of(context);
+                  if (await scanner.requestPermission()) {
                     ref.invalidate(bleNearbyProvider);
+                    return;
                   }
+                  // Refused (or refused for good, when Android no longer
+                  // asks): say so, and where to allow it.
+                  messenger
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(
+                      SnackBar(
+                        content: Text(l10n.blePermissionDenied),
+                        action: SnackBarAction(
+                          label: l10n.openAppSettings,
+                          onPressed: scanner.openSettings,
+                        ),
+                      ),
+                    );
                 },
                 child: Text(l10n.blePermission),
               ),

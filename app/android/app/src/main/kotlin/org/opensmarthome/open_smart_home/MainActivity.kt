@@ -66,6 +66,46 @@ class MainActivity : FlutterFragmentActivity() {
             }
         }
 
+        // Permissions the app asks for itself (each only when the feature is
+        // turned on): camera, Bluetooth, microphone.
+        MethodChannel(messenger, "org.opensmarthome/camera").setMethodCallHandler { call, result ->
+            when (call.method) {
+                "request" -> requestCamera(result)
+                else -> result.notImplemented()
+            }
+        }
+        MethodChannel(messenger, "org.opensmarthome/ble_permission").setMethodCallHandler { call, result ->
+            when (call.method) {
+                "granted" -> result.success(BleScanHandler.hasPermission(this))
+                "request" -> requestBle(result)
+                // Once refused for good, only the app's settings can allow it.
+                "openSettings" -> {
+                    startActivity(
+                        Intent(
+                            android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                            android.net.Uri.fromParts("package", packageName, null),
+                        ),
+                    )
+                    result.success(null)
+                }
+                else -> result.notImplemented()
+            }
+        }
+        MethodChannel(messenger, "org.opensmarthome/microphone").setMethodCallHandler { call, result ->
+            when (call.method) {
+                "request" -> requestMicrophone(result)
+                else -> result.notImplemented()
+            }
+        }
+
+        // Clap detection (sound levels only) and the front camera's movement.
+        val microphone = AudioLevelHandler(applicationContext)
+        audio = microphone
+        EventChannel(messenger, "org.opensmarthome/audio_level").setStreamHandler(microphone.levels)
+        val motionHandler = MotionHandler(this)
+        motion = motionHandler
+        EventChannel(messenger, "org.opensmarthome/motion").setStreamHandler(motionHandler)
+
         widget = MethodChannel(messenger, "org.opensmarthome/widget").apply {
             setMethodCallHandler { call, result ->
                 when (call.method) {

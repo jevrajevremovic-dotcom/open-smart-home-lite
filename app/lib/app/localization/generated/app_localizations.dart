@@ -5918,6 +5918,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The transfer was stopped: a wrong code was entered three times. Send again.'**
   String get backupTransferLocked;
+
+  /// No description provided for @blePermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Android did not allow Bluetooth. Allow \"Nearby devices\" in the app\'s settings.'**
+  String get blePermissionDenied;
+
+  /// No description provided for @openAppSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get openAppSettings;
 }
 
 class _AppLocalizationsDelegate

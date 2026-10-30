@@ -188,6 +188,27 @@ void main() {
     },
   );
 
+  testWidgets('Bluetooth refused: it says so and offers the settings', (
+    tester,
+  ) async {
+    final scanner = FakeBleScanner(permitted: false)..grants = false;
+    await pumpApp(
+      tester,
+      size: const Size(800, 1800),
+      http: FakeLanHttp(const {}),
+      ble: scanner,
+    );
+    await goTo(tester, AppRoutes.addDevice);
+    await settle(tester, 4);
+    await tapKey(tester, 'blePermission');
+    await settle(tester, 6);
+    expect(find.text(en.blePermissionDenied), findsOneWidget);
+    await tester.tap(find.byType(SnackBarAction).last);
+    await settle(tester, 2);
+    expect(scanner.settingsOpened, 1);
+    await unmount(tester);
+  });
+
   testWidgets('add a thermometer heard nearby, after allowing Bluetooth', (
     tester,
   ) async {

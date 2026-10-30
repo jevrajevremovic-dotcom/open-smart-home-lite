@@ -204,11 +204,18 @@ class FakeBleScanner implements BleScanner {
   @override
   Future<bool> hasPermission() async => permitted;
 
+  /// What Android answers when asked.
+  bool grants = true;
+  int settingsOpened = 0;
+
   @override
   Future<bool> requestPermission() async {
     asked++;
-    return permitted = true;
+    return permitted = grants;
   }
+
+  @override
+  Future<void> openSettings() async => settingsOpened++;
 
   @override
   Stream<BleAdvert> scan() => _adverts.stream;

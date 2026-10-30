@@ -25,6 +25,9 @@ abstract interface class BleScanner {
   /// Asks the person (Android's dialog); `true` when allowed.
   Future<bool> requestPermission();
 
+  /// The app's settings, where a permission refused for good is allowed.
+  Future<void> openSettings();
+
   /// Every advertisement while listened to; one scan shared by all
   /// listeners. Fails with [BleScanError].
   Stream<BleAdvert> scan();
@@ -70,6 +73,15 @@ class AndroidBleScanner implements BleScanner {
       return await _permission.invokeMethod<bool>('request') ?? false;
     } on Object {
       return false;
+    }
+  }
+
+  @override
+  Future<void> openSettings() async {
+    try {
+      await _permission.invokeMethod<void>('openSettings');
+    } on Object {
+      // Nothing more to do.
     }
   }
 
