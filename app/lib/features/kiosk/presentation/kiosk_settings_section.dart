@@ -80,16 +80,6 @@ class KioskSettingsSection extends ConsumerWidget {
         const ClapSettings(),
         const ApproachSettings(),
         SwitchListTile(
-          key: const Key('kioskGreetSwitch'),
-          contentPadding: EdgeInsets.zero,
-          secondary: const Icon(Icons.waving_hand_outlined),
-          title: Text(l10n.greetPeople),
-          subtitle: Text(l10n.greetPeopleHint),
-          value: settings.greetPeople,
-          onChanged: (v) =>
-              controller.update((s) => s.copyWith(greetPeople: v)),
-        ),
-        SwitchListTile(
           key: const Key('kioskAlertSwitch'),
           contentPadding: EdgeInsets.zero,
           secondary: const Icon(Icons.crisis_alert_rounded),

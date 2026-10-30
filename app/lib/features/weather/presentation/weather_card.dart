@@ -16,7 +16,7 @@ import 'animated_weather_icon.dart';
 import 'weather_labels.dart';
 import '../../../core/widgets/skeleton.dart';
 
-/// Weather at home (from Home Assistant) and, if the user enabled it, at the
+/// Weather at home (MET Norway, for the home's location) and, if enabled, at the
 /// device's location. Shown on the dashboard.
 class WeatherSection extends ConsumerWidget {
   const WeatherSection({super.key, this.allowDeviceLocation = true});

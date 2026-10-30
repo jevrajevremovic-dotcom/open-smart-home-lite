@@ -11,7 +11,7 @@ import 'room_card.dart' show roomIcon;
 import 'room_look.dart';
 
 /// A photo per room (room id → file on this device). Kept only here:
-/// never sent to Home Assistant, not in the settings backup.
+/// never sent anywhere, not in the settings backup.
 class RoomPhotosController extends Notifier<Map<String, String>> {
   static const _key = 'room.photos';
 

@@ -5,7 +5,7 @@ import '../../devices/application/device_providers.dart';
 import '../../devices/presentation/device_presentation.dart';
 import '../../household/application/household_providers.dart';
 
-/// Album art / channel logo from Home Assistant, or the device icon.
+/// Album art / channel logo when a device has one, or the device icon.
 class MediaArtwork extends ConsumerWidget {
   const MediaArtwork({
     super.key,

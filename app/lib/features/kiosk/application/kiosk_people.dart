@@ -5,7 +5,7 @@ import '../../../core/security/pin_hasher.dart';
 import '../../../core/storage/app_preferences.dart';
 import 'kiosk_controller.dart';
 
-/// What the wall panel knows about one household member (a Home Assistant
+/// What the wall panel knows about one household member (a
 /// `person`): a personal PIN, which lets them do critical things (unlock,
 /// disarm) — members without one (children) cannot — their own quick
 /// controls, and their birthday (the panel celebrates).

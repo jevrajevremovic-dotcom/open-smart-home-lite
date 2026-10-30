@@ -11,38 +11,6 @@ import '../widgets/app_widget_test.dart'
     show en, goTo, pumpApp, settle, tapKey, unmount;
 
 void main() {
-  test('timer commands in Serbian and English', () {
-    expect(
-      parseTimerCommand('postavi tajmer 10 minuta'),
-      const Duration(minutes: 10),
-    );
-    expect(
-      parseTimerCommand('Tajmer na pola sata'),
-      const Duration(minutes: 30),
-    );
-    expect(
-      parseTimerCommand('tajmer 1 sat i 15 minuta'),
-      const Duration(hours: 1, minutes: 15),
-    );
-    expect(
-      parseTimerCommand('pokreni tajmer 90 sekundi'),
-      const Duration(seconds: 90),
-    );
-    expect(
-      parseTimerCommand('set a timer for 5 minutes'),
-      const Duration(minutes: 5),
-    );
-    expect(parseTimerCommand('timer for an hour'), const Duration(hours: 1));
-    expect(parseTimerCommand('tajmer 7'), const Duration(minutes: 7));
-    expect(parseTimerCommand('ugasi svetla'), isNull);
-    expect(parseTimerCommand('turn on the light for 5 minutes'), isNull);
-    expect(formatCountdown(const Duration(minutes: 4, seconds: 5)), '4:05');
-    expect(
-      formatCountdown(const Duration(hours: 1, minutes: 2, seconds: 3)),
-      '1:02:03',
-    );
-  });
-
   Future<ProviderContainer> kiosk(
     WidgetTester tester, {
     FakeSpeechOutput? speech,

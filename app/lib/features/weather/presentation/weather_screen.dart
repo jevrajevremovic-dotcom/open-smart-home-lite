@@ -13,7 +13,7 @@ import '../domain/weather.dart';
 import 'animated_weather_icon.dart';
 import 'weather_labels.dart';
 
-/// Full forecast from the Home Assistant weather entity: now, the next
+/// Full forecast for the home: now, the next
 /// hours (temperature curve) and the next days (temperature ranges).
 class WeatherScreen extends ConsumerWidget {
   const WeatherScreen({super.key});

@@ -26,20 +26,12 @@ class KioskSettings {
     this.clapEnabled = false,
     this.clapTargetId,
     this.clapSensitivity = ClapSensitivity.medium,
-    this.wakeWordEnabled = false,
     this.approachWake = ApproachWake.off,
     this.approachSensorId,
     this.alertOverlay = true,
-    this.greetPeople = true,
     this.quickControls = const [],
     this.homeCards = HomeCard.values,
     this.openAlertMinutes = 10,
-    this.popupTriggerIds = const [],
-    this.popupCameraId,
-    this.popupSeconds = 60,
-    this.popupLive = true,
-    this.popupOpenId,
-    this.popupSpeakerId,
     this.aodFocus = AodFocus.home,
     this.aodEntityId,
     this.morningScreen = true,
@@ -76,13 +68,11 @@ class KioskSettings {
       clapTargetId: json['clapTargetId'] is String
           ? json['clapTargetId']! as String
           : null,
-      wakeWordEnabled: json['wakeWordEnabled'] == true,
       approachWake: ApproachWake.values.firstWhere(
         (a) => a.name == json['approachWake'],
         orElse: () => d.approachWake,
       ),
       alertOverlay: json['alertOverlay'] != false,
-      greetPeople: json['greetPeople'] != false,
       homeCards: switch (json['homeCards']) {
         final List<Object?> list => [
           for (final name in list)
@@ -141,24 +131,6 @@ class KioskSettings {
         final num v when v >= 0.05 && v <= 1 => v.toDouble(),
         _ => d.aodBrightness,
       },
-      popupTriggerIds: [
-        if (json['popupTriggerIds'] case final List<Object?> ids)
-          for (final id in ids.whereType<String>().take(10)) id,
-      ],
-      popupCameraId: json['popupCameraId'] is String
-          ? json['popupCameraId']! as String
-          : null,
-      popupLive: json['popupLive'] != false,
-      popupOpenId: json['popupOpenId'] is String
-          ? json['popupOpenId']! as String
-          : null,
-      popupSpeakerId: json['popupSpeakerId'] is String
-          ? json['popupSpeakerId']! as String
-          : null,
-      popupSeconds: switch (json['popupSeconds']) {
-        final int s when popupOptions.contains(s) => s,
-        _ => d.popupSeconds,
-      },
     );
   }
 
@@ -182,13 +154,8 @@ class KioskSettings {
   final String? clapTargetId;
   final ClapSensitivity clapSensitivity;
 
-  /// Hands-free Assist: while the kiosk is shown, microphone audio streams
-  /// to the user's own Home Assistant, whose wake word engine (openWakeWord)
-  /// listens for the wake word. Opt-in.
-  final bool wakeWordEnabled;
-
-  /// Wakes the idle screen when someone comes near: a motion sensor in
-  /// Home Assistant ([approachSensorId]) or the tablet's front camera
+  /// Wakes the idle screen when someone comes near: a motion sensor
+  /// ([approachSensorId]) or the tablet's front camera
   /// (movement found on the tablet, nothing recorded or sent).
   final ApproachWake approachWake;
   final String? approachSensorId;
@@ -196,9 +163,6 @@ class KioskSettings {
   /// Critical alerts (smoke, CO, leak, alarm triggered, jammed lock) cover
   /// the whole kiosk screen until acknowledged.
   final bool alertOverlay;
-
-  /// Says hello (and shows their messages) when a person comes home.
-  final bool greetPeople;
 
   /// Devices on the right of the home overview: entity ids, or
   /// `group:<device id>` for all of one physical device.
@@ -210,26 +174,6 @@ class KioskSettings {
   /// A door or window open longer than this also covers the screen (0 =
   /// never).
   final int openAlertMinutes;
-
-  /// A doorbell, motion or contact sensor that wakes the screen and shows
-  /// [popupCameraId] full screen for [popupSeconds].
-  final List<String> popupTriggerIds;
-  final String? popupCameraId;
-  final int popupSeconds;
-
-  /// Live video in the pop-up when the camera offers it (else snapshots).
-  final bool popupLive;
-
-  /// Intercom on the pop-up: "Open" works this lock, gate or garage door
-  /// (critical, so it asks for confirmation) …
-  final String? popupOpenId;
-
-  /// … and "Coming" says a short reply through this speaker by the door
-  /// (Home Assistant's `tts.speak`).
-  final String? popupSpeakerId;
-  static const popupOptions = [30, 60, 120, 300];
-
-  bool get hasPopup => popupCameraId != null && popupTriggerIds.isNotEmpty;
 
   /// Under the clock of the always-on screen.
   final AodFocus aodFocus;
@@ -333,23 +277,12 @@ class KioskSettings {
     bool? clapEnabled,
     String? clapTargetId,
     ClapSensitivity? clapSensitivity,
-    bool? wakeWordEnabled,
     ApproachWake? approachWake,
     String? approachSensorId,
     bool? alertOverlay,
-    bool? greetPeople,
     List<String>? quickControls,
     List<HomeCard>? homeCards,
     int? openAlertMinutes,
-    List<String>? popupTriggerIds,
-    String? popupCameraId,
-    bool clearPopupCamera = false,
-    int? popupSeconds,
-    bool? popupLive,
-    String? popupOpenId,
-    String? popupSpeakerId,
-    bool clearPopupOpen = false,
-    bool clearPopupSpeaker = false,
     AodFocus? aodFocus,
     String? aodEntityId,
     bool clearAodEntity = false,
@@ -384,24 +317,12 @@ class KioskSettings {
     nightLightId: nightLightId ?? this.nightLightId,
     darkScreensaver: darkScreensaver ?? this.darkScreensaver,
     aodBrightness: aodBrightness ?? this.aodBrightness,
-    popupTriggerIds: popupTriggerIds ?? this.popupTriggerIds,
-    popupCameraId: clearPopupCamera
-        ? null
-        : (popupCameraId ?? this.popupCameraId),
-    popupSeconds: popupSeconds ?? this.popupSeconds,
-    popupLive: popupLive ?? this.popupLive,
-    popupOpenId: clearPopupOpen ? null : (popupOpenId ?? this.popupOpenId),
-    popupSpeakerId: clearPopupSpeaker
-        ? null
-        : (popupSpeakerId ?? this.popupSpeakerId),
     clapEnabled: clapEnabled ?? this.clapEnabled,
     clapTargetId: clapTargetId ?? this.clapTargetId,
     clapSensitivity: clapSensitivity ?? this.clapSensitivity,
-    wakeWordEnabled: wakeWordEnabled ?? this.wakeWordEnabled,
     approachWake: approachWake ?? this.approachWake,
     approachSensorId: approachSensorId ?? this.approachSensorId,
     alertOverlay: alertOverlay ?? this.alertOverlay,
-    greetPeople: greetPeople ?? this.greetPeople,
     quickControls: quickControls ?? this.quickControls,
     homeCards: homeCards ?? this.homeCards,
     openAlertMinutes: openAlertMinutes ?? this.openAlertMinutes,
@@ -425,20 +346,12 @@ class KioskSettings {
     'clapEnabled': clapEnabled,
     'clapTargetId': clapTargetId,
     'clapSensitivity': clapSensitivity.name,
-    'wakeWordEnabled': wakeWordEnabled,
     'approachWake': approachWake.name,
     'approachSensorId': approachSensorId,
     'alertOverlay': alertOverlay,
-    'greetPeople': greetPeople,
     'quickControls': quickControls,
     'homeCards': [for (final c in homeCards) c.name],
     'openAlertMinutes': openAlertMinutes,
-    'popupTriggerIds': popupTriggerIds,
-    'popupCameraId': popupCameraId,
-    'popupSeconds': popupSeconds,
-    'popupLive': popupLive,
-    'popupOpenId': popupOpenId,
-    'popupSpeakerId': popupSpeakerId,
     'aodFocus': aodFocus.name,
     'aodEntityId': aodEntityId,
     'morningScreen': morningScreen,

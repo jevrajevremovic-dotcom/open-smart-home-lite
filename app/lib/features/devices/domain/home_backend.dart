@@ -13,7 +13,7 @@ abstract interface class DeviceCommandSink {
   Future<void> sendToAll(List<SmartHomeDevice> devices, DeviceCommand command);
 }
 
-/// The home as one backend sees it: Home Assistant, or (lite) the Wi-Fi and
+/// The home as one backend sees it: the Wi-Fi and
 /// Bluetooth devices themselves. The rest of the app knows only this,
 /// [HomeSnapshot] and [SmartHomeDevice].
 abstract interface class HomeBackend implements DeviceCommandSink {

@@ -54,7 +54,7 @@ import '../../floor_plan/floor_plan.dart';
 const kioskNoRoom = '__no_room__';
 
 /// The area id behind a [kioskColumnsRoomProvider] value (`null` for
-/// [kioskNoRoom]: Home Assistant's "no area").
+/// [kioskNoRoom]: devices in no room).
 String? _areaOf(String roomId) => roomId == kioskNoRoom ? null : roomId;
 
 /// Room shown in the middle column (`null` = the home overview).
@@ -595,7 +595,7 @@ class _Sidebar extends ConsumerWidget {
             icon: r.icon,
             selected: r.id == roomId,
           ),
-        // Devices Home Assistant has in no area: still reachable.
+        // Devices in no room: still reachable.
         if ((ref.watch(deviceIdsByRoomProvider)[null] ?? const []).isNotEmpty)
           _RoomRow(
             key: const ValueKey('kioskColumnsRoom-none'),

@@ -10,7 +10,7 @@ import '../data/approach_platform.dart';
 import '../data/kiosk_settings.dart';
 
 /// Wakes the idle kiosk screen when someone comes near: when the chosen
-/// motion sensor in Home Assistant turns on, or when the front camera sees
+/// motion sensor turns on, or when the front camera sees
 /// movement. Only while the screen is idle — the camera is off otherwise.
 class KioskApproachWaker extends ConsumerStatefulWidget {
   const KioskApproachWaker({super.key, required this.child});

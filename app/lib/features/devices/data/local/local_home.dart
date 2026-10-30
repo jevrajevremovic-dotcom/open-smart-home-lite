@@ -117,8 +117,30 @@ class ConfiguredDevice {
 /// Where the password of the device [key] is kept (`CredentialStore`).
 String devicePasswordId(String key) => 'device:$key';
 
-/// The home on this phone: its rooms, the devices added to it, and the
-/// household's names and rooms for them. Stored locally.
+/// Someone who lives in the home: for the wall panel (a personal PIN,
+/// quick controls, a birthday). Shown as a `person` device
+/// (`member:<id>`); the app does not know whether they are at home.
+@immutable
+class HouseholdMember {
+  const HouseholdMember({required this.id, required this.name});
+
+  final String id;
+  final String name;
+
+  /// As a device in the home's snapshot.
+  String get deviceId => 'member:$id';
+
+  @override
+  bool operator ==(Object other) =>
+      other is HouseholdMember && other.id == id && other.name == name;
+
+  @override
+  int get hashCode => Object.hash(id, name);
+}
+
+/// The home on this phone: its rooms, the devices added to it, the
+/// household's names and rooms for them, and who lives there. Stored
+/// locally.
 @immutable
 class LocalHome {
   const LocalHome({
@@ -126,6 +148,7 @@ class LocalHome {
     this.devices = const [],
     this.names = const {},
     this.roomOf = const {},
+    this.members = const [],
   });
 
   final List<Room> rooms;
@@ -138,6 +161,8 @@ class LocalHome {
   /// Room id by `SmartHomeDevice.id` or [ConfiguredDevice.key]; a channel
   /// without its own room is where its physical device is.
   final Map<String, String> roomOf;
+
+  final List<HouseholdMember> members;
 
   List<ConfiguredDevice> devicesOf(String adapter) => [
     for (final d in devices)
@@ -179,11 +204,13 @@ class LocalHome {
     List<ConfiguredDevice>? devices,
     Map<String, String>? names,
     Map<String, String>? roomOf,
+    List<HouseholdMember>? members,
   }) => LocalHome(
     rooms: rooms ?? this.rooms,
     devices: devices ?? this.devices,
     names: names ?? this.names,
     roomOf: roomOf ?? this.roomOf,
+    members: members ?? this.members,
   );
 
   Map<String, Object?> toJson() => {
@@ -193,6 +220,10 @@ class LocalHome {
     'devices': [for (final d in devices) d.toJson()],
     'names': names,
     'roomOf': roomOf,
+    if (members.isNotEmpty)
+      'members': [
+        for (final m in members) {'id': m.id, 'name': m.name},
+      ],
   };
 
   /// Tolerant: a broken entry is skipped, not the whole home.
@@ -220,6 +251,11 @@ class LocalHome {
       ],
       names: strings(json['names']),
       roomOf: strings(json['roomOf']),
+      members: [
+        for (final m in (json['members'] as List?) ?? const [])
+          if (m is Map && m['id'] is String && m['name'] is String)
+            HouseholdMember(id: m['id'] as String, name: m['name'] as String),
+      ],
     );
   }
 }
@@ -315,6 +351,28 @@ class LocalHomeController extends Notifier<LocalHome> {
     ),
   );
 
+  /// A new household member called [name].
+  Future<void> addMember(String name) => _save(
+    state.copyWith(
+      members: [
+        ...state.members,
+        HouseholdMember(
+          id: DateTime.now().microsecondsSinceEpoch.toRadixString(36),
+          name: name.trim(),
+        ),
+      ],
+    ),
+  );
+
+  Future<void> removeMember(String id) => _save(
+    state.copyWith(
+      members: [
+        for (final m in state.members)
+          if (m.id != id) m,
+      ],
+    ),
+  );
+
   /// The device [key] remembers [options] (merged; an empty value removes).
   Future<void> setOptions(String key, Map<String, String> options) => _save(
     state.copyWith(
@@ -386,6 +444,11 @@ class LocalHomeController extends Notifier<LocalHome> {
         ],
         names: {...other.names, ...here.names},
         roomOf: {...other.roomOf, ...here.roomOf},
+        members: [
+          ...here.members,
+          for (final m in other.members)
+            if (!here.members.any((x) => x.id == m.id)) m,
+        ],
       ),
     );
   }

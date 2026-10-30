@@ -10,7 +10,7 @@ import 'room_card.dart';
 class RoomLook {
   const RoomLook({this.icon, this.color});
 
-  /// A Material Design Icons name, as Home Assistant areas use.
+  /// A Material Design Icons name (`mdi:sofa`).
   final String? icon;
   final Color? color;
 
@@ -95,7 +95,7 @@ final roomLooksProvider =
       RoomLooksController.new,
     );
 
-/// The room's icon and colour: chosen here, else from Home Assistant.
+/// The room's icon and colour: chosen here, else the room's own.
 ({IconData icon, Color color, String? iconName}) roomLookOf(
   WidgetRef ref,
   String? roomId,

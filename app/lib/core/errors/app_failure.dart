@@ -63,8 +63,7 @@ class AppFailure implements Exception {
   final String? debugMessage;
   final int? statusCode;
 
-  /// Error code from Home Assistant's WebSocket reply (e.g.
-  /// `wake-engine-missing`), when there was one.
+  /// A device's own error code, when it sent one.
   final String? code;
 
   /// Present when [kind] is [FailureKind.certificate] and the certificate

@@ -171,7 +171,7 @@ class NowPlayingCard extends ConsumerWidget {
     );
     final d = id == null ? null : ref.watch(deviceProvider(id));
     // Always present, so it's clear where music lives; without players
-    // the sheet explains what to add in Home Assistant.
+    // the sheet explains what to add.
     final scheme = theme.colorScheme;
     final playing = d?.state.raw == 'playing';
     final path = d?.metadata.picturePath;

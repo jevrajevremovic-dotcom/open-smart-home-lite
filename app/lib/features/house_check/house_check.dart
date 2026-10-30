@@ -55,7 +55,7 @@ class HouseCheckItem {
 }
 
 /// What is still on, open or unlocked for [mode], most important first.
-/// Only uses the state Home Assistant reports; nothing is guessed.
+/// Only uses the state devices report; nothing is guessed.
 List<HouseCheckItem> houseCheck(
   Iterable<SmartHomeDevice> devices,
   HouseCheckMode mode,

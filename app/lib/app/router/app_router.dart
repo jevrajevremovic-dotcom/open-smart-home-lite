@@ -60,7 +60,7 @@ abstract final class AppRoutes {
   static String device(String id, {bool kiosk = false}) =>
       '${kiosk ? AppRoutes.kiosk : ''}/device/${Uri.encodeComponent(id)}';
 
-  /// All parts of one physical device ([deviceId] from Home Assistant's
+  /// All parts of one physical device ([deviceId] from its adapter's
   /// device registry).
   static String deviceGroup(String deviceId, {bool kiosk = false}) =>
       '${kiosk ? AppRoutes.kiosk : ''}/device-group/${Uri.encodeComponent(deviceId)}';

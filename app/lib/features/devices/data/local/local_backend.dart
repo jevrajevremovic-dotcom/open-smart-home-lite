@@ -3,6 +3,7 @@ import 'dart:async';
 import '../../../../core/errors/app_failure.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../../domain/device_command.dart';
+import '../../domain/device_kind.dart';
 import '../../domain/home_backend.dart';
 import '../../domain/home_snapshot.dart';
 import '../../domain/smart_home_device.dart';
@@ -94,6 +95,16 @@ class LocalBackend implements HomeBackend {
     final devices = <String, SmartHomeDevice>{
       for (final adapter in _adapters)
         for (final d in adapter.current) d.id: _stamped(_home.overlay(d)),
+      for (final m in _home.members)
+        m.deviceId: SmartHomeDevice(
+          id: m.deviceId,
+          sourceId: m.id,
+          name: m.name,
+          kind: DeviceKind.person,
+          available: true,
+          capabilities: const {},
+          state: const DeviceState(raw: 'member'),
+        ),
     };
     _changed.removeWhere((id, _) => !devices.containsKey(id));
     final rooms = <String, Room>{

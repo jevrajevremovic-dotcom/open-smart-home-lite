@@ -368,7 +368,7 @@ class _KioskThermostatPanelState extends ConsumerState<KioskThermostatPanel> {
   }
 }
 
-/// `turn_on` restores the previous mode in Home Assistant; devices without
+/// turning on restores the previous mode; devices without
 /// it get the first mode that is not "off".
 DeviceCommand _powerCommand(SmartHomeDevice d, {required bool turnOn}) {
   if (d.supports(Capability.power)) {

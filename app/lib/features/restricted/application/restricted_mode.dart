@@ -7,8 +7,7 @@ import '../../devices/domain/device_kind.dart';
 import '../../devices/domain/smart_home_device.dart';
 
 /// Child / guest mode for this device: hides sensitive devices and locks
-/// settings and adding devices behind a PIN. Local only – Home Assistant
-/// permissions are unchanged (use a separate HA user for real limits).
+/// settings and adding devices behind a PIN, on this device.
 @immutable
 class RestrictedSettings {
   const RestrictedSettings({

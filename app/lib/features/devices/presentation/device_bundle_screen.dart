@@ -21,7 +21,7 @@ import 'stale_data_banner.dart';
 class DeviceBundleScreen extends ConsumerWidget {
   const DeviceBundleScreen({super.key, required this.deviceId});
 
-  /// Home Assistant device registry id.
+  /// The physical device's id (`SmartHomeDevice.deviceId`).
   final String deviceId;
 
   @override

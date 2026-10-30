@@ -16,19 +16,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mockModeBanner => 'MOCK REŽIM — demo podaci, bez stvarnih uređaja';
 
   @override
-  String get welcomeTitle => 'Vaš dom, u jednoj aplikaciji';
-
-  @override
-  String get welcomeBody =>
-      'Upravljajte svetlima, klimom, senzorima i scenama svih proizvođača i protokola koje podržava vaš Home Assistant server.';
-
-  @override
-  String get welcomeLocalFirst => 'Radi lokalno. Cloud nalog nije potreban.';
-
-  @override
-  String get chooseLanguage => 'Jezik';
-
-  @override
   String get languageSystem => 'Sistemski';
 
   @override
@@ -38,135 +25,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get languageEnglish => 'English';
 
   @override
-  String get getStarted => 'Započni';
-
-  @override
   String get back => 'Nazad';
 
   @override
   String get cancel => 'Otkaži';
-
-  @override
-  String get continueAction => 'Nastavi';
-
-  @override
-  String get serverAddressTitle => 'Povezivanje sa Home Assistantom';
-
-  @override
-  String get serverAddressIntro =>
-      'Unesite adresu vašeg Home Assistant servera, na primer onu koju kod kuće otvarate u pregledaču.';
-
-  @override
-  String get serverAddressLabel => 'Adresa servera';
-
-  @override
-  String get serverAddressHint => 'homeassistant.local:8123';
-
-  @override
-  String get checkConnection => 'Proveri vezu';
-
-  @override
-  String get checking => 'Proveravam…';
-
-  @override
-  String serverReachable(String address) {
-    return 'Home Assistant je pronađen na adresi $address';
-  }
-
-  @override
-  String get addressErrorEmpty => 'Unesite adresu servera.';
-
-  @override
-  String get addressErrorMalformed => 'Ovo nije ispravna adresa.';
-
-  @override
-  String get addressErrorUnsupportedScheme =>
-      'Podržane su samo http:// i https:// adrese.';
-
-  @override
-  String get addressErrorMissingHost =>
-      'Adresi nedostaje naziv računara ili IP adresa.';
-
-  @override
-  String get addressErrorCredentials =>
-      'Ne unosite korisničko ime ili lozinku u adresu.';
-
-  @override
-  String get addressErrorPath =>
-      'Home Assistant mora biti dostupan na korenu adrese (bez putanje kao što je /ha).';
-
-  @override
-  String get addressErrorQuery => 'Uklonite deo adrese posle znaka ? ili #.';
-
-  @override
-  String get addressErrorPort => 'Port mora biti između 1 i 65535.';
-
-  @override
-  String get riskLocalHttp => 'Nešifrovana veza unutar vaše lokalne mreže.';
-
-  @override
-  String get riskRemoteExposure =>
-      'Ovo je javna adresa. Proverite da je server ažuran i zaštićen.';
-
-  @override
-  String get riskInsecureRemote =>
-      'Upozorenje: ova javna adresa koristi nešifrovani HTTP. Vaš pristupni token može biti presretnut. Koristite HTTPS, osim ako veza ide kroz VPN.';
-
-  @override
-  String get insecureAcknowledge => 'Razumem rizik (npr. koristim VPN)';
-
-  @override
-  String get certificateUntrustedTitle => 'Nepouzdan sertifikat';
-
-  @override
-  String get certificateUntrustedBody =>
-      'Ovaj uređaj ne veruje sertifikatu servera. To je uobičajeno za samopotpisani sertifikat, ali može značiti i da neko presreće vezu. Nastavite samo ako se otisak poklapa sa onim na vašem serveru.';
-
-  @override
-  String get certificateSubject => 'Izdat za';
-
-  @override
-  String get certificateIssuer => 'Izdavač';
-
-  @override
-  String get certificateValidUntil => 'Važi do';
-
-  @override
-  String get certificateFingerprint => 'SHA-256 otisak';
-
-  @override
-  String get certificateExpired => 'Ovaj sertifikat je istekao.';
-
-  @override
-  String get certificateConfirm =>
-      'Uporedio/la sam otisak i verujem ovom sertifikatu';
-
-  @override
-  String get trustCertificate => 'Veruj ovom sertifikatu';
-
-  @override
-  String get tokenTitle => 'Prijava';
-
-  @override
-  String get tokenIntro =>
-      'Aplikacija se prijavljuje pomoću dugotrajnog pristupnog tokena iz vašeg Home Assistant korisničkog profila.';
-
-  @override
-  String get tokenSteps =>
-      '1. Otvorite Home Assistant u pregledaču.\n2. Kliknite na svoje korisničko ime (dole levo) → Security.\n3. U delu „Long-lived access tokens” izaberite „Create token”.\n4. Kopirajte token i nalepite ga ispod. Home Assistant ga prikazuje samo jednom.';
-
-  @override
-  String get tokenLabel => 'Pristupni token';
-
-  @override
-  String get tokenMockHint =>
-      'Mock režim: svaki token radi; „invalid” simulira odbijen token.';
-
-  @override
-  String get showToken => 'Prikaži token';
-
-  @override
-  String get hideToken => 'Sakrij token';
 
   @override
   String get connect => 'Poveži se';
@@ -175,33 +37,28 @@ class AppLocalizationsSr extends AppLocalizations {
   String get connecting => 'Povezivanje…';
 
   @override
-  String get tokenInvalidFormat =>
-      'Token ne sme biti prazan niti sadržati razmake.';
-
-  @override
   String get failureNetwork =>
-      'Server nije dostupan. Proverite adresu i da li je uređaj na odgovarajućoj mreži.';
+      'Uređaj nije dostupan. Proverite da li je uključen i da li je telefon na istoj Wi-Fi mreži.';
 
   @override
-  String get failureTimeout => 'Server predugo ne odgovara.';
+  String get failureTimeout => 'Uređaj predugo ne odgovara.';
 
   @override
   String get failureAuthentication =>
-      'Pristupni token je odbijen. Možda je pogrešan, istekao ili opozvan.';
+      'Uređaj je odbio lozinku, ključ ili token. Proverite ih u Podešavanja → Dom.';
 
   @override
   String get failureAuthorization =>
       'Ovaj korisnik nema dozvolu za ovu radnju.';
 
   @override
-  String get failureValidation => 'Server nije prihvatio zahtev.';
+  String get failureValidation => 'Uređaj nije prihvatio komandu.';
 
   @override
-  String get failureParsing => 'Server je poslao neočekivan odgovor.';
+  String get failureParsing => 'Uređaj je poslao neočekivan odgovor.';
 
   @override
-  String get failureServer =>
-      'Server je odgovorio, ali ne kao Home Assistant, ili je prijavio grešku.';
+  String get failureServer => 'Uređaj je prijavio grešku.';
 
   @override
   String get failureCertificate =>
@@ -230,46 +87,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get navSettings => 'Podešavanja';
 
   @override
-  String get statusConnected => 'Povezano';
-
-  @override
-  String get statusConnecting => 'Povezivanje…';
-
-  @override
-  String get statusAuthenticating => 'Prijavljivanje…';
-
-  @override
-  String get statusReconnecting => 'Ponovno povezivanje…';
-
-  @override
-  String statusReconnectingIn(int seconds) {
-    return 'Ponovno povezivanje za $seconds s';
-  }
-
-  @override
-  String get statusDisconnected => 'Nije povezano';
-
-  @override
-  String get statusAuthFailed => 'Prijava odbijena';
-
-  @override
-  String get statusServerUnavailable => 'Server nije dostupan';
-
-  @override
-  String get statusError => 'Greška veze';
-
-  @override
-  String get retryNow => 'Pokušaj odmah';
-
-  @override
-  String get signInAgain => 'Prijavi se ponovo';
-
-  @override
-  String serverVersion(String version) {
-    return 'Home Assistant $version';
-  }
-
-  @override
   String get settingsTitle => 'Podešavanja';
 
   @override
@@ -291,19 +108,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get language => 'Jezik';
 
   @override
-  String get serverSection => 'Server';
-
-  @override
-  String get signOut => 'Odjavi se';
-
-  @override
-  String get signOutConfirmTitle => 'Odjaviti se?';
-
-  @override
-  String get signOutConfirmBody =>
-      'Pristupni token biće obrisan sa ovog uređaja. Možete se ponovo prijaviti u bilo kom trenutku.';
-
-  @override
   String get deleteAllData => 'Obriši sve lokalne podatke';
 
   @override
@@ -311,25 +115,13 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get deleteAllConfirmBody =>
-      'Sa ovog uređaja biće uklonjeni pristupni token, adresa servera i sva podešavanja. Na Home Assistant serveru se ništa ne menja.';
+      'Sa ovog telefona biće uklonjeni dom, lozinke i ključevi uređaja i sva podešavanja. Sami uređaji se ne menjaju.';
 
   @override
   String get delete => 'Obriši';
 
   @override
   String get privacySection => 'Privatnost i podaci';
-
-  @override
-  String get addressErrorMixedContent =>
-      'Ova stranica je učitana preko HTTPS-a, pa pregledač blokira veze ka http:// serveru. Koristite https:// adresu servera ili otvorite web aplikaciju sa iste adrese kao Home Assistant.';
-
-  @override
-  String get webConnectionHint =>
-      'U pregledaču ovo može značiti i da Home Assistant ne dozvoljava adresu ove web aplikacije (dodajte je u http: cors_allowed_origins u configuration.yaml) ili da pregledač ne veruje sertifikatu servera (jednom otvorite adresu servera u novoj kartici i prihvatite ga).';
-
-  @override
-  String get webSessionNotice =>
-      'Sa tokenom prijava traje samo dok je ova kartica otvorena.';
 
   @override
   String get failureConfirmationRequired => 'Potvrdite ovu radnju.';
@@ -663,7 +455,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get roomEmpty => 'Nema uređaja u ovoj prostoriji.';
 
   @override
-  String get noRoomsYet => 'U Home Assistantu nisu definisane prostorije.';
+  String get noRoomsYet => 'Još nema soba. Dodajte ih u Podešavanja → Dom.';
 
   @override
   String get groupLights => 'Svetla';
@@ -815,7 +607,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get infoLastChanged => 'Poslednja promena';
 
   @override
-  String get infoEntityId => 'ID entiteta';
+  String get infoEntityId => 'ID uređaja';
 
   @override
   String get infoSignal => 'Signal';
@@ -920,136 +712,7 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String get oauthSignIn => 'Prijavi se preko Home Assistanta';
-
-  @override
-  String get oauthHint =>
-      'Prijavljujete se na stranici za prijavu vašeg Home Assistanta – aplikacija nikad ne vidi vašu lozinku.';
-
-  @override
-  String get rememberMe => 'Zapamti me na ovom uređaju';
-
-  @override
-  String get rememberMeHint =>
-      'Ostajete prijavljeni i posle zatvaranja pregledača. Pristup možete opozvati bilo kada u Home Assistant profilu (Security → Refresh tokens).';
-
-  @override
-  String get orUseToken => 'Ili koristite dugotrajni pristupni token';
-
-  @override
-  String get loginFailed => 'Prijava nije završena. Pokušajte ponovo.';
-
-  @override
-  String get discoveryTitle => 'Home Assistant na ovoj mreži';
-
-  @override
-  String get discoverySearching => 'Pretraga…';
-
-  @override
-  String get discoveryNothingFound =>
-      'Server nije automatski pronađen. Unesite adresu ispod.';
-
-  @override
-  String get discoverySearchAgain => 'Traži ponovo';
-
-  @override
-  String get energyTitle => 'Energija';
-
-  @override
-  String get energyToday => 'Danas';
-
-  @override
-  String get energyWeek => 'Ova nedelja';
-
-  @override
-  String get energyMonth => 'Ovaj mesec';
-
-  @override
-  String get energyCurrentPower => 'Trenutna snaga';
-
-  @override
-  String get energyNotConfigured =>
-      'Energija još nije podešena u Home Assistantu (Podešavanja → Kontrolne table → Energija). Kada se podesi, ovde se prikazuju potrošnja, solar i uređaji.';
-
-  @override
-  String get energyOffline =>
-      'Statistika energije se učitava iz Home Assistanta i dostupna je dok je aplikacija povezana.';
-
-  @override
   String get energyConsumption => 'Potrošnja doma';
-
-  @override
-  String get energyFromGrid => 'Iz mreže';
-
-  @override
-  String get energyToGrid => 'U mrežu';
-
-  @override
-  String get energySolar => 'Solarna proizvodnja';
-
-  @override
-  String get energyBatteryCharge => 'Baterija – punjenje';
-
-  @override
-  String get energyBatteryDischarge => 'Baterija – pražnjenje';
-
-  @override
-  String get energyGas => 'Gas';
-
-  @override
-  String get energyCostEstimate => 'Procena troška';
-
-  @override
-  String get energySetTariff => 'Unesite tarifu za procenu troška';
-
-  @override
-  String get energyPerHour => 'Potrošnja po satima';
-
-  @override
-  String get energyPerDay => 'Potrošnja po danima';
-
-  @override
-  String get energyTopConsumers => 'Najveći potrošači';
-
-  @override
-  String get energyNoDevices =>
-      'U Home Assistantu nijedan uređaj nije dodat u Energy kontrolnu tablu.';
-
-  @override
-  String get energyNoData => 'Još nema podataka za ovaj period.';
-
-  @override
-  String energyPeak(String time, String value) {
-    return 'Najviše: $time · $value';
-  }
-
-  @override
-  String get energyShowChart => 'Grafikon';
-
-  @override
-  String get energyShowTable => 'Tabela';
-
-  @override
-  String get energyConsumptionChart => 'Grafikon potrošnje';
-
-  @override
-  String get energyTariffTitle => 'Tarifa za struju';
-
-  @override
-  String get energyTariffHint =>
-      'Koristi se samo za procenu na ovom uređaju. Pravi račun uključuje i fiksne naknade, poreze i obračun po zonama.';
-
-  @override
-  String get energyTariffImport => 'Cena po kWh iz mreže';
-
-  @override
-  String get energyTariffExport => 'Naknada po kWh predatom u mrežu (opciono)';
-
-  @override
-  String get energyTariffCurrency => 'Valuta';
-
-  @override
-  String get energyTariffInvalid => 'Unesite ispravnu, nenegativnu cenu.';
 
   @override
   String get save => 'Sačuvaj';
@@ -1164,9 +827,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get presetActivity => 'Aktivnost';
 
   @override
-  String get thermostatModes => 'Režimi';
-
-  @override
   String get powerToggle => 'Uključi/isključi';
 
   @override
@@ -1174,9 +834,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get personAway => 'Nije kod kuće';
-
-  @override
-  String get householdTitle => 'Ukućani';
 
   @override
   String get searchHint => 'Pretraži';
@@ -1240,107 +897,10 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get weatherNoForecast =>
-      'Vaš Home Assistant entitet za vreme ne daje prognozu.';
+      'Za dom još nema prognoze. Uključite je u Podešavanja → Privatnost.';
 
   @override
-  String get weatherPrecipitation => 'Padavine';
-
-  @override
-  String get weatherFeelsHint =>
-      'Iz vašeg Home Assistant entiteta za vreme. Ništa ne napušta vašu mrežu.';
-
-  @override
-  String get camerasTitle => 'Kamere';
-
-  @override
-  String get cameraUnavailable => 'Kamera trenutno ne šalje sliku.';
-
-  @override
-  String cameraSnapshotAt(String time) {
-    return 'Snimak $time';
-  }
-
-  @override
-  String cameraRefreshHint(int seconds) {
-    return 'Slika se osvežava svake $seconds s dok je ovaj ekran otvoren. Ništa se ne snima niti čuva.';
-  }
-
-  @override
-  String get cameraFullscreen => 'Ceo ekran';
-
-  @override
-  String get cameraLoading => 'Učitavam kameru…';
-
-  @override
-  String get kioskShowCameras => 'Prikaži kamere';
-
-  @override
-  String get kioskShowCamerasHint =>
-      'Sliku kamera vidi svako ko gleda u zidni tablet.';
-
-  @override
-  String get calendarTitle => 'Kalendar';
-
-  @override
-  String get calendarToday => 'Danas';
-
-  @override
-  String get calendarTomorrow => 'Sutra';
-
-  @override
-  String get calendarAllDay => 'Ceo dan';
-
-  @override
-  String get calendarNoEvents => 'Nema događaja';
-
-  @override
-  String get calendarNone =>
-      'U Home Assistantu nema kalendara. Dodajte ga tamo, na primer Google Calendar, CalDAV ili integraciju Local Calendar.';
-
-  @override
-  String get calendarUnavailable => 'Kalendar trenutno nije dostupan.';
-
-  @override
-  String get calendarPrevMonth => 'Prethodni mesec';
-
-  @override
-  String get calendarNextMonth => 'Sledeći mesec';
-
-  @override
-  String get calendarBackToToday => 'Danas';
-
-  @override
-  String get assistTitle => 'Assist';
-
-  @override
-  String get assistHint => 'Napišite komandu ili pitanje';
-
-  @override
-  String get assistSend => 'Pošalji';
-
-  @override
-  String get assistIntro =>
-      'Zamolite Home Assistant da nešto uradi, na primer:';
-
-  @override
-  String get assistSuggestionLightsOff => 'Ugasi svetla';
-
-  @override
-  String get assistSuggestionTemperature =>
-      'Kolika je temperatura u dnevnoj sobi?';
-
-  @override
-  String get assistSuggestionLightsOn => 'Upali svetla';
-
-  @override
-  String get assistUnavailable => 'Assist trenutno nije dostupan.';
-
-  @override
-  String get assistNotUnderstood => 'Assist to nije mogao da uradi.';
-
-  @override
-  String get assistPrivacy =>
-      'Tekst ide samo na vaš Home Assistant server. Assist razume jezike koji su tamo podešeni i radi sa ovlašćenjima vašeg naloga.';
+  String get weatherFeelsHint => 'Prognoza MET Norway za lokaciju doma.';
 
   @override
   String get mediaPlayPause => 'Pusti ili pauziraj';
@@ -1352,88 +912,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mediaPrevious => 'Prethodna';
 
   @override
-  String get mediaNowPlaying => 'Sada svira';
-
-  @override
   String get addDeviceTitle => 'Dodaj uređaj';
-
-  @override
-  String get addDeviceIntro =>
-      'Novi uređaji se uparuju sa vašim Home Assistant hubom, koji ima Zigbee ili Z-Wave radio, a ne sa ovim telefonom. Aplikacija vas vodi kroz postupak.';
-
-  @override
-  String get addDeviceZigbee => 'Zigbee';
-
-  @override
-  String get addDeviceZigbeeSubtitle =>
-      'Senzori, sijalice, utičnice, prekidači';
-
-  @override
-  String get addDeviceWifi => 'Wi-Fi i LAN';
-
-  @override
-  String get addDeviceMatter => 'Matter';
-
-  @override
-  String get addDeviceZwave => 'Z-Wave';
-
-  @override
-  String get addDeviceSoon => 'Uskoro';
-
-  @override
-  String get zigbeeViaZha => 'Preko ZHA';
-
-  @override
-  String get zigbeeViaZ2m => 'Preko Zigbee2MQTT';
-
-  @override
-  String get zigbeeNotFound =>
-      'U Home Assistantu nije pronađen ni ZHA ni Zigbee2MQTT. Prvo tamo dodajte Zigbee koordinator.';
-
-  @override
-  String get zigbeeStep1 => 'Pokrenite uparivanje dugmetom ispod.';
-
-  @override
-  String get zigbeeStep2 =>
-      'Resetujte uređaj ili ga stavite u režim uparivanja. Obično držite njegovo dugme oko 5 sekundi dok ne zatrepće; pogledajte uputstvo uređaja.';
-
-  @override
-  String get zigbeeStep3 =>
-      'Držite uređaj blizu huba dok se ne pojavi na listi.';
-
-  @override
-  String get pairingStart => 'Pokreni uparivanje';
-
-  @override
-  String get pairingStop => 'Zaustavi';
-
-  @override
-  String get pairingExtend => 'Produži';
-
-  @override
-  String get pairingOpen => 'Uparivanje je uključeno';
-
-  @override
-  String pairingRemaining(String time) {
-    return 'Još $time';
-  }
-
-  @override
-  String get pairingClosed => 'Uparivanje je isključeno';
-
-  @override
-  String get pairingWaiting => 'Čekam nove uređaje…';
-
-  @override
-  String get pairingFound => 'Novi uređaji';
-
-  @override
-  String pairingFailed(String reason) {
-    return 'Uparivanje nije pokrenuto. $reason';
-  }
-
-  @override
-  String get newDeviceSetUp => 'Podesi';
 
   @override
   String get setUpDeviceTitle => 'Ime i prostorija';
@@ -1446,10 +925,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get setUpSaved => 'Sačuvano.';
-
-  @override
-  String get setUpFailed =>
-      'Ime i prostorija ne mogu da se promene odavde. Uradite to u Home Assistantu, u Podešavanja → Uređaji.';
 
   @override
   String get weatherHomeLocationTitle => 'Prognoza za vaš dom';
@@ -1474,18 +949,11 @@ class AppLocalizationsSr extends AppLocalizations {
       'Šalje približnu lokaciju doma (zapamćenu kad ste uključili prognozu).';
 
   @override
-  String get weatherNoHomeCoordinates =>
-      'U Home Assistantu nije podešena lokacija doma.';
-
-  @override
-  String get calendarNoneShort => 'U Home Assistantu nema kalendara';
-
-  @override
   String get mediaTitle => 'Muzika i mediji';
 
   @override
   String get mediaNoPlayers =>
-      'U Home Assistantu još nema media plejera. Dodajte ga tamo, na primer Spotify, Google Cast, Sonos, DLNA, Kodi ili integraciju vašeg smart TV-a, i pojaviće se ovde.';
+      'Još nema zvučnika ni televizora. Dodajte Sonos, Roku, Samsung ili LG televizor preko „Dodaj uređaj“ i pojaviće se ovde.';
 
   @override
   String get mediaSource => 'Izvor';
@@ -1494,333 +962,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mediaIdle => 'Ništa ne svira';
 
   @override
-  String weatherHomeLocationFar(int km) {
-    return 'Lokacija doma u Home Assistantu je oko $km km od ovog uređaja. Ako to nije tačno, podesite je u Home Assistantu (Podešavanja → Sistem → Opšte); prognoza za dom koristi tu lokaciju.';
-  }
-
-  @override
   String get mediaNoPlayersShort => 'Još nema media plejera';
-
-  @override
-  String get assistMic => 'Izgovorite komandu';
-
-  @override
-  String get assistListening => 'Slušam…';
-
-  @override
-  String get voicePrivacyTitle => 'Glasovne komande';
-
-  @override
-  String get voicePrivacyBody =>
-      'Prepoznavač govora na telefonu pretvara govor u tekst; vašem Home Assistantu ide samo tekst. Neki telefoni prepoznaju govor samo preko interneta (na primer Google ili Apple servis), koji tada dobija snimak vašeg glasa.';
-
-  @override
-  String get voiceOnDeviceOnly => 'Samo na uređaju';
-
-  @override
-  String get voiceAllowCloud => 'Dozvoli i preko interneta';
-
-  @override
-  String get voiceUnavailable =>
-      'Prepoznavanje govora nije dostupno. Proverite dozvolu za mikrofon.';
-
-  @override
-  String get voiceOnDeviceUnavailable =>
-      'Ovaj uređaj ne može da prepozna ovaj jezik bez interneta. Prepoznavanje preko interneta možete dozvoliti u Podešavanjima.';
-
-  @override
-  String get voiceNoMatch => 'Nisam razumeo. Pokušajte ponovo.';
-
-  @override
-  String get voiceCloudSetting => 'Prepoznavanje govora preko interneta';
-
-  @override
-  String get voiceCloudSettingHint =>
-      'Kad je isključeno, glasovne komande se prepoznaju samo na uređaju.';
-
-  @override
-  String get addDeviceWifiSubtitle =>
-      'Uređaji koje je Home Assistant pronašao na mreži';
-
-  @override
-  String get discoveredTitle => 'Pronađeno na mreži';
-
-  @override
-  String get discoveredEmpty =>
-      'Home Assistant nije pronašao nove uređaje. Povežite uređaj na istu Wi-Fi mrežu i sačekajte minut; uređaji koje HA ne može sam da pronađe dodaju se u Home Assistantu, u Podešavanja → Uređaji.';
-
-  @override
-  String discoveredVia(String source) {
-    return 'Pronađeno preko: $source';
-  }
-
-  @override
-  String get discoveredRefresh => 'Traži ponovo';
-
-  @override
-  String get discoveredUnavailable =>
-      'Lista pronađenih uređaja nije dostupna. Za to je obično potreban administratorski nalog u Home Assistantu.';
-
-  @override
-  String get flowAdd => 'Dodaj';
-
-  @override
-  String get flowNext => 'Dalje';
-
-  @override
-  String flowConfirm(String name) {
-    return 'Dodati $name u vaš dom?';
-  }
-
-  @override
-  String flowDone(String title) {
-    return 'Dodato: $title';
-  }
-
-  @override
-  String get flowDoneDevices => 'Novi uređaji';
-
-  @override
-  String flowAborted(String reason) {
-    return 'Podešavanje je prekinuto: $reason';
-  }
-
-  @override
-  String get flowAbortedGeneric => 'Home Assistant je prekinuo podešavanje.';
-
-  @override
-  String get flowUnsupported =>
-      'Ovaj korak zahteva sam Home Assistant (na primer prijavu u pregledaču). Nastavite tamo.';
-
-  @override
-  String get flowUnsupportedField =>
-      'Ovaj formular ima polja koja aplikacija još ne prikazuje. Nastavite u Home Assistantu.';
-
-  @override
-  String get flowWorking => 'Podešavam…';
-
-  @override
-  String get flowRequired => 'Obavezno';
-
-  @override
-  String get flowFinish => 'Gotovo';
-
-  @override
-  String get matterTitle => 'Matter';
-
-  @override
-  String get matterIntro =>
-      'Dodajte Matter uređaj koji već radi sa nekom drugom aplikacijom (Google Home, Apple Home, SmartThings, Alexa…).';
-
-  @override
-  String get matterStep1 =>
-      'U toj aplikaciji otvorite uređaj i izaberite da ga podelite sa drugom aplikacijom ili kontrolerom („Povezane Matter aplikacije”, „Uključi režim uparivanja”).';
-
-  @override
-  String get matterStep2 =>
-      'Skenirajte QR kod koji se prikaže ili unesite 11-cifreni kod.';
-
-  @override
-  String get matterStep3 =>
-      'Home Assistant tada dodaje uređaj preko vaše mreže; obe aplikacije mogu da ga kontrolišu.';
-
-  @override
-  String get matterNewDeviceNote =>
-      'Potpuno novi Matter uređaji preko Bluetooth-a dodaju se iz Android aplikacije.';
-
-  @override
-  String get matterCodeLabel => 'Kod za uparivanje';
-
-  @override
-  String get matterCodeHint => '1234-567-8901 ili MT:…';
-
-  @override
-  String get matterInvalidCode =>
-      'To nije ispravan Matter kod. Proverite cifre.';
-
-  @override
-  String get matterScan => 'Skeniraj QR kod';
-
-  @override
-  String get matterAdding => 'Dodajem uređaj… može potrajati do minut.';
-
-  @override
-  String get matterNotAvailable =>
-      'Matter integracija nije podešena u Home Assistantu. Prvo je dodajte tamo.';
-
-  @override
-  String get matterFailed =>
-      'Uređaj nije dodat. Proverite da je deljenje i dalje uključeno u drugoj aplikaciji (kod važi nekoliko minuta) i da je uređaj na istoj mreži.';
-
-  @override
-  String get matterAdded => 'Uređaj je dodat';
-
-  @override
-  String get scanPointCamera => 'Usmerite kameru na Matter QR kod.';
-
-  @override
-  String get zwaveTitle => 'Z-Wave';
-
-  @override
-  String get zwaveIntro =>
-      'Dodajte Z-Wave uređaj preko vašeg Z-Wave JS kontrolera.';
-
-  @override
-  String get zwaveNotAvailable =>
-      'Z-Wave JS integracija nije podešena u Home Assistantu.';
-
-  @override
-  String get zwaveStart => 'Pokreni uključivanje';
-
-  @override
-  String get zwaveStop => 'Zaustavi';
-
-  @override
-  String get zwaveStatusWaiting =>
-      'Stavite uređaj u režim uključivanja (često tri brza pritiska dugmeta; pogledajte uputstvo).';
-
-  @override
-  String get zwaveStatusFound => 'Uređaj je pronađen…';
-
-  @override
-  String get zwaveStatusInterview =>
-      'Upoznajem uređaj (intervju)… uređajima na bateriju može trebati nekoliko minuta.';
-
-  @override
-  String get zwaveStatusDone => 'Uređaj je dodat';
-
-  @override
-  String get zwaveStatusFailed =>
-      'Uključivanje nije uspelo. Pokušajte ponovo, bliže kontroleru.';
-
-  @override
-  String get zwaveStatusStopped => 'Uključivanje je zaustavljeno.';
-
-  @override
-  String get zwaveGrantTitle => 'Bezbednost';
-
-  @override
-  String get zwaveGrantBody =>
-      'Uređaj traži ove nivoe bezbednosti. Preporučeno je dozvoliti sve.';
-
-  @override
-  String get zwaveS2Unauth => 'S2 bez autentifikacije';
-
-  @override
-  String get zwaveS2Auth => 'S2 sa autentifikacijom';
-
-  @override
-  String get zwaveS2Access => 'S2 kontrola pristupa (brave, garažna vrata)';
-
-  @override
-  String get zwaveS0 => 'S0 (stari način)';
-
-  @override
-  String get zwaveGrant => 'Dozvoli';
-
-  @override
-  String get zwavePinTitle => 'PIN sa uređaja';
-
-  @override
-  String zwavePinBody(String dsk) {
-    return 'Unesite prvih 5 cifara DSK koda sa nalepnice uređaja ili kutije (obično podvučene). Ostatak koda: $dsk';
-  }
-
-  @override
-  String get zwavePinLabel => '5 cifara';
-
-  @override
-  String get zwavePinInvalid => 'Unesite tačno 5 cifara.';
-
-  @override
-  String get zwaveSmartStart => 'SmartStart: skeniraj QR';
-
-  @override
-  String get zwaveSmartStartHint =>
-      'Uređaji sa SmartStart QR kodom se sami pridruže kad ih uključite.';
-
-  @override
-  String get zwaveSmartStartDone =>
-      'Uređaj je prijavljen. Uključite ga; pridružiće se sam za nekoliko minuta.';
-
-  @override
-  String get zwaveSmartStartInvalid => 'To nije Z-Wave QR kod.';
-
-  @override
-  String get scanPointCameraZwave => 'Usmerite kameru na Z-Wave QR kod.';
-
-  @override
-  String get historyTitle => 'Istorija';
-
-  @override
-  String get history24h => '24 h';
-
-  @override
-  String get history7d => '7 dana';
-
-  @override
-  String historyMin(String value) {
-    return 'Min $value';
-  }
-
-  @override
-  String historyMax(String value) {
-    return 'Maks $value';
-  }
-
-  @override
-  String get historyEmpty => 'Nema podataka za ovaj period.';
-
-  @override
-  String get historyUnavailable =>
-      'Istorija nije dostupna. Moguće je da je snimanje (recorder) isključeno u Home Assistantu.';
-
-  @override
-  String get activityTitle => 'Aktivnost';
-
-  @override
-  String get activityByUser => 'ručno';
-
-  @override
-  String get activityEmpty => 'U poslednja 24 sata nije bilo promena.';
-
-  @override
-  String get notificationsTitle => 'Obaveštenja';
-
-  @override
-  String notificationsCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count obaveštenja iz Home Assistanta',
-      few: '$count obaveštenja iz Home Assistanta',
-      one: '$count obaveštenje iz Home Assistanta',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get notificationDismiss => 'Odbaci';
-
-  @override
-  String get notificationsDismissAll => 'Odbaci sve';
-
-  @override
-  String get notificationsEmpty => 'Nema obaveštenja.';
-
-  @override
-  String get cameraSnapshots => 'Snimci';
-
-  @override
-  String get cameraLive => 'Uživo';
-
-  @override
-  String get cameraLiveHint =>
-      'Video uživo iz Home Assistanta dok je ovaj ekran otvoren; zvuk je isključen. Ništa se ne snima.';
-
-  @override
-  String get cameraLiveFailed =>
-      'Video uživo nije dostupan za ovu kameru (ili video plejer ne veruje sertifikatu servera). Snimci i dalje rade.';
 
   @override
   String get appLockTitle => 'Open Smart Home je zaključan';
@@ -1852,16 +994,6 @@ class AppLocalizationsSr extends AppLocalizations {
   @override
   String get appLockCriticalSettingHint =>
       'Traži potvrdu i pre otključavanja vrata, otvaranja garaže ili isključivanja alarma.';
-
-  @override
-  String get appLockNoDeviceAuth =>
-      'Na ovom uređaju nije podešeno zaključavanje ekrana ni biometrija.';
-
-  @override
-  String get homesTitle => 'Domovi';
-
-  @override
-  String get addHome => 'Dodaj još jedan dom';
 
   @override
   String get alarmArm_home => 'Kod kuće';
@@ -1946,7 +1078,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get restrictedHint =>
-      'Skriva osetljive uređaje i zaključava podešavanja PIN-om na ovom uređaju. Ovlašćenja u Home Assistantu se ne menjaju; za prava ograničenja koristite posebnog HA korisnika.';
+      'Skriva osetljive uređaje i zaključava podešavanja PIN-om na ovom uređaju.';
 
   @override
   String get restrictedHideSecurity => 'Sakrij brave, alarm i garažna vrata';
@@ -2017,13 +1149,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get autoSave => 'Sačuvaj u Home Assistant';
 
   @override
-  String get autoSaved => 'Automatizacija je sačuvana u Home Assistantu.';
-
-  @override
-  String get autoSaveFailed =>
-      'Automatizacija nije sačuvana. Za to je potreban administratorski nalog u Home Assistantu.';
-
-  @override
   String get autoDelete => 'Obriši automatizaciju';
 
   @override
@@ -2035,41 +1160,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get autoIncomplete => 'Izaberite kada se pokreće i bar jednu radnju.';
 
   @override
-  String get autoChangesTo => 'pređe u';
-
-  @override
   String get autoNameHint => 'Na primer: Svetlo u hodniku noću';
-
-  @override
-  String get autoHint =>
-      'Čuva se kao obična Home Assistant automatizacija, pa radi i kad je ovaj telefon isključen. Kasnije je možete menjati i u Home Assistantu.';
-
-  @override
-  String get svc_turn_on => 'Uključi';
-
-  @override
-  String get svc_turn_off => 'Isključi';
-
-  @override
-  String get svc_open_cover => 'Otvori';
-
-  @override
-  String get svc_close_cover => 'Zatvori';
-
-  @override
-  String get svc_lock => 'Zaključaj';
-
-  @override
-  String get svc_start => 'Pokreni';
-
-  @override
-  String get svc_return_to_base => 'Na punjač';
-
-  @override
-  String get svc_media_play => 'Pusti';
-
-  @override
-  String get svc_media_pause => 'Pauziraj';
 
   @override
   String get svc_activate => 'Aktiviraj';
@@ -2090,10 +1181,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get sceneNew => 'Nova scena od trenutnog stanja';
 
   @override
-  String get sceneHint =>
-      'Čuva kako su izabrani uređaji podešeni sada (uključeno/isključeno, jačina, boja, roletne, temperatura) kao Home Assistant scenu.';
-
-  @override
   String get sceneName => 'Ime scene';
 
   @override
@@ -2101,9 +1188,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get sceneSave => 'Sačuvaj scenu';
-
-  @override
-  String get sceneSaved => 'Scena je sačuvana u Home Assistantu.';
 
   @override
   String get sceneNeedDevice => 'Izaberite bar jedan uređaj.';
@@ -2117,26 +1201,7 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String energyPrevDay(String value) {
-    return 'Juče: $value';
-  }
-
-  @override
-  String energyPrevWeek(String value) {
-    return 'Prošle nedelje: $value';
-  }
-
-  @override
-  String energyPrevMonth(String value) {
-    return 'Prošlog meseca: $value';
-  }
-
-  @override
   String get autoEdit => 'Izmeni automatizaciju';
-
-  @override
-  String get autoTooComplex =>
-      'Ova automatizacija radi više nego što editor u aplikaciji može da prikaže. Izmenite je u Home Assistantu.';
 
   @override
   String get backupSection => 'Rezervna kopija i prenos';
@@ -2207,27 +1272,11 @@ class AppLocalizationsSr extends AppLocalizations {
   String get autoCondLight => 'Samo kad je dan';
 
   @override
-  String get autoIs => 'je';
-
-  @override
-  String get activityAll => 'Sve';
-
-  @override
-  String get activitySecurity => 'Vrata i bezbednost';
-
-  @override
-  String get activityPeople => 'Ukućani';
-
-  @override
-  String get activityHint =>
-      'Iz dnevnika Home Assistanta za poslednja 24 sata. Senzori koji mere neprekidno (temperatura, snaga) se ne prikazuju.';
-
-  @override
   String get alertsSetting => 'Obaveštenja o kritičnim upozorenjima';
 
   @override
   String get alertsSettingHint =>
-      'Dim, CO, curenje vode, aktiviran alarm ili zaglavljena brava kao obaveštenje na telefonu, koje prikazuje sam uređaj. Dok aplikacija radi — ili stalno, uz „I kad je aplikacija zatvorena” kod Poruka iz Home Assistanta.';
+      'Dim, CO, curenje vode, aktiviran alarm ili zaglavljena brava kao obaveštenje na telefonu. Dok aplikacija radi — ili stalno, uz Automatizacije u pozadini (Podešavanja → Dom).';
 
   @override
   String get alertsPermissionDenied =>
@@ -2262,36 +1311,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get widgetNoScenes => 'Još nema scena: napravite ih u aplikaciji';
-
-  @override
-  String get widgetSignedOut => 'Prijavite se u Open Smart Home';
-
-  @override
-  String get riskVpnTunnel =>
-      'Tailscale VPN adresa: veza je šifrovana i radi i van kuće.';
-
-  @override
-  String get remoteTitle => 'Adresa van kuće';
-
-  @override
-  String get remoteNotSet => 'Nije podešena: koristi se samo kućna adresa';
-
-  @override
-  String get remoteInUse => 'Sada se koristi (kućna adresa ne odgovara)';
-
-  @override
-  String get remoteHint =>
-      'Isti Home Assistant, dostupan spolja: adresa Home Assistant Cloud-a (Nabu Casa), sopstveni domen sa HTTPS-om ili Tailscale adresa. Kod kuće aplikacija koristi kućnu adresu; kada ona ne odgovara, prelazi na ovu. Koristi se isti token.';
-
-  @override
-  String get remoteSameAsLocal => 'Ovo je već kućna adresa.';
-
-  @override
-  String get remoteNeedsHttps =>
-      'Za javnu adresu potreban je HTTPS (ili Tailscale), inače bi token putovao internetom nešifrovan.';
-
-  @override
-  String get remoteRemove => 'Ukloni';
 
   @override
   String get clapSetting => 'Dvostruki pljesak';
@@ -2368,116 +1387,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get clapSearch => 'Pretraži uređaje';
 
   @override
-  String get oauthHintNative =>
-      'Prijavite se na stranici za prijavu vašeg Home Assistanta korisničkim imenom i lozinkom. Aplikacija dobija samo jednokratni kod i ne čuva lozinku; dugotrajni token nije potreban.';
-
-  @override
-  String get oauthPageFailed =>
-      'Stranica za prijavu Home Assistanta se nije učitala. Proverite vezu ili se prijavite tokenom ispod. (Sa samopotpisanim sertifikatom radi samo prijava tokenom.)';
-
-  @override
-  String get haPushTitle => 'Poruke iz Home Assistanta';
-
-  @override
-  String get haPushHint =>
-      'Neka HA automatizacije šalju obaveštenja na ovaj uređaj';
-
-  @override
-  String get haPushExplain =>
-      'Ovaj uređaj se dodaje u Home Assistant (integracija Mobile App). Automatizacije mu tada mogu slati poruke preko notify servisa. Stižu preko lokalne veze dok aplikacija radi, bez ikakvog cloud servisa.';
-
-  @override
-  String get haPushName => 'Ime uređaja u Home Assistantu';
-
-  @override
-  String get haPushDefaultName => 'Open Smart Home';
-
-  @override
-  String get haPushRegister => 'Dodaj u Home Assistant';
-
-  @override
-  String haPushReady(String service) {
-    return 'Automatizacije šalju poruke servisom $service';
-  }
-
-  @override
-  String get haPushCopy => 'Kopiraj ime servisa';
-
-  @override
-  String get haPushCopied => 'Ime servisa je kopirano.';
-
-  @override
-  String get haPushTest => 'Pošalji probnu poruku';
-
-  @override
-  String get haPushTestMessage =>
-      'Poruke iz Home Assistanta stižu na ovaj uređaj.';
-
-  @override
-  String get haPushForget => 'Prestani da primaš poruke';
-
-  @override
-  String get haPushForgetHint =>
-      'Aplikacija prestaje da sluša poruke. Da biste uređaj potpuno uklonili, obrišite ga u Home Assistantu: Podešavanja → Uređaji i servisi → Mobile App.';
-
-  @override
-  String get haPushBackground => 'I kad je aplikacija zatvorena';
-
-  @override
-  String get haPushBackgroundHint =>
-      'Drži vezu otvorenom u pozadini, i posle restarta telefona. Android tada prikazuje tiho, stalno obaveštenje; troši malo više baterije.';
-
-  @override
-  String get haPushServiceTitle => 'Povezano sa Home Assistantom';
-
-  @override
-  String get haPushServiceText => 'Čeka poruke vaših automatizacija';
-
-  @override
-  String get haPushRemovedInHa =>
-      'Ovaj uređaj je obrisan u Home Assistantu (Mobile App). Dodajte ga ponovo da biste primali poruke.';
-
-  @override
-  String get kioskPopup => 'Iskačuća kamera';
-
-  @override
-  String get kioskPopupHint =>
-      'Prikaži kameru kad neko pozvoni ili se pomeri ispred vrata';
-
-  @override
-  String kioskPopupSummary(String camera, int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count okidača',
-      few: '$count okidača',
-      one: '1 okidač',
-    );
-    return '$camera · $_temp0';
-  }
-
-  @override
-  String get kioskPopupExplain =>
-      'Kad se oglasi neki od izabranih uređaja — zvono, pokret, otvaranje vrata ili kapije — kiosk se probudi i prikaže kameru preko celog ekrana.';
-
-  @override
-  String get kioskPopupCamera => 'Kamera';
-
-  @override
-  String get kioskPopupOff => 'Isključeno';
-
-  @override
-  String get kioskPopupDuration => 'Prikazuj';
-
-  @override
-  String get kioskPopupTriggers => 'Okidači';
-
-  @override
-  String kioskPopupClosesIn(int seconds) {
-    return 'zatvara se za $seconds s';
-  }
-
-  @override
   String get kioskDarkScreensaver => 'Prigušeno osvetljenje u mirovanju';
 
   @override
@@ -2542,20 +1451,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get dashCardMedia => 'Sada svira';
 
   @override
-  String get dashCardNotifications => 'Obaveštenja iz Home Assistanta';
-
-  @override
   String get dashCardShortcuts => 'Energija, kalendar, aktivnost';
 
   @override
   String get dashCardAttention => 'Potrebna pažnja (baterije, nedostupni)';
-
-  @override
-  String get kioskPopupLive => 'Video uživo';
-
-  @override
-  String get kioskPopupLiveHint =>
-      'Kad kamera nudi stream; dok se ne pokrene, ili ako ne može, prikazuju se snimci.';
 
   @override
   String get timerSet => 'Tajmer';
@@ -2576,9 +1475,6 @@ class AppLocalizationsSr extends AppLocalizations {
       'Odbrojava ovaj telefon ili zidni tablet, dok aplikacija radi (ili uz automatizacije u pozadini).';
 
   @override
-  String get timerRunning => 'Tajmer je uključen';
-
-  @override
   String timerTurnsOffAt(String time) {
     return 'Isključuje se u $time';
   }
@@ -2587,36 +1483,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String timerTurnsOnAt(String time) {
     return 'Uključuje se u $time';
   }
-
-  @override
-  String get timerNeedsAdmin =>
-      'Za tajmer je potreban administratorski nalog u Home Assistantu.';
-
-  @override
-  String energyShareOfHome(int percent) {
-    return '$percent % doma';
-  }
-
-  @override
-  String get matterNewTitle => 'Novi Matter uređaj';
-
-  @override
-  String get matterNewHint =>
-      'Potpuno nov, sa QR kodom na sebi ili kutiji. Google Play services ga podešava preko Bluetooth-a i dodaje na vašu Wi-Fi ili Thread mrežu, a zatim ga preuzima Home Assistant. Držite telefon blizu uređaja.';
-
-  @override
-  String get matterNewButton => 'Dodaj novi Matter uređaj';
-
-  @override
-  String get matterNoPlayServices =>
-      'Novi Matter uređaji se na Androidu dodaju preko Google Play services, koji ovde nisu dostupni (npr. emulator ili telefon bez Google servisa). Koristite zvaničnu Home Assistant aplikaciju ili podelite uređaj iz druge Matter aplikacije ispod.';
-
-  @override
-  String get matterNewFailed =>
-      'Uređaj nije dodat. Resetujte ga (vidi uputstvo) i pokušajte ponovo blizu telefona. Thread uređajima treba i Thread border router poznat ovom telefonu.';
-
-  @override
-  String get matterSharedTitle => 'Uređaj je već u drugoj aplikaciji';
 
   @override
   String get kioskPanelChooseDevice => 'Izaberi uređaj';
@@ -2628,15 +1494,11 @@ class AppLocalizationsSr extends AppLocalizations {
   String get settingsAppearanceHint => 'Tema, jezik, početni ekran';
 
   @override
-  String get settingsServerHint => 'Adresa, adresa van kuće, domovi, odjava';
-
-  @override
   String get settingsKioskHint =>
       'Zidni tablet: raspored, PIN, čuvar ekrana, kamera';
 
   @override
-  String get settingsNotificationsHint =>
-      'Poruke iz Home Assistanta, upozorenja';
+  String get settingsNotificationsHint => 'Upozorenja, baterije, gotov uređaj';
 
   @override
   String get settingsSecurityHint =>
@@ -2746,323 +1608,6 @@ class AppLocalizationsSr extends AppLocalizations {
     );
     return '$_temp0';
   }
-
-  @override
-  String get todoTitle => 'Liste';
-
-  @override
-  String get todoAddHint => 'Dodaj stavku…';
-
-  @override
-  String get todoAdd => 'Dodaj';
-
-  @override
-  String todoDone(int count) {
-    return 'Urađeno ($count)';
-  }
-
-  @override
-  String get todoClearDone => 'Obriši urađene';
-
-  @override
-  String get todoEmpty => 'Nema stavki. Dodajte prvu.';
-
-  @override
-  String get todoNoLists =>
-      'U Home Assistantu nema lista. Dodajte integraciju „Spisak za kupovinu” ili „Lokalne liste zadataka”.';
-
-  @override
-  String get todoRename => 'Izmeni stavku';
-
-  @override
-  String get todoDelete => 'Obriši';
-
-  @override
-  String get todoReadOnly => 'Ova lista se ovde samo čita.';
-
-  @override
-  String todoDue(String date) {
-    return 'Rok: $date';
-  }
-
-  @override
-  String get todoUnavailable => 'Lista trenutno nije dostupna.';
-
-  @override
-  String get dashCardLists => 'Liste';
-
-  @override
-  String get energyTwoRate => 'Dvotarifno brojilo';
-
-  @override
-  String get energyTwoRateHint =>
-      'Niža (noćna) tarifa važi u zadatim satima. Termini se razlikuju po području — proverite ih na računu ili kod distributera.';
-
-  @override
-  String get energyLowPrice => 'Cena u nižoj tarifi (po kWh)';
-
-  @override
-  String get energyHighPrice => 'Cena u višoj tarifi (po kWh)';
-
-  @override
-  String get energyLowFrom => 'Od';
-
-  @override
-  String get energyLowTo => 'Do';
-
-  @override
-  String get energyLowPresetBelgrade => 'Beograd 00–08';
-
-  @override
-  String get energyLowPresetVojvodina => 'Vojvodina 23–07';
-
-  @override
-  String get energyLowPresetCentral => 'Centralna Srbija 22–06';
-
-  @override
-  String get energyHighRateKwh => 'Viša tarifa';
-
-  @override
-  String get energyLowRateKwh => 'Niža tarifa';
-
-  @override
-  String energyLowShare(int percent) {
-    return '$percent % potrošnje';
-  }
-
-  @override
-  String energyLowNow(String time) {
-    return 'Sada je niža tarifa, do $time';
-  }
-
-  @override
-  String energyHighNow(String time) {
-    return 'Sada je viša tarifa — niža počinje u $time';
-  }
-
-  @override
-  String get energyLowLegend => 'Sati niže tarife';
-
-  @override
-  String get boardTitle => 'Tabla';
-
-  @override
-  String get boardNewPage => 'Nova strana';
-
-  @override
-  String get boardEmpty =>
-      'Još nema strana. Napravite prvu i pišite ili crtajte prstom ili olovkom.';
-
-  @override
-  String get boardStorageNote =>
-      'Strane se čuvaju na vašem Home Assistantu kao slike (image_upload), pa ih vide svi vaši uređaji. Home Assistant takve slike pokazuje bez prijave svakome u mreži ko zna njihov dugačak nasumičan link.';
-
-  @override
-  String get boardPen => 'Olovka';
-
-  @override
-  String get boardEraser => 'Gumica';
-
-  @override
-  String get boardUndo => 'Poništi';
-
-  @override
-  String get boardRedo => 'Vrati';
-
-  @override
-  String get boardClear => 'Očisti stranu';
-
-  @override
-  String get boardClearConfirm => 'Obrisati sve sa ove strane?';
-
-  @override
-  String get boardDeletePage => 'Obriši stranu';
-
-  @override
-  String get boardDeleteConfirm => 'Obrisati ovu stranu sa Home Assistanta?';
-
-  @override
-  String get boardDeleteNeedsAdmin =>
-      'Brisanje slika u Home Assistantu traži administratorski nalog.';
-
-  @override
-  String get boardSaving => 'Čuvam…';
-
-  @override
-  String get boardSaved => 'Sačuvano';
-
-  @override
-  String get boardSaveFailed => 'Nije sačuvano — pokušaću ponovo.';
-
-  @override
-  String get boardChangedElsewhere => 'Strana je izmenjena na drugom uređaju.';
-
-  @override
-  String get boardReload => 'Učitaj';
-
-  @override
-  String boardColor(int n) {
-    return 'Boja $n';
-  }
-
-  @override
-  String boardWidth(int n) {
-    return 'Debljina $n';
-  }
-
-  @override
-  String get boardZoomHint => 'Dva prsta: uvećanje i pomeranje';
-
-  @override
-  String get boardUnavailable =>
-      'Tabla nije dostupna. Proverite vezu sa Home Assistantom.';
-
-  @override
-  String boardPageCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count strana',
-      few: '$count strane',
-      one: '$count strana',
-      zero: 'Prazna — napišite ili nacrtajte nešto',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get deviceSensorBattery => 'Baterija';
-
-  @override
-  String get deviceSensorBatteryState => 'Stanje baterije';
-
-  @override
-  String get deviceSensorCharging => 'Punjenje';
-
-  @override
-  String get deviceSensorKiosk => 'Kiosk';
-
-  @override
-  String get deviceSensorsSwitch => 'Šalji stanje baterije u Home Assistant';
-
-  @override
-  String get deviceSensorsHint =>
-      'Procenat baterije, punjenje i da li je kiosk uključen postaju senzori ovog uređaja u vašem HA. Ništa drugo se ne šalje.';
-
-  @override
-  String get smartChargeTitle => 'Pametno punjenje';
-
-  @override
-  String smartChargeHint(int low, int high) {
-    return 'Utičnica punjača se pali na $low %, a gasi na $high % — baterija zidnog tableta duže traje.';
-  }
-
-  @override
-  String get smartChargeWaiting =>
-      'Čekam da se senzor baterije pojavi u Home Assistantu…';
-
-  @override
-  String get smartChargePlug => 'Utičnica ili prekidač punjača';
-
-  @override
-  String get smartChargeCreate => 'Napravi automatizaciju';
-
-  @override
-  String smartChargeDone(String name) {
-    return 'Automatizacija „$name” je napravljena u Home Assistantu.';
-  }
-
-  @override
-  String get smartChargeNeedsAdmin =>
-      'Pravljenje automatizacija traži administratorski nalog.';
-
-  @override
-  String smartChargeAlias(String device) {
-    return 'Pametno punjenje – $device';
-  }
-
-  @override
-  String get nfcTitle => 'NFC nalepnice';
-
-  @override
-  String get nfcHint =>
-      'Prislonite telefon na nalepnicu i Home Assistant pokreće ono što ste izabrali — npr. scenu „Odlazak” kod ulaznih vrata. Nalepnice su u istom formatu kao kod zvanične HA aplikacije.';
-
-  @override
-  String get nfcSectionHint => 'Scena na dodir telefona';
-
-  @override
-  String get nfcOff => 'NFC je isključen u podešavanjima telefona.';
-
-  @override
-  String get nfcMissing =>
-      'Ovaj uređaj nema NFC. Postojeće nalepnice i dalje rade sa drugih telefona.';
-
-  @override
-  String get nfcNeedsRegistration =>
-      'Za očitavanje dodajte ovaj uređaj u Home Assistant (Obaveštenja → Poruke iz Home Assistanta).';
-
-  @override
-  String get nfcNew => 'Nova nalepnica';
-
-  @override
-  String get nfcName => 'Ime nalepnice';
-
-  @override
-  String get nfcRuns => 'Kad se očita, pokreni';
-
-  @override
-  String get nfcWrite => 'Upiši nalepnicu';
-
-  @override
-  String get nfcHold => 'Prislonite nalepnicu uz poleđinu telefona…';
-
-  @override
-  String nfcWritten(String name) {
-    return 'Nalepnica „$name” je spremna.';
-  }
-
-  @override
-  String get nfcWrittenNoAdmin =>
-      'Nalepnica je upisana, ali dodavanje u Home Assistant (i automatizacija) traži administratorski nalog. Očitavanja ipak stižu u HA.';
-
-  @override
-  String get nfcErrorReadOnly =>
-      'Nalepnica je zaključana i ne može da se upiše.';
-
-  @override
-  String get nfcErrorTooSmall => 'Na nalepnicu ne staje adresa.';
-
-  @override
-  String get nfcErrorUnsupported => 'Ova vrsta nalepnice nije podržana.';
-
-  @override
-  String get nfcErrorFailed =>
-      'Upis nije uspeo — držite nalepnicu mirno uz telefon i pokušajte ponovo.';
-
-  @override
-  String nfcScanned(String name) {
-    return 'Nalepnica „$name” očitana';
-  }
-
-  @override
-  String nfcScanFailed(String reason) {
-    return 'Nalepnica nije prosleđena Home Assistantu: $reason';
-  }
-
-  @override
-  String get nfcEmpty => 'U Home Assistantu još nema nalepnica.';
-
-  @override
-  String nfcLastScanned(String when) {
-    return 'Poslednji put: $when';
-  }
-
-  @override
-  String get nfcNeverScanned => 'Još nije očitana';
-
-  @override
-  String get nfcScannedUnnamed => 'Nalepnica očitana';
 
   @override
   String homeSayTime(String time) {
@@ -3192,12 +1737,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get aodFocusNone => 'Ništa';
 
   @override
-  String get aodFocusNextEvent => 'Sledeća obaveza';
-
-  @override
-  String get aodFocusList => 'Lista';
-
-  @override
   String get aodFocusDevice => 'Uređaj';
 
   @override
@@ -3213,18 +1752,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get aodChoose => 'Izaberi';
 
   @override
-  String get aodNextEvent => 'Sledeće';
-
-  @override
-  String get aodNoEvents => 'Nema obaveza u narednih 7 dana';
-
-  @override
-  String get aodToday => 'danas';
-
-  @override
-  String get aodTomorrow => 'sutra';
-
-  @override
   String get morningScreen => 'Jutarnji ekran';
 
   @override
@@ -3238,73 +1765,12 @@ class AppLocalizationsSr extends AppLocalizations {
   String get morningTo => 'Do';
 
   @override
-  String get morningToday => 'Danas';
-
-  @override
-  String get morningReminders => 'Podsetnici';
-
-  @override
-  String get morningNothing => 'Danas nema obaveza ni podsetnika.';
-
-  @override
   String morningHighLow(String high, String low) {
     return 'najviše $high, najniže $low';
   }
 
   @override
-  String aodNowUntil(String time) {
-    return 'sada, do $time';
-  }
-
-  @override
   String get aodBrightness => 'Osvetljenost u mirovanju';
-
-  @override
-  String get settingsAssistSection => 'Assist (glas)';
-
-  @override
-  String get settingsAssistHint => 'Izgovoreni odgovori, asistent telefona';
-
-  @override
-  String get assistSpeak => 'Izgovaraj odgovore';
-
-  @override
-  String get assistSpeakHint =>
-      'Kad pitate glasom, odgovor se i izgovori (sintetizator govora na uređaju, ništa se ne šalje).';
-
-  @override
-  String get assistDefault => 'Asistent telefona';
-
-  @override
-  String get assistDefaultHint =>
-      'Izaberite Open Smart Home za „digitalnog asistenta”: dugi pritisak na Home ili dugme za napajanje otvara Assist koji odmah sluša.';
-
-  @override
-  String get wakeWordSetting => 'Ključna reč (bez ruku)';
-
-  @override
-  String get wakeWordSettingHint =>
-      'Izgovorite ključnu reč podešenu u Home Assistantu (na primer „Okay Nabu”), pa komandu. Samo dok je kiosk na ekranu.';
-
-  @override
-  String get wakeWordPrivacyTitle => 'Slušati ključnu reč?';
-
-  @override
-  String get wakeWordPrivacyBody =>
-      'Dok je kiosk na ekranu mikrofon je stalno uključen (Android prikazuje oznaku mikrofona), a zvuk se neprekidno šalje Vašem Home Assistant serveru, istom vezom kao i sve ostalo, da bi njegov prepoznavač ključne reči (openWakeWord) čuo ključnu reč. Na ovom tabletu se ništa ne snima niti čuva. Šta Home Assistant radi sa komandom posle ključne reči zavisi od njegovih Assist podešavanja: lokalno prepoznavanje (na primer Whisper) ostaje kod kuće, Home Assistant Cloud je šalje na internet.';
-
-  @override
-  String get wakeWordAllow => 'Uključi';
-
-  @override
-  String get wakeWordActive => 'Sluša se ključna reč';
-
-  @override
-  String get wakeWordMissing =>
-      'Home Assistant nema prepoznavač ključne reči. Instalirajte dodatak openWakeWord (Wyoming integracija ga sama pronalazi), pa ponovo uključite ovu opciju.';
-
-  @override
-  String get wakeWordNeedsServer => 'Potrebna je veza sa Home Assistantom.';
 
   @override
   String get approachWake => 'Probudi ekran kad neko priđe';
@@ -3316,7 +1782,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get approachOff => 'Isključeno';
 
   @override
-  String get approachSensor => 'Senzor pokreta (Home Assistant)';
+  String get approachSensor => 'Senzor pokreta';
 
   @override
   String get approachCamera => 'Kamera tableta';
@@ -3326,14 +1792,14 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get approachNoSensors =>
-      'Home Assistant nema senzore pokreta ili prisustva.';
+      'Nema senzora pokreta ili prisustva. Dodajte jedan (npr. Shelly BLU, Hue, IKEA ili ESPHome).';
 
   @override
   String get approachCameraTitle => 'Koristiti kameru tableta?';
 
   @override
   String get approachCameraBody =>
-      'Dok je ekran u mirovanju, prednja kamera nekoliko puta u sekundi proverava da li se nešto pomera ispred tableta, a Android prikazuje oznaku kamere. Slike se obrađuju samo na ovom tabletu i odmah odbacuju: ništa se ne snima, ne čuva i nigde ne šalje — ni Home Assistantu. Dok je ekran budan, kamera je isključena.';
+      'Dok je ekran u mirovanju, prednja kamera nekoliko puta u sekundi proverava da li se nešto pomera ispred tableta, a Android prikazuje oznaku kamere. Slike se obrađuju samo na ovom tabletu i odmah odbacuju: ništa se ne snima, ne čuva i nigde ne šalje. Dok je ekran budan, kamera je isključena.';
 
   @override
   String get approachCameraAllow => 'Uključi';
@@ -3357,29 +1823,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get presenceOn => 'Simulacija uključena';
 
   @override
-  String get presenceNotSaved => 'Još nije sačuvana u Home Assistantu.';
-
-  @override
   String get presenceLights => 'Svetla';
 
   @override
   String get presenceNoLights => 'U domu nema svetala.';
-
-  @override
-  String get presenceWhen => 'Kada';
-
-  @override
-  String get presenceWhenAway => 'Kad niko nije kod kuće';
-
-  @override
-  String get presenceWhenAwayHint =>
-      'Prema osobama u Home Assistantu (zona Dom).';
-
-  @override
-  String get presenceWhenAlarm => 'Kad je alarm uključen (odsutni)';
-
-  @override
-  String get presenceWhenAlways => 'Uvek dok je uključena';
 
   @override
   String get presenceFromSunset => 'Od zalaska sunca';
@@ -3395,56 +1842,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get presenceSaved => 'Simulacija prisustva je sačuvana.';
-
-  @override
-  String get presenceRemove => 'Ukloni';
-
-  @override
-  String get presenceRemoved => 'Simulacija prisustva je uklonjena.';
-
-  @override
-  String get presenceNeedsAdmin =>
-      'Za ovo je potreban administratorski nalog u Home Assistantu.';
-
-  @override
-  String lowTariffAlias(String device) {
-    return 'Niža tarifa: podsetnik ($device)';
-  }
-
-  @override
-  String get lowTariffTitle => 'Počela je niža tarifa';
-
-  @override
-  String lowTariffMessage(String until, String price) {
-    return 'Struja je jeftinija do $until ($price/kWh): dobro vreme za veš-mašinu, sudove ili punjenje.';
-  }
-
-  @override
-  String get lowTariffRemind => 'Podseti me kad počne niža tarifa';
-
-  @override
-  String get lowTariffRemindOn => 'Podsetnik za nižu tarifu je uključen';
-
-  @override
-  String lowTariffDialogBody(String time) {
-    return 'Kad počne niža tarifa ($time), Home Assistant šalje poruku na ovaj telefon, a kad prođe, poruka se sama skloni. Radi kao automatizacija u Home Assistantu (za čuvanje je potreban administratorski nalog), a poruka stiže dok je aplikacija povezana, kao i sve poruke iz Home Assistanta.';
-  }
-
-  @override
-  String get lowTariffCreate => 'Uključi podsetnik';
-
-  @override
-  String get lowTariffRemove => 'Ukloni podsetnik';
-
-  @override
-  String get lowTariffCreated => 'Podsetnik za nižu tarifu je uključen.';
-
-  @override
-  String get lowTariffRemoved => 'Podsetnik za nižu tarifu je uklonjen.';
-
-  @override
-  String get lowTariffNeedsPush =>
-      'Prvo uključite „Poruke iz Home Assistanta” (Podešavanja › Obaveštenja).';
 
   @override
   String get kioskAlertAck => 'Video sam';
@@ -3511,11 +1908,6 @@ class AppLocalizationsSr extends AppLocalizations {
   @override
   String timerDoneSpeech(String label) {
     return 'Tajmer od $label je istekao.';
-  }
-
-  @override
-  String timerStarted(String label) {
-    return 'Tajmer od $label je pokrenut.';
   }
 
   @override
@@ -3616,86 +2008,8 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String get familyMessages => 'Poruke';
-
-  @override
-  String get familyMessagesNone => 'Nema poruka. Ostavite poruku ukućanima.';
-
-  @override
-  String get familyMessageNew => 'Nova poruka';
-
-  @override
-  String get familyMessageEveryone => 'Svi';
-
-  @override
-  String familyMessageFor(String name) {
-    return 'Poruka za: $name';
-  }
-
-  @override
-  String get familyMessageForAll => 'Poruka za sve';
-
-  @override
-  String get familyMessageRead => 'Pročitano';
-
-  @override
-  String get familyMessageHint => 'Na primer: u frižideru je supa';
-
-  @override
-  String get familyMessageSend => 'Ostavi poruku';
-
-  @override
-  String welcomeHome(String name) {
-    return 'Dobro došli kući, $name!';
-  }
-
-  @override
-  String get greetPeople => 'Pozdravi ukućane kad dođu';
-
-  @override
-  String get greetPeopleHint =>
-      'Kad neko stigne (po osobi u Home Assistantu), tablet ga pozdravi i pokaže poruke za njega.';
-
-  @override
-  String get kioskIntercom => 'Interfon';
-
-  @override
-  String get kioskIntercomOpen => 'Dugme „Otvori”';
-
-  @override
-  String get kioskIntercomSpeaker => 'Zvučnik kod vrata (dugme „Dolazim”)';
-
-  @override
-  String get kioskIntercomSpeakerHint =>
-      'Home Assistant tamo izgovori odgovor svojim pretvaranjem teksta u govor.';
-
-  @override
-  String get kioskIntercomReply => 'Dolazim!';
-
-  @override
-  String get kioskIntercomReplyText => 'Dolazim, samo trenutak!';
-
-  @override
-  String get kioskIntercomReplied =>
-      'Izgovoreno kod vrata: „Dolazim, samo trenutak!”';
-
-  @override
-  String get kioskIntercomNoTts =>
-      'Home Assistant nema podešeno pretvaranje teksta u govor.';
-
-  @override
-  String kioskIntercomUnlock(String name) {
-    return 'Otključaj: $name';
-  }
-
-  @override
-  String kioskIntercomOpenDevice(String name) {
-    return 'Otvori: $name';
-  }
-
-  @override
   String get kioskColumnsNoRooms =>
-      'Još nema prostorija. Dodajte oblasti u Home Assistantu.';
+      'Još nema soba. Dodajte ih u Podešavanja → Dom.';
 
   @override
   String get kioskColumnsDevices => 'Uređaji';
@@ -3763,25 +2077,6 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String get applianceDoneThisPhone => 'Poruka na ovaj telefon';
-
-  @override
-  String get applianceDoneNeedsPush =>
-      'Prvo uključite poruke iz Home Assistanta u podešavanjima.';
-
-  @override
-  String get applianceDoneHousehold => 'Poruka svim ukućanima';
-
-  @override
-  String get applianceDoneHouseholdHint =>
-      'Vide je svi u aplikaciji i na zidnom tabletu.';
-
-  @override
-  String applianceDoneOtherPhones(int count) {
-    return 'Javlja i na još $count telefon(a).';
-  }
-
-  @override
   String get applianceDoneRemove => 'Ukloni';
 
   @override
@@ -3791,10 +2086,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String applianceDoneSaved(String name) {
     return 'Javiće se kad „$name” završi.';
   }
-
-  @override
-  String get applianceDoneNeedsAdmin =>
-      'Za ovo je potreban administratorski nalog u Home Assistantu.';
 
   @override
   String get applianceDoneOn => 'Javlja kad završi';
@@ -3811,11 +2102,6 @@ class AppLocalizationsSr extends AppLocalizations {
   @override
   String applianceDoneMessage(String name) {
     return '$name: ciklus je završen.';
-  }
-
-  @override
-  String applianceDoneAlias(String name) {
-    return 'Gotovo: $name (Open Smart Home)';
   }
 
   @override
@@ -3855,11 +2141,6 @@ class AppLocalizationsSr extends AppLocalizations {
   @override
   String heatingScheduleNext(String time, String temperature) {
     return 'Sledeće: $time → $temperature';
-  }
-
-  @override
-  String heatingScheduleAlias(String name) {
-    return 'Raspored: $name (Open Smart Home)';
   }
 
   @override
@@ -3930,14 +2211,14 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get roomPhotoHint =>
-      'Fotografija, ikonica i boja ostaju samo na ovom uređaju; ne šalju se u Home Assistant. Za zidni tablet izaberite ih na samom tabletu.';
+      'Fotografija, ikonica i boja ostaju samo na ovom uređaju. Za zidni tablet izaberite ih na samom tabletu.';
 
   @override
   String get themeAutoDark => 'Tamno posle zalaska sunca';
 
   @override
   String get themeAutoDarkHint =>
-      'Prati izlazak i zalazak sunca iz Home Assistanta (bez njega: tamno od 20 do 7).';
+      'Prati izlazak i zalazak sunca na lokaciji doma (bez nje: tamno od 20 do 7).';
 
   @override
   String get accentTitle => 'Boja aplikacije';
@@ -3999,7 +2280,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get roomColorTitle => 'Boja';
 
   @override
-  String get roomLookReset => 'Kao u Home Assistantu';
+  String get roomLookReset => 'Podrazumevano';
 
   @override
   String get favoritesBrowse => 'Pogledaj uređaje';
@@ -4008,240 +2289,13 @@ class AppLocalizationsSr extends AppLocalizations {
   String get bigSliderPosition => 'Položaj';
 
   @override
-  String get bigSliderHint => 'Dugi pritisak: veliki klizač';
-
-  @override
   String get deviceSheetMore => 'Svi detalji';
-
-  @override
-  String get serviceSection => 'Servis';
-
-  @override
-  String get serviceSectionHint =>
-      'Dijagnostika, podrška i alati za instalatera';
-
-  @override
-  String serviceSupport(String brand) {
-    return 'Podrška: $brand';
-  }
-
-  @override
-  String get serviceApp => 'Aplikacija';
-
-  @override
-  String get serviceDevice => 'Uređaj';
-
-  @override
-  String get serviceServer => 'Server';
-
-  @override
-  String get serviceConnected => 'povezano';
-
-  @override
-  String get serviceDisconnected => 'nije povezano';
-
-  @override
-  String get serviceDevices => 'Uređaji';
-
-  @override
-  String serviceDevicesValue(int count, int unavailable) {
-    return '$count uređaja, nedostupno: $unavailable';
-  }
-
-  @override
-  String get servicePanel => 'Zidni panel';
-
-  @override
-  String get servicePanelManaged =>
-      'Upravljan (vlasnik uređaja): kiosk se ne može napustiti, pokreće se posle restarta';
-
-  @override
-  String get servicePanelNot =>
-      'Običan uređaj (bez instalaterskog upravljanja)';
-
-  @override
-  String get servicePanelApply => 'Primeni pravila panela';
-
-  @override
-  String get servicePanelApplied =>
-      'Ekran ostaje upaljen na struji; aplikacija je početni ekran.';
-
-  @override
-  String get servicePanelFailed =>
-      'Nije uspelo: aplikacija nije vlasnik uređaja.';
-
-  @override
-  String get servicePanelRelease => 'Vrati uređaj';
-
-  @override
-  String get servicePanelReleaseBody =>
-      'Uklanja instalatersko upravljanje: kiosk se može napustiti, vraća se običan početni ekran. Ponovo uključivanje traži novu pripremu uređaja (fabričko resetovanje).';
-
-  @override
-  String get serviceProblems => 'Nedavni problemi';
-
-  @override
-  String get serviceNoProblems => 'Nema zabeleženih problema od pokretanja.';
-
-  @override
-  String get serviceCopy => 'Kopiraj dijagnostiku';
-
-  @override
-  String get serviceCopied => 'Dijagnostika je kopirana.';
-
-  @override
-  String get serviceCopyHint =>
-      'Bez tokena i lozinki: samo verzije, uređaj, adresa servera (bez porta i putanje) i poslednje greške.';
-
-  @override
-  String get setupTitle => 'Čarobnjak za instalaciju';
-
-  @override
-  String setupIntro(String brand) {
-    return 'Proverite i podesite sve za ovaj uređaj, korak po korak. ($brand)';
-  }
-
-  @override
-  String get setupConnection => 'Veza sa Home Assistantom';
-
-  @override
-  String setupConnectionOk(String host, String version) {
-    return 'Povezano sa $host (Home Assistant $version)';
-  }
-
-  @override
-  String get setupConnectionMissing =>
-      'Nije povezano — proverite adresu i mrežu u Podešavanja → Server.';
-
-  @override
-  String get setupRooms => 'Prostorije';
-
-  @override
-  String setupRoomsCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count prostorija',
-      few: '$count prostorije',
-      one: '1 prostorija',
-      zero: 'Nema prostorija',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String setupNoRoom(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count uređaja bez prostorije',
-      few: '$count uređaja bez prostorije',
-      one: '1 uređaj bez prostorije',
-      zero: 'Svi uređaji imaju prostoriju',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get setupRoomsHint =>
-      'Prostorije i raspored uređaja se uređuju u Home Assistantu (Podešavanja → Oblasti).';
-
-  @override
-  String get setupMessages => 'Poruke iz Home Assistanta';
-
-  @override
-  String setupMessagesOk(String name) {
-    return 'Registrovano kao „$name”';
-  }
-
-  @override
-  String get setupMessagesHint =>
-      'Registruje uređaj u Home Assistantu (Mobile App), da mu automatizacije šalju poruke.';
-
-  @override
-  String get setupDeviceName => 'Ime uređaja u Home Assistantu';
-
-  @override
-  String get setupDefaultDeviceName => 'Zidni tablet';
-
-  @override
-  String get setupRegister => 'Registruj';
-
-  @override
-  String get setupKiosk => 'Kiosk i PIN';
-
-  @override
-  String get setupPinHint => 'PIN za izlaz iz kioska još nije postavljen';
-
-  @override
-  String get setupPinSaved => 'PIN je sačuvan.';
-
-  @override
-  String get setupPanel => 'Zidni panel';
-
-  @override
-  String get setupPanelHint =>
-      'Za panel koji se ne može napustiti i sam se pokreće posle nestanka struje, uređaj se priprema kao „vlasnik uređaja” pre prijave Google naloga — vidi uputstvo za instalatere (docs/INSTALLER.md).';
-
-  @override
-  String get setupDone => 'Gotovo';
 
   @override
   String get setupNext => 'Dalje';
 
   @override
   String get setupBack => 'Nazad';
-
-  @override
-  String get haBackupTitle => 'U Home Assistantu';
-
-  @override
-  String get haBackupHint =>
-      'Podešavanja aplikacije (izgled, kiosk, kartice, brze kontrole, sobe) čuvaju se u vašem Home Assistantu pod imenom uređaja, pa se posle reinstalacije ili na drugom tabletu vraćaju jednim dodirom. Ne čuvaju se tokeni, PIN, fotografije ni izbori za mikrofon i kameru.';
-
-  @override
-  String get haBackupName => 'Ime kopije (uređaj)';
-
-  @override
-  String get haBackupSave => 'Sačuvaj';
-
-  @override
-  String haBackupSavedHome(String name) {
-    return 'Sačuvano kao „$name” — vidljivo na svim uređajima u kući.';
-  }
-
-  @override
-  String haBackupSavedUser(String name) {
-    return 'Sačuvano kao „$name” za vaš nalog (za celu kuću je potreban administrator).';
-  }
-
-  @override
-  String get haBackupNone => 'Još nema sačuvanih kopija.';
-
-  @override
-  String get haBackupScopeHome => 'za celu kuću';
-
-  @override
-  String get haBackupScopeUser => 'samo vaš nalog';
-
-  @override
-  String get haBackupRestore => 'Vrati';
-
-  @override
-  String haBackupRestoreTitle(String name) {
-    return 'Vratiti „$name”?';
-  }
-
-  @override
-  String get haBackupRestoreBody =>
-      'Podešavanja ovog uređaja biće zamenjena sačuvanim. PIN, fotografije i izbori za mikrofon i kameru ostaju kakvi su.';
-
-  @override
-  String get haBackupDelete => 'Obriši kopiju';
-
-  @override
-  String get haBackupUnavailable =>
-      'Kopije iz Home Assistanta trenutno nisu dostupne (nema veze).';
 
   @override
   String get backupFileTitle => 'Kao tekst';
@@ -4306,30 +2360,10 @@ class AppLocalizationsSr extends AppLocalizations {
       'Pita GitHub (javna izdanja) da li postoji nova verzija; GitHub tada vidi adresu uređaja. Ništa drugo se ne šalje.';
 
   @override
-  String get nfcLinkConfirmTitle => 'Pokrenuti oznaku?';
-
-  @override
-  String nfcLinkConfirm(String name) {
-    return 'Link za oznaku „$name” nije došao sa NFC oznake prislonjene uz telefon, već iz QR koda, sa veba ili iz druge aplikacije. Pokrenuti je u Home Assistantu?';
-  }
-
-  @override
-  String get nfcLinkConfirmUnnamed =>
-      'Link za Home Assistant oznaku nije došao sa NFC oznake prislonjene uz telefon, već iz QR koda, sa veba ili iz druge aplikacije. Pokrenuti je?';
-
-  @override
-  String get nfcLinkRun => 'Pokreni';
-
-  @override
   String get firstRunSkip => 'Preskoči';
 
   @override
   String get firstRunWelcomeTitle => 'Dobro došli kući!';
-
-  @override
-  String firstRunWelcomeBody(String host) {
-    return 'Povezani ste sa $host. Podesimo aplikaciju — traje minut, a sve se kasnije može promeniti u Podešavanjima.';
-  }
 
   @override
   String get firstRunRoleQuestion => 'Kako ćete koristiti ovaj uređaj?';
@@ -4351,13 +2385,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get firstRunWallNext => 'Podesi zidni panel';
 
   @override
-  String get firstRunRestoreTitle => 'Preuzmite postojeća podešavanja';
-
-  @override
-  String get firstRunRestoreBody =>
-      'U vašem Home Assistantu su sačuvana podešavanja sa drugih uređaja. Ako je ovo zamena ili još jedan isti uređaj, vratite jedno jednim dodirom — ili samo nastavite.';
-
-  @override
   String get firstRunLookTitle => 'Izgled';
 
   @override
@@ -4373,7 +2400,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get firstRunFavoritesNone =>
-      'U Home Assistantu još nema uređaja kojima se upravlja.';
+      'Još nema uređaja kojima se upravlja. Dodajte ih posle, u Podešavanja → Dom.';
 
   @override
   String firstRunFavoritesCount(int count) {
@@ -4389,13 +2416,6 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String get firstRunMessagesTitle => 'Poruke na telefon';
-
-  @override
-  String get firstRunMessagesBody =>
-      'Home Assistant može da javi ovom telefonu kad se nešto desi, npr. da su vrata ostala otvorena. Poruke idu direktno iz vaše kuće, bez clouda.';
-
-  @override
   String get firstRunSecurityTitle => 'Zaštita';
 
   @override
@@ -4407,7 +2427,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get firstRunDoneBody =>
-      'Prostorije, scene i uređaji stižu iz Home Assistanta. Sve što ste ovde izabrali menjate u Podešavanjima, a kartice Početne dugmetom ⚙ pored pozdrava.';
+      'Uređaje dodajete u Podešavanja → Dom → Dodaj uređaj. Sve što ste ovde izabrali menjate u Podešavanjima, a kartice Početne dugmetom ⚙ pored pozdrava.';
 
   @override
   String get firstRunStart => 'Počnimo';
@@ -4443,7 +2463,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get kioskPeopleHint =>
-      'Na tabletu ukućanin dodirne svoju sliku i dobija svoj pozdrav i svoje brze kontrole. Otključavanje vrata, isključenje alarma i slične radnje dozvoljene su samo uz lični PIN ukućanina ili PIN tableta — ko nema PIN (npr. deca), ne može. Ukućani su osobe iz Home Assistanta.';
+      'Na tabletu ukućanin dodirne svoje ime i dobija svoje brze kontrole. Otključavanje vrata, isključenje alarma i slične radnje dozvoljene su samo uz lični PIN ukućanina ili PIN tableta — ko nema PIN (npr. deca), ne može. Dodir na ime: rođendan.';
 
   @override
   String get kioskPersonPinSet => 'Lični PIN postavljen — sme da otključava';
@@ -4501,9 +2521,6 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String get batteryReminderAlias => 'Baterija pri kraju (Open Smart Home)';
-
-  @override
   String batteryReminderMessage(String name, String percent) {
     return 'Baterija je pri kraju: $name ($percent %)';
   }
@@ -4513,33 +2530,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get batteryOk => 'Baterija u redu';
-
-  @override
-  String get unlockLogPanel => 'Zidni tablet';
-
-  @override
-  String get unlockLogPhone => 'Telefon';
-
-  @override
-  String get unlockLogViaPanel => 'zidni tablet';
-
-  @override
-  String get unlockLogViaPhone => 'telefon';
-
-  @override
-  String unlockLogUnlock(String device, String via) {
-    return 'otključava: $device ($via)';
-  }
-
-  @override
-  String unlockLogDisarm(String device, String via) {
-    return 'isključuje alarm: $device ($via)';
-  }
-
-  @override
-  String unlockLogOpen(String device, String via) {
-    return 'otvara: $device ($via)';
-  }
 
   @override
   String get vacationTitle => 'Na odmoru';
@@ -4612,58 +2602,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get vacationEnd => 'Vratili smo se';
-
-  @override
-  String get comingHomeTitle => 'Stižem kući';
-
-  @override
-  String get comingHomeHint =>
-      'Jednim dodirom (i sa ikonice aplikacije): upali šta treba, ugrej kuću i javi ukućanima.';
-
-  @override
-  String get comingHomeWho => 'Ko stiže';
-
-  @override
-  String get comingHomeNoOne => 'Bez imena';
-
-  @override
-  String get comingHomeRoutine => 'Scena ili skripta';
-
-  @override
-  String get comingHomeNone => 'Ništa';
-
-  @override
-  String get comingHomeHeatingOff => 'Grejanje: ne menjaj';
-
-  @override
-  String comingHomeHeating(String temperature) {
-    return 'Grejanje na $temperature °C';
-  }
-
-  @override
-  String get comingHomeAnnounce => 'Javi ukućanima';
-
-  @override
-  String get comingHomeAnnounceHint =>
-      'Poruka se vidi u aplikaciji i na zidnom tabletu';
-
-  @override
-  String get comingHomeRun => 'Stižem kući';
-
-  @override
-  String get comingHomeShortcutHint =>
-      'Isto radi i dugi pritisak na ikonicu aplikacije → „Stižem kući”.';
-
-  @override
-  String get comingHomeDone => 'Kuća zna da stižete.';
-
-  @override
-  String comingHomeMessage(String name) {
-    return '$name stiže kući 🏠';
-  }
-
-  @override
-  String get comingHomeMessageNoName => 'Neko stiže kući 🏠';
 
   @override
   String get guestWifiTitle => 'Wi-Fi za goste';
@@ -4790,74 +2728,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get sunriseRemoved => 'Buđenje svetlom je isključeno.';
-
-  @override
-  String get sunriseAlias => 'Buđenje svetlom (Open Smart Home)';
-
-  @override
-  String get wrappedTitle => 'Ova nedelja';
-
-  @override
-  String get wrappedIntro => 'Vaša nedelja u kući';
-
-  @override
-  String get wrappedIntroCaption =>
-      'Poslednjih 7 dana, iz dnevnika Home Assistanta. Dodirnite desno za dalje.';
-
-  @override
-  String get wrappedDoors => 'Vrata i prozori otvoreni';
-
-  @override
-  String wrappedTopDoor(String name) {
-    return 'Najprometnije: $name';
-  }
-
-  @override
-  String get wrappedLights => 'Puta je upaljeno svetlo';
-
-  @override
-  String wrappedTopLight(String name, int count) {
-    return 'Najomiljenije: $name ($count×)';
-  }
-
-  @override
-  String get wrappedArrivals => 'Dolazaka kući';
-
-  @override
-  String wrappedTopArrival(String name, int count) {
-    return 'Najčešće: $name ($count×)';
-  }
-
-  @override
-  String get wrappedUnlocks => 'Otključavanja';
-
-  @override
-  String get wrappedBusiestDay => 'Najživlji dan u kući';
-
-  @override
-  String get wrappedEnergy => 'kWh struje ove nedelje';
-
-  @override
-  String get wrappedEnergyUnit => 'od ponedeljka do sada';
-
-  @override
-  String wrappedEnergyLastWeek(String kwh) {
-    return 'od ponedeljka do sada · prošle nedelje $kwh kWh';
-  }
-
-  @override
-  String get wrappedOutro => 'Dobra nedelja!';
-
-  @override
-  String get wrappedOutroCaption => 'Vidimo se sledeće nedelje 👋';
-
-  @override
-  String get wrappedEmpty =>
-      'Dnevnik Home Assistanta za ovu nedelju je prazan — još nema šta da se prebroji.';
-
-  @override
-  String get wrappedUnavailable =>
-      'Dnevnik Home Assistanta trenutno nije dostupan.';
 
   @override
   String birthdayGreeting(String names) {
@@ -5103,12 +2973,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get simpleCooler => 'Hladnije';
 
   @override
-  String get serviceLicenses => 'Licence otvorenog koda';
-
-  @override
-  String get serviceLicensesHint => 'Aplikacija i svi paketi koje koristi';
-
-  @override
   String get settingsHomeSection => 'Dom';
 
   @override
@@ -5140,9 +3004,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get addDeviceAddressLabel => 'IP adresa uređaja';
-
-  @override
-  String get addDeviceChecking => 'Proveravam…';
 
   @override
   String get addDeviceNotFound =>
@@ -5350,9 +3211,6 @@ class AppLocalizationsSr extends AppLocalizations {
       'Još ništa. Senzori se javljaju na nekoliko sekundi do minuta.';
 
   @override
-  String get bleUnsupported => 'Ovaj uređaj nema Bluetooth.';
-
-  @override
   String get backupWithSecrets => 'Sa lozinkama i ključevima uređaja';
 
   @override
@@ -5529,6 +3387,18 @@ class AppLocalizationsSr extends AppLocalizations {
   @override
   String get emptyHomeBody =>
       'Dodajte uređaje sa kućne Wi-Fi mreže ili preko Bluetooth-a: Shelly, Hue, WiZ, Tapo, Tuya, ESPHome, televizore i druge.';
+
+  @override
+  String get householdAdd => 'Dodaj ukućanina';
+
+  @override
+  String get householdName => 'Ime';
+
+  @override
+  String get householdRemove => 'Ukloni ukućanina';
+
+  @override
+  String get personMember => 'Ukućanin';
 }
 
 /// The translations for Serbian, using the Latin script (`sr_Latn`).

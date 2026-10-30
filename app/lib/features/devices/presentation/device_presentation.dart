@@ -32,7 +32,7 @@ enum DeviceTone {
 /// Icon, tone and localized status text for a device. Pure functions of the
 /// device model, so every screen describes devices the same way.
 abstract final class DevicePresentation {
-  /// [name] without a leading room name, as Home Assistant's own tiles do:
+  /// [name] without a leading room name, as smart home apps' own tiles do:
   /// "Dnevna soba – glavno svetlo" in "Dnevna soba" → "Glavno svetlo".
   /// Unchanged when nothing meaningful would remain.
   static String shortName(String name, String? roomName) {
@@ -335,6 +335,8 @@ abstract final class DevicePresentation {
       DeviceKind.person => switch (s.textValue) {
         'home' => l10n.personHome,
         'not_home' => l10n.personAway,
+        // A member added on this phone: where they are is not known.
+        null when s.raw == 'member' => l10n.personMember,
         null => l10n.stateUnknown,
         // Any other state is the name of the zone the person is in.
         final zone => zone,
@@ -383,7 +385,7 @@ abstract final class DevicePresentation {
     return l10n.timeDaysAgo(d.inDays);
   }
 
-  /// Standard Home Assistant preset names; custom ones are shown as-is.
+  /// Standard preset names; custom ones are shown as-is.
   static String presetLabel(AppLocalizations l10n, String preset) =>
       switch (preset) {
         'none' => l10n.presetNone,
@@ -397,7 +399,7 @@ abstract final class DevicePresentation {
         _ => preset,
       };
 
-  /// Standard Home Assistant climate fan modes; custom ones as-is.
+  /// Standard climate fan modes; custom ones as-is.
   static String fanModeLabel(AppLocalizations l10n, String mode) =>
       switch (mode) {
         'on' => l10n.stateOn,

@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../domain/device_kind.dart';
 import '../domain/smart_home_device.dart';
 
-/// The entities of one physical device (Home Assistant device registry),
+/// The channels of one physical device (same `deviceId`),
 /// shown as one thing: an air fryer with its start/pause buttons, modes,
 /// timers and sensors is one card, not twenty.
 @immutable

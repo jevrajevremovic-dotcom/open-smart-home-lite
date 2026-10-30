@@ -41,7 +41,7 @@ final localeProvider = NotifierProvider<LocaleController, Locale?>(
   LocaleController.new,
 );
 
-/// Dark after sunset, light after sunrise (Home Assistant's `sun.sun`, or
+/// Dark after sunset, light after sunrise (at the home's location, or
 /// 20:00–7:00 without it). Overrides [themeModeProvider] while on.
 class AutoDarkController extends Notifier<bool> {
   static const _key = 'theme.sun';

@@ -167,7 +167,7 @@ final quickTileStatesProvider = Provider<List<QuickTileState?>>((ref) {
   ];
 });
 
-/// Keeps the tiles current and runs their taps once Home Assistant is live
+/// Keeps the tiles current and runs their taps once the home is live
 /// (the app may just have been started in the background by the tap).
 class QuickTilesHost extends ConsumerStatefulWidget {
   const QuickTilesHost({super.key, required this.child});

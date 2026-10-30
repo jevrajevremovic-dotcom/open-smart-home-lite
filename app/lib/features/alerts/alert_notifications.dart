@@ -20,7 +20,7 @@ import '../kiosk/application/kiosk_controller.dart';
 class NotificationTap {
   const NotificationTap(this.payload, [this.actionId]);
 
-  /// A device id (alerts) or a JSON object (messages from Home Assistant).
+  /// A device id (alerts) or a JSON object (messages from the home).
   final String payload;
   final String? actionId;
 }
@@ -40,7 +40,7 @@ abstract interface class AlertNotifier {
 
   Future<void> show(String deviceId, String title, String body);
 
-  /// A message sent by a Home Assistant automation (`notify.mobile_app_…`),
+  /// A message from the home (an appliance is done, a battery is low),
   /// on its own, less intrusive channel; [actions] become buttons
   /// (id, label). [key] replaces an earlier message with the same key.
   Future<void> showMessage(
@@ -176,15 +176,15 @@ class LocalAlertNotifier implements AlertNotifier {
         notificationDetails: NotificationDetails(
           android: AndroidNotificationDetails(
             'ha_messages',
-            'Home Assistant',
-            channelDescription: 'Messages from Home Assistant automations',
+            'Poruke kuće',
+            channelDescription: 'Appliance done, batteries and other messages',
             importance: Importance.high,
             priority: Priority.high,
             visibility: NotificationVisibility.private,
             styleInformation: BigTextStyleInformation(body),
             actions: [
               for (final (id, label) in actions.take(3))
-                // Opens the app, whose main code answers Home Assistant.
+                // Opens the app, which handles the action.
                 AndroidNotificationAction(id, label, showsUserInterface: true),
             ],
           ),
@@ -267,7 +267,7 @@ class _AlertNotificationsHostState
   }
 
   void _onTap(NotificationTap tap) {
-    // Messages from Home Assistant carry JSON; alerts a device id.
+    // Messages carry JSON; alerts a device id.
     if (tap.payload.startsWith('{')) return;
     final deviceId = tap.payload;
     if (ref.read(deviceProvider(deviceId)) == null) return;

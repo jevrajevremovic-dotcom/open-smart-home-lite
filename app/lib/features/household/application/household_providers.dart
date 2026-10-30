@@ -6,7 +6,7 @@ import '../../../core/utils/value_list.dart';
 import '../../devices/application/device_providers.dart';
 import '../../devices/domain/device_kind.dart';
 
-/// Household members (`person` entities), sorted by name.
+/// Household members (`person` devices), sorted by name.
 final peopleIdsProvider = Provider<ValueList<String>>((ref) {
   final devices = ref.watch(homeSnapshotProvider.select((s) => s.devices));
   final people =

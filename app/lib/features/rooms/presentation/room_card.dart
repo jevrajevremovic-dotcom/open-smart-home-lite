@@ -13,7 +13,7 @@ import '../../kiosk/presentation/glass.dart' show kioskPhotoStoreProvider;
 import 'room_look.dart';
 import 'room_photo.dart' show roomPhotosProvider;
 
-/// Maps common Material Design Icons names used for HA areas to Material
+/// Maps common Material Design Icons names used for rooms to Material
 /// icons. Unknown names fall back to a generic room icon.
 IconData roomIcon(String? mdi) => switch (mdi) {
   'mdi:sofa' ||

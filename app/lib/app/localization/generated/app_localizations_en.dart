@@ -16,19 +16,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mockModeBanner => 'MOCK MODE — demo data, no real devices';
 
   @override
-  String get welcomeTitle => 'Your home, in one app';
-
-  @override
-  String get welcomeBody =>
-      'Control lights, climate, sensors and scenes from every brand and protocol your Home Assistant server supports.';
-
-  @override
-  String get welcomeLocalFirst => 'Works locally. No cloud account required.';
-
-  @override
-  String get chooseLanguage => 'Language';
-
-  @override
   String get languageSystem => 'System';
 
   @override
@@ -38,137 +25,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageEnglish => 'English';
 
   @override
-  String get getStarted => 'Get started';
-
-  @override
   String get back => 'Back';
 
   @override
   String get cancel => 'Cancel';
-
-  @override
-  String get continueAction => 'Continue';
-
-  @override
-  String get serverAddressTitle => 'Connect to Home Assistant';
-
-  @override
-  String get serverAddressIntro =>
-      'Enter the address of your Home Assistant server, for example the one you open in a browser at home.';
-
-  @override
-  String get serverAddressLabel => 'Server address';
-
-  @override
-  String get serverAddressHint => 'homeassistant.local:8123';
-
-  @override
-  String get checkConnection => 'Check connection';
-
-  @override
-  String get checking => 'Checking…';
-
-  @override
-  String serverReachable(String address) {
-    return 'Home Assistant found at $address';
-  }
-
-  @override
-  String get addressErrorEmpty => 'Enter a server address.';
-
-  @override
-  String get addressErrorMalformed => 'This is not a valid address.';
-
-  @override
-  String get addressErrorUnsupportedScheme =>
-      'Only http:// and https:// addresses are supported.';
-
-  @override
-  String get addressErrorMissingHost =>
-      'The address is missing a host name or IP address.';
-
-  @override
-  String get addressErrorCredentials =>
-      'Do not put a user name or password in the address.';
-
-  @override
-  String get addressErrorPath =>
-      'Home Assistant must be served from the root of the address (no path such as /ha).';
-
-  @override
-  String get addressErrorQuery =>
-      'Remove the part after ? or # from the address.';
-
-  @override
-  String get addressErrorPort => 'The port must be between 1 and 65535.';
-
-  @override
-  String get riskLocalHttp =>
-      'Unencrypted connection inside your local network.';
-
-  @override
-  String get riskRemoteExposure =>
-      'This is a public address. Make sure your server is kept up to date and protected.';
-
-  @override
-  String get riskInsecureRemote =>
-      'Warning: this public address uses unencrypted HTTP. Your access token could be intercepted. Use HTTPS unless the connection runs through a VPN.';
-
-  @override
-  String get insecureAcknowledge => 'I understand the risk (e.g. I use a VPN)';
-
-  @override
-  String get certificateUntrustedTitle => 'Untrusted certificate';
-
-  @override
-  String get certificateUntrustedBody =>
-      'The server\'s certificate is not trusted by this device. This is normal for a self-signed certificate, but can also mean someone is intercepting the connection. Only continue if the fingerprint matches the one shown on your server.';
-
-  @override
-  String get certificateSubject => 'Issued to';
-
-  @override
-  String get certificateIssuer => 'Issued by';
-
-  @override
-  String get certificateValidUntil => 'Valid until';
-
-  @override
-  String get certificateFingerprint => 'SHA-256 fingerprint';
-
-  @override
-  String get certificateExpired => 'This certificate has expired.';
-
-  @override
-  String get certificateConfirm =>
-      'I compared the fingerprint and trust this certificate';
-
-  @override
-  String get trustCertificate => 'Trust this certificate';
-
-  @override
-  String get tokenTitle => 'Sign in';
-
-  @override
-  String get tokenIntro =>
-      'The app signs in with a long-lived access token from your Home Assistant user profile.';
-
-  @override
-  String get tokenSteps =>
-      '1. Open Home Assistant in a browser.\n2. Click your user name (bottom left) → Security.\n3. Under “Long-lived access tokens” choose “Create token”.\n4. Copy the token and paste it below. Home Assistant shows it only once.';
-
-  @override
-  String get tokenLabel => 'Access token';
-
-  @override
-  String get tokenMockHint =>
-      'Mock mode: any token works; “invalid” simulates a rejected token.';
-
-  @override
-  String get showToken => 'Show token';
-
-  @override
-  String get hideToken => 'Hide token';
 
   @override
   String get connect => 'Connect';
@@ -177,33 +37,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get connecting => 'Connecting…';
 
   @override
-  String get tokenInvalidFormat =>
-      'The token must not be empty or contain spaces.';
-
-  @override
   String get failureNetwork =>
-      'The server cannot be reached. Check the address and that this device is on the right network.';
+      'The device cannot be reached. Check that it is on and that the phone is on the same Wi-Fi.';
 
   @override
-  String get failureTimeout => 'The server took too long to respond.';
+  String get failureTimeout => 'The device took too long to answer.';
 
   @override
   String get failureAuthentication =>
-      'The access token was rejected. It may be wrong, expired or revoked.';
+      'The device refused the password, key or token. Check it in Settings → Home.';
 
   @override
   String get failureAuthorization =>
       'This user is not allowed to perform this action.';
 
   @override
-  String get failureValidation => 'The request was not accepted by the server.';
+  String get failureValidation => 'The device did not accept the command.';
 
   @override
-  String get failureParsing => 'The server sent an unexpected response.';
+  String get failureParsing => 'The device sent an unexpected answer.';
 
   @override
-  String get failureServer =>
-      'The server responded, but not like Home Assistant, or reported an error.';
+  String get failureServer => 'The device reported an error.';
 
   @override
   String get failureCertificate =>
@@ -234,46 +89,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navSettings => 'Settings';
 
   @override
-  String get statusConnected => 'Connected';
-
-  @override
-  String get statusConnecting => 'Connecting…';
-
-  @override
-  String get statusAuthenticating => 'Signing in…';
-
-  @override
-  String get statusReconnecting => 'Reconnecting…';
-
-  @override
-  String statusReconnectingIn(int seconds) {
-    return 'Reconnecting in $seconds s';
-  }
-
-  @override
-  String get statusDisconnected => 'Disconnected';
-
-  @override
-  String get statusAuthFailed => 'Sign-in rejected';
-
-  @override
-  String get statusServerUnavailable => 'Server unavailable';
-
-  @override
-  String get statusError => 'Connection error';
-
-  @override
-  String get retryNow => 'Retry now';
-
-  @override
-  String get signInAgain => 'Sign in again';
-
-  @override
-  String serverVersion(String version) {
-    return 'Home Assistant $version';
-  }
-
-  @override
   String get settingsTitle => 'Settings';
 
   @override
@@ -295,19 +110,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get language => 'Language';
 
   @override
-  String get serverSection => 'Server';
-
-  @override
-  String get signOut => 'Sign out';
-
-  @override
-  String get signOutConfirmTitle => 'Sign out?';
-
-  @override
-  String get signOutConfirmBody =>
-      'The access token will be deleted from this device. You can sign in again at any time.';
-
-  @override
   String get deleteAllData => 'Delete all local data';
 
   @override
@@ -315,25 +117,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteAllConfirmBody =>
-      'This removes the access token, server address and all settings from this device. Nothing is changed on your Home Assistant server.';
+      'This removes the home, the devices\' passwords and keys, and all settings from this phone. The devices themselves are not changed.';
 
   @override
   String get delete => 'Delete';
 
   @override
   String get privacySection => 'Privacy & data';
-
-  @override
-  String get addressErrorMixedContent =>
-      'This page is loaded over HTTPS, so the browser blocks connections to an http:// server. Use the server\'s https:// address, or open this web app from the same address as Home Assistant.';
-
-  @override
-  String get webConnectionHint =>
-      'In a browser this can also mean that Home Assistant does not allow this web app\'s address (add it to http: cors_allowed_origins in configuration.yaml), or that the browser does not trust the server\'s certificate (open the server address in a new tab once and accept it there).';
-
-  @override
-  String get webSessionNotice =>
-      'With a token, sign-in lasts only while this tab is open.';
 
   @override
   String get failureConfirmationRequired => 'Please confirm this action.';
@@ -662,7 +452,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get roomEmpty => 'No devices in this room.';
 
   @override
-  String get noRoomsYet => 'No rooms are defined in Home Assistant.';
+  String get noRoomsYet => 'No rooms yet. Add them in Settings → Home.';
 
   @override
   String get groupLights => 'Lights';
@@ -814,7 +604,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get infoLastChanged => 'Last changed';
 
   @override
-  String get infoEntityId => 'Entity ID';
+  String get infoEntityId => 'Device ID';
 
   @override
   String get infoSignal => 'Signal';
@@ -918,137 +708,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get oauthSignIn => 'Sign in with Home Assistant';
-
-  @override
-  String get oauthHint =>
-      'You sign in on your Home Assistant\'s own login page – this app never sees your password.';
-
-  @override
-  String get rememberMe => 'Remember me on this device';
-
-  @override
-  String get rememberMeHint =>
-      'Stay signed in after the browser is closed. You can revoke access anytime in your Home Assistant profile (Security → Refresh tokens).';
-
-  @override
-  String get orUseToken => 'Or use a long-lived access token';
-
-  @override
-  String get loginFailed => 'Sign-in did not complete. Please try again.';
-
-  @override
-  String get discoveryTitle => 'Home Assistant on this network';
-
-  @override
-  String get discoverySearching => 'Searching…';
-
-  @override
-  String get discoveryNothingFound =>
-      'No server found automatically. Enter the address below.';
-
-  @override
-  String get discoverySearchAgain => 'Search again';
-
-  @override
-  String get energyTitle => 'Energy';
-
-  @override
-  String get energyToday => 'Today';
-
-  @override
-  String get energyWeek => 'This week';
-
-  @override
-  String get energyMonth => 'This month';
-
-  @override
-  String get energyCurrentPower => 'Power now';
-
-  @override
-  String get energyNotConfigured =>
-      'Energy is not set up in Home Assistant yet (Settings → Dashboards → Energy). Once it is, consumption, solar and devices appear here.';
-
-  @override
-  String get energyOffline =>
-      'Energy statistics are loaded from Home Assistant and are available while connected.';
-
-  @override
   String get energyConsumption => 'Home consumption';
-
-  @override
-  String get energyFromGrid => 'From grid';
-
-  @override
-  String get energyToGrid => 'To grid';
-
-  @override
-  String get energySolar => 'Solar production';
-
-  @override
-  String get energyBatteryCharge => 'Battery charged';
-
-  @override
-  String get energyBatteryDischarge => 'Battery discharged';
-
-  @override
-  String get energyGas => 'Gas';
-
-  @override
-  String get energyCostEstimate => 'Estimated cost';
-
-  @override
-  String get energySetTariff => 'Enter a tariff for a cost estimate';
-
-  @override
-  String get energyPerHour => 'Consumption per hour';
-
-  @override
-  String get energyPerDay => 'Consumption per day';
-
-  @override
-  String get energyTopConsumers => 'Top consumers';
-
-  @override
-  String get energyNoDevices =>
-      'No individual devices are added to the Energy dashboard in Home Assistant.';
-
-  @override
-  String get energyNoData => 'No data for this period yet.';
-
-  @override
-  String energyPeak(String time, String value) {
-    return 'Highest: $time · $value';
-  }
-
-  @override
-  String get energyShowChart => 'Chart';
-
-  @override
-  String get energyShowTable => 'Table';
-
-  @override
-  String get energyConsumptionChart => 'Consumption chart';
-
-  @override
-  String get energyTariffTitle => 'Electricity tariff';
-
-  @override
-  String get energyTariffHint =>
-      'Used only for an estimate on this device. Real bills also include fixed fees, taxes and consumption zones.';
-
-  @override
-  String get energyTariffImport => 'Price per kWh from the grid';
-
-  @override
-  String get energyTariffExport =>
-      'Compensation per kWh to the grid (optional)';
-
-  @override
-  String get energyTariffCurrency => 'Currency';
-
-  @override
-  String get energyTariffInvalid => 'Enter a valid, non-negative price.';
 
   @override
   String get save => 'Save';
@@ -1164,9 +824,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get presetActivity => 'Activity';
 
   @override
-  String get thermostatModes => 'Modes';
-
-  @override
   String get powerToggle => 'On/off';
 
   @override
@@ -1174,9 +831,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get personAway => 'Away';
-
-  @override
-  String get householdTitle => 'Household';
 
   @override
   String get searchHint => 'Search';
@@ -1237,106 +891,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get weatherNoForecast =>
-      'Your Home Assistant weather entity provides no forecast.';
-
-  @override
-  String get weatherPrecipitation => 'Precipitation';
+      'No forecast for the home yet. Turn it on in Settings → Privacy.';
 
   @override
   String get weatherFeelsHint =>
-      'From your Home Assistant weather entity. Nothing leaves your network.';
-
-  @override
-  String get camerasTitle => 'Cameras';
-
-  @override
-  String get cameraUnavailable => 'The camera isn\'t sending images right now.';
-
-  @override
-  String cameraSnapshotAt(String time) {
-    return 'Snapshot $time';
-  }
-
-  @override
-  String cameraRefreshHint(int seconds) {
-    return 'The picture refreshes every $seconds s while this screen is open. Nothing is recorded or stored.';
-  }
-
-  @override
-  String get cameraFullscreen => 'Full screen';
-
-  @override
-  String get cameraLoading => 'Loading the camera…';
-
-  @override
-  String get kioskShowCameras => 'Show cameras';
-
-  @override
-  String get kioskShowCamerasHint =>
-      'Camera pictures are visible to anyone looking at the wall tablet.';
-
-  @override
-  String get calendarTitle => 'Calendar';
-
-  @override
-  String get calendarToday => 'Today';
-
-  @override
-  String get calendarTomorrow => 'Tomorrow';
-
-  @override
-  String get calendarAllDay => 'All day';
-
-  @override
-  String get calendarNoEvents => 'No events';
-
-  @override
-  String get calendarNone =>
-      'Home Assistant has no calendars. Add one there, for example Google Calendar, CalDAV or the Local Calendar integration.';
-
-  @override
-  String get calendarUnavailable => 'The calendar isn\'t available right now.';
-
-  @override
-  String get calendarPrevMonth => 'Previous month';
-
-  @override
-  String get calendarNextMonth => 'Next month';
-
-  @override
-  String get calendarBackToToday => 'Today';
-
-  @override
-  String get assistTitle => 'Assist';
-
-  @override
-  String get assistHint => 'Type a command or a question';
-
-  @override
-  String get assistSend => 'Send';
-
-  @override
-  String get assistIntro => 'Ask Home Assistant to do something, for example:';
-
-  @override
-  String get assistSuggestionLightsOff => 'Turn off the lights';
-
-  @override
-  String get assistSuggestionTemperature =>
-      'What is the temperature in the living room?';
-
-  @override
-  String get assistSuggestionLightsOn => 'Turn on the lights';
-
-  @override
-  String get assistUnavailable => 'Assist isn\'t available right now.';
-
-  @override
-  String get assistNotUnderstood => 'Assist couldn\'t do that.';
-
-  @override
-  String get assistPrivacy =>
-      'Your text goes only to your Home Assistant server. Assist understands the languages set up there and acts with your account\'s permissions.';
+      'MET Norway\'s forecast for the home\'s location.';
 
   @override
   String get mediaPlayPause => 'Play or pause';
@@ -1348,87 +907,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mediaPrevious => 'Previous';
 
   @override
-  String get mediaNowPlaying => 'Now playing';
-
-  @override
   String get addDeviceTitle => 'Add device';
-
-  @override
-  String get addDeviceIntro =>
-      'New devices pair with your Home Assistant hub, which has the Zigbee or Z-Wave radio, not with this phone. The app guides you through it.';
-
-  @override
-  String get addDeviceZigbee => 'Zigbee';
-
-  @override
-  String get addDeviceZigbeeSubtitle => 'Sensors, bulbs, plugs, switches';
-
-  @override
-  String get addDeviceWifi => 'Wi-Fi and LAN';
-
-  @override
-  String get addDeviceMatter => 'Matter';
-
-  @override
-  String get addDeviceZwave => 'Z-Wave';
-
-  @override
-  String get addDeviceSoon => 'Coming soon';
-
-  @override
-  String get zigbeeViaZha => 'Via ZHA';
-
-  @override
-  String get zigbeeViaZ2m => 'Via Zigbee2MQTT';
-
-  @override
-  String get zigbeeNotFound =>
-      'Neither ZHA nor Zigbee2MQTT was found in Home Assistant. Add a Zigbee coordinator there first.';
-
-  @override
-  String get zigbeeStep1 => 'Start pairing with the button below.';
-
-  @override
-  String get zigbeeStep2 =>
-      'Reset the device or put it in pairing mode. Usually you hold its button for about 5 seconds until it blinks; check the device\'s manual.';
-
-  @override
-  String get zigbeeStep3 =>
-      'Keep the device near the hub until it shows up in the list.';
-
-  @override
-  String get pairingStart => 'Start pairing';
-
-  @override
-  String get pairingStop => 'Stop';
-
-  @override
-  String get pairingExtend => 'Extend';
-
-  @override
-  String get pairingOpen => 'Pairing is on';
-
-  @override
-  String pairingRemaining(String time) {
-    return '$time left';
-  }
-
-  @override
-  String get pairingClosed => 'Pairing is off';
-
-  @override
-  String get pairingWaiting => 'Waiting for new devices…';
-
-  @override
-  String get pairingFound => 'New devices';
-
-  @override
-  String pairingFailed(String reason) {
-    return 'Pairing couldn\'t be started. $reason';
-  }
-
-  @override
-  String get newDeviceSetUp => 'Set up';
 
   @override
   String get setUpDeviceTitle => 'Name and room';
@@ -1441,10 +920,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get setUpSaved => 'Saved.';
-
-  @override
-  String get setUpFailed =>
-      'Name and room can\'t be changed from here. Do it in Home Assistant under Settings, Devices.';
 
   @override
   String get weatherHomeLocationTitle => 'Forecast for your home';
@@ -1469,18 +944,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Sends the home\'s approximate location (saved when you turned the forecast on).';
 
   @override
-  String get weatherNoHomeCoordinates =>
-      'Home Assistant has no home location set.';
-
-  @override
-  String get calendarNoneShort => 'No calendars in Home Assistant';
-
-  @override
   String get mediaTitle => 'Music and media';
 
   @override
   String get mediaNoPlayers =>
-      'Home Assistant has no media players yet. Add one there, for example Spotify, Google Cast, Sonos, DLNA, Kodi or your smart TV\'s integration, and it shows up here.';
+      'No speakers or TVs yet. Add a Sonos, Roku, Samsung or LG TV with \"Add device\" and it shows up here.';
 
   @override
   String get mediaSource => 'Source';
@@ -1489,332 +957,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mediaIdle => 'Not playing';
 
   @override
-  String weatherHomeLocationFar(int km) {
-    return 'Home Assistant\'s home location is about $km km from this device. If that\'s wrong, set it in Home Assistant under Settings, System, General; the home forecast uses it.';
-  }
-
-  @override
   String get mediaNoPlayersShort => 'No media players yet';
-
-  @override
-  String get assistMic => 'Speak a command';
-
-  @override
-  String get assistListening => 'Listening…';
-
-  @override
-  String get voicePrivacyTitle => 'Voice commands';
-
-  @override
-  String get voicePrivacyBody =>
-      'Your phone\'s speech recogniser turns speech into text; only the text goes to your Home Assistant. Some phones can only recognise speech online (for example Google\'s or Apple\'s service), which then receives a recording of your voice.';
-
-  @override
-  String get voiceOnDeviceOnly => 'On this device only';
-
-  @override
-  String get voiceAllowCloud => 'Allow online too';
-
-  @override
-  String get voiceUnavailable =>
-      'Speech recognition isn\'t available. Check the microphone permission.';
-
-  @override
-  String get voiceOnDeviceUnavailable =>
-      'This device can\'t recognise this language offline. You can allow online recognition in Settings.';
-
-  @override
-  String get voiceNoMatch => 'I didn\'t catch that. Try again.';
-
-  @override
-  String get voiceCloudSetting => 'Online speech recognition';
-
-  @override
-  String get voiceCloudSettingHint =>
-      'When off, voice commands are recognised on this device only.';
-
-  @override
-  String get addDeviceWifiSubtitle =>
-      'Devices Home Assistant found on your network';
-
-  @override
-  String get discoveredTitle => 'Found on the network';
-
-  @override
-  String get discoveredEmpty =>
-      'Home Assistant hasn\'t found any new devices. Connect the device to the same Wi-Fi network and wait a minute; devices HA can\'t find on its own are added in Home Assistant under Settings, Devices.';
-
-  @override
-  String discoveredVia(String source) {
-    return 'Found via $source';
-  }
-
-  @override
-  String get discoveredRefresh => 'Search again';
-
-  @override
-  String get discoveredUnavailable =>
-      'The list of found devices isn\'t available. This usually needs an administrator account in Home Assistant.';
-
-  @override
-  String get flowAdd => 'Add';
-
-  @override
-  String get flowNext => 'Next';
-
-  @override
-  String flowConfirm(String name) {
-    return 'Add $name to your home?';
-  }
-
-  @override
-  String flowDone(String title) {
-    return 'Added: $title';
-  }
-
-  @override
-  String get flowDoneDevices => 'New devices';
-
-  @override
-  String flowAborted(String reason) {
-    return 'Setup stopped: $reason';
-  }
-
-  @override
-  String get flowAbortedGeneric => 'Home Assistant stopped the setup.';
-
-  @override
-  String get flowUnsupported =>
-      'This step needs Home Assistant itself (for example a sign-in in a browser). Continue there.';
-
-  @override
-  String get flowUnsupportedField =>
-      'This form has fields the app can\'t show yet. Continue in Home Assistant.';
-
-  @override
-  String get flowWorking => 'Setting up…';
-
-  @override
-  String get flowRequired => 'Required';
-
-  @override
-  String get flowFinish => 'Done';
-
-  @override
-  String get matterTitle => 'Matter';
-
-  @override
-  String get matterIntro =>
-      'Add a Matter device that already works with another app (Google Home, Apple Home, SmartThings, Alexa…).';
-
-  @override
-  String get matterStep1 =>
-      'In that app, open the device and choose to share it with another app or controller (\"Linked Matter apps\", \"Turn on pairing mode\").';
-
-  @override
-  String get matterStep2 =>
-      'Scan the QR code it shows, or type the 11-digit code.';
-
-  @override
-  String get matterStep3 =>
-      'Home Assistant then adds the device over your network; both apps can control it.';
-
-  @override
-  String get matterNewDeviceNote =>
-      'Brand-new Matter devices over Bluetooth can be added from the Android app.';
-
-  @override
-  String get matterCodeLabel => 'Setup code';
-
-  @override
-  String get matterCodeHint => '1234-567-8901 or MT:…';
-
-  @override
-  String get matterInvalidCode =>
-      'That isn\'t a valid Matter code. Check the digits.';
-
-  @override
-  String get matterScan => 'Scan QR code';
-
-  @override
-  String get matterAdding => 'Adding the device… this can take a minute.';
-
-  @override
-  String get matterNotAvailable =>
-      'The Matter integration isn\'t set up in Home Assistant. Add it there first.';
-
-  @override
-  String get matterFailed =>
-      'The device couldn\'t be added. Make sure sharing is still on in the other app (the code is valid for a few minutes) and the device is on the same network.';
-
-  @override
-  String get matterAdded => 'Device added';
-
-  @override
-  String get scanPointCamera => 'Point the camera at the Matter QR code.';
-
-  @override
-  String get zwaveTitle => 'Z-Wave';
-
-  @override
-  String get zwaveIntro =>
-      'Add a Z-Wave device through your Z-Wave JS controller.';
-
-  @override
-  String get zwaveNotAvailable =>
-      'The Z-Wave JS integration isn\'t set up in Home Assistant.';
-
-  @override
-  String get zwaveStart => 'Start inclusion';
-
-  @override
-  String get zwaveStop => 'Stop';
-
-  @override
-  String get zwaveStatusWaiting =>
-      'Put the device into inclusion mode (often three quick presses of its button; see the manual).';
-
-  @override
-  String get zwaveStatusFound => 'Device found…';
-
-  @override
-  String get zwaveStatusInterview =>
-      'Getting to know the device (interview)… battery devices can take a few minutes.';
-
-  @override
-  String get zwaveStatusDone => 'Device added';
-
-  @override
-  String get zwaveStatusFailed =>
-      'Inclusion didn\'t work. Try again closer to the controller.';
-
-  @override
-  String get zwaveStatusStopped => 'Inclusion stopped.';
-
-  @override
-  String get zwaveGrantTitle => 'Security';
-
-  @override
-  String get zwaveGrantBody =>
-      'The device asks for these security levels. Allowing all of them is recommended.';
-
-  @override
-  String get zwaveS2Unauth => 'S2 unauthenticated';
-
-  @override
-  String get zwaveS2Auth => 'S2 authenticated';
-
-  @override
-  String get zwaveS2Access => 'S2 access control (locks, garage doors)';
-
-  @override
-  String get zwaveS0 => 'S0 (legacy)';
-
-  @override
-  String get zwaveGrant => 'Allow';
-
-  @override
-  String get zwavePinTitle => 'PIN from the device';
-
-  @override
-  String zwavePinBody(String dsk) {
-    return 'Enter the first 5 digits of the DSK from the device label or box (usually underlined). The rest of the code: $dsk';
-  }
-
-  @override
-  String get zwavePinLabel => '5 digits';
-
-  @override
-  String get zwavePinInvalid => 'Enter exactly 5 digits.';
-
-  @override
-  String get zwaveSmartStart => 'SmartStart: scan QR';
-
-  @override
-  String get zwaveSmartStartHint =>
-      'Devices with a SmartStart QR code join by themselves once powered on.';
-
-  @override
-  String get zwaveSmartStartDone =>
-      'Device registered. Power it on; it joins by itself within a few minutes.';
-
-  @override
-  String get zwaveSmartStartInvalid => 'That isn\'t a Z-Wave QR code.';
-
-  @override
-  String get scanPointCameraZwave => 'Point the camera at the Z-Wave QR code.';
-
-  @override
-  String get historyTitle => 'History';
-
-  @override
-  String get history24h => '24 h';
-
-  @override
-  String get history7d => '7 days';
-
-  @override
-  String historyMin(String value) {
-    return 'Min $value';
-  }
-
-  @override
-  String historyMax(String value) {
-    return 'Max $value';
-  }
-
-  @override
-  String get historyEmpty => 'No data for this period.';
-
-  @override
-  String get historyUnavailable =>
-      'History isn\'t available. The recorder may be turned off in Home Assistant.';
-
-  @override
-  String get activityTitle => 'Activity';
-
-  @override
-  String get activityByUser => 'by a person';
-
-  @override
-  String get activityEmpty => 'Nothing happened in the last 24 hours.';
-
-  @override
-  String get notificationsTitle => 'Notifications';
-
-  @override
-  String notificationsCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count notifications from Home Assistant',
-      one: '1 notification from Home Assistant',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get notificationDismiss => 'Dismiss';
-
-  @override
-  String get notificationsDismissAll => 'Dismiss all';
-
-  @override
-  String get notificationsEmpty => 'No notifications.';
-
-  @override
-  String get cameraSnapshots => 'Snapshots';
-
-  @override
-  String get cameraLive => 'Live';
-
-  @override
-  String get cameraLiveHint =>
-      'Live video from Home Assistant while this screen is open; sound is off. Nothing is recorded.';
-
-  @override
-  String get cameraLiveFailed =>
-      'Live video isn\'t available for this camera (or the server\'s certificate isn\'t trusted by the video player). Snapshots still work.';
 
   @override
   String get appLockTitle => 'Open Smart Home is locked';
@@ -1846,16 +989,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get appLockCriticalSettingHint =>
       'Also ask before unlocking doors, opening the garage or disarming the alarm.';
-
-  @override
-  String get appLockNoDeviceAuth =>
-      'This device has no screen lock or biometrics set up.';
-
-  @override
-  String get homesTitle => 'Homes';
-
-  @override
-  String get addHome => 'Add another home';
 
   @override
   String get alarmArm_home => 'Home';
@@ -1940,7 +1073,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get restrictedHint =>
-      'Hides sensitive devices and locks settings with a PIN on this device. Home Assistant permissions don\'t change; for real limits use a separate HA user.';
+      'Hides sensitive devices and locks settings with a PIN on this device.';
 
   @override
   String get restrictedHideSecurity => 'Hide locks, alarm and garage doors';
@@ -2011,13 +1144,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get autoSave => 'Save to Home Assistant';
 
   @override
-  String get autoSaved => 'Automation saved in Home Assistant.';
-
-  @override
-  String get autoSaveFailed =>
-      'The automation wasn\'t saved. This needs an administrator account in Home Assistant.';
-
-  @override
   String get autoDelete => 'Delete automation';
 
   @override
@@ -2029,41 +1155,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get autoIncomplete => 'Choose when it runs and at least one action.';
 
   @override
-  String get autoChangesTo => 'changes to';
-
-  @override
   String get autoNameHint => 'For example: Hallway light at night';
-
-  @override
-  String get autoHint =>
-      'Saved as a normal Home Assistant automation, so it runs even when this phone is off. You can change it later in Home Assistant too.';
-
-  @override
-  String get svc_turn_on => 'Turn on';
-
-  @override
-  String get svc_turn_off => 'Turn off';
-
-  @override
-  String get svc_open_cover => 'Open';
-
-  @override
-  String get svc_close_cover => 'Close';
-
-  @override
-  String get svc_lock => 'Lock';
-
-  @override
-  String get svc_start => 'Start';
-
-  @override
-  String get svc_return_to_base => 'Back to dock';
-
-  @override
-  String get svc_media_play => 'Play';
-
-  @override
-  String get svc_media_pause => 'Pause';
 
   @override
   String get svc_activate => 'Activate';
@@ -2084,10 +1176,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sceneNew => 'New scene from now';
 
   @override
-  String get sceneHint =>
-      'Saves how the chosen devices are right now (on/off, brightness, colour, blinds, temperature) as a Home Assistant scene.';
-
-  @override
   String get sceneName => 'Scene name';
 
   @override
@@ -2095,9 +1183,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sceneSave => 'Save scene';
-
-  @override
-  String get sceneSaved => 'Scene saved in Home Assistant.';
 
   @override
   String get sceneNeedDevice => 'Choose at least one device.';
@@ -2111,26 +1196,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String energyPrevDay(String value) {
-    return 'Yesterday: $value';
-  }
-
-  @override
-  String energyPrevWeek(String value) {
-    return 'Last week: $value';
-  }
-
-  @override
-  String energyPrevMonth(String value) {
-    return 'Last month: $value';
-  }
-
-  @override
   String get autoEdit => 'Edit automation';
-
-  @override
-  String get autoTooComplex =>
-      'This automation does more than the app\'s editor can show. Change it in Home Assistant.';
 
   @override
   String get backupSection => 'Backup and transfer';
@@ -2202,27 +1268,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get autoCondLight => 'Only when it\'s light';
 
   @override
-  String get autoIs => 'is';
-
-  @override
-  String get activityAll => 'All';
-
-  @override
-  String get activitySecurity => 'Doors & security';
-
-  @override
-  String get activityPeople => 'People';
-
-  @override
-  String get activityHint =>
-      'From Home Assistant\'s logbook for the last 24 hours. Sensors that measure continuously (temperature, power) aren\'t listed.';
-
-  @override
   String get alertsSetting => 'Notify about critical alerts';
 
   @override
   String get alertsSettingHint =>
-      'Smoke, CO, water leak, a triggered alarm or a jammed lock as a phone notification, shown by this device. While the app runs — or always, with “Also when the app is closed” under Messages from Home Assistant.';
+      'Smoke, CO, water leak, a triggered alarm or a jammed lock as a phone notification. While the app runs — or always, with Background automations (Settings → Home).';
 
   @override
   String get alertsPermissionDenied =>
@@ -2257,36 +1307,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get widgetNoScenes => 'No scenes yet: create one in the app';
-
-  @override
-  String get widgetSignedOut => 'Sign in to Open Smart Home';
-
-  @override
-  String get riskVpnTunnel =>
-      'Tailscale VPN address: the connection is encrypted and also works away from home.';
-
-  @override
-  String get remoteTitle => 'Address away from home';
-
-  @override
-  String get remoteNotSet => 'Not set: only the home address is used';
-
-  @override
-  String get remoteInUse => 'In use now (the home address does not answer)';
-
-  @override
-  String get remoteHint =>
-      'The same Home Assistant as reached from outside: a Home Assistant Cloud (Nabu Casa) address, your own domain with HTTPS, or a Tailscale address. At home the app uses the home address; when it doesn\'t answer, it switches to this one. The same token is used.';
-
-  @override
-  String get remoteSameAsLocal => 'This is already the home address.';
-
-  @override
-  String get remoteNeedsHttps =>
-      'A public address needs HTTPS (or use Tailscale), otherwise the token would cross the internet unencrypted.';
-
-  @override
-  String get remoteRemove => 'Remove';
 
   @override
   String get clapSetting => 'Double clap';
@@ -2363,115 +1383,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clapSearch => 'Search devices';
 
   @override
-  String get oauthHintNative =>
-      'Sign in on your Home Assistant\'s own login page with your user name and password. The app receives only a one-time code and keeps no password; no long-lived token is needed.';
-
-  @override
-  String get oauthPageFailed =>
-      'Home Assistant\'s login page did not load. Check the connection, or sign in with a token below. (A self-signed certificate works only with a token.)';
-
-  @override
-  String get haPushTitle => 'Messages from Home Assistant';
-
-  @override
-  String get haPushHint =>
-      'Let Home Assistant automations send notifications to this device';
-
-  @override
-  String get haPushExplain =>
-      'This device is added to Home Assistant (Mobile App integration). Automations can then send it messages with a notify service. They arrive over the local connection while the app is running, without any cloud service.';
-
-  @override
-  String get haPushName => 'Device name in Home Assistant';
-
-  @override
-  String get haPushDefaultName => 'Open Smart Home';
-
-  @override
-  String get haPushRegister => 'Add to Home Assistant';
-
-  @override
-  String haPushReady(String service) {
-    return 'Automations send messages with $service';
-  }
-
-  @override
-  String get haPushCopy => 'Copy the service name';
-
-  @override
-  String get haPushCopied => 'Service name copied.';
-
-  @override
-  String get haPushTest => 'Send a test message';
-
-  @override
-  String get haPushTestMessage =>
-      'Messages from Home Assistant arrive on this device.';
-
-  @override
-  String get haPushForget => 'Stop messages';
-
-  @override
-  String get haPushForgetHint =>
-      'The app stops listening for messages. To remove the device completely, delete it in Home Assistant: Settings → Devices & services → Mobile App.';
-
-  @override
-  String get haPushBackground => 'Also when the app is closed';
-
-  @override
-  String get haPushBackgroundHint =>
-      'Keeps the connection open in the background, also after a restart. Android then shows a quiet, permanent notification; uses a little more battery.';
-
-  @override
-  String get haPushServiceTitle => 'Connected to Home Assistant';
-
-  @override
-  String get haPushServiceText => 'Waiting for messages from your automations';
-
-  @override
-  String get haPushRemovedInHa =>
-      'This device was removed in Home Assistant (Mobile App). Add it again to receive messages.';
-
-  @override
-  String get kioskPopup => 'Camera pop-up';
-
-  @override
-  String get kioskPopupHint =>
-      'Show a camera when someone rings or moves at the door';
-
-  @override
-  String kioskPopupSummary(String camera, int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count triggers',
-      one: '1 trigger',
-    );
-    return '$camera · $_temp0';
-  }
-
-  @override
-  String get kioskPopupExplain =>
-      'When one of the chosen devices fires — a doorbell press, motion, a door or gate opening — the kiosk wakes up and shows the camera full screen.';
-
-  @override
-  String get kioskPopupCamera => 'Camera';
-
-  @override
-  String get kioskPopupOff => 'Off';
-
-  @override
-  String get kioskPopupDuration => 'Show for';
-
-  @override
-  String get kioskPopupTriggers => 'Triggered by';
-
-  @override
-  String kioskPopupClosesIn(int seconds) {
-    return 'closes in $seconds s';
-  }
-
-  @override
   String get kioskDarkScreensaver => 'Dimmed backlight when idle';
 
   @override
@@ -2536,20 +1447,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dashCardMedia => 'Now playing';
 
   @override
-  String get dashCardNotifications => 'Notifications from Home Assistant';
-
-  @override
   String get dashCardShortcuts => 'Energy, calendar, activity';
 
   @override
   String get dashCardAttention => 'Needs attention (batteries, unavailable)';
-
-  @override
-  String get kioskPopupLive => 'Live video';
-
-  @override
-  String get kioskPopupLiveHint =>
-      'When the camera offers a stream; until it starts, and otherwise, snapshots are shown.';
 
   @override
   String get timerSet => 'Timer';
@@ -2570,9 +1471,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'This phone or wall panel counts down while the app runs (or with automations in the background).';
 
   @override
-  String get timerRunning => 'Timer is running';
-
-  @override
   String timerTurnsOffAt(String time) {
     return 'Turns off at $time';
   }
@@ -2581,36 +1479,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String timerTurnsOnAt(String time) {
     return 'Turns on at $time';
   }
-
-  @override
-  String get timerNeedsAdmin =>
-      'Timers need an administrator account in Home Assistant.';
-
-  @override
-  String energyShareOfHome(int percent) {
-    return '$percent % of the home';
-  }
-
-  @override
-  String get matterNewTitle => 'New Matter device';
-
-  @override
-  String get matterNewHint =>
-      'Out of the box, with a QR code on it or its box. Google Play services sets it up over Bluetooth and puts it on your Wi-Fi or Thread network, then Home Assistant adds it. Keep the phone close to the device.';
-
-  @override
-  String get matterNewButton => 'Add a new Matter device';
-
-  @override
-  String get matterNoPlayServices =>
-      'Adding new Matter devices on Android goes through Google Play services, which are not available here (for example an emulator, or a phone without Google services). Use Home Assistant\'s own app, or share the device from another Matter app below.';
-
-  @override
-  String get matterNewFailed =>
-      'The device was not added. Reset it (see its manual) and try again close to the phone. Thread devices also need a Thread border router known to this phone.';
-
-  @override
-  String get matterSharedTitle => 'Device already in another app';
 
   @override
   String get kioskPanelChooseDevice => 'Choose device';
@@ -2622,15 +1490,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsAppearanceHint => 'Theme, language, home screen';
 
   @override
-  String get settingsServerHint => 'Address, away address, homes, sign out';
-
-  @override
   String get settingsKioskHint =>
       'Wall tablet: layout, PIN, screensaver, camera';
 
   @override
-  String get settingsNotificationsHint =>
-      'Messages from Home Assistant, alerts';
+  String get settingsNotificationsHint => 'Alerts, batteries, appliance done';
 
   @override
   String get settingsSecurityHint => 'App lock, kids and guests mode';
@@ -2738,322 +1602,6 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
-
-  @override
-  String get todoTitle => 'Lists';
-
-  @override
-  String get todoAddHint => 'Add an item…';
-
-  @override
-  String get todoAdd => 'Add';
-
-  @override
-  String todoDone(int count) {
-    return 'Done ($count)';
-  }
-
-  @override
-  String get todoClearDone => 'Clear done';
-
-  @override
-  String get todoEmpty => 'No items. Add the first one.';
-
-  @override
-  String get todoNoLists =>
-      'Home Assistant has no lists. Add the “Shopping list” or “Local to-do” integration.';
-
-  @override
-  String get todoRename => 'Edit item';
-
-  @override
-  String get todoDelete => 'Delete';
-
-  @override
-  String get todoReadOnly => 'This list is read-only here.';
-
-  @override
-  String todoDue(String date) {
-    return 'Due: $date';
-  }
-
-  @override
-  String get todoUnavailable => 'The list is not available right now.';
-
-  @override
-  String get dashCardLists => 'Lists';
-
-  @override
-  String get energyTwoRate => 'Two-rate meter';
-
-  @override
-  String get energyTwoRateHint =>
-      'The lower (night) rate applies in the hours you set. They differ by area — check your bill or your distributor.';
-
-  @override
-  String get energyLowPrice => 'Low-rate price (per kWh)';
-
-  @override
-  String get energyHighPrice => 'High-rate price (per kWh)';
-
-  @override
-  String get energyLowFrom => 'From';
-
-  @override
-  String get energyLowTo => 'To';
-
-  @override
-  String get energyLowPresetBelgrade => 'Belgrade 00–08';
-
-  @override
-  String get energyLowPresetVojvodina => 'Vojvodina 23–07';
-
-  @override
-  String get energyLowPresetCentral => 'Central Serbia 22–06';
-
-  @override
-  String get energyHighRateKwh => 'High rate';
-
-  @override
-  String get energyLowRateKwh => 'Low rate';
-
-  @override
-  String energyLowShare(int percent) {
-    return '$percent % of use';
-  }
-
-  @override
-  String energyLowNow(String time) {
-    return 'Low rate now, until $time';
-  }
-
-  @override
-  String energyHighNow(String time) {
-    return 'High rate now — low rate starts at $time';
-  }
-
-  @override
-  String get energyLowLegend => 'Low-rate hours';
-
-  @override
-  String get boardTitle => 'Board';
-
-  @override
-  String get boardNewPage => 'New page';
-
-  @override
-  String get boardEmpty =>
-      'No pages yet. Make the first one and write or draw with a finger or a pen.';
-
-  @override
-  String get boardStorageNote =>
-      'Pages are saved on your Home Assistant as pictures (image_upload), so all your devices see them. Home Assistant shows such pictures without signing in to anyone on the network who knows their long random link.';
-
-  @override
-  String get boardPen => 'Pen';
-
-  @override
-  String get boardEraser => 'Eraser';
-
-  @override
-  String get boardUndo => 'Undo';
-
-  @override
-  String get boardRedo => 'Redo';
-
-  @override
-  String get boardClear => 'Clear page';
-
-  @override
-  String get boardClearConfirm => 'Clear everything on this page?';
-
-  @override
-  String get boardDeletePage => 'Delete page';
-
-  @override
-  String get boardDeleteConfirm => 'Delete this page from Home Assistant?';
-
-  @override
-  String get boardDeleteNeedsAdmin =>
-      'Deleting pictures in Home Assistant needs an administrator account.';
-
-  @override
-  String get boardSaving => 'Saving…';
-
-  @override
-  String get boardSaved => 'Saved';
-
-  @override
-  String get boardSaveFailed => 'Not saved — will try again.';
-
-  @override
-  String get boardChangedElsewhere =>
-      'This page was changed on another device.';
-
-  @override
-  String get boardReload => 'Load';
-
-  @override
-  String boardColor(int n) {
-    return 'Colour $n';
-  }
-
-  @override
-  String boardWidth(int n) {
-    return 'Width $n';
-  }
-
-  @override
-  String get boardZoomHint => 'Two fingers: zoom and move';
-
-  @override
-  String get boardUnavailable =>
-      'The board is not available. Check the connection to Home Assistant.';
-
-  @override
-  String boardPageCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count pages',
-      one: '$count page',
-      zero: 'Empty — write or draw something',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get deviceSensorBattery => 'Battery';
-
-  @override
-  String get deviceSensorBatteryState => 'Battery state';
-
-  @override
-  String get deviceSensorCharging => 'Charging';
-
-  @override
-  String get deviceSensorKiosk => 'Kiosk';
-
-  @override
-  String get deviceSensorsSwitch => 'Send battery state to Home Assistant';
-
-  @override
-  String get deviceSensorsHint =>
-      'Battery level, charging and whether the kiosk is on become sensors of this device in your HA. Nothing else is sent.';
-
-  @override
-  String get smartChargeTitle => 'Smart charging';
-
-  @override
-  String smartChargeHint(int low, int high) {
-    return 'The charger\'s plug turns on at $low % and off at $high % — the wall tablet\'s battery lasts longer.';
-  }
-
-  @override
-  String get smartChargeWaiting =>
-      'Waiting for the battery sensor to appear in Home Assistant…';
-
-  @override
-  String get smartChargePlug => 'Charger plug or switch';
-
-  @override
-  String get smartChargeCreate => 'Create automation';
-
-  @override
-  String smartChargeDone(String name) {
-    return 'Automation “$name” created in Home Assistant.';
-  }
-
-  @override
-  String get smartChargeNeedsAdmin =>
-      'Creating automations needs an administrator account.';
-
-  @override
-  String smartChargeAlias(String device) {
-    return 'Smart charging – $device';
-  }
-
-  @override
-  String get nfcTitle => 'NFC tags';
-
-  @override
-  String get nfcHint =>
-      'Hold the phone to a tag and Home Assistant runs what you chose — e.g. a “Leaving” scene by the front door. Tags use the same format as the official HA app.';
-
-  @override
-  String get nfcSectionHint => 'A scene with a tap of the phone';
-
-  @override
-  String get nfcOff => 'NFC is turned off in the phone\'s settings.';
-
-  @override
-  String get nfcMissing =>
-      'This device has no NFC. Existing tags still work from other phones.';
-
-  @override
-  String get nfcNeedsRegistration =>
-      'To scan, add this device to Home Assistant (Notifications → Messages from Home Assistant).';
-
-  @override
-  String get nfcNew => 'New tag';
-
-  @override
-  String get nfcName => 'Tag name';
-
-  @override
-  String get nfcRuns => 'When scanned, run';
-
-  @override
-  String get nfcWrite => 'Write tag';
-
-  @override
-  String get nfcHold => 'Hold the tag to the back of the phone…';
-
-  @override
-  String nfcWritten(String name) {
-    return 'Tag “$name” is ready.';
-  }
-
-  @override
-  String get nfcWrittenNoAdmin =>
-      'The tag is written, but adding it to Home Assistant (and the automation) needs an administrator account. Scans still reach HA.';
-
-  @override
-  String get nfcErrorReadOnly => 'The tag is locked and cannot be written.';
-
-  @override
-  String get nfcErrorTooSmall => 'The address does not fit on this tag.';
-
-  @override
-  String get nfcErrorUnsupported => 'This kind of tag is not supported.';
-
-  @override
-  String get nfcErrorFailed =>
-      'Writing failed — hold the tag still against the phone and try again.';
-
-  @override
-  String nfcScanned(String name) {
-    return 'Tag “$name” scanned';
-  }
-
-  @override
-  String nfcScanFailed(String reason) {
-    return 'The tag did not reach Home Assistant: $reason';
-  }
-
-  @override
-  String get nfcEmpty => 'Home Assistant has no tags yet.';
-
-  @override
-  String nfcLastScanned(String when) {
-    return 'Last: $when';
-  }
-
-  @override
-  String get nfcNeverScanned => 'Not scanned yet';
-
-  @override
-  String get nfcScannedUnnamed => 'Tag scanned';
 
   @override
   String homeSayTime(String time) {
@@ -3180,12 +1728,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aodFocusNone => 'Nothing';
 
   @override
-  String get aodFocusNextEvent => 'Next event';
-
-  @override
-  String get aodFocusList => 'List';
-
-  @override
   String get aodFocusDevice => 'Device';
 
   @override
@@ -3201,18 +1743,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aodChoose => 'Choose';
 
   @override
-  String get aodNextEvent => 'Next';
-
-  @override
-  String get aodNoEvents => 'No events in the next 7 days';
-
-  @override
-  String get aodToday => 'today';
-
-  @override
-  String get aodTomorrow => 'tomorrow';
-
-  @override
   String get morningScreen => 'Morning screen';
 
   @override
@@ -3226,73 +1756,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get morningTo => 'To';
 
   @override
-  String get morningToday => 'Today';
-
-  @override
-  String get morningReminders => 'Reminders';
-
-  @override
-  String get morningNothing => 'Nothing on today.';
-
-  @override
   String morningHighLow(String high, String low) {
     return 'high $high, low $low';
   }
 
   @override
-  String aodNowUntil(String time) {
-    return 'now, until $time';
-  }
-
-  @override
   String get aodBrightness => 'Always-on brightness';
-
-  @override
-  String get settingsAssistSection => 'Assist (voice)';
-
-  @override
-  String get settingsAssistHint => 'Spoken answers, phone assistant';
-
-  @override
-  String get assistSpeak => 'Speak answers';
-
-  @override
-  String get assistSpeakHint =>
-      'When you ask by voice, the answer is spoken too (the device\'s text-to-speech, nothing is sent).';
-
-  @override
-  String get assistDefault => 'Phone assistant';
-
-  @override
-  String get assistDefaultHint =>
-      'Choose Open Smart Home as the “digital assistant”: a long press of home or power opens Assist, listening.';
-
-  @override
-  String get wakeWordSetting => 'Wake word (hands-free)';
-
-  @override
-  String get wakeWordSettingHint =>
-      'Say the wake word set up in Home Assistant (for example “Okay Nabu”), then the command. Only while the kiosk is shown.';
-
-  @override
-  String get wakeWordPrivacyTitle => 'Listen for the wake word?';
-
-  @override
-  String get wakeWordPrivacyBody =>
-      'While the kiosk is on screen the microphone stays on (Android shows its microphone indicator) and the sound is streamed continuously to your Home Assistant server, over the same connection as everything else, so that its wake word engine (openWakeWord) can recognise the wake word. Nothing is recorded or stored on this tablet. What Home Assistant does with the command after the wake word depends on its Assist settings: local recognition (for example Whisper) stays at home, Home Assistant Cloud sends it to the internet.';
-
-  @override
-  String get wakeWordAllow => 'Turn on';
-
-  @override
-  String get wakeWordActive => 'Listening for the wake word';
-
-  @override
-  String get wakeWordMissing =>
-      'Home Assistant has no wake word engine. Install the openWakeWord add-on (the Wyoming integration finds it), then turn this on again.';
-
-  @override
-  String get wakeWordNeedsServer => 'Needs a connection to Home Assistant.';
 
   @override
   String get approachWake => 'Wake the screen when someone comes near';
@@ -3304,7 +1773,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get approachOff => 'Off';
 
   @override
-  String get approachSensor => 'Motion sensor (Home Assistant)';
+  String get approachSensor => 'Motion sensor';
 
   @override
   String get approachCamera => 'Tablet camera';
@@ -3314,14 +1783,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get approachNoSensors =>
-      'Home Assistant has no motion or presence sensors.';
+      'No motion or presence sensors. Add one (e.g. Shelly BLU, Hue, IKEA or ESPHome).';
 
   @override
   String get approachCameraTitle => 'Use the tablet\'s camera?';
 
   @override
   String get approachCameraBody =>
-      'While the screen is idle, the front camera checks a few times a second whether something moves in front of the tablet, and Android shows its camera indicator. Pictures are processed only on this tablet and dropped at once: nothing is recorded, stored or sent anywhere — not even to Home Assistant. While the screen is awake the camera is off.';
+      'While the screen is idle, the front camera checks a few times a second whether something moves in front of the tablet, and Android shows its camera indicator. Pictures are processed only on this tablet and dropped at once: nothing is recorded, stored or sent anywhere. While the screen is awake the camera is off.';
 
   @override
   String get approachCameraAllow => 'Turn on';
@@ -3345,29 +1814,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get presenceOn => 'Simulation on';
 
   @override
-  String get presenceNotSaved => 'Not saved in Home Assistant yet.';
-
-  @override
   String get presenceLights => 'Lights';
 
   @override
   String get presenceNoLights => 'The home has no lights.';
-
-  @override
-  String get presenceWhen => 'When';
-
-  @override
-  String get presenceWhenAway => 'When nobody is home';
-
-  @override
-  String get presenceWhenAwayHint =>
-      'By the people in Home Assistant (the Home zone).';
-
-  @override
-  String get presenceWhenAlarm => 'When the alarm is armed away';
-
-  @override
-  String get presenceWhenAlways => 'Always while it is on';
 
   @override
   String get presenceFromSunset => 'From sunset';
@@ -3383,56 +1833,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get presenceSaved => 'Presence simulation saved.';
-
-  @override
-  String get presenceRemove => 'Remove';
-
-  @override
-  String get presenceRemoved => 'Presence simulation removed.';
-
-  @override
-  String get presenceNeedsAdmin =>
-      'This needs an administrator account in Home Assistant.';
-
-  @override
-  String lowTariffAlias(String device) {
-    return 'Lower rate reminder ($device)';
-  }
-
-  @override
-  String get lowTariffTitle => 'The lower rate has started';
-
-  @override
-  String lowTariffMessage(String until, String price) {
-    return 'Electricity is cheaper until $until ($price/kWh): a good time for the washing machine, the dishwasher or charging.';
-  }
-
-  @override
-  String get lowTariffRemind => 'Remind me when the lower rate starts';
-
-  @override
-  String get lowTariffRemindOn => 'Lower rate reminder is on';
-
-  @override
-  String lowTariffDialogBody(String time) {
-    return 'When the lower rate starts ($time), Home Assistant sends a message to this phone; when it ends, the message goes away by itself. It runs as an automation in Home Assistant (saving needs an administrator account), and the message arrives while the app is connected, as all messages from Home Assistant.';
-  }
-
-  @override
-  String get lowTariffCreate => 'Turn on reminder';
-
-  @override
-  String get lowTariffRemove => 'Remove reminder';
-
-  @override
-  String get lowTariffCreated => 'Lower rate reminder is on.';
-
-  @override
-  String get lowTariffRemoved => 'Lower rate reminder removed.';
-
-  @override
-  String get lowTariffNeedsPush =>
-      'First turn on “Messages from Home Assistant” (Settings › Notifications).';
 
   @override
   String get kioskAlertAck => 'Got it';
@@ -3499,11 +1899,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String timerDoneSpeech(String label) {
     return 'The $label timer is done.';
-  }
-
-  @override
-  String timerStarted(String label) {
-    return 'Timer for $label started.';
   }
 
   @override
@@ -3602,86 +1997,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get familyMessages => 'Messages';
-
-  @override
-  String get familyMessagesNone => 'No messages. Leave one for the household.';
-
-  @override
-  String get familyMessageNew => 'New message';
-
-  @override
-  String get familyMessageEveryone => 'Everyone';
-
-  @override
-  String familyMessageFor(String name) {
-    return 'Message for $name';
-  }
-
-  @override
-  String get familyMessageForAll => 'Message for everyone';
-
-  @override
-  String get familyMessageRead => 'Read';
-
-  @override
-  String get familyMessageHint => 'For example: there is soup in the fridge';
-
-  @override
-  String get familyMessageSend => 'Leave message';
-
-  @override
-  String welcomeHome(String name) {
-    return 'Welcome home, $name!';
-  }
-
-  @override
-  String get greetPeople => 'Greet people coming home';
-
-  @override
-  String get greetPeopleHint =>
-      'When someone arrives (by their person in Home Assistant), the tablet says hello and shows their messages.';
-
-  @override
-  String get kioskIntercom => 'Intercom';
-
-  @override
-  String get kioskIntercomOpen => '“Open” button';
-
-  @override
-  String get kioskIntercomSpeaker => 'Speaker by the door (“Coming” button)';
-
-  @override
-  String get kioskIntercomSpeakerHint =>
-      'Home Assistant says the reply there with its own text-to-speech.';
-
-  @override
-  String get kioskIntercomReply => 'Coming!';
-
-  @override
-  String get kioskIntercomReplyText => 'Coming, just a moment!';
-
-  @override
-  String get kioskIntercomReplied =>
-      'Said at the door: “Coming, just a moment!”';
-
-  @override
-  String get kioskIntercomNoTts =>
-      'Home Assistant has no text-to-speech set up.';
-
-  @override
-  String kioskIntercomUnlock(String name) {
-    return 'Unlock $name';
-  }
-
-  @override
-  String kioskIntercomOpenDevice(String name) {
-    return 'Open $name';
-  }
-
-  @override
   String get kioskColumnsNoRooms =>
-      'No rooms yet. Add areas in Home Assistant.';
+      'No rooms yet. Add them in Settings → Home.';
 
   @override
   String get kioskColumnsDevices => 'Devices';
@@ -3749,25 +2066,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get applianceDoneThisPhone => 'Message to this phone';
-
-  @override
-  String get applianceDoneNeedsPush =>
-      'Turn on messages from Home Assistant in settings first.';
-
-  @override
-  String get applianceDoneHousehold => 'Message to the whole household';
-
-  @override
-  String get applianceDoneHouseholdHint =>
-      'Everyone sees it in the app and on the wall tablet.';
-
-  @override
-  String applianceDoneOtherPhones(int count) {
-    return 'Also tells $count other phone(s).';
-  }
-
-  @override
   String get applianceDoneRemove => 'Remove';
 
   @override
@@ -3777,10 +2075,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String applianceDoneSaved(String name) {
     return 'You\'ll hear when \"$name\" is done.';
   }
-
-  @override
-  String get applianceDoneNeedsAdmin =>
-      'This needs an administrator account in Home Assistant.';
 
   @override
   String get applianceDoneOn => 'Tells you when it\'s done';
@@ -3797,11 +2091,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String applianceDoneMessage(String name) {
     return '$name: the cycle has finished.';
-  }
-
-  @override
-  String applianceDoneAlias(String name) {
-    return 'Done: $name (Open Smart Home)';
   }
 
   @override
@@ -3841,11 +2130,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String heatingScheduleNext(String time, String temperature) {
     return 'Next: $time → $temperature';
-  }
-
-  @override
-  String heatingScheduleAlias(String name) {
-    return 'Schedule: $name (Open Smart Home)';
   }
 
   @override
@@ -3916,14 +2200,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get roomPhotoHint =>
-      'Photo, icon and colour stay on this device only; they are not sent to Home Assistant. For the wall tablet, choose them on the tablet itself.';
+      'Photo, icon and colour stay on this device only. For the wall tablet, choose them on the tablet itself.';
 
   @override
   String get themeAutoDark => 'Dark after sunset';
 
   @override
   String get themeAutoDarkHint =>
-      'Follows sunrise and sunset from Home Assistant (without it: dark from 20:00 to 7:00).';
+      'Follows sunrise and sunset at the home\'s location (without it: dark from 20:00 to 7:00).';
 
   @override
   String get accentTitle => 'Accent colour';
@@ -3984,7 +2268,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get roomColorTitle => 'Colour';
 
   @override
-  String get roomLookReset => 'As in Home Assistant';
+  String get roomLookReset => 'Default';
 
   @override
   String get favoritesBrowse => 'Browse devices';
@@ -3993,235 +2277,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bigSliderPosition => 'Position';
 
   @override
-  String get bigSliderHint => 'Long press: big slider';
-
-  @override
   String get deviceSheetMore => 'All details';
-
-  @override
-  String get serviceSection => 'Service';
-
-  @override
-  String get serviceSectionHint => 'Diagnostics, support and installer tools';
-
-  @override
-  String serviceSupport(String brand) {
-    return 'Support: $brand';
-  }
-
-  @override
-  String get serviceApp => 'App';
-
-  @override
-  String get serviceDevice => 'Device';
-
-  @override
-  String get serviceServer => 'Server';
-
-  @override
-  String get serviceConnected => 'connected';
-
-  @override
-  String get serviceDisconnected => 'not connected';
-
-  @override
-  String get serviceDevices => 'Devices';
-
-  @override
-  String serviceDevicesValue(int count, int unavailable) {
-    return '$count devices, unavailable: $unavailable';
-  }
-
-  @override
-  String get servicePanel => 'Wall panel';
-
-  @override
-  String get servicePanelManaged =>
-      'Managed (device owner): the kiosk cannot be left and starts after a restart';
-
-  @override
-  String get servicePanelNot => 'Ordinary device (not installer-managed)';
-
-  @override
-  String get servicePanelApply => 'Apply panel rules';
-
-  @override
-  String get servicePanelApplied =>
-      'Screen stays on while powered; the app is the home screen.';
-
-  @override
-  String get servicePanelFailed => 'Failed: the app is not the device owner.';
-
-  @override
-  String get servicePanelRelease => 'Release the device';
-
-  @override
-  String get servicePanelReleaseBody =>
-      'Removes installer management: the kiosk can be left and the normal home screen returns. Turning it back on needs the device prepared again (factory reset).';
-
-  @override
-  String get serviceProblems => 'Recent problems';
-
-  @override
-  String get serviceNoProblems => 'Nothing logged since the app started.';
-
-  @override
-  String get serviceCopy => 'Copy diagnostics';
-
-  @override
-  String get serviceCopied => 'Diagnostics copied.';
-
-  @override
-  String get serviceCopyHint =>
-      'No tokens or passwords: only versions, the device, the server\'s host and recent errors.';
-
-  @override
-  String get setupTitle => 'Setup wizard';
-
-  @override
-  String setupIntro(String brand) {
-    return 'Check and set up everything for this device, step by step. ($brand)';
-  }
-
-  @override
-  String get setupConnection => 'Connection to Home Assistant';
-
-  @override
-  String setupConnectionOk(String host, String version) {
-    return 'Connected to $host (Home Assistant $version)';
-  }
-
-  @override
-  String get setupConnectionMissing =>
-      'Not connected — check the address and network in Settings → Server.';
-
-  @override
-  String get setupRooms => 'Rooms';
-
-  @override
-  String setupRoomsCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count rooms',
-      one: '1 room',
-      zero: 'No rooms',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String setupNoRoom(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count devices without a room',
-      one: '1 device without a room',
-      zero: 'Every device has a room',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get setupRoomsHint =>
-      'Rooms and devices are arranged in Home Assistant (Settings → Areas).';
-
-  @override
-  String get setupMessages => 'Messages from Home Assistant';
-
-  @override
-  String setupMessagesOk(String name) {
-    return 'Registered as \"$name\"';
-  }
-
-  @override
-  String get setupMessagesHint =>
-      'Registers the device in Home Assistant (Mobile App), so automations can send it messages.';
-
-  @override
-  String get setupDeviceName => 'Device name in Home Assistant';
-
-  @override
-  String get setupDefaultDeviceName => 'Wall tablet';
-
-  @override
-  String get setupRegister => 'Register';
-
-  @override
-  String get setupKiosk => 'Kiosk and PIN';
-
-  @override
-  String get setupPinHint => 'No PIN to leave the kiosk yet';
-
-  @override
-  String get setupPinSaved => 'PIN saved.';
-
-  @override
-  String get setupPanel => 'Wall panel';
-
-  @override
-  String get setupPanelHint =>
-      'For a panel that cannot be left and starts by itself after a power cut, the device is prepared as \"device owner\" before any Google account is added — see the installer guide (docs/INSTALLER.md).';
-
-  @override
-  String get setupDone => 'Done';
 
   @override
   String get setupNext => 'Next';
 
   @override
   String get setupBack => 'Back';
-
-  @override
-  String get haBackupTitle => 'In Home Assistant';
-
-  @override
-  String get haBackupHint =>
-      'The app\'s settings (look, kiosk, cards, quick controls, rooms) are kept in your Home Assistant under the device\'s name, so after a reinstall or on another tablet they come back with one tap. Tokens, PIN, photos and microphone/camera choices are never kept.';
-
-  @override
-  String get haBackupName => 'Copy name (device)';
-
-  @override
-  String get haBackupSave => 'Save';
-
-  @override
-  String haBackupSavedHome(String name) {
-    return 'Saved as \"$name\" — visible on every device in the home.';
-  }
-
-  @override
-  String haBackupSavedUser(String name) {
-    return 'Saved as \"$name\" for your account (the whole home needs an administrator).';
-  }
-
-  @override
-  String get haBackupNone => 'No saved copies yet.';
-
-  @override
-  String get haBackupScopeHome => 'for the whole home';
-
-  @override
-  String get haBackupScopeUser => 'your account only';
-
-  @override
-  String get haBackupRestore => 'Restore';
-
-  @override
-  String haBackupRestoreTitle(String name) {
-    return 'Restore \"$name\"?';
-  }
-
-  @override
-  String get haBackupRestoreBody =>
-      'This device\'s settings will be replaced by the saved ones. PIN, photos and microphone/camera choices stay as they are.';
-
-  @override
-  String get haBackupDelete => 'Delete copy';
-
-  @override
-  String get haBackupUnavailable =>
-      'Copies in Home Assistant aren\'t available right now (no connection).';
 
   @override
   String get backupFileTitle => 'As text';
@@ -4285,30 +2347,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Asks GitHub (public releases) whether there\'s a new version; GitHub then sees the device\'s address. Nothing else is sent.';
 
   @override
-  String get nfcLinkConfirmTitle => 'Run this tag?';
-
-  @override
-  String nfcLinkConfirm(String name) {
-    return 'The link for tag \"$name\" didn\'t come from an NFC tag held to the phone, but from a QR code, the web or another app. Run it in Home Assistant?';
-  }
-
-  @override
-  String get nfcLinkConfirmUnnamed =>
-      'A Home Assistant tag link didn\'t come from an NFC tag held to the phone, but from a QR code, the web or another app. Run it?';
-
-  @override
-  String get nfcLinkRun => 'Run';
-
-  @override
   String get firstRunSkip => 'Skip';
 
   @override
   String get firstRunWelcomeTitle => 'Welcome home!';
-
-  @override
-  String firstRunWelcomeBody(String host) {
-    return 'You are connected to $host. Let\'s set the app up — it takes a minute, and everything can be changed later in Settings.';
-  }
 
   @override
   String get firstRunRoleQuestion => 'How will you use this device?';
@@ -4330,13 +2372,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get firstRunWallNext => 'Set up the wall panel';
 
   @override
-  String get firstRunRestoreTitle => 'Bring over existing settings';
-
-  @override
-  String get firstRunRestoreBody =>
-      'Your Home Assistant keeps settings saved from other devices. If this one replaces or matches one of them, restore it with a tap — or just continue.';
-
-  @override
   String get firstRunLookTitle => 'Look';
 
   @override
@@ -4352,7 +2387,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get firstRunFavoritesNone =>
-      'Home Assistant has no controllable devices yet.';
+      'No controllable devices yet. Add them later in Settings → Home.';
 
   @override
   String firstRunFavoritesCount(int count) {
@@ -4367,13 +2402,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get firstRunMessagesTitle => 'Messages on this phone';
-
-  @override
-  String get firstRunMessagesBody =>
-      'Home Assistant can tell this phone when something happens, e.g. a door left open. Messages come straight from your home, without a cloud.';
-
-  @override
   String get firstRunSecurityTitle => 'Protection';
 
   @override
@@ -4385,7 +2413,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get firstRunDoneBody =>
-      'Rooms, scenes and devices come from Home Assistant. Everything chosen here can be changed in Settings, and Home\'s cards with the ⚙ button next to the greeting.';
+      'Add devices in Settings → Home → Add device. Everything chosen here can be changed in Settings, and Home\'s cards with the ⚙ button next to the greeting.';
 
   @override
   String get firstRunStart => 'Let\'s go';
@@ -4421,7 +2449,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get kioskPeopleHint =>
-      'On the panel, a member taps their picture and gets their own greeting and quick controls. Unlocking doors, disarming the alarm and similar actions need the member\'s own PIN or the panel\'s PIN — members without a PIN (e.g. children) cannot. Members are Home Assistant\'s people.';
+      'On the panel, a member taps their name and gets their own quick controls. Unlocking doors, disarming the alarm and similar actions need the member\'s own PIN or the panel\'s PIN — members without a PIN (e.g. children) cannot. Tap a name for the birthday.';
 
   @override
   String get kioskPersonPinSet => 'Own PIN set — may unlock';
@@ -4476,9 +2504,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get batteryReminderAlias => 'Battery running low (Open Smart Home)';
-
-  @override
   String batteryReminderMessage(String name, String percent) {
     return 'Battery running low: $name ($percent %)';
   }
@@ -4488,33 +2513,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get batteryOk => 'Battery fine';
-
-  @override
-  String get unlockLogPanel => 'Wall panel';
-
-  @override
-  String get unlockLogPhone => 'Phone';
-
-  @override
-  String get unlockLogViaPanel => 'wall panel';
-
-  @override
-  String get unlockLogViaPhone => 'phone';
-
-  @override
-  String unlockLogUnlock(String device, String via) {
-    return 'unlocks $device ($via)';
-  }
-
-  @override
-  String unlockLogDisarm(String device, String via) {
-    return 'disarms $device ($via)';
-  }
-
-  @override
-  String unlockLogOpen(String device, String via) {
-    return 'opens $device ($via)';
-  }
 
   @override
   String get vacationTitle => 'On holiday';
@@ -4587,58 +2585,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get vacationEnd => 'We\'re back';
-
-  @override
-  String get comingHomeTitle => 'Coming home';
-
-  @override
-  String get comingHomeHint =>
-      'One tap (also from the app icon): turn on what you like, warm the house and tell the household.';
-
-  @override
-  String get comingHomeWho => 'Who is coming';
-
-  @override
-  String get comingHomeNoOne => 'No name';
-
-  @override
-  String get comingHomeRoutine => 'Scene or script';
-
-  @override
-  String get comingHomeNone => 'Nothing';
-
-  @override
-  String get comingHomeHeatingOff => 'Heating: leave as is';
-
-  @override
-  String comingHomeHeating(String temperature) {
-    return 'Heating to $temperature °C';
-  }
-
-  @override
-  String get comingHomeAnnounce => 'Tell the household';
-
-  @override
-  String get comingHomeAnnounceHint =>
-      'The message shows in the app and on the wall panel';
-
-  @override
-  String get comingHomeRun => 'I\'m coming home';
-
-  @override
-  String get comingHomeShortcutHint =>
-      'A long press on the app icon → \"Coming home\" does the same.';
-
-  @override
-  String get comingHomeDone => 'The home knows you are coming.';
-
-  @override
-  String comingHomeMessage(String name) {
-    return '$name is coming home 🏠';
-  }
-
-  @override
-  String get comingHomeMessageNoName => 'Someone is coming home 🏠';
 
   @override
   String get guestWifiTitle => 'Guest Wi-Fi';
@@ -4764,74 +2710,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sunriseRemoved => 'Sunrise alarm turned off.';
-
-  @override
-  String get sunriseAlias => 'Sunrise alarm (Open Smart Home)';
-
-  @override
-  String get wrappedTitle => 'This week';
-
-  @override
-  String get wrappedIntro => 'Your week at home';
-
-  @override
-  String get wrappedIntroCaption =>
-      'The last 7 days, from Home Assistant\'s logbook. Tap the right side to go on.';
-
-  @override
-  String get wrappedDoors => 'Doors and windows opened';
-
-  @override
-  String wrappedTopDoor(String name) {
-    return 'Busiest: $name';
-  }
-
-  @override
-  String get wrappedLights => 'Times a light went on';
-
-  @override
-  String wrappedTopLight(String name, int count) {
-    return 'Favourite: $name ($count×)';
-  }
-
-  @override
-  String get wrappedArrivals => 'Homecomings';
-
-  @override
-  String wrappedTopArrival(String name, int count) {
-    return 'Most often: $name ($count×)';
-  }
-
-  @override
-  String get wrappedUnlocks => 'Unlocks';
-
-  @override
-  String get wrappedBusiestDay => 'The liveliest day at home';
-
-  @override
-  String get wrappedEnergy => 'kWh of electricity this week';
-
-  @override
-  String get wrappedEnergyUnit => 'since Monday';
-
-  @override
-  String wrappedEnergyLastWeek(String kwh) {
-    return 'since Monday · last week $kwh kWh';
-  }
-
-  @override
-  String get wrappedOutro => 'What a week!';
-
-  @override
-  String get wrappedOutroCaption => 'See you next week 👋';
-
-  @override
-  String get wrappedEmpty =>
-      'Home Assistant\'s logbook for this week is empty — nothing to count yet.';
-
-  @override
-  String get wrappedUnavailable =>
-      'Home Assistant\'s logbook is not available right now.';
 
   @override
   String birthdayGreeting(String names) {
@@ -5075,12 +2953,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get simpleCooler => 'Cooler';
 
   @override
-  String get serviceLicenses => 'Open source licences';
-
-  @override
-  String get serviceLicensesHint => 'The app and every package it uses';
-
-  @override
   String get settingsHomeSection => 'Home';
 
   @override
@@ -5112,9 +2984,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addDeviceAddressLabel => 'Device IP address';
-
-  @override
-  String get addDeviceChecking => 'Checking…';
 
   @override
   String get addDeviceNotFound => 'No supported device found at that address.';
@@ -5321,9 +3190,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Nothing yet. Sensors call in every few seconds to a minute.';
 
   @override
-  String get bleUnsupported => 'This device has no Bluetooth.';
-
-  @override
   String get backupWithSecrets => 'With the devices\' passwords and keys';
 
   @override
@@ -5502,4 +3368,16 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get emptyHomeBody =>
       'Add devices from your home Wi-Fi or over Bluetooth: Shelly, Hue, WiZ, Tapo, Tuya, ESPHome, TVs and more.';
+
+  @override
+  String get householdAdd => 'Add a member';
+
+  @override
+  String get householdName => 'Name';
+
+  @override
+  String get householdRemove => 'Remove member';
+
+  @override
+  String get personMember => 'Member';
 }

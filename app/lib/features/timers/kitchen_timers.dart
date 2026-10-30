@@ -105,41 +105,6 @@ final kitchenTimersProvider =
       KitchenTimersController.new,
     );
 
-/// "postavi tajmer 10 minuta", "tajmer na pola sata", "set a timer for 5
-/// minutes", "timer 90 seconds" → the duration; anything else → `null`
-/// (then the text goes to Home Assistant as usual).
-Duration? parseTimerCommand(String text) {
-  final t = text.toLowerCase().trim();
-  if (!RegExp(r'\b(tajmer\w*|timer\w*|odbrojavanje)\b').hasMatch(t)) {
-    return null;
-  }
-  if (RegExp(r'pola sata|half an hour').hasMatch(t)) {
-    return const Duration(minutes: 30);
-  }
-  if (RegExp(r'(jedan |1 )?sat\b|an hour|one hour').hasMatch(t) &&
-      !RegExp(r'\d+\s*(sat|h|hour)').hasMatch(t)) {
-    return const Duration(hours: 1);
-  }
-  var total = Duration.zero;
-  final parts = RegExp(
-    r'(\d+)\s*(sat[ai]?|h\b|hours?|minut[aie]?|min\b|minutes?|sekund[aie]?|sec\b|s\b|seconds?)',
-  ).allMatches(t);
-  for (final m in parts) {
-    final n = int.parse(m[1]!);
-    final unit = m[2]!;
-    total += switch (unit[0]) {
-      's' when unit.startsWith('sat') => Duration(hours: n),
-      's' => Duration(seconds: n),
-      'h' => Duration(hours: n),
-      _ => Duration(minutes: n),
-    };
-  }
-  if (total > Duration.zero) return total;
-  // "tajmer 10" — minutes.
-  final bare = RegExp(r'\b(\d+)\b').firstMatch(t);
-  return bare == null ? null : Duration(minutes: int.parse(bare[1]!));
-}
-
 /// "1:05:00", "4:30", "0:09" for countdowns.
 String formatCountdown(Duration d) {
   final h = d.inHours;

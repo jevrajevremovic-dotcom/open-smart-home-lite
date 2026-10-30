@@ -17,6 +17,7 @@ import '../../devices/presentation/device_edit.dart'
 import '../../kiosk/presentation/kiosk_settings_section.dart';
 import '../../app_lock/application/app_lock.dart';
 import '../../../core/storage/app_preferences.dart';
+import '../../../core/storage/credential_store.dart';
 import '../../first_run/first_run_controller.dart';
 import '../../restricted/application/restricted_mode.dart';
 import '../../restricted/presentation/restricted_settings.dart';
@@ -526,6 +527,8 @@ Future<void> confirmDeleteAll(BuildContext context, WidgetRef ref) async {
   );
   if (ok) {
     await ref.read(appPreferencesProvider).clear();
+    // The devices' passwords and keys too: nothing of the home stays.
+    await ref.read(credentialStoreProvider).deleteAll();
     // Back to the first start.
     ref.invalidate(firstRunProvider);
   }

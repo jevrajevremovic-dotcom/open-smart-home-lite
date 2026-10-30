@@ -2,69 +2,20 @@
   "@@locale": "en",
   "appTitle": "Open Smart Home Lite",
   "mockModeBanner": "MOCK MODE — demo data, no real devices",
-  "welcomeTitle": "Your home, in one app",
-  "welcomeBody": "Control lights, climate, sensors and scenes from every brand and protocol your Home Assistant server supports.",
-  "welcomeLocalFirst": "Works locally. No cloud account required.",
-  "chooseLanguage": "Language",
   "languageSystem": "System",
   "languageSerbian": "Srpski",
   "languageEnglish": "English",
-  "getStarted": "Get started",
   "back": "Back",
   "cancel": "Cancel",
-  "continueAction": "Continue",
-  "serverAddressTitle": "Connect to Home Assistant",
-  "serverAddressIntro": "Enter the address of your Home Assistant server, for example the one you open in a browser at home.",
-  "serverAddressLabel": "Server address",
-  "serverAddressHint": "homeassistant.local:8123",
-  "checkConnection": "Check connection",
-  "checking": "Checking…",
-  "serverReachable": "Home Assistant found at {address}",
-  "@serverReachable": {
-    "placeholders": {
-      "address": {
-        "type": "String"
-      }
-    }
-  },
-  "addressErrorEmpty": "Enter a server address.",
-  "addressErrorMalformed": "This is not a valid address.",
-  "addressErrorUnsupportedScheme": "Only http:// and https:// addresses are supported.",
-  "addressErrorMissingHost": "The address is missing a host name or IP address.",
-  "addressErrorCredentials": "Do not put a user name or password in the address.",
-  "addressErrorPath": "Home Assistant must be served from the root of the address (no path such as /ha).",
-  "addressErrorQuery": "Remove the part after ? or # from the address.",
-  "addressErrorPort": "The port must be between 1 and 65535.",
-  "riskLocalHttp": "Unencrypted connection inside your local network.",
-  "riskRemoteExposure": "This is a public address. Make sure your server is kept up to date and protected.",
-  "riskInsecureRemote": "Warning: this public address uses unencrypted HTTP. Your access token could be intercepted. Use HTTPS unless the connection runs through a VPN.",
-  "insecureAcknowledge": "I understand the risk (e.g. I use a VPN)",
-  "certificateUntrustedTitle": "Untrusted certificate",
-  "certificateUntrustedBody": "The server's certificate is not trusted by this device. This is normal for a self-signed certificate, but can also mean someone is intercepting the connection. Only continue if the fingerprint matches the one shown on your server.",
-  "certificateSubject": "Issued to",
-  "certificateIssuer": "Issued by",
-  "certificateValidUntil": "Valid until",
-  "certificateFingerprint": "SHA-256 fingerprint",
-  "certificateExpired": "This certificate has expired.",
-  "certificateConfirm": "I compared the fingerprint and trust this certificate",
-  "trustCertificate": "Trust this certificate",
-  "tokenTitle": "Sign in",
-  "tokenIntro": "The app signs in with a long-lived access token from your Home Assistant user profile.",
-  "tokenSteps": "1. Open Home Assistant in a browser.\n2. Click your user name (bottom left) → Security.\n3. Under “Long-lived access tokens” choose “Create token”.\n4. Copy the token and paste it below. Home Assistant shows it only once.",
-  "tokenLabel": "Access token",
-  "tokenMockHint": "Mock mode: any token works; “invalid” simulates a rejected token.",
-  "showToken": "Show token",
-  "hideToken": "Hide token",
   "connect": "Connect",
   "connecting": "Connecting…",
-  "tokenInvalidFormat": "The token must not be empty or contain spaces.",
-  "failureNetwork": "The server cannot be reached. Check the address and that this device is on the right network.",
-  "failureTimeout": "The server took too long to respond.",
-  "failureAuthentication": "The access token was rejected. It may be wrong, expired or revoked.",
+  "failureNetwork": "The device cannot be reached. Check that it is on and that the phone is on the same Wi-Fi.",
+  "failureTimeout": "The device took too long to answer.",
+  "failureAuthentication": "The device refused the password, key or token. Check it in Settings → Home.",
   "failureAuthorization": "This user is not allowed to perform this action.",
-  "failureValidation": "The request was not accepted by the server.",
-  "failureParsing": "The server sent an unexpected response.",
-  "failureServer": "The server responded, but not like Home Assistant, or reported an error.",
+  "failureValidation": "The device did not accept the command.",
+  "failureParsing": "The device sent an unexpected answer.",
+  "failureServer": "The device reported an error.",
   "failureCertificate": "The secure connection could not be verified (certificate problem).",
   "failureUnavailableEntity": "This device is currently unavailable.",
   "failureUnsupportedFeature": "This device does not support this action.",
@@ -73,32 +24,6 @@
   "failureUnknown": "Something went wrong. Please try again.",
   "navHome": "Home",
   "navSettings": "Settings",
-  "statusConnected": "Connected",
-  "statusConnecting": "Connecting…",
-  "statusAuthenticating": "Signing in…",
-  "statusReconnecting": "Reconnecting…",
-  "statusReconnectingIn": "Reconnecting in {seconds} s",
-  "@statusReconnectingIn": {
-    "placeholders": {
-      "seconds": {
-        "type": "int"
-      }
-    }
-  },
-  "statusDisconnected": "Disconnected",
-  "statusAuthFailed": "Sign-in rejected",
-  "statusServerUnavailable": "Server unavailable",
-  "statusError": "Connection error",
-  "retryNow": "Retry now",
-  "signInAgain": "Sign in again",
-  "serverVersion": "Home Assistant {version}",
-  "@serverVersion": {
-    "placeholders": {
-      "version": {
-        "type": "String"
-      }
-    }
-  },
   "settingsTitle": "Settings",
   "appearance": "Appearance",
   "theme": "Theme",
@@ -106,38 +31,16 @@
   "themeLight": "Light",
   "themeDark": "Dark",
   "language": "Language",
-  "serverSection": "Server",
-  "signOut": "Sign out",
-  "signOutConfirmTitle": "Sign out?",
-  "signOutConfirmBody": "The access token will be deleted from this device. You can sign in again at any time.",
   "deleteAllData": "Delete all local data",
   "deleteAllConfirmTitle": "Delete all local data?",
-  "deleteAllConfirmBody": "This removes the access token, server address and all settings from this device. Nothing is changed on your Home Assistant server.",
+  "deleteAllConfirmBody": "This removes the home, the devices' passwords and keys, and all settings from this phone. The devices themselves are not changed.",
   "delete": "Delete",
   "privacySection": "Privacy & data",
-  "addressErrorMixedContent": "This page is loaded over HTTPS, so the browser blocks connections to an http:// server. Use the server's https:// address, or open this web app from the same address as Home Assistant.",
-  "webConnectionHint": "In a browser this can also mean that Home Assistant does not allow this web app's address (add it to http: cors_allowed_origins in configuration.yaml), or that the browser does not trust the server's certificate (open the server address in a new tab once and accept it there).",
-  "webSessionNotice": "With a token, sign-in lasts only while this tab is open.",
   "failureConfirmationRequired": "Please confirm this action.",
   "devicesInRooms": "{devices, plural, =1{1 device} other{{devices} devices}} in {rooms, plural, =0{no rooms} =1{1 room} other{{rooms} rooms}}",
-  "@devicesInRooms": {
-    "placeholders": {
-      "devices": {
-        "type": "int"
-      },
-      "rooms": {
-        "type": "int"
-      }
-    }
-  },
+  "@devicesInRooms": {"placeholders": {"devices": {"type": "int"}, "rooms": {"type": "int"}}},
   "dataStaleSince": "Not connected — showing data last updated {time}. It may not be current.",
-  "@dataStaleSince": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
+  "@dataStaleSince": {"placeholders": {"time": {"type": "String"}}},
   "navRooms": "Rooms",
   "navFavorites": "Favorites",
   "navScenes": "Scenes",
@@ -146,13 +49,7 @@
   "stateUnavailable": "Unavailable",
   "stateUnknown": "Unknown",
   "stateOnBrightness": "On · {percent} %",
-  "@stateOnBrightness": {
-    "placeholders": {
-      "percent": {
-        "type": "int"
-      }
-    }
-  },
+  "@stateOnBrightness": {"placeholders": {"percent": {"type": "int"}}},
   "motionDetected": "Motion detected",
   "motionClear": "No motion",
   "occupancyDetected": "Occupied",
@@ -172,13 +69,7 @@
   "coverOpening": "Opening…",
   "coverClosing": "Closing…",
   "coverOpenPercent": "Open {percent} %",
-  "@coverOpenPercent": {
-    "placeholders": {
-      "percent": {
-        "type": "int"
-      }
-    }
-  },
+  "@coverOpenPercent": {"placeholders": {"percent": {"type": "int"}}},
   "lockLocked": "Locked",
   "lockUnlocked": "Unlocked",
   "lockLocking": "Locking…",
@@ -197,16 +88,7 @@
   "hvacDry": "Dry",
   "hvacFanOnly": "Fan only",
   "climateStatus": "{mode} · {temperature}",
-  "@climateStatus": {
-    "placeholders": {
-      "mode": {
-        "type": "String"
-      },
-      "temperature": {
-        "type": "String"
-      }
-    }
-  },
+  "@climateStatus": {"placeholders": {"mode": {"type": "String"}, "temperature": {"type": "String"}}},
   "mediaPlaying": "Playing",
   "mediaPaused": "Paused",
   "cameraIdle": "Ready",
@@ -215,22 +97,10 @@
   "scriptRunning": "Running",
   "routineReady": "Ready",
   "doorbellLast": "Last ring {time}",
-  "@doorbellLast": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
+  "@doorbellLast": {"placeholders": {"time": {"type": "String"}}},
   "lowBattery": "Low battery",
   "batteryLevel": "Battery {percent} %",
-  "@batteryLevel": {
-    "placeholders": {
-      "percent": {
-        "type": "int"
-      }
-    }
-  },
+  "@batteryLevel": {"placeholders": {"percent": {"type": "int"}}},
   "protocolCloud": "Cloud",
   "protocolVirtual": "Virtual",
   "favoritesEmpty": "Tap the star on a device's page to add it to your favorites.",
@@ -254,52 +124,19 @@
   "summaryAlerts": "Alerts",
   "valueNotAvailable": "Not available",
   "lightsOnOf": "{on} of {total}",
-  "@lightsOnOf": {
-    "placeholders": {
-      "on": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
+  "@lightsOnOf": {"placeholders": {"on": {"type": "int"}, "total": {"type": "int"}}},
   "lowBatteryCount": "{count, plural, =1{1 low battery} other{{count} low batteries}}",
-  "@lowBatteryCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
+  "@lowBatteryCount": {"placeholders": {"count": {"type": "int"}}},
   "unavailableCount": "{count, plural, =1{1 unavailable} other{{count} unavailable}}",
-  "@unavailableCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
+  "@unavailableCount": {"placeholders": {"count": {"type": "int"}}},
   "roomNoRoom": "Unassigned",
   "allDevices": "All devices",
   "roomDevicesCount": "{count, plural, =0{No devices} =1{1 device} other{{count} devices}}",
-  "@roomDevicesCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
+  "@roomDevicesCount": {"placeholders": {"count": {"type": "int"}}},
   "roomLightsOn": "{count, plural, =1{1 light on} other{{count} lights on}}",
-  "@roomLightsOn": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
+  "@roomLightsOn": {"placeholders": {"count": {"type": "int"}}},
   "roomEmpty": "No devices in this room.",
-  "noRoomsYet": "No rooms are defined in Home Assistant.",
+  "noRoomsYet": "No rooms yet. Add them in Settings → Home.",
   "groupLights": "Lights",
   "groupClimate": "Climate",
   "groupCovers": "Blinds & doors",
@@ -329,50 +166,20 @@
   "lock": "Lock",
   "unlock": "Unlock",
   "confirmUnlockTitle": "Unlock {name}?",
-  "@confirmUnlockTitle": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
+  "@confirmUnlockTitle": {"placeholders": {"name": {"type": "String"}}},
   "confirmOpenTitle": "Open {name}?",
-  "@confirmOpenTitle": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
+  "@confirmOpenTitle": {"placeholders": {"name": {"type": "String"}}},
   "confirmDisarmTitle": "Disarm {name}?",
-  "@confirmDisarmTitle": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
+  "@confirmDisarmTitle": {"placeholders": {"name": {"type": "String"}}},
   "confirmCriticalBody": "This action affects the security of your home.",
   "confirm": "Confirm",
   "activate": "Activate",
   "runNow": "Run now",
   "sceneActivated": "{name} activated",
-  "@sceneActivated": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
+  "@sceneActivated": {"placeholders": {"name": {"type": "String"}}},
   "automationEnabled": "Enabled",
   "lastTriggered": "Last triggered {time}",
-  "@lastTriggered": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
+  "@lastTriggered": {"placeholders": {"time": {"type": "String"}}},
   "neverTriggered": "Never triggered",
   "volume": "Volume",
   "detailInfo": "Information",
@@ -381,7 +188,7 @@
   "infoModel": "Model",
   "infoProtocol": "Protocol",
   "infoLastChanged": "Last changed",
-  "infoEntityId": "Entity ID",
+  "infoEntityId": "Device ID",
   "infoSignal": "Signal",
   "infoBattery": "Battery",
   "deviceNotFound": "This device no longer exists.",
@@ -407,90 +214,16 @@
   "kioskEnterPin": "Enter PIN",
   "kioskWrongPin": "Wrong PIN.",
   "kioskLockedOut": "Too many attempts. Try again in {seconds} s.",
-  "@kioskLockedOut": {
-    "placeholders": {
-      "seconds": {
-        "type": "int"
-      }
-    }
-  },
+  "@kioskLockedOut": {"placeholders": {"seconds": {"type": "int"}}},
   "kioskOsHint": "For a fully locked wall panel also use the system's kiosk feature: Android screen pinning or a kiosk launcher, iOS Guided Access. They can also start the app automatically.",
   "durationNever": "Never",
   "durationSeconds": "{seconds} s",
-  "@durationSeconds": {
-    "placeholders": {
-      "seconds": {
-        "type": "int"
-      }
-    }
-  },
+  "@durationSeconds": {"placeholders": {"seconds": {"type": "int"}}},
   "durationMinutes": "{minutes} min",
-  "@durationMinutes": {
-    "placeholders": {
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
+  "@durationMinutes": {"placeholders": {"minutes": {"type": "int"}}},
   "dataUpdating": "Showing data from {time} — updating…",
-  "@dataUpdating": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "oauthSignIn": "Sign in with Home Assistant",
-  "oauthHint": "You sign in on your Home Assistant's own login page – this app never sees your password.",
-  "rememberMe": "Remember me on this device",
-  "rememberMeHint": "Stay signed in after the browser is closed. You can revoke access anytime in your Home Assistant profile (Security → Refresh tokens).",
-  "orUseToken": "Or use a long-lived access token",
-  "loginFailed": "Sign-in did not complete. Please try again.",
-  "discoveryTitle": "Home Assistant on this network",
-  "discoverySearching": "Searching…",
-  "discoveryNothingFound": "No server found automatically. Enter the address below.",
-  "discoverySearchAgain": "Search again",
-  "energyTitle": "Energy",
-  "energyToday": "Today",
-  "energyWeek": "This week",
-  "energyMonth": "This month",
-  "energyCurrentPower": "Power now",
-  "energyNotConfigured": "Energy is not set up in Home Assistant yet (Settings → Dashboards → Energy). Once it is, consumption, solar and devices appear here.",
-  "energyOffline": "Energy statistics are loaded from Home Assistant and are available while connected.",
+  "@dataUpdating": {"placeholders": {"time": {"type": "String"}}},
   "energyConsumption": "Home consumption",
-  "energyFromGrid": "From grid",
-  "energyToGrid": "To grid",
-  "energySolar": "Solar production",
-  "energyBatteryCharge": "Battery charged",
-  "energyBatteryDischarge": "Battery discharged",
-  "energyGas": "Gas",
-  "energyCostEstimate": "Estimated cost",
-  "energySetTariff": "Enter a tariff for a cost estimate",
-  "energyPerHour": "Consumption per hour",
-  "energyPerDay": "Consumption per day",
-  "energyTopConsumers": "Top consumers",
-  "energyNoDevices": "No individual devices are added to the Energy dashboard in Home Assistant.",
-  "energyNoData": "No data for this period yet.",
-  "energyPeak": "Highest: {time} · {value}",
-  "@energyPeak": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      },
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "energyShowChart": "Chart",
-  "energyShowTable": "Table",
-  "energyConsumptionChart": "Consumption chart",
-  "energyTariffTitle": "Electricity tariff",
-  "energyTariffHint": "Used only for an estimate on this device. Real bills also include fixed fees, taxes and consumption zones.",
-  "energyTariffImport": "Price per kWh from the grid",
-  "energyTariffExport": "Compensation per kWh to the grid (optional)",
-  "energyTariffCurrency": "Currency",
-  "energyTariffInvalid": "Enter a valid, non-negative price.",
   "save": "Save",
   "weatherClear": "Clear",
   "weatherClearNight": "Clear night",
@@ -527,302 +260,44 @@
   "presetComfort": "Comfort",
   "presetBoost": "Boost",
   "presetActivity": "Activity",
-  "thermostatModes": "Modes",
   "powerToggle": "On/off",
   "personHome": "Home",
   "personAway": "Away",
-  "householdTitle": "Household",
   "searchHint": "Search",
   "done": "Done",
   "timeJustNow": "just now",
   "timeMinutesAgo": "{count, plural, =1{1 minute ago} other{{count} minutes ago}}",
-  "@timeMinutesAgo": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
+  "@timeMinutesAgo": {"placeholders": {"count": {"type": "int"}}},
   "timeHoursAgo": "{count, plural, =1{1 hour ago} other{{count} hours ago}}",
-  "@timeHoursAgo": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
+  "@timeHoursAgo": {"placeholders": {"count": {"type": "int"}}},
   "timeDaysAgo": "{count, plural, =1{1 day ago} other{{count} days ago}}",
-  "@timeDaysAgo": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
+  "@timeDaysAgo": {"placeholders": {"count": {"type": "int"}}},
   "weatherForecastTitle": "Weather forecast",
   "weatherHourly": "Next hours",
   "weatherDaily": "Next days",
   "weatherToday": "Today",
   "weatherNow": "Now",
-  "weatherNoForecast": "Your Home Assistant weather entity provides no forecast.",
-  "weatherPrecipitation": "Precipitation",
-  "weatherFeelsHint": "From your Home Assistant weather entity. Nothing leaves your network.",
-  "camerasTitle": "Cameras",
-  "cameraUnavailable": "The camera isn't sending images right now.",
-  "cameraSnapshotAt": "Snapshot {time}",
-  "@cameraSnapshotAt": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "cameraRefreshHint": "The picture refreshes every {seconds} s while this screen is open. Nothing is recorded or stored.",
-  "@cameraRefreshHint": {
-    "placeholders": {
-      "seconds": {
-        "type": "int"
-      }
-    }
-  },
-  "cameraFullscreen": "Full screen",
-  "cameraLoading": "Loading the camera…",
-  "kioskShowCameras": "Show cameras",
-  "kioskShowCamerasHint": "Camera pictures are visible to anyone looking at the wall tablet.",
-  "calendarTitle": "Calendar",
-  "calendarToday": "Today",
-  "calendarTomorrow": "Tomorrow",
-  "calendarAllDay": "All day",
-  "calendarNoEvents": "No events",
-  "calendarNone": "Home Assistant has no calendars. Add one there, for example Google Calendar, CalDAV or the Local Calendar integration.",
-  "calendarUnavailable": "The calendar isn't available right now.",
-  "calendarPrevMonth": "Previous month",
-  "calendarNextMonth": "Next month",
-  "calendarBackToToday": "Today",
-  "assistTitle": "Assist",
-  "assistHint": "Type a command or a question",
-  "assistSend": "Send",
-  "assistIntro": "Ask Home Assistant to do something, for example:",
-  "assistSuggestionLightsOff": "Turn off the lights",
-  "assistSuggestionTemperature": "What is the temperature in the living room?",
-  "assistSuggestionLightsOn": "Turn on the lights",
-  "assistUnavailable": "Assist isn't available right now.",
-  "assistNotUnderstood": "Assist couldn't do that.",
-  "assistPrivacy": "Your text goes only to your Home Assistant server. Assist understands the languages set up there and acts with your account's permissions.",
+  "weatherNoForecast": "No forecast for the home yet. Turn it on in Settings → Privacy.",
+  "weatherFeelsHint": "MET Norway's forecast for the home's location.",
   "mediaPlayPause": "Play or pause",
   "mediaNext": "Next",
   "mediaPrevious": "Previous",
-  "mediaNowPlaying": "Now playing",
   "addDeviceTitle": "Add device",
-  "addDeviceIntro": "New devices pair with your Home Assistant hub, which has the Zigbee or Z-Wave radio, not with this phone. The app guides you through it.",
-  "addDeviceZigbee": "Zigbee",
-  "addDeviceZigbeeSubtitle": "Sensors, bulbs, plugs, switches",
-  "addDeviceWifi": "Wi-Fi and LAN",
-  "addDeviceMatter": "Matter",
-  "addDeviceZwave": "Z-Wave",
-  "addDeviceSoon": "Coming soon",
-  "zigbeeViaZha": "Via ZHA",
-  "zigbeeViaZ2m": "Via Zigbee2MQTT",
-  "zigbeeNotFound": "Neither ZHA nor Zigbee2MQTT was found in Home Assistant. Add a Zigbee coordinator there first.",
-  "zigbeeStep1": "Start pairing with the button below.",
-  "zigbeeStep2": "Reset the device or put it in pairing mode. Usually you hold its button for about 5 seconds until it blinks; check the device's manual.",
-  "zigbeeStep3": "Keep the device near the hub until it shows up in the list.",
-  "pairingStart": "Start pairing",
-  "pairingStop": "Stop",
-  "pairingExtend": "Extend",
-  "pairingOpen": "Pairing is on",
-  "pairingRemaining": "{time} left",
-  "@pairingRemaining": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "pairingClosed": "Pairing is off",
-  "pairingWaiting": "Waiting for new devices…",
-  "pairingFound": "New devices",
-  "pairingFailed": "Pairing couldn't be started. {reason}",
-  "@pairingFailed": {
-    "placeholders": {
-      "reason": {
-        "type": "String"
-      }
-    }
-  },
-  "newDeviceSetUp": "Set up",
   "setUpDeviceTitle": "Name and room",
   "deviceNameLabel": "Name",
   "deviceRoomLabel": "Room",
   "setUpSaved": "Saved.",
-  "setUpFailed": "Name and room can't be changed from here. Do it in Home Assistant under Settings, Devices.",
   "weatherHomeLocationTitle": "Forecast for your home",
   "weatherHomeLocationHint": "Turn the forecast on: the app will remember this phone's approximate location as the home location.",
   "weatherHomeLocationEnable": "Turn on forecast",
   "weatherHomeLocationDisclosure": "The app will take this phone's approximate location once (rounded to about 1 km) as the home location and send it to MET Norway (api.met.no) every 30 minutes. Nothing else is sent. You can turn it off in Settings.",
   "weatherHomeLocationSetting": "Forecast for the home location (MET Norway)",
   "weatherHomeLocationSettingHint": "Sends the home's approximate location (saved when you turned the forecast on).",
-  "weatherNoHomeCoordinates": "Home Assistant has no home location set.",
-  "calendarNoneShort": "No calendars in Home Assistant",
   "mediaTitle": "Music and media",
-  "mediaNoPlayers": "Home Assistant has no media players yet. Add one there, for example Spotify, Google Cast, Sonos, DLNA, Kodi or your smart TV's integration, and it shows up here.",
+  "mediaNoPlayers": "No speakers or TVs yet. Add a Sonos, Roku, Samsung or LG TV with \"Add device\" and it shows up here.",
   "mediaSource": "Source",
   "mediaIdle": "Not playing",
-  "weatherHomeLocationFar": "Home Assistant's home location is about {km} km from this device. If that's wrong, set it in Home Assistant under Settings, System, General; the home forecast uses it.",
-  "@weatherHomeLocationFar": {
-    "placeholders": {
-      "km": {
-        "type": "int"
-      }
-    }
-  },
   "mediaNoPlayersShort": "No media players yet",
-  "assistMic": "Speak a command",
-  "assistListening": "Listening…",
-  "voicePrivacyTitle": "Voice commands",
-  "voicePrivacyBody": "Your phone's speech recogniser turns speech into text; only the text goes to your Home Assistant. Some phones can only recognise speech online (for example Google's or Apple's service), which then receives a recording of your voice.",
-  "voiceOnDeviceOnly": "On this device only",
-  "voiceAllowCloud": "Allow online too",
-  "voiceUnavailable": "Speech recognition isn't available. Check the microphone permission.",
-  "voiceOnDeviceUnavailable": "This device can't recognise this language offline. You can allow online recognition in Settings.",
-  "voiceNoMatch": "I didn't catch that. Try again.",
-  "voiceCloudSetting": "Online speech recognition",
-  "voiceCloudSettingHint": "When off, voice commands are recognised on this device only.",
-  "addDeviceWifiSubtitle": "Devices Home Assistant found on your network",
-  "discoveredTitle": "Found on the network",
-  "discoveredEmpty": "Home Assistant hasn't found any new devices. Connect the device to the same Wi-Fi network and wait a minute; devices HA can't find on its own are added in Home Assistant under Settings, Devices.",
-  "discoveredVia": "Found via {source}",
-  "@discoveredVia": {
-    "placeholders": {
-      "source": {
-        "type": "String"
-      }
-    }
-  },
-  "discoveredRefresh": "Search again",
-  "discoveredUnavailable": "The list of found devices isn't available. This usually needs an administrator account in Home Assistant.",
-  "flowAdd": "Add",
-  "flowNext": "Next",
-  "flowConfirm": "Add {name} to your home?",
-  "@flowConfirm": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "flowDone": "Added: {title}",
-  "@flowDone": {
-    "placeholders": {
-      "title": {
-        "type": "String"
-      }
-    }
-  },
-  "flowDoneDevices": "New devices",
-  "flowAborted": "Setup stopped: {reason}",
-  "@flowAborted": {
-    "placeholders": {
-      "reason": {
-        "type": "String"
-      }
-    }
-  },
-  "flowAbortedGeneric": "Home Assistant stopped the setup.",
-  "flowUnsupported": "This step needs Home Assistant itself (for example a sign-in in a browser). Continue there.",
-  "flowUnsupportedField": "This form has fields the app can't show yet. Continue in Home Assistant.",
-  "flowWorking": "Setting up…",
-  "flowRequired": "Required",
-  "flowFinish": "Done",
-  "matterTitle": "Matter",
-  "matterIntro": "Add a Matter device that already works with another app (Google Home, Apple Home, SmartThings, Alexa…).",
-  "matterStep1": "In that app, open the device and choose to share it with another app or controller (\"Linked Matter apps\", \"Turn on pairing mode\").",
-  "matterStep2": "Scan the QR code it shows, or type the 11-digit code.",
-  "matterStep3": "Home Assistant then adds the device over your network; both apps can control it.",
-  "matterNewDeviceNote": "Brand-new Matter devices over Bluetooth can be added from the Android app.",
-  "matterCodeLabel": "Setup code",
-  "matterCodeHint": "1234-567-8901 or MT:…",
-  "matterInvalidCode": "That isn't a valid Matter code. Check the digits.",
-  "matterScan": "Scan QR code",
-  "matterAdding": "Adding the device… this can take a minute.",
-  "matterNotAvailable": "The Matter integration isn't set up in Home Assistant. Add it there first.",
-  "matterFailed": "The device couldn't be added. Make sure sharing is still on in the other app (the code is valid for a few minutes) and the device is on the same network.",
-  "matterAdded": "Device added",
-  "scanPointCamera": "Point the camera at the Matter QR code.",
-  "zwaveTitle": "Z-Wave",
-  "zwaveIntro": "Add a Z-Wave device through your Z-Wave JS controller.",
-  "zwaveNotAvailable": "The Z-Wave JS integration isn't set up in Home Assistant.",
-  "zwaveStart": "Start inclusion",
-  "zwaveStop": "Stop",
-  "zwaveStatusWaiting": "Put the device into inclusion mode (often three quick presses of its button; see the manual).",
-  "zwaveStatusFound": "Device found…",
-  "zwaveStatusInterview": "Getting to know the device (interview)… battery devices can take a few minutes.",
-  "zwaveStatusDone": "Device added",
-  "zwaveStatusFailed": "Inclusion didn't work. Try again closer to the controller.",
-  "zwaveStatusStopped": "Inclusion stopped.",
-  "zwaveGrantTitle": "Security",
-  "zwaveGrantBody": "The device asks for these security levels. Allowing all of them is recommended.",
-  "zwaveS2Unauth": "S2 unauthenticated",
-  "zwaveS2Auth": "S2 authenticated",
-  "zwaveS2Access": "S2 access control (locks, garage doors)",
-  "zwaveS0": "S0 (legacy)",
-  "zwaveGrant": "Allow",
-  "zwavePinTitle": "PIN from the device",
-  "zwavePinBody": "Enter the first 5 digits of the DSK from the device label or box (usually underlined). The rest of the code: {dsk}",
-  "zwavePinLabel": "5 digits",
-  "zwavePinInvalid": "Enter exactly 5 digits.",
-  "zwaveSmartStart": "SmartStart: scan QR",
-  "zwaveSmartStartHint": "Devices with a SmartStart QR code join by themselves once powered on.",
-  "zwaveSmartStartDone": "Device registered. Power it on; it joins by itself within a few minutes.",
-  "zwaveSmartStartInvalid": "That isn't a Z-Wave QR code.",
-  "scanPointCameraZwave": "Point the camera at the Z-Wave QR code.",
-  "@zwavePinBody": {
-    "placeholders": {
-      "dsk": {
-        "type": "String"
-      }
-    }
-  },
-  "historyTitle": "History",
-  "history24h": "24 h",
-  "history7d": "7 days",
-  "historyMin": "Min {value}",
-  "historyMax": "Max {value}",
-  "historyEmpty": "No data for this period.",
-  "historyUnavailable": "History isn't available. The recorder may be turned off in Home Assistant.",
-  "activityTitle": "Activity",
-  "activityByUser": "by a person",
-  "activityEmpty": "Nothing happened in the last 24 hours.",
-  "@historyMin": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "@historyMax": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "notificationsTitle": "Notifications",
-  "notificationsCount": "{count, plural, =1{1 notification from Home Assistant} other{{count} notifications from Home Assistant}}",
-  "notificationDismiss": "Dismiss",
-  "notificationsDismissAll": "Dismiss all",
-  "notificationsEmpty": "No notifications.",
-  "@notificationsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "cameraSnapshots": "Snapshots",
-  "cameraLive": "Live",
-  "cameraLiveHint": "Live video from Home Assistant while this screen is open; sound is off. Nothing is recorded.",
-  "cameraLiveFailed": "Live video isn't available for this camera (or the server's certificate isn't trusted by the video player). Snapshots still work.",
   "appLockTitle": "Open Smart Home is locked",
   "appUnlock": "Unlock",
   "appLockReason": "Unlock Open Smart Home",
@@ -832,16 +307,7 @@
   "appLockSettingHint": "Ask for fingerprint, face or the device PIN when opening the app (after 1 minute in the background).",
   "appLockCriticalSetting": "Confirm locks and alarm",
   "appLockCriticalSettingHint": "Also ask before unlocking doors, opening the garage or disarming the alarm.",
-  "appLockNoDeviceAuth": "This device has no screen lock or biometrics set up.",
-  "@appLockCriticalReason": {
-    "placeholders": {
-      "device": {
-        "type": "String"
-      }
-    }
-  },
-  "homesTitle": "Homes",
-  "addHome": "Add another home",
+  "@appLockCriticalReason": {"placeholders": {"device": {"type": "String"}}},
   "alarmArm_home": "Home",
   "alarmArm_away": "Away",
   "alarmArm_night": "Night",
@@ -869,7 +335,7 @@
   "deviceSearchEmpty": "No device matches.",
   "favoritesReorder": "Change order",
   "restrictedTitle": "Child / guest mode",
-  "restrictedHint": "Hides sensitive devices and locks settings with a PIN on this device. Home Assistant permissions don't change; for real limits use a separate HA user.",
+  "restrictedHint": "Hides sensitive devices and locks settings with a PIN on this device.",
   "restrictedHideSecurity": "Hide locks, alarm and garage doors",
   "restrictedHideCameras": "Hide cameras",
   "restrictedEnable": "Turn on (set a PIN)",
@@ -890,84 +356,26 @@
   "autoPickDevice": "Choose a device",
   "autoAddAction": "Add an action",
   "autoSave": "Save to Home Assistant",
-  "autoSaved": "Automation saved in Home Assistant.",
-  "autoSaveFailed": "The automation wasn't saved. This needs an administrator account in Home Assistant.",
   "autoDelete": "Delete automation",
   "autoDeleteConfirm": "Delete \"{name}\"? This can't be undone.",
   "autoIncomplete": "Choose when it runs and at least one action.",
-  "autoChangesTo": "changes to",
   "autoNameHint": "For example: Hallway light at night",
-  "autoHint": "Saved as a normal Home Assistant automation, so it runs even when this phone is off. You can change it later in Home Assistant too.",
-  "svc_turn_on": "Turn on",
-  "svc_turn_off": "Turn off",
-  "svc_open_cover": "Open",
-  "svc_close_cover": "Close",
-  "svc_lock": "Lock",
-  "svc_start": "Start",
-  "svc_return_to_base": "Back to dock",
-  "svc_media_play": "Play",
-  "svc_media_pause": "Pause",
   "svc_activate": "Activate",
-  "@autoOffset": {
-    "placeholders": {
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "@autoDeleteConfirm": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
+  "@autoOffset": {"placeholders": {"minutes": {"type": "int"}}},
+  "@autoDeleteConfirm": {"placeholders": {"name": {"type": "String"}}},
   "allLightsOn": "All on",
   "allLightsOff": "All off",
   "allLightsTitle": "All lights in the home",
   "floorOther": "Other",
   "sceneNew": "New scene from now",
-  "sceneHint": "Saves how the chosen devices are right now (on/off, brightness, colour, blinds, temperature) as a Home Assistant scene.",
   "sceneName": "Scene name",
   "sceneDevices": "Devices",
   "sceneSave": "Save scene",
-  "sceneSaved": "Scene saved in Home Assistant.",
   "sceneNeedDevice": "Choose at least one device.",
   "sceneDelete": "Delete scene",
   "sceneDefaultName": "Scene {time}",
-  "@sceneDefaultName": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "energyPrevDay": "Yesterday: {value}",
-  "energyPrevWeek": "Last week: {value}",
-  "energyPrevMonth": "Last month: {value}",
-  "@energyPrevDay": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "@energyPrevWeek": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "@energyPrevMonth": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
+  "@sceneDefaultName": {"placeholders": {"time": {"type": "String"}}},
   "autoEdit": "Edit automation",
-  "autoTooComplex": "This automation does more than the app's editor can show. Change it in Home Assistant.",
   "backupSection": "Backup and transfer",
   "backupHint": "The whole home — devices, rooms, names, scenes, automations and programs — and the app's look, to keep or to move to another phone or wall panel. PINs, photos and this device's own choices stay here.",
   "backupCopy": "Copy settings",
@@ -990,13 +398,8 @@
   "autoCondDevice": "A device is in a state",
   "autoCondDark": "Only when it's dark",
   "autoCondLight": "Only when it's light",
-  "autoIs": "is",
-  "activityAll": "All",
-  "activitySecurity": "Doors & security",
-  "activityPeople": "People",
-  "activityHint": "From Home Assistant's logbook for the last 24 hours. Sensors that measure continuously (temperature, power) aren't listed.",
   "alertsSetting": "Notify about critical alerts",
-  "alertsSettingHint": "Smoke, CO, water leak, a triggered alarm or a jammed lock as a phone notification, shown by this device. While the app runs — or always, with “Also when the app is closed” under Messages from Home Assistant.",
+  "alertsSettingHint": "Smoke, CO, water leak, a triggered alarm or a jammed lock as a phone notification. While the app runs — or always, with Background automations (Settings → Home).",
   "alertsPermissionDenied": "Notifications are turned off for this app in the phone's settings.",
   "fanLow": "Low",
   "fanMedium": "Medium",
@@ -1008,15 +411,6 @@
   "allCoversOpen": "Open all",
   "allCoversClose": "Close all",
   "widgetNoScenes": "No scenes yet: create one in the app",
-  "widgetSignedOut": "Sign in to Open Smart Home",
-  "riskVpnTunnel": "Tailscale VPN address: the connection is encrypted and also works away from home.",
-  "remoteTitle": "Address away from home",
-  "remoteNotSet": "Not set: only the home address is used",
-  "remoteInUse": "In use now (the home address does not answer)",
-  "remoteHint": "The same Home Assistant as reached from outside: a Home Assistant Cloud (Nabu Casa) address, your own domain with HTTPS, or a Tailscale address. At home the app uses the home address; when it doesn't answer, it switches to this one. The same token is used.",
-  "remoteSameAsLocal": "This is already the home address.",
-  "remoteNeedsHttps": "A public address needs HTTPS (or use Tailscale), otherwise the token would cross the internet unencrypted.",
-  "remoteRemove": "Remove",
   "clapSetting": "Double clap",
   "clapSettingHint": "Clap twice to switch something. Only while the kiosk is shown.",
   "clapPrivacyTitle": "Listen for claps?",
@@ -1031,24 +425,9 @@
   "clapMedium": "Medium",
   "clapHigh": "High",
   "clapSwitched": "{name}: {state}",
-  "@clapSwitched": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      },
-      "state": {
-        "type": "String"
-      }
-    }
-  },
+  "@clapSwitched": {"placeholders": {"name": {"type": "String"}, "state": {"type": "String"}}},
   "clapDone": "{name}: done",
-  "@clapDone": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
+  "@clapDone": {"placeholders": {"name": {"type": "String"}}},
   "clapLockAction": "lock / unlock (unlocking asks for confirmation)",
   "clapGarageAction": "open (asks for confirmation) / close",
   "clapCoverAction": "open / close",
@@ -1056,100 +435,20 @@
   "clapMediaAction": "play / pause",
   "clapOpenScreen": "opens its screen",
   "clapSearch": "Search devices",
-  "oauthHintNative": "Sign in on your Home Assistant's own login page with your user name and password. The app receives only a one-time code and keeps no password; no long-lived token is needed.",
-  "oauthPageFailed": "Home Assistant's login page did not load. Check the connection, or sign in with a token below. (A self-signed certificate works only with a token.)",
-  "haPushTitle": "Messages from Home Assistant",
-  "haPushHint": "Let Home Assistant automations send notifications to this device",
-  "haPushExplain": "This device is added to Home Assistant (Mobile App integration). Automations can then send it messages with a notify service. They arrive over the local connection while the app is running, without any cloud service.",
-  "haPushName": "Device name in Home Assistant",
-  "haPushDefaultName": "Open Smart Home",
-  "haPushRegister": "Add to Home Assistant",
-  "haPushReady": "Automations send messages with {service}",
-  "@haPushReady": {
-    "placeholders": {
-      "service": {
-        "type": "String"
-      }
-    }
-  },
-  "haPushCopy": "Copy the service name",
-  "haPushCopied": "Service name copied.",
-  "haPushTest": "Send a test message",
-  "haPushTestMessage": "Messages from Home Assistant arrive on this device.",
-  "haPushForget": "Stop messages",
-  "haPushForgetHint": "The app stops listening for messages. To remove the device completely, delete it in Home Assistant: Settings → Devices & services → Mobile App.",
-  "haPushBackground": "Also when the app is closed",
-  "haPushBackgroundHint": "Keeps the connection open in the background, also after a restart. Android then shows a quiet, permanent notification; uses a little more battery.",
-  "haPushServiceTitle": "Connected to Home Assistant",
-  "haPushServiceText": "Waiting for messages from your automations",
-  "haPushRemovedInHa": "This device was removed in Home Assistant (Mobile App). Add it again to receive messages.",
-  "kioskPopup": "Camera pop-up",
-  "kioskPopupHint": "Show a camera when someone rings or moves at the door",
-  "kioskPopupSummary": "{camera} · {count, plural, =1{1 trigger} other{{count} triggers}}",
-  "@kioskPopupSummary": {
-    "placeholders": {
-      "camera": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "kioskPopupExplain": "When one of the chosen devices fires — a doorbell press, motion, a door or gate opening — the kiosk wakes up and shows the camera full screen.",
-  "kioskPopupCamera": "Camera",
-  "kioskPopupOff": "Off",
-  "kioskPopupDuration": "Show for",
-  "kioskPopupTriggers": "Triggered by",
-  "kioskPopupClosesIn": "closes in {seconds} s",
-  "@kioskPopupClosesIn": {
-    "placeholders": {
-      "seconds": {
-        "type": "int"
-      }
-    }
-  },
   "kioskDarkScreensaver": "Dimmed backlight when idle",
   "kioskDarkScreensaverHint": "While the screen is idle the backlight is at the level below (at night at most “Darker at night”).",
   "kioskNight": "Darker at night",
   "kioskNightHint": "Lower brightness on a schedule",
   "kioskNightRange": "{from} – {to}",
-  "@kioskNightRange": {
-    "placeholders": {
-      "from": {
-        "type": "String"
-      },
-      "to": {
-        "type": "String"
-      }
-    }
-  },
+  "@kioskNightRange": {"placeholders": {"from": {"type": "String"}, "to": {"type": "String"}}},
   "kioskNightFrom": "From {time}",
-  "@kioskNightFrom": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
+  "@kioskNightFrom": {"placeholders": {"time": {"type": "String"}}},
   "kioskNightTo": "Until {time}",
-  "@kioskNightTo": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
+  "@kioskNightTo": {"placeholders": {"time": {"type": "String"}}},
   "kioskNightFromHelp": "Night starts at",
   "kioskNightToHelp": "Night ends at",
   "kioskNightLevel": "Night brightness: {percent} %",
-  "@kioskNightLevel": {
-    "placeholders": {
-      "percent": {
-        "type": "int"
-      }
-    }
-  },
+  "@kioskNightLevel": {"placeholders": {"percent": {"type": "int"}}},
   "dashLayoutTitle": "Home screen",
   "dashLayoutSubtitle": "Choose and order the cards",
   "dashLayoutHint": "Drag or use the arrow to change the order; the switch shows or hides a card. Warnings (connection, critical alerts) always stay on top. On tablets favorites and rooms are in the right column.",
@@ -1158,61 +457,23 @@
   "dashCardSummary": "Summary (temperature, lights, power…)",
   "dashCardWeather": "Weather",
   "dashCardMedia": "Now playing",
-  "dashCardNotifications": "Notifications from Home Assistant",
   "dashCardShortcuts": "Energy, calendar, activity",
   "dashCardAttention": "Needs attention (batteries, unavailable)",
-  "kioskPopupLive": "Live video",
-  "kioskPopupLiveHint": "When the camera offers a stream; until it starts, and otherwise, snapshots are shown.",
   "timerSet": "Timer",
   "timerTurnOff": "Turn off",
   "timerTurnOn": "Turn on",
   "timerHours": "{hours} h",
-  "@timerHours": {
-    "placeholders": {
-      "hours": {
-        "type": "int"
-      }
-    }
-  },
+  "@timerHours": {"placeholders": {"hours": {"type": "int"}}},
   "timerHint": "This phone or wall panel counts down while the app runs (or with automations in the background).",
-  "timerRunning": "Timer is running",
   "timerTurnsOffAt": "Turns off at {time}",
-  "@timerTurnsOffAt": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
+  "@timerTurnsOffAt": {"placeholders": {"time": {"type": "String"}}},
   "timerTurnsOnAt": "Turns on at {time}",
-  "@timerTurnsOnAt": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "timerNeedsAdmin": "Timers need an administrator account in Home Assistant.",
-  "energyShareOfHome": "{percent} % of the home",
-  "@energyShareOfHome": {
-    "placeholders": {
-      "percent": {
-        "type": "int"
-      }
-    }
-  },
-  "matterNewTitle": "New Matter device",
-  "matterNewHint": "Out of the box, with a QR code on it or its box. Google Play services sets it up over Bluetooth and puts it on your Wi-Fi or Thread network, then Home Assistant adds it. Keep the phone close to the device.",
-  "matterNewButton": "Add a new Matter device",
-  "matterNoPlayServices": "Adding new Matter devices on Android goes through Google Play services, which are not available here (for example an emulator, or a phone without Google services). Use Home Assistant's own app, or share the device from another Matter app below.",
-  "matterNewFailed": "The device was not added. Reset it (see its manual) and try again close to the phone. Thread devices also need a Thread border router known to this phone.",
-  "matterSharedTitle": "Device already in another app",
+  "@timerTurnsOnAt": {"placeholders": {"time": {"type": "String"}}},
   "kioskPanelChooseDevice": "Choose device",
   "settingsNotificationsSection": "Notifications",
   "settingsAppearanceHint": "Theme, language, home screen",
-  "settingsServerHint": "Address, away address, homes, sign out",
   "settingsKioskHint": "Wall tablet: layout, PIN, screensaver, camera",
-  "settingsNotificationsHint": "Messages from Home Assistant, alerts",
+  "settingsNotificationsHint": "Alerts, batteries, appliance done",
   "settingsSecurityHint": "App lock, kids and guests mode",
   "settingsPrivacyHint": "Location, voice, deleting data",
   "settingsBackupHint": "Keep your home or move it to another device",
@@ -1244,109 +505,6 @@
   "houseCheckOpenDevice": "Open",
   "todoOpenCount": "{count, plural, =0{All done} one{{count} item} other{{count} items}}",
   "@todoOpenCount": {"placeholders": {"count": {"type": "int"}}},
-  "todoTitle": "Lists",
-  "todoAddHint": "Add an item…",
-  "todoAdd": "Add",
-  "todoDone": "Done ({count})",
-  "@todoDone": {"placeholders": {"count": {"type": "int"}}},
-  "todoClearDone": "Clear done",
-  "todoEmpty": "No items. Add the first one.",
-  "todoNoLists": "Home Assistant has no lists. Add the “Shopping list” or “Local to-do” integration.",
-  "todoRename": "Edit item",
-  "todoDelete": "Delete",
-  "todoReadOnly": "This list is read-only here.",
-  "todoDue": "Due: {date}",
-  "@todoDue": {"placeholders": {"date": {"type": "String"}}},
-  "todoUnavailable": "The list is not available right now.",
-  "dashCardLists": "Lists",
-  "energyTwoRate": "Two-rate meter",
-  "energyTwoRateHint": "The lower (night) rate applies in the hours you set. They differ by area — check your bill or your distributor.",
-  "energyLowPrice": "Low-rate price (per kWh)",
-  "energyHighPrice": "High-rate price (per kWh)",
-  "energyLowFrom": "From",
-  "energyLowTo": "To",
-  "energyLowPresetBelgrade": "Belgrade 00–08",
-  "energyLowPresetVojvodina": "Vojvodina 23–07",
-  "energyLowPresetCentral": "Central Serbia 22–06",
-  "energyHighRateKwh": "High rate",
-  "energyLowRateKwh": "Low rate",
-  "energyLowShare": "{percent} % of use",
-  "@energyLowShare": {"placeholders": {"percent": {"type": "int"}}},
-  "energyLowNow": "Low rate now, until {time}",
-  "@energyLowNow": {"placeholders": {"time": {"type": "String"}}},
-  "energyHighNow": "High rate now — low rate starts at {time}",
-  "@energyHighNow": {"placeholders": {"time": {"type": "String"}}},
-  "energyLowLegend": "Low-rate hours",
-  "boardTitle": "Board",
-  "boardNewPage": "New page",
-  "boardEmpty": "No pages yet. Make the first one and write or draw with a finger or a pen.",
-  "boardStorageNote": "Pages are saved on your Home Assistant as pictures (image_upload), so all your devices see them. Home Assistant shows such pictures without signing in to anyone on the network who knows their long random link.",
-  "boardPen": "Pen",
-  "boardEraser": "Eraser",
-  "boardUndo": "Undo",
-  "boardRedo": "Redo",
-  "boardClear": "Clear page",
-  "boardClearConfirm": "Clear everything on this page?",
-  "boardDeletePage": "Delete page",
-  "boardDeleteConfirm": "Delete this page from Home Assistant?",
-  "boardDeleteNeedsAdmin": "Deleting pictures in Home Assistant needs an administrator account.",
-  "boardSaving": "Saving…",
-  "boardSaved": "Saved",
-  "boardSaveFailed": "Not saved — will try again.",
-  "boardChangedElsewhere": "This page was changed on another device.",
-  "boardReload": "Load",
-  "boardColor": "Colour {n}",
-  "@boardColor": {"placeholders": {"n": {"type": "int"}}},
-  "boardWidth": "Width {n}",
-  "@boardWidth": {"placeholders": {"n": {"type": "int"}}},
-  "boardZoomHint": "Two fingers: zoom and move",
-  "boardUnavailable": "The board is not available. Check the connection to Home Assistant.",
-  "boardPageCount": "{count, plural, =0{Empty — write or draw something} one{{count} page} other{{count} pages}}",
-  "@boardPageCount": {"placeholders": {"count": {"type": "int"}}},
-  "deviceSensorBattery": "Battery",
-  "deviceSensorBatteryState": "Battery state",
-  "deviceSensorCharging": "Charging",
-  "deviceSensorKiosk": "Kiosk",
-  "deviceSensorsSwitch": "Send battery state to Home Assistant",
-  "deviceSensorsHint": "Battery level, charging and whether the kiosk is on become sensors of this device in your HA. Nothing else is sent.",
-  "smartChargeTitle": "Smart charging",
-  "smartChargeHint": "The charger's plug turns on at {low} % and off at {high} % — the wall tablet's battery lasts longer.",
-  "@smartChargeHint": {"placeholders": {"low": {"type": "int"}, "high": {"type": "int"}}},
-  "smartChargeWaiting": "Waiting for the battery sensor to appear in Home Assistant…",
-  "smartChargePlug": "Charger plug or switch",
-  "smartChargeCreate": "Create automation",
-  "smartChargeDone": "Automation “{name}” created in Home Assistant.",
-  "@smartChargeDone": {"placeholders": {"name": {"type": "String"}}},
-  "smartChargeNeedsAdmin": "Creating automations needs an administrator account.",
-  "smartChargeAlias": "Smart charging – {device}",
-  "@smartChargeAlias": {"placeholders": {"device": {"type": "String"}}},
-  "nfcTitle": "NFC tags",
-  "nfcHint": "Hold the phone to a tag and Home Assistant runs what you chose — e.g. a “Leaving” scene by the front door. Tags use the same format as the official HA app.",
-  "nfcSectionHint": "A scene with a tap of the phone",
-  "nfcOff": "NFC is turned off in the phone's settings.",
-  "nfcMissing": "This device has no NFC. Existing tags still work from other phones.",
-  "nfcNeedsRegistration": "To scan, add this device to Home Assistant (Notifications → Messages from Home Assistant).",
-  "nfcNew": "New tag",
-  "nfcName": "Tag name",
-  "nfcRuns": "When scanned, run",
-  "nfcWrite": "Write tag",
-  "nfcHold": "Hold the tag to the back of the phone…",
-  "nfcWritten": "Tag “{name}” is ready.",
-  "@nfcWritten": {"placeholders": {"name": {"type": "String"}}},
-  "nfcWrittenNoAdmin": "The tag is written, but adding it to Home Assistant (and the automation) needs an administrator account. Scans still reach HA.",
-  "nfcErrorReadOnly": "The tag is locked and cannot be written.",
-  "nfcErrorTooSmall": "The address does not fit on this tag.",
-  "nfcErrorUnsupported": "This kind of tag is not supported.",
-  "nfcErrorFailed": "Writing failed — hold the tag still against the phone and try again.",
-  "nfcScanned": "Tag “{name}” scanned",
-  "@nfcScanned": {"placeholders": {"name": {"type": "String"}}},
-  "nfcScanFailed": "The tag did not reach Home Assistant: {reason}",
-  "@nfcScanFailed": {"placeholders": {"reason": {"type": "String"}}},
-  "nfcEmpty": "Home Assistant has no tags yet.",
-  "nfcLastScanned": "Last: {when}",
-  "@nfcLastScanned": {"placeholders": {"when": {"type": "String"}}},
-  "nfcNeverScanned": "Not scanned yet",
-  "nfcScannedUnnamed": "Tag scanned",
   "homeSayTime": "It's {time}.",
   "@homeSayTime": {"placeholders": {"time": {"type": "String"}}},
   "homeSayWeather": "Outside it's {condition}, {temperature}.",
@@ -1385,88 +543,40 @@
   "aodHint": "When the kiosk is not used: a black screen with the clock, the forecast and one thing you choose. The content shifts slowly so the screen does not burn in.",
   "aodFocus": "Under the clock",
   "aodFocusNone": "Nothing",
-  "aodFocusNextEvent": "Next event",
-  "aodFocusList": "List",
   "aodFocusDevice": "Device",
   "aodFocusEnergy": "Power now",
   "aodFocusMedia": "Now playing",
   "aodFocusHome": "Home sentence",
   "aodChoose": "Choose",
-  "aodNextEvent": "Next",
-  "aodNoEvents": "No events in the next 7 days",
-  "aodToday": "today",
-  "aodTomorrow": "tomorrow",
   "morningScreen": "Morning screen",
   "morningScreenHint": "In the morning the always-on screen shows today's forecast, events and reminders (items due today).",
   "morningFrom": "From",
   "morningTo": "To",
-  "morningToday": "Today",
-  "morningReminders": "Reminders",
-  "morningNothing": "Nothing on today.",
   "morningHighLow": "high {high}, low {low}",
   "@morningHighLow": {"placeholders": {"high": {"type": "String"}, "low": {"type": "String"}}},
-  "aodNowUntil": "now, until {time}",
-  "@aodNowUntil": {"placeholders": {"time": {"type": "String"}}},
   "aodBrightness": "Always-on brightness",
-  "settingsAssistSection": "Assist (voice)",
-  "settingsAssistHint": "Spoken answers, phone assistant",
-  "assistSpeak": "Speak answers",
-  "assistSpeakHint": "When you ask by voice, the answer is spoken too (the device's text-to-speech, nothing is sent).",
-  "assistDefault": "Phone assistant",
-  "assistDefaultHint": "Choose Open Smart Home as the “digital assistant”: a long press of home or power opens Assist, listening.",
-  "wakeWordSetting": "Wake word (hands-free)",
-  "wakeWordSettingHint": "Say the wake word set up in Home Assistant (for example “Okay Nabu”), then the command. Only while the kiosk is shown.",
-  "wakeWordPrivacyTitle": "Listen for the wake word?",
-  "wakeWordPrivacyBody": "While the kiosk is on screen the microphone stays on (Android shows its microphone indicator) and the sound is streamed continuously to your Home Assistant server, over the same connection as everything else, so that its wake word engine (openWakeWord) can recognise the wake word. Nothing is recorded or stored on this tablet. What Home Assistant does with the command after the wake word depends on its Assist settings: local recognition (for example Whisper) stays at home, Home Assistant Cloud sends it to the internet.",
-  "wakeWordAllow": "Turn on",
-  "wakeWordActive": "Listening for the wake word",
-  "wakeWordMissing": "Home Assistant has no wake word engine. Install the openWakeWord add-on (the Wyoming integration finds it), then turn this on again.",
-  "wakeWordNeedsServer": "Needs a connection to Home Assistant.",
   "approachWake": "Wake the screen when someone comes near",
   "approachWakeHint": "Only while the kiosk screen is idle.",
   "approachOff": "Off",
-  "approachSensor": "Motion sensor (Home Assistant)",
+  "approachSensor": "Motion sensor",
   "approachCamera": "Tablet camera",
   "approachSensorPick": "Sensor",
-  "approachNoSensors": "Home Assistant has no motion or presence sensors.",
+  "approachNoSensors": "No motion or presence sensors. Add one (e.g. Shelly BLU, Hue, IKEA or ESPHome).",
   "approachCameraTitle": "Use the tablet's camera?",
-  "approachCameraBody": "While the screen is idle, the front camera checks a few times a second whether something moves in front of the tablet, and Android shows its camera indicator. Pictures are processed only on this tablet and dropped at once: nothing is recorded, stored or sent anywhere — not even to Home Assistant. While the screen is awake the camera is off.",
+  "approachCameraBody": "While the screen is idle, the front camera checks a few times a second whether something moves in front of the tablet, and Android shows its camera indicator. Pictures are processed only on this tablet and dropped at once: nothing is recorded, stored or sent anywhere. While the screen is awake the camera is off.",
   "approachCameraAllow": "Turn on",
   "approachCameraDenied": "The camera is not allowed for this app in the system settings.",
   "presenceTitle": "Presence simulation",
   "presenceHint": "Lights go on and off by themselves in the evening while nobody is home",
   "presenceIntro": "While it is on, one of the chosen lights is switched on or off every 15 minutes in the evening (with a random wait of up to 10 minutes), and all go off at the end time. The phone or tablet running it has to stay at home, running.",
   "presenceOn": "Simulation on",
-  "presenceNotSaved": "Not saved in Home Assistant yet.",
   "presenceLights": "Lights",
   "presenceNoLights": "The home has no lights.",
-  "presenceWhen": "When",
-  "presenceWhenAway": "When nobody is home",
-  "presenceWhenAwayHint": "By the people in Home Assistant (the Home zone).",
-  "presenceWhenAlarm": "When the alarm is armed away",
-  "presenceWhenAlways": "Always while it is on",
   "presenceFromSunset": "From sunset",
   "presenceStart": "Start",
   "presenceEnd": "End (all chosen lights go off)",
   "presenceSave": "Save",
   "presenceSaved": "Presence simulation saved.",
-  "presenceRemove": "Remove",
-  "presenceRemoved": "Presence simulation removed.",
-  "presenceNeedsAdmin": "This needs an administrator account in Home Assistant.",
-  "lowTariffAlias": "Lower rate reminder ({device})",
-  "@lowTariffAlias": {"placeholders": {"device": {"type": "String"}}},
-  "lowTariffTitle": "The lower rate has started",
-  "lowTariffMessage": "Electricity is cheaper until {until} ({price}/kWh): a good time for the washing machine, the dishwasher or charging.",
-  "@lowTariffMessage": {"placeholders": {"until": {"type": "String"}, "price": {"type": "String"}}},
-  "lowTariffRemind": "Remind me when the lower rate starts",
-  "lowTariffRemindOn": "Lower rate reminder is on",
-  "lowTariffDialogBody": "When the lower rate starts ({time}), Home Assistant sends a message to this phone; when it ends, the message goes away by itself. It runs as an automation in Home Assistant (saving needs an administrator account), and the message arrives while the app is connected, as all messages from Home Assistant.",
-  "@lowTariffDialogBody": {"placeholders": {"time": {"type": "String"}}},
-  "lowTariffCreate": "Turn on reminder",
-  "lowTariffRemove": "Remove reminder",
-  "lowTariffCreated": "Lower rate reminder is on.",
-  "lowTariffRemoved": "Lower rate reminder removed.",
-  "lowTariffNeedsPush": "First turn on “Messages from Home Assistant” (Settings › Notifications).",
   "kioskAlertAck": "Got it",
   "kioskAlertShow": "Show device",
   "kioskAlertOpenFor": "Open for {minutes} min",
@@ -1491,8 +601,6 @@
   "@timerDone": {"placeholders": {"label": {"type": "String"}}},
   "timerDoneSpeech": "The {label} timer is done.",
   "@timerDoneSpeech": {"placeholders": {"label": {"type": "String"}}},
-  "timerStarted": "Timer for {label} started.",
-  "@timerStarted": {"placeholders": {"label": {"type": "String"}}},
   "kioskNightLightHint": "Tap: {name} at 10 %",
   "@kioskNightLightHint": {"placeholders": {"name": {"type": "String"}}},
   "kioskNightLightOn": "{name} is on · tap again for the screen",
@@ -1519,33 +627,7 @@
   "@photoFrameEverySeconds": {"placeholders": {"seconds": {"type": "int"}}},
   "photoFrameEveryMinutes": "every {minutes} min",
   "@photoFrameEveryMinutes": {"placeholders": {"minutes": {"type": "int"}}},
-  "familyMessages": "Messages",
-  "familyMessagesNone": "No messages. Leave one for the household.",
-  "familyMessageNew": "New message",
-  "familyMessageEveryone": "Everyone",
-  "familyMessageFor": "Message for {name}",
-  "@familyMessageFor": {"placeholders": {"name": {"type": "String"}}},
-  "familyMessageForAll": "Message for everyone",
-  "familyMessageRead": "Read",
-  "familyMessageHint": "For example: there is soup in the fridge",
-  "familyMessageSend": "Leave message",
-  "welcomeHome": "Welcome home, {name}!",
-  "@welcomeHome": {"placeholders": {"name": {"type": "String"}}},
-  "greetPeople": "Greet people coming home",
-  "greetPeopleHint": "When someone arrives (by their person in Home Assistant), the tablet says hello and shows their messages.",
-  "kioskIntercom": "Intercom",
-  "kioskIntercomOpen": "“Open” button",
-  "kioskIntercomSpeaker": "Speaker by the door (“Coming” button)",
-  "kioskIntercomSpeakerHint": "Home Assistant says the reply there with its own text-to-speech.",
-  "kioskIntercomReply": "Coming!",
-  "kioskIntercomReplyText": "Coming, just a moment!",
-  "kioskIntercomReplied": "Said at the door: “Coming, just a moment!”",
-  "kioskIntercomNoTts": "Home Assistant has no text-to-speech set up.",
-  "kioskIntercomUnlock": "Unlock {name}",
-  "@kioskIntercomUnlock": {"placeholders": {"name": {"type": "String"}}},
-  "kioskIntercomOpenDevice": "Open {name}",
-  "@kioskIntercomOpenDevice": {"placeholders": {"name": {"type": "String"}}},
-  "kioskColumnsNoRooms": "No rooms yet. Add areas in Home Assistant.",
+  "kioskColumnsNoRooms": "No rooms yet. Add them in Settings → Home.",
   "kioskColumnsDevices": "Devices",
   "kioskOpenDevice": "Open device",
   "kioskBundleMain": "Main",
@@ -1568,25 +650,16 @@
   "@applianceDoneMinutesValue": {"placeholders": {"minutes": {"type": "int"}}},
   "applianceDoneNow": "Using {watts} W now.",
   "@applianceDoneNow": {"placeholders": {"watts": {"type": "String"}}},
-  "applianceDoneThisPhone": "Message to this phone",
-  "applianceDoneNeedsPush": "Turn on messages from Home Assistant in settings first.",
-  "applianceDoneHousehold": "Message to the whole household",
-  "applianceDoneHouseholdHint": "Everyone sees it in the app and on the wall tablet.",
-  "applianceDoneOtherPhones": "Also tells {count} other phone(s).",
-  "@applianceDoneOtherPhones": {"placeholders": {"count": {"type": "int"}}},
   "applianceDoneRemove": "Remove",
   "applianceDoneRemoved": "Reminder removed.",
   "applianceDoneSaved": "You'll hear when \"{name}\" is done.",
   "@applianceDoneSaved": {"placeholders": {"name": {"type": "String"}}},
-  "applianceDoneNeedsAdmin": "This needs an administrator account in Home Assistant.",
   "applianceDoneOn": "Tells you when it's done",
   "applianceDoneOnHint": "Watched by this phone",
   "applianceDoneChange": "Change",
   "applianceDoneTitle": "Done",
   "applianceDoneMessage": "{name}: the cycle has finished.",
   "@applianceDoneMessage": {"placeholders": {"name": {"type": "String"}}},
-  "applianceDoneAlias": "Done: {name} (Open Smart Home)",
-  "@applianceDoneAlias": {"placeholders": {"name": {"type": "String"}}},
   "heatingScheduleAction": "Weekly schedule",
   "heatingScheduleTitle": "Weekly schedule",
   "heatingScheduleHint": "From each time on, that temperature holds until the next one. The schedule is kept as the home's automations. Runs on this phone or wall panel while the app runs (or with automations in the background). A manual change holds until the next time.",
@@ -1600,8 +673,6 @@
   "heatingScheduleSaved": "Schedule saved.",
   "heatingScheduleNext": "Next: {time} → {temperature}",
   "@heatingScheduleNext": {"placeholders": {"time": {"type": "String"}, "temperature": {"type": "String"}}},
-  "heatingScheduleAlias": "Schedule: {name} (Open Smart Home)",
-  "@heatingScheduleAlias": {"placeholders": {"name": {"type": "String"}}},
   "mediaMute": "Mute",
   "mediaUnmute": "Unmute",
   "mediaVolumeUp": "Volume up",
@@ -1624,9 +695,9 @@
   "roomPhoto": "Room photo",
   "roomPhotoChange": "Choose another photo",
   "roomPhotoRemove": "Remove photo",
-  "roomPhotoHint": "Photo, icon and colour stay on this device only; they are not sent to Home Assistant. For the wall tablet, choose them on the tablet itself.",
+  "roomPhotoHint": "Photo, icon and colour stay on this device only. For the wall tablet, choose them on the tablet itself.",
   "themeAutoDark": "Dark after sunset",
-  "themeAutoDarkHint": "Follows sunrise and sunset from Home Assistant (without it: dark from 20:00 to 7:00).",
+  "themeAutoDarkHint": "Follows sunrise and sunset at the home's location (without it: dark from 20:00 to 7:00).",
   "accentTitle": "Accent colour",
   "accentTerracotta": "Terracotta",
   "accentBlue": "Blue",
@@ -1645,81 +716,12 @@
   "roomPhotoChoose": "Choose a photo",
   "roomIconTitle": "Icon",
   "roomColorTitle": "Colour",
-  "roomLookReset": "As in Home Assistant",
+  "roomLookReset": "Default",
   "favoritesBrowse": "Browse devices",
   "bigSliderPosition": "Position",
-  "bigSliderHint": "Long press: big slider",
   "deviceSheetMore": "All details",
-  "serviceSection": "Service",
-  "serviceSectionHint": "Diagnostics, support and installer tools",
-  "serviceSupport": "Support: {brand}",
-  "@serviceSupport": {"placeholders": {"brand": {"type": "String"}}},
-  "serviceApp": "App",
-  "serviceDevice": "Device",
-  "serviceServer": "Server",
-  "serviceConnected": "connected",
-  "serviceDisconnected": "not connected",
-  "serviceDevices": "Devices",
-  "serviceDevicesValue": "{count} devices, unavailable: {unavailable}",
-  "@serviceDevicesValue": {"placeholders": {"count": {"type": "int"}, "unavailable": {"type": "int"}}},
-  "servicePanel": "Wall panel",
-  "servicePanelManaged": "Managed (device owner): the kiosk cannot be left and starts after a restart",
-  "servicePanelNot": "Ordinary device (not installer-managed)",
-  "servicePanelApply": "Apply panel rules",
-  "servicePanelApplied": "Screen stays on while powered; the app is the home screen.",
-  "servicePanelFailed": "Failed: the app is not the device owner.",
-  "servicePanelRelease": "Release the device",
-  "servicePanelReleaseBody": "Removes installer management: the kiosk can be left and the normal home screen returns. Turning it back on needs the device prepared again (factory reset).",
-  "serviceProblems": "Recent problems",
-  "serviceNoProblems": "Nothing logged since the app started.",
-  "serviceCopy": "Copy diagnostics",
-  "serviceCopied": "Diagnostics copied.",
-  "serviceCopyHint": "No tokens or passwords: only versions, the device, the server's host and recent errors.",
-  "setupTitle": "Setup wizard",
-  "setupIntro": "Check and set up everything for this device, step by step. ({brand})",
-  "@setupIntro": {"placeholders": {"brand": {"type": "String"}}},
-  "setupConnection": "Connection to Home Assistant",
-  "setupConnectionOk": "Connected to {host} (Home Assistant {version})",
-  "@setupConnectionOk": {"placeholders": {"host": {"type": "String"}, "version": {"type": "String"}}},
-  "setupConnectionMissing": "Not connected — check the address and network in Settings → Server.",
-  "setupRooms": "Rooms",
-  "setupRoomsCount": "{count, plural, =0{No rooms} =1{1 room} other{{count} rooms}}",
-  "@setupRoomsCount": {"placeholders": {"count": {"type": "int"}}},
-  "setupNoRoom": "{count, plural, =0{Every device has a room} =1{1 device without a room} other{{count} devices without a room}}",
-  "@setupNoRoom": {"placeholders": {"count": {"type": "int"}}},
-  "setupRoomsHint": "Rooms and devices are arranged in Home Assistant (Settings → Areas).",
-  "setupMessages": "Messages from Home Assistant",
-  "setupMessagesOk": "Registered as \"{name}\"",
-  "@setupMessagesOk": {"placeholders": {"name": {"type": "String"}}},
-  "setupMessagesHint": "Registers the device in Home Assistant (Mobile App), so automations can send it messages.",
-  "setupDeviceName": "Device name in Home Assistant",
-  "setupDefaultDeviceName": "Wall tablet",
-  "setupRegister": "Register",
-  "setupKiosk": "Kiosk and PIN",
-  "setupPinHint": "No PIN to leave the kiosk yet",
-  "setupPinSaved": "PIN saved.",
-  "setupPanel": "Wall panel",
-  "setupPanelHint": "For a panel that cannot be left and starts by itself after a power cut, the device is prepared as \"device owner\" before any Google account is added — see the installer guide (docs/INSTALLER.md).",
-  "setupDone": "Done",
   "setupNext": "Next",
   "setupBack": "Back",
-  "haBackupTitle": "In Home Assistant",
-  "haBackupHint": "The app's settings (look, kiosk, cards, quick controls, rooms) are kept in your Home Assistant under the device's name, so after a reinstall or on another tablet they come back with one tap. Tokens, PIN, photos and microphone/camera choices are never kept.",
-  "haBackupName": "Copy name (device)",
-  "haBackupSave": "Save",
-  "haBackupSavedHome": "Saved as \"{name}\" — visible on every device in the home.",
-  "@haBackupSavedHome": {"placeholders": {"name": {"type": "String"}}},
-  "haBackupSavedUser": "Saved as \"{name}\" for your account (the whole home needs an administrator).",
-  "@haBackupSavedUser": {"placeholders": {"name": {"type": "String"}}},
-  "haBackupNone": "No saved copies yet.",
-  "haBackupScopeHome": "for the whole home",
-  "haBackupScopeUser": "your account only",
-  "haBackupRestore": "Restore",
-  "haBackupRestoreTitle": "Restore \"{name}\"?",
-  "@haBackupRestoreTitle": {"placeholders": {"name": {"type": "String"}}},
-  "haBackupRestoreBody": "This device's settings will be replaced by the saved ones. PIN, photos and microphone/camera choices stay as they are.",
-  "haBackupDelete": "Delete copy",
-  "haBackupUnavailable": "Copies in Home Assistant aren't available right now (no connection).",
   "backupFileTitle": "As text",
   "updateTitle": "App updates",
   "updateCurrent": "Version {version}",
@@ -1740,36 +742,25 @@
   "updateCheck": "Check now",
   "updateAuto": "Check for new releases at start-up",
   "updateAutoHint": "Asks GitHub (public releases) whether there's a new version; GitHub then sees the device's address. Nothing else is sent.",
-  "nfcLinkConfirmTitle": "Run this tag?",
-  "nfcLinkConfirm": "The link for tag \"{name}\" didn't come from an NFC tag held to the phone, but from a QR code, the web or another app. Run it in Home Assistant?",
-  "@nfcLinkConfirm": {"placeholders": {"name": {"type": "String"}}},
-  "nfcLinkConfirmUnnamed": "A Home Assistant tag link didn't come from an NFC tag held to the phone, but from a QR code, the web or another app. Run it?",
-  "nfcLinkRun": "Run",
   "firstRunSkip": "Skip",
   "firstRunWelcomeTitle": "Welcome home!",
-  "firstRunWelcomeBody": "You are connected to {host}. Let's set the app up — it takes a minute, and everything can be changed later in Settings.",
-  "@firstRunWelcomeBody": {"placeholders": {"host": {"type": "String"}}},
   "firstRunRoleQuestion": "How will you use this device?",
   "firstRunRolePhone": "My phone or tablet",
   "firstRunRolePhoneHint": "Personal, I carry it with me",
   "firstRunRoleWall": "Wall tablet for the whole home",
   "firstRunRoleWallHint": "Mounted on the wall, used by everyone (kiosk with a PIN)",
   "firstRunWallNext": "Set up the wall panel",
-  "firstRunRestoreTitle": "Bring over existing settings",
-  "firstRunRestoreBody": "Your Home Assistant keeps settings saved from other devices. If this one replaces or matches one of them, restore it with a tap — or just continue.",
   "firstRunLookTitle": "Look",
   "firstRunLookBody": "Pick a light or dark theme and a colour you like.",
   "firstRunFavoritesTitle": "Favourite devices",
   "firstRunFavoritesBody": "Tap what you use most — it will be at the top of Home.",
-  "firstRunFavoritesNone": "Home Assistant has no controllable devices yet.",
+  "firstRunFavoritesNone": "No controllable devices yet. Add them later in Settings → Home.",
   "firstRunFavoritesCount": "{count, plural, =0{Nothing selected} =1{1 device selected} other{{count} devices selected}}",
   "@firstRunFavoritesCount": {"placeholders": {"count": {"type": "int"}}},
-  "firstRunMessagesTitle": "Messages on this phone",
-  "firstRunMessagesBody": "Home Assistant can tell this phone when something happens, e.g. a door left open. Messages come straight from your home, without a cloud.",
   "firstRunSecurityTitle": "Protection",
   "firstRunSecurityBody": "Whoever has your unlocked phone can control the home. We recommend at least confirming locks and the alarm.",
   "firstRunDoneTitle": "All set",
-  "firstRunDoneBody": "Rooms, scenes and devices come from Home Assistant. Everything chosen here can be changed in Settings, and Home's cards with the ⚙ button next to the greeting.",
+  "firstRunDoneBody": "Add devices in Settings → Home → Add device. Everything chosen here can be changed in Settings, and Home's cards with the ⚙ button next to the greeting.",
   "firstRunStart": "Let's go",
   "kioskGreetingName": "{greeting}, {name}",
   "@kioskGreetingName": {"placeholders": {"greeting": {"type": "String"}, "name": {"type": "String"}}},
@@ -1782,7 +773,7 @@
   "@kioskQuickControlsFor": {"placeholders": {"name": {"type": "String"}}},
   "kioskQuickControlsShared": "Use the shared ones",
   "kioskPeopleTitle": "Household on the panel",
-  "kioskPeopleHint": "On the panel, a member taps their picture and gets their own greeting and quick controls. Unlocking doors, disarming the alarm and similar actions need the member's own PIN or the panel's PIN — members without a PIN (e.g. children) cannot. Members are Home Assistant's people.",
+  "kioskPeopleHint": "On the panel, a member taps their name and gets their own quick controls. Unlocking doors, disarming the alarm and similar actions need the member's own PIN or the panel's PIN — members without a PIN (e.g. children) cannot. Tap a name for the birthday.",
   "kioskPersonPinSet": "Own PIN set — may unlock",
   "kioskPersonNoPin": "No own PIN",
   "kioskPersonSetPin": "Own PIN — {name}",
@@ -1797,21 +788,10 @@
   "batteryReminder": "Tell me when a battery runs low",
   "batteryReminderHint": "This phone or tablet tells you with a notification when a device's battery drops to {percent} % or lower (while the app runs, or with automations in the background).",
   "@batteryReminderHint": {"placeholders": {"percent": {"type": "int"}}},
-  "batteryReminderAlias": "Battery running low (Open Smart Home)",
   "batteryReminderMessage": "Battery running low: {name} ({percent} %)",
   "@batteryReminderMessage": {"placeholders": {"name": {"type": "String"}, "percent": {"type": "String"}}},
   "batteryLowShort": "Battery low",
   "batteryOk": "Battery fine",
-  "unlockLogPanel": "Wall panel",
-  "unlockLogPhone": "Phone",
-  "unlockLogViaPanel": "wall panel",
-  "unlockLogViaPhone": "phone",
-  "unlockLogUnlock": "unlocks {device} ({via})",
-  "@unlockLogUnlock": {"placeholders": {"device": {"type": "String"}, "via": {"type": "String"}}},
-  "unlockLogDisarm": "disarms {device} ({via})",
-  "@unlockLogDisarm": {"placeholders": {"device": {"type": "String"}, "via": {"type": "String"}}},
-  "unlockLogOpen": "opens {device} ({via})",
-  "@unlockLogOpen": {"placeholders": {"device": {"type": "String"}, "via": {"type": "String"}}},
   "vacationTitle": "On holiday",
   "vacationHint": "Get the home ready while you are away, with one tap. On your return, heating and the simulation go back to how they were.",
   "vacationTidy": "Tidy up",
@@ -1833,23 +813,6 @@
   "vacationEndHint": "When you are back: heating to the old temperatures, the simulation as it was.",
   "vacationAlarmStillOn": "The alarm is still on — disarm it with the keypad or code.",
   "vacationEnd": "We're back",
-  "comingHomeTitle": "Coming home",
-  "comingHomeHint": "One tap (also from the app icon): turn on what you like, warm the house and tell the household.",
-  "comingHomeWho": "Who is coming",
-  "comingHomeNoOne": "No name",
-  "comingHomeRoutine": "Scene or script",
-  "comingHomeNone": "Nothing",
-  "comingHomeHeatingOff": "Heating: leave as is",
-  "comingHomeHeating": "Heating to {temperature} °C",
-  "@comingHomeHeating": {"placeholders": {"temperature": {"type": "String"}}},
-  "comingHomeAnnounce": "Tell the household",
-  "comingHomeAnnounceHint": "The message shows in the app and on the wall panel",
-  "comingHomeRun": "I'm coming home",
-  "comingHomeShortcutHint": "A long press on the app icon → \"Coming home\" does the same.",
-  "comingHomeDone": "The home knows you are coming.",
-  "comingHomeMessage": "{name} is coming home 🏠",
-  "@comingHomeMessage": {"placeholders": {"name": {"type": "String"}}},
-  "comingHomeMessageNoName": "Someone is coming home 🏠",
   "guestWifiTitle": "Guest Wi-Fi",
   "guestWifiNotSet": "Not set up yet. Enter the guest network; guests then join by scanning the code — no spelling out the password.",
   "guestWifiScan": "Scan with the phone's camera",
@@ -1890,29 +853,6 @@
   "sunriseSaved": "Sunrise alarm: bright by {time}.",
   "@sunriseSaved": {"placeholders": {"time": {"type": "String"}}},
   "sunriseRemoved": "Sunrise alarm turned off.",
-  "sunriseAlias": "Sunrise alarm (Open Smart Home)",
-  "wrappedTitle": "This week",
-  "wrappedIntro": "Your week at home",
-  "wrappedIntroCaption": "The last 7 days, from Home Assistant's logbook. Tap the right side to go on.",
-  "wrappedDoors": "Doors and windows opened",
-  "wrappedTopDoor": "Busiest: {name}",
-  "@wrappedTopDoor": {"placeholders": {"name": {"type": "String"}}},
-  "wrappedLights": "Times a light went on",
-  "wrappedTopLight": "Favourite: {name} ({count}×)",
-  "@wrappedTopLight": {"placeholders": {"name": {"type": "String"}, "count": {"type": "int"}}},
-  "wrappedArrivals": "Homecomings",
-  "wrappedTopArrival": "Most often: {name} ({count}×)",
-  "@wrappedTopArrival": {"placeholders": {"name": {"type": "String"}, "count": {"type": "int"}}},
-  "wrappedUnlocks": "Unlocks",
-  "wrappedBusiestDay": "The liveliest day at home",
-  "wrappedEnergy": "kWh of electricity this week",
-  "wrappedEnergyUnit": "since Monday",
-  "wrappedEnergyLastWeek": "since Monday · last week {kwh} kWh",
-  "@wrappedEnergyLastWeek": {"placeholders": {"kwh": {"type": "String"}}},
-  "wrappedOutro": "What a week!",
-  "wrappedOutroCaption": "See you next week 👋",
-  "wrappedEmpty": "Home Assistant's logbook for this week is empty — nothing to count yet.",
-  "wrappedUnavailable": "Home Assistant's logbook is not available right now.",
   "birthdayGreeting": "Happy birthday, {names}!",
   "@birthdayGreeting": {"placeholders": {"names": {"type": "String"}}},
   "birthdayPick": "Birthday (day and month)",
@@ -1985,8 +925,6 @@
   "nowPlayingChannel": "Now playing",
   "simpleWarmer": "Warmer",
   "simpleCooler": "Cooler",
-  "serviceLicenses": "Open source licences",
-  "serviceLicensesHint": "The app and every package it uses",
   "settingsHomeSection": "Home",
   "settingsHomeHint": "Devices and rooms",
   "firstRunWelcomeBodyLite": "The phone controls your devices itself, no server needed. Let's set the app up — it takes a minute, and everything can be changed later in Settings.",
@@ -1997,7 +935,6 @@
   "addDeviceNoneYet": "Nothing yet. Check that the phone is on the same Wi-Fi network as the device, or enter its IP address.",
   "addDeviceManual": "Enter IP address",
   "addDeviceAddressLabel": "Device IP address",
-  "addDeviceChecking": "Checking…",
   "addDeviceNotFound": "No supported device found at that address.",
   "addDeviceAdded": "Added",
   "addDeviceAdd": "Add",
@@ -2064,7 +1001,6 @@
   "blePermissionHint": "Bluetooth sensors need the nearby devices permission.",
   "bleOff": "Bluetooth is off. Turn it on for the sensors to show up.",
   "bleNoneYet": "Nothing yet. Sensors call in every few seconds to a minute.",
-  "bleUnsupported": "This device has no Bluetooth.",
   "backupWithSecrets": "With the devices' passwords and keys",
   "backupWithSecretsHint": "Encrypted with a password you choose; without it nobody can read them.",
   "backupPassword": "Backup password",
@@ -2118,5 +1054,9 @@
   "cameraNoImage": "There is no camera image at this address (or the user is wrong).",
   "cameraOffline": "The camera is not giving an image right now.",
   "emptyHomeTitle": "No devices yet",
-  "emptyHomeBody": "Add devices from your home Wi-Fi or over Bluetooth: Shelly, Hue, WiZ, Tapo, Tuya, ESPHome, TVs and more."
+  "emptyHomeBody": "Add devices from your home Wi-Fi or over Bluetooth: Shelly, Hue, WiZ, Tapo, Tuya, ESPHome, TVs and more.",
+  "householdAdd": "Add a member",
+  "householdName": "Name",
+  "householdRemove": "Remove member",
+  "personMember": "Member"
 }
