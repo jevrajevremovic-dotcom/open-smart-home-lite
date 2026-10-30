@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.3.1] – 2026-10-30
+
 ### Uklonjeno
 - Demo uređaji: aplikacija više ne prikazuje izmišljeni dom. Dok nema uređaja, početna kaže kako se dodaju; prekidač „Demo uređaji“ u Podešavanjima je uklonjen.
 
