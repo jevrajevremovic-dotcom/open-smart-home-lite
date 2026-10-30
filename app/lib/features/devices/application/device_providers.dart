@@ -14,6 +14,10 @@ import '../data/local/esphome/esphome_adapter.dart';
 import '../data/local/esphome/esphome_client.dart';
 import '../data/local/hue_adapter.dart';
 import '../data/local/kasa_adapter.dart';
+import '../data/local/govee_adapter.dart';
+import '../data/local/lan_transport.dart';
+import '../data/local/lifx_adapter.dart';
+import '../data/local/wiz_adapter.dart';
 import '../data/local/lan_http.dart';
 import '../data/local/local_backend.dart';
 import '../data/local/local_home.dart';
@@ -53,6 +57,12 @@ final homeBackendProvider = Provider<LocalBackend?>((ref) {
       ),
       YeelightAdapter(ref.watch(yeelightTransportProvider)),
       KasaAdapter(ref.watch(kasaTransportProvider)),
+      WizAdapter(ref.watch(lanUdpProvider)),
+      LifxAdapter(ref.watch(lanUdpProvider)),
+      GoveeAdapter(
+        ref.watch(lanUdpProvider),
+        pollEvery: const Duration(seconds: 10),
+      ),
       BleAdapter(ref.watch(bleScannerProvider)),
       ref.watch(routineAdapterProvider),
       EsphomeAdapter(

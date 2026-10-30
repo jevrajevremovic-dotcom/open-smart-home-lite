@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/device_adapter.dart';
+import 'package:open_smart_home_lite/features/devices/data/local/lan_transport.dart';
 import 'package:open_smart_home_lite/app/app.dart';
 import 'package:open_smart_home_lite/app/localization/generated/app_localizations_en.dart';
 import 'package:open_smart_home_lite/app/localization/generated/app_localizations_sr.dart';
@@ -47,6 +48,10 @@ Future<InMemoryCredentialStore> pumpApp(
   LanHttp? http,
   LanDiscovery? discovery,
   EsphomeConnector? esphome,
+  LanUdp? udp,
+  LanRequests? requests,
+  LanTcp? tcp,
+  LanSockets? sockets,
   BleScanner? ble,
   List<Override> overrides = const [],
 }) async {
@@ -73,6 +78,10 @@ Future<InMemoryCredentialStore> pumpApp(
     http: http,
     discovery: discovery,
     esphome: esphome,
+    udp: udp,
+    requests: requests,
+    tcp: tcp,
+    sockets: sockets,
     ble: ble,
     overrides: overrides,
   );

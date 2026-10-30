@@ -7,6 +7,7 @@ import 'package:open_smart_home_lite/features/add_device/data/lan_discovery.dart
 import 'package:open_smart_home_lite/features/devices/data/local/esphome/esphome_client.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/kasa_adapter.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/lan_http.dart';
+import 'package:open_smart_home_lite/features/devices/data/local/lan_transport.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/yeelight_adapter.dart';
 import 'package:open_smart_home_lite/core/platform/speech_output.dart';
 import 'package:open_smart_home_lite/core/storage/app_preferences.dart';
@@ -37,6 +38,7 @@ import 'package:open_smart_home_lite/features/shortcuts/quick_tiles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home_fixture.dart';
+import 'lan_fakes.dart';
 
 /// Devices of a test home. Commands are recorded in [sent]; [onCommand]
 /// may return the device's new state (else nothing changes).
@@ -335,8 +337,18 @@ Future<List<Override>> testOverrides({
   KasaTransport? kasa,
   BackgroundPlatform? background,
   BleScanner? ble,
+  LanUdp? udp,
+  LanRequests? requests,
+  LanTcp? tcp,
+  LanSockets? sockets,
   List<Override> overrides = const [],
 }) async {
+  final network =
+      http != null ||
+      udp != null ||
+      requests != null ||
+      tcp != null ||
+      sockets != null;
   SharedPreferences.setMockInitialValues({
     if (!firstRun) 'firstRun': '{"done":true}',
     if (adapter is HomeFixture) 'routines': fixtureRoutines,
@@ -346,9 +358,9 @@ Future<List<Override>> testOverrides({
   return [
     appConfigProvider.overrideWithValue(const AppConfig(mockMode: true)),
     sharedPreferencesProvider.overrideWithValue(prefs),
-    // With [http] the app's own backend runs (demo, Shelly, WLED) against
-    // the pretend network.
-    if (adapter != null || http == null)
+    // With a pretend network ([http], [udp]…) the app's own backend runs
+    // (demo and every adapter) against it.
+    if (adapter != null || !network)
       homeBackendProvider.overrideWith((ref) {
         final home = ref.read(localHomeProvider);
         final routines = ref.watch(routineAdapterProvider);
@@ -371,6 +383,12 @@ Future<List<Override>> testOverrides({
         return backend;
       }),
     lanHttpProvider.overrideWithValue(http ?? FakeLanHttp(const {})),
+    lanUdpProvider.overrideWithValue(udp ?? FakeLanUdp(const {})),
+    lanRequestsProvider.overrideWithValue(
+      requests ?? FakeLanRequests(const {}),
+    ),
+    lanTcpProvider.overrideWithValue(tcp ?? FakeLanTcp(const {})),
+    lanSocketsProvider.overrideWithValue(sockets ?? FakeLanSockets(const {})),
     esphomeConnectorProvider.overrideWithValue(esphome ?? noEsphome),
     yeelightTransportProvider.overrideWithValue(yeelight ?? FakeYeelight()),
     kasaTransportProvider.overrideWithValue(kasa ?? FakeKasa()),

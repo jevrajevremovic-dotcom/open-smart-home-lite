@@ -6,7 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../devices/data/local/esphome/esphome_client.dart';
 import '../../devices/data/local/ble/ble_advert.dart';
 import '../../devices/data/local/hue_adapter.dart';
+import '../../devices/data/local/govee_adapter.dart';
 import '../../devices/data/local/kasa_adapter.dart';
+import '../../devices/data/local/lan_transport.dart';
+import '../../devices/data/local/lifx_adapter.dart';
+import '../../devices/data/local/wiz_adapter.dart';
 import '../../devices/data/local/lan_http.dart';
 import '../../devices/data/local/local_home.dart';
 import '../../devices/data/local/shelly_adapter.dart';
@@ -58,11 +62,66 @@ class ProbedDevice {
 /// (`Status 0`), Kasa (`get_sysinfo`) or ESPHome (its API, or what it
 /// announces). Only reads; `null` for anything else.
 class DeviceProbe {
-  const DeviceProbe(this._http, this._esphome, {this.kasa});
+  const DeviceProbe(this._http, this._esphome, {this.kasa, this.udp});
 
   final LanHttp _http;
   final EsphomeConnector _esphome;
   final KasaTransport? kasa;
+  final LanUdp? udp;
+
+  /// Devices that answer a search of their own on the network (WiZ, LIFX,
+  /// Govee), as each search ends.
+  Stream<List<ProbedDevice>> search() async* {
+    final udp = this.udp;
+    if (udp == null) return;
+    final found = <ProbedDevice>[];
+    Future<List<ProbedDevice>> quiet(Future<List<ProbedDevice>> f) =>
+        f.catchError((Object _) => const <ProbedDevice>[]);
+    final searches = [
+      quiet(wizDiscover(udp).then((l) => l.map(fromWiz).toList())),
+      quiet(lifxDiscover(udp).then((l) => l.map(fromLifx).toList())),
+      quiet(goveeDiscover(udp).then((l) => l.map(fromGovee).toList())),
+    ];
+    for (final s in searches) {
+      found.addAll(await s);
+      yield List.unmodifiable(found);
+    }
+  }
+
+  static ProbedDevice fromWiz(WizFound w) => ProbedDevice(
+    brand: 'WiZ',
+    device: ConfiguredDevice(
+      adapter: 'wiz',
+      id: w.mac,
+      host: w.host,
+      model: w.module,
+      label: 'WiZ',
+    ),
+  );
+
+  static ProbedDevice fromLifx(({String host, String mac, String? label}) l) =>
+      ProbedDevice(
+        brand: 'LIFX',
+        name: l.label?.isEmpty ?? true ? null : l.label,
+        device: ConfiguredDevice(
+          adapter: 'lifx',
+          id: l.mac,
+          host: l.host,
+          label: l.label?.isEmpty ?? true ? 'LIFX' : l.label,
+        ),
+      );
+
+  static ProbedDevice fromGovee(({String host, String id, String? sku}) g) =>
+      ProbedDevice(
+        brand: 'Govee',
+        device: ConfiguredDevice(
+          adapter: 'govee',
+          id: g.id,
+          host: g.host,
+          model: g.sku,
+          label: g.sku == null ? 'Govee' : 'Govee ${g.sku}',
+        ),
+      );
 
   /// A Yeelight that answered the search.
   static ProbedDevice fromYeelight(YeelightFound bulb) => ProbedDevice(
@@ -246,9 +305,20 @@ class DeviceProbe {
     return null;
   }
 
-  /// An address typed in: a web device, a Kasa, else an ESPHome device.
+  /// An address typed in: a web device, a Kasa, a WiZ, else an ESPHome
+  /// device.
   Future<ProbedDevice?> probeAddress(String host) async =>
-      await probe(host) ?? await _probeKasa(host) ?? await probeEsphome(host);
+      await probe(host) ??
+      await _probeKasa(host) ??
+      await _probeWiz(host) ??
+      await probeEsphome(host);
+
+  Future<ProbedDevice?> _probeWiz(String host) async {
+    final udp = this.udp;
+    if (udp == null) return null;
+    final w = await wizProbe(udp, host);
+    return w == null ? null : fromWiz(w);
+  }
 
   Future<ProbedDevice?> _probeKasa(String host) async {
     final kasa = this.kasa;
@@ -287,5 +357,6 @@ final deviceProbeProvider = Provider<DeviceProbe>(
     ref.watch(lanHttpProvider),
     ref.watch(esphomeConnectorProvider),
     kasa: ref.watch(kasaTransportProvider),
+    udp: ref.watch(lanUdpProvider),
   ),
 );

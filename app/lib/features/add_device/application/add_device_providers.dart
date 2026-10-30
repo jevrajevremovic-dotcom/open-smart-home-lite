@@ -11,7 +11,7 @@ import '../data/lan_discovery.dart';
 
 /// Devices found on the network while the screen is open: announced by
 /// mDNS (Shelly, WLED, Hue, ESPHome; each address asked once) or answering
-/// a search of their own (Yeelight, Kasa). A device already added that
+/// a search of their own (Yeelight, Kasa, WiZ, LIFX, Govee). A device already added that
 /// answers at a new address (DHCP) gets its address updated.
 final discoveredDevicesProvider =
     StreamProvider.autoDispose<List<ProbedDevice>>((ref) {
@@ -67,6 +67,10 @@ final discoveredDevicesProvider =
           }),
         ref.read(yeelightTransportProvider).discover().listen((bulbs) {
           bulbs.map(DeviceProbe.fromYeelight).forEach(add);
+          emit();
+        }, onError: (Object _) {}),
+        probe.search().listen((found) {
+          found.forEach(add);
           emit();
         }, onError: (Object _) {}),
         ref.read(kasaTransportProvider).discover().listen((found) {

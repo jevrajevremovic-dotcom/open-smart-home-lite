@@ -64,6 +64,7 @@ class AddDeviceScreen extends ConsumerWidget {
                         'Hue' => Icons.hub_outlined,
                         'Yeelight' => Icons.lightbulb_outline,
                         'Kasa' => Icons.outlet_outlined,
+                        'WiZ' || 'LIFX' || 'Govee' => Icons.lightbulb_outline,
                         _ => Icons.power_outlined,
                       }),
                       title: Text(p.title),

@@ -16,6 +16,7 @@ class ConfiguredDevice {
     this.model,
     this.label,
     this.secured = false,
+    this.options = const {},
   });
 
   /// [DeviceAdapter.id] (`shelly`, `wled`).
@@ -35,6 +36,10 @@ class ConfiguredDevice {
   /// ([devicePasswordId]), never here.
   final bool secured;
 
+  /// What the adapter needs to remember about it (a protocol version, a
+  /// TV's MAC address, learned remote buttons). No secrets.
+  final Map<String, String> options;
+
   /// Id of the physical device, shared by its channels
   /// (`SmartHomeDevice.deviceId`).
   String get key => '$adapter:$id';
@@ -44,6 +49,7 @@ class ConfiguredDevice {
     String? model,
     String? label,
     bool? secured,
+    Map<String, String>? options,
   }) => ConfiguredDevice(
     adapter: adapter,
     id: id,
@@ -51,6 +57,7 @@ class ConfiguredDevice {
     model: model ?? this.model,
     label: label ?? this.label,
     secured: secured ?? this.secured,
+    options: options ?? this.options,
   );
 
   Map<String, Object?> toJson() => {
@@ -60,6 +67,7 @@ class ConfiguredDevice {
     'model': ?model,
     'label': ?label,
     if (secured) 'secured': true,
+    if (options.isNotEmpty) 'options': options,
   };
 
   static ConfiguredDevice? fromJson(Object? json) {
@@ -75,6 +83,11 @@ class ConfiguredDevice {
       model: json['model'] as String?,
       label: json['label'] as String?,
       secured: json['secured'] == true,
+      options: {
+        for (final e in ((json['options'] as Map?) ?? const {}).entries)
+          if (e.key is String && e.value is String)
+            e.key as String: e.value as String,
+      },
     );
   }
 
@@ -86,10 +99,19 @@ class ConfiguredDevice {
       other.host == host &&
       other.model == model &&
       other.label == label &&
-      other.secured == secured;
+      other.secured == secured &&
+      mapEquals(other.options, options);
 
   @override
-  int get hashCode => Object.hash(adapter, id, host, model, label, secured);
+  int get hashCode => Object.hash(
+    adapter,
+    id,
+    host,
+    model,
+    label,
+    secured,
+    Object.hashAllUnordered(options.entries.map((e) => (e.key, e.value))),
+  );
 }
 
 /// Where the password of the device [key] is kept (`CredentialStore`).
@@ -298,6 +320,21 @@ class LocalHomeController extends Notifier<LocalHome> {
       devices: [
         for (final d in state.devices)
           d.key == key ? d.copyWith(host: host) : d,
+      ],
+    ),
+  );
+
+  /// The device [key] remembers [options] (merged; an empty value removes).
+  Future<void> setOptions(String key, Map<String, String> options) => _save(
+    state.copyWith(
+      devices: [
+        for (final d in state.devices)
+          d.key == key
+              ? d.copyWith(
+                  options: {...d.options, ...options}
+                    ..removeWhere((_, v) => v.isEmpty),
+                )
+              : d,
       ],
     ),
   );
