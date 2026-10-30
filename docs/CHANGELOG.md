@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.4.1] – 2026-10-30
+
 ### Ispravljeno
 - Dugme „Dozvoli Bluetooth“ ništa nije radilo, a ni dozvole za mikrofon (pljesak) i kameru (buđenje tableta), ni sami pljesak i pokret kamerom: pri čišćenju Android koda u 0.2.0 slučajno su uklonjene njihove veze sa aplikacijom. Vraćene su, a novi test proverava da je svaka veza koju aplikacija koristi i registrovana.
 - Kad Android odbije Bluetooth (ili više ne pita), aplikacija to kaže i nudi podešavanja aplikacije.
