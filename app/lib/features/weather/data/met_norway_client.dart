@@ -3,7 +3,9 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../../app/app_info.dart';
 import '../../../core/config/app_config.dart';
+import '../../updates/update_service.dart';
 import '../../../core/errors/app_failure.dart';
 import '../domain/weather.dart';
 
@@ -31,8 +33,9 @@ class MetNorwayClient implements LocationWeatherService {
       ..headers = {'User-Agent': userAgent};
   }
 
+  /// MET Norway asks who is calling and how to reach them.
   static const userAgent =
-      'OpenSmartHomeLite/0.1 github.com/jevrajevremovic-dotcom/open-smart-home';
+      'OpenSmartHomeLite/$appVersion github.com/$updateRepo';
   final Dio _dio;
 
   static double roundCoordinate(double v) => (v * 100).roundToDouble() / 100;

@@ -62,7 +62,7 @@ ID uređaja je `<adapter>:<MAC>:<kanal>` (npr. `shelly:a8032ab12345:switch0`, `w
 
 ESPHome: veza je trajna (native API, port 6053) i uređaj sam šalje promene. Ako uređaj ima `api: encryption: key:`, ključ se unosi pri dodavanju i proverava pre nego što se uređaj doda (Noise `NNpsk0_25519_ChaChaPoly_SHA256`, `app/lib/features/devices/data/local/esphome/`). Ventilatori, klima, `number` i `select` entiteti još nisu podržani. Šifrovanje je testirano samo protiv sopstvene implementacije uređajske strane (`test/esphome_fake.dart`), ne protiv pravog uređaja.
 
-Shelly sa lozinkom: Gen2+ preko HTTP Digest (SHA-256), Gen1 preko Basic, korisnik `admin`. Lozinka se unosi pri dodavanju ili u Podešavanja → Dom i čuva samo u bezbednom skladištu telefona (Keystore), nikad u podešavanjima ili rezervnoj kopiji.
+Shelly sa lozinkom: Gen2+ preko HTTP Digest (SHA-256), Gen1 preko Basic, korisnik `admin`. Lozinka se unosi pri dodavanju ili u Podešavanja → Dom i čuva u bezbednom skladištu telefona (Keystore), nikad u podešavanjima. U rezervnu kopiju ide samo ako se to izabere, šifrovana lozinkom kopije (vidi dole).
 
 Ograničenja: uređaji na baterije koji spavaju (Shelly H&T) prikazuju se kao nedostupni. Tasmota se obično ne oglašava preko mDNS-a, pa se dodaje preko IP adrese. Stanje se proverava svakih 5 s dok je aplikacija otvorena (zidni tablet u kiosku i u pozadini). Pri pokretanju i povratku u aplikaciju telefon 30 s osluškuje mrežu; dodati uređaj koji se javi sa nove IP adrese (DHCP) se sam prati.
 
@@ -78,6 +78,16 @@ Ograničenja: uređaji na baterije koji spavaju (Shelly H&T) prikazuju se kao ne
 ## Dodaci (meni „Još“ i ekran uređaja)
 
 Vraćeni iz 1.0, sada rade na telefonu umesto u Home Assistantu: **zabava** (boje svetala se smenjuju, posle se sve vraća), **laku noć** (priča uz prigušivanje u koracima), **buđenje svetlom** (svakog minuta svetlije i hladnije do vremena buđenja), **odmor** (grejanje dole, simulacija prisustva uključena; posle sve kako je bilo), **simulacija prisustva** (Podešavanja → Bezbednost), **tajmer uređaja** („isključi za 30 min“), **raspored grejanja** (čuva se kao automatizacije doma) i **javi kad je gotov** (prati snagu uređaja, javlja obaveštenjem), **baterije** (lista, najprazniji prvi; podsetnik obaveštenjem jednom po uređaju kad padne na 15 %; nivo javljaju Hue senzori, ESPHome senzori klase `battery` i Shelly uređaji na baterije). Sve što radi po vremenu radi dok aplikacija radi (kiosk ili automatizacije u pozadini); simulacija prisustva traži uređaj koji ostaje kod kuće.
+
+## Rezervna kopija i prelazak na drugi telefon
+
+Podešavanja → Rezervna kopija i prenos. Kopija nosi dom (uređaje, sobe, imena), scene, automatizacije, dodatke (simulacija prisustva, buđenje svetlom, „javi kad je gotov“), lokaciju doma i izgled. Ne nosi ono što je izbor samog uređaja (PIN tableta, mikrofon, kamera, rad u pozadini).
+
+- **Sačuvaj u fajl** / **Učitaj iz fajla**: JSON fajl, deli se kao svaki drugi (mejl, Drive, USB).
+- **Pošalji na drugi uređaj** / **Primi sa drugog uređaja**: preko iste Wi-Fi mreže. Telefon pokaže adresu i šestocifreni kod; drugi ih ukuca. Kopija je šifrovana kodom, šalje se samo jednom, i najduže 5 minuta.
+- **Kopiraj podešavanja** / **Nalepi podešavanja**: kao tekst.
+- **Sa lozinkama i ključevima uređaja** (po želji): Shelly lozinke, ESPHome ključevi, Hue korisnici i lozinka gostujuće mreže idu šifrovani lozinkom kopije (najmanje 6 znakova; PBKDF2-SHA256 sa 100 000 ponavljanja, AES-256-GCM). Bez te lozinke se ne mogu pročitati.
+- Pri uvozu se bira **Zameni sve** (dom postaje kao u kopiji) ili **Dodaj samo novo** (dodaju se samo uređaji, sobe, scene i automatizacije kojih nema).
 
 ## Šta je uklonjeno iz 1.0 i kad se vraća
 
@@ -95,12 +105,16 @@ Prognoza za dom sada koristi lokaciju telefona zapamćenu kad se prognoza uklju�
 
 ## Testovi
 
-`flutter test` pokreće testove lite verzije (`TestAdapter` i `testDevice` u `test/helpers.dart`). Testovi iz 1.0 koji grade dom preko lažnog HA servera čekaju prebacivanje u `app/test_to_port/` (vidi tamošnji README).
+`flutter test` (u `app/`). Uređaji u testovima: `TestAdapter` i `testDevice` (`test/helpers.dart`) za nekoliko uređaja, `HomeFixture` (`test/home_fixture.dart`) za celu kuću sa svim vrstama uređaja koja odgovara na komande, i lažni uređaji na mreži (`FakeLanHttp`, `test/esphome_fake.dart`, `FakeBleScanner`).
 
 ## Ograničenja lite verzije
 
 - Automatizacije rade samo dok aplikacija radi (kiosk ili rad u pozadini); telefon je centrala, nema servera koji radi kad je telefon ugašen.
-- Nema pristupa van kuće ni Zigbee/Z-Wave uređaja (osim preko Hue bridge-a / Dirigera).
+- Nema pristupa van kuće ni Zigbee/Z-Wave uređaja (osim Zigbee svetala i senzora preko Hue mosta).
 - Samo Android; web ne može (nema mDNS ni BLE u pregledaču).
+
+## Izdanja
+
+Šta je novo: [docs/CHANGELOG.md](docs/CHANGELOG.md). Potpisivanje i objavljivanje: [docs/RELEASE.md](docs/RELEASE.md). Instalirana aplikacija sama nalazi nova izdanja na GitHub Releases (Podešavanja → O aplikaciji).
 
 Licenca: vidi [LICENSE](LICENSE) i [NOTICE](NOTICE).
