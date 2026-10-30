@@ -8,6 +8,7 @@ import '../../../core/errors/app_failure.dart';
 import '../../devices/data/local/esphome/esphome_client.dart';
 import '../../devices/data/local/ble/ble_advert.dart';
 import '../../devices/data/local/hue_adapter.dart';
+import '../../devices/data/local/broadlink.dart';
 import '../../devices/data/local/dirigera_adapter.dart';
 import '../../devices/data/local/govee_adapter.dart';
 import '../../devices/data/local/kasa_adapter.dart';
@@ -127,6 +128,11 @@ class DeviceProbe {
       quiet(lifxDiscover(udp).then((l) => l.map(fromLifx).toList())),
       quiet(goveeDiscover(udp).then((l) => l.map(fromGovee).toList())),
       quiet(miioDiscover(udp).then((l) => l.map(fromMiio).toList())),
+      quiet(
+        BroadlinkClient(udp)
+            .discover()
+            .then((l) => l.map(fromBroadlink).toList()),
+      ),
       quiet(tuyaDiscover(udp).then((l) => l.map(fromTuya).toList())),
     ];
     for (final s in searches) {
@@ -241,6 +247,19 @@ class DeviceProbe {
       model: t.product,
       label: 'Tuya',
       options: {'version': t.version},
+    ),
+  );
+
+  static ProbedDevice fromBroadlink(BroadlinkFound b) => ProbedDevice(
+    brand: 'Broadlink',
+    name: b.name.isEmpty ? null : b.name,
+    device: ConfiguredDevice(
+      adapter: 'broadlink',
+      id: broadlinkMacText(b.mac),
+      host: b.host,
+      model: 'RM ${b.devtype.toRadixString(16)}',
+      label: b.name.isEmpty ? 'Broadlink' : b.name,
+      options: {'devtype': b.devtype.toRadixString(16)},
     ),
   );
 

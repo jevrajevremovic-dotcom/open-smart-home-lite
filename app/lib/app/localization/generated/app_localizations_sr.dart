@@ -5481,6 +5481,57 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get deviceTokenWrong => 'Uređaj ne prihvata ovaj ključ.';
+
+  @override
+  String get irButtonsTitle => 'Dugmad daljinskog';
+
+  @override
+  String get irButtonsEmpty =>
+      'Još nema naučenih dugmadi. Naučite ih sa originalnog daljinskog.';
+
+  @override
+  String get irLearn => 'Nauči dugme';
+
+  @override
+  String get irLearnName => 'Ime dugmeta (npr. Klima uključi)';
+
+  @override
+  String get irLearnPress =>
+      'Usmerite originalni daljinski ka uređaju i pritisnite dugme. Čeka se 20 sekundi.';
+
+  @override
+  String get irLearnFailed => 'Uređaj nije čuo dugme. Pokušajte ponovo, bliže.';
+
+  @override
+  String irLearned(String name) {
+    return 'Dugme „$name“ je naučeno.';
+  }
+
+  @override
+  String get irSend => 'Pošalji';
+
+  @override
+  String get irDelete => 'Obriši dugme';
+
+  @override
+  String get cameraAdd => 'Dodaj kameru';
+
+  @override
+  String get cameraUrlLabel => 'Adresa slike sa kamere';
+
+  @override
+  String get cameraUrlHint =>
+      'Kamera daje trenutnu sliku na svojoj adresi. Na primer: Reolink /cgi-bin/api.cgi?cmd=Snap&channel=0, Hikvision /ISAPI/Streaming/channels/101/picture, Dahua /cgi-bin/snapshot.cgi, ESP32-CAM /capture.';
+
+  @override
+  String get cameraUserLabel => 'Korisnik (ako kamera traži)';
+
+  @override
+  String get cameraNoImage =>
+      'Na ovoj adresi nema slike sa kamere (ili je korisnik pogrešan).';
+
+  @override
+  String get cameraOffline => 'Kamera trenutno ne daje sliku.';
 }
 
 /// The translations for Serbian, using the Latin script (`sr_Latn`).

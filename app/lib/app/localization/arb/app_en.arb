@@ -2103,5 +2103,21 @@
   "tuyaKeyHint": "A Tuya device (Smart Life, Tuya Smart…) needs its local key, 16 characters. It is taken once from the Tuya account (e.g. with the tinytuya wizard); after that the app talks to the device directly.",
   "miioTokenHint": "A Xiaomi device needs its token, 32 characters. It is taken once from the Mi Home account (e.g. with Xiaomi Cloud Tokens Extractor).",
   "deviceTokenLabel": "Local key / token",
-  "deviceTokenWrong": "The device does not accept this key."
+  "deviceTokenWrong": "The device does not accept this key.",
+  "irButtonsTitle": "Remote buttons",
+  "irButtonsEmpty": "No buttons learned yet. Learn them from the original remote.",
+  "irLearn": "Learn a button",
+  "irLearnName": "Button name (e.g. AC on)",
+  "irLearnPress": "Point the original remote at the device and press the button. Waiting 20 seconds.",
+  "irLearnFailed": "The device did not hear the button. Try again, closer.",
+  "irLearned": "Button \"{name}\" learned.",
+  "@irLearned": {"placeholders": {"name": {"type": "String"}}},
+  "irSend": "Send",
+  "irDelete": "Delete button",
+  "cameraAdd": "Add a camera",
+  "cameraUrlLabel": "Camera image address",
+  "cameraUrlHint": "A camera serves its current image at an address of its own. For example: Reolink /cgi-bin/api.cgi?cmd=Snap&channel=0, Hikvision /ISAPI/Streaming/channels/101/picture, Dahua /cgi-bin/snapshot.cgi, ESP32-CAM /capture.",
+  "cameraUserLabel": "User (if the camera asks)",
+  "cameraNoImage": "There is no camera image at this address (or the user is wrong).",
+  "cameraOffline": "The camera is not giving an image right now."
 }

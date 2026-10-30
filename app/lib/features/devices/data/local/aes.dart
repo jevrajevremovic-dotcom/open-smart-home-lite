@@ -34,6 +34,18 @@ Uint8List aesCbcDecrypt(List<int> key, List<int> iv, List<int> data) =>
       ),
     );
 
+/// CBC without padding ([data] is whole blocks), as Broadlink uses it.
+Uint8List aesCbcRaw(
+  bool encrypt,
+  List<int> key,
+  List<int> iv,
+  List<int> data,
+) => _run(
+  CBCBlockCipher(AESEngine())
+    ..init(encrypt, ParametersWithIV(KeyParameter(_u8(key)), _u8(iv))),
+  _u8(data),
+);
+
 Uint8List pkcs7Pad(List<int> data) {
   final n = 16 - data.length % 16;
   return Uint8List.fromList([...data, for (var i = 0; i < n; i++) n]);

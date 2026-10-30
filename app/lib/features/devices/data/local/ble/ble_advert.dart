@@ -40,6 +40,8 @@ class BleReading {
     this.open,
     this.moisture,
     this.button,
+    this.switchOn,
+    this.position,
     this.packetId,
   });
 
@@ -68,6 +70,13 @@ class BleReading {
   /// `press`, `double_press`, `long_press`…, as the button sent it.
   final String? button;
 
+  /// A SwitchBot Bot in on/off mode: whether it is on (`null` in press
+  /// mode, where it has no state).
+  final bool? switchOn;
+
+  /// A SwitchBot Curtain: how far open, 0–100.
+  final int? position;
+
   /// Repeats of the same advertisement carry the same id.
   final int? packetId;
 
@@ -79,12 +88,23 @@ class BleReading {
       open == null &&
       moisture == null &&
       button == null &&
-      battery == null;
+      switchOn == null &&
+      position == null &&
+      battery == null &&
+      !model.startsWith('SwitchBot Bot');
 }
 
 /// The first reading any known format finds in [advert], or `null`.
 BleReading? parseAdvert(BleAdvert advert) {
-  for (final parse in const [_bthome, _pvvx, _atc, _switchbot, _govee]) {
+  for (final parse in const [
+    _bthome,
+    _pvvx,
+    _atc,
+    _switchbot,
+    _switchbotBot,
+    _switchbotCurtain,
+    _govee,
+  ]) {
     final r = parse(advert);
     if (r != null && !r.isEmpty) return r;
   }
@@ -283,6 +303,32 @@ BleReading? _switchbot(BleAdvert a) {
     temperature: sign * (whole + tenths / 10),
     humidity: (d[5] & 0x7F).toDouble(),
     battery: d[2] & 0x7F,
+  );
+}
+
+/// SwitchBot Bot (type `H`): mode (press, or on/off), state, battery.
+BleReading? _switchbotBot(BleAdvert a) {
+  final d = a.serviceData[0xFD3D] ?? a.serviceData[0x0D00];
+  if (d == null || d.length < 3 || d[0] & 0x7F != 0x48) return null;
+  final switchMode = d[1] & 0x80 != 0;
+  return BleReading(
+    model: 'SwitchBot Bot',
+    switchOn: switchMode ? d[1] & 0x40 == 0 : null,
+    battery: d[2] & 0x7F,
+  );
+}
+
+/// SwitchBot Curtain (type `c`, Curtain 3 `{`): battery and position
+/// (SwitchBot counts 0 as open; here 100 is).
+BleReading? _switchbotCurtain(BleAdvert a) {
+  final d = a.serviceData[0xFD3D] ?? a.serviceData[0x0D00];
+  if (d == null || d.length < 4) return null;
+  final type = d[0] & 0x7F;
+  if (type != 0x63 && type != 0x7B) return null;
+  return BleReading(
+    model: 'SwitchBot Curtain',
+    battery: d[2] & 0x7F,
+    position: 100 - (d[3] & 0x7F).clamp(0, 100),
   );
 }
 

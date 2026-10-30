@@ -210,6 +210,19 @@ class FakeBleScanner implements BleScanner {
 
   @override
   Stream<BleAdvert> scan() => _adverts.stream;
+
+  /// What was written, as `address characteristic hex`.
+  final List<String> writes = [];
+
+  @override
+  Future<void> write(
+    String address,
+    String service,
+    String characteristic,
+    List<int> value,
+  ) async => writes.add(
+    '$address $characteristic ${value.map((b) => b.toRadixString(16).padLeft(2, '0')).join()}',
+  );
 }
 
 /// Records the background service being started and stopped.

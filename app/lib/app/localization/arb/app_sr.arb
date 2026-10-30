@@ -1532,5 +1532,20 @@
   "tuyaKeyHint": "Tuya uređaj (Smart Life, Tuya Smart…) traži svoj lokalni ključ, 16 znakova. Ključ se jednom uzima iz Tuya naloga (npr. alatom tinytuya wizard); posle toga aplikacija razgovara direktno sa uređajem.",
   "miioTokenHint": "Xiaomi uređaj traži svoj token, 32 znaka. Token se jednom uzima iz Mi Home naloga (npr. alatom Xiaomi Cloud Tokens Extractor).",
   "deviceTokenLabel": "Lokalni ključ / token",
-  "deviceTokenWrong": "Uređaj ne prihvata ovaj ključ."
+  "deviceTokenWrong": "Uređaj ne prihvata ovaj ključ.",
+  "irButtonsTitle": "Dugmad daljinskog",
+  "irButtonsEmpty": "Još nema naučenih dugmadi. Naučite ih sa originalnog daljinskog.",
+  "irLearn": "Nauči dugme",
+  "irLearnName": "Ime dugmeta (npr. Klima uključi)",
+  "irLearnPress": "Usmerite originalni daljinski ka uređaju i pritisnite dugme. Čeka se 20 sekundi.",
+  "irLearnFailed": "Uređaj nije čuo dugme. Pokušajte ponovo, bliže.",
+  "irLearned": "Dugme „{name}“ je naučeno.",
+  "irSend": "Pošalji",
+  "irDelete": "Obriši dugme",
+  "cameraAdd": "Dodaj kameru",
+  "cameraUrlLabel": "Adresa slike sa kamere",
+  "cameraUrlHint": "Kamera daje trenutnu sliku na svojoj adresi. Na primer: Reolink /cgi-bin/api.cgi?cmd=Snap&channel=0, Hikvision /ISAPI/Streaming/channels/101/picture, Dahua /cgi-bin/snapshot.cgi, ESP32-CAM /capture.",
+  "cameraUserLabel": "Korisnik (ako kamera traži)",
+  "cameraNoImage": "Na ovoj adresi nema slike sa kamere (ili je korisnik pogrešan).",
+  "cameraOffline": "Kamera trenutno ne daje sliku."
 }

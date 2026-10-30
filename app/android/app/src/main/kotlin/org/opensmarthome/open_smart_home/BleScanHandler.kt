@@ -33,13 +33,17 @@ class BleScanHandler(private val context: Context) : EventChannel.StreamHandler 
                 .setStreamHandler(BleScanHandler(context.applicationContext))
         }
 
-        /** The one permission scanning needs, by Android version. */
-        val permission: String =
-            if (Build.VERSION.SDK_INT >= 31) Manifest.permission.BLUETOOTH_SCAN
-            else Manifest.permission.ACCESS_FINE_LOCATION
+        /** What scanning (and connecting to a SwitchBot) needs, by Android version. */
+        val permissions: Array<String> =
+            if (Build.VERSION.SDK_INT >= 31) {
+                arrayOf(Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT)
+            } else {
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+            }
 
-        fun hasPermission(context: Context): Boolean =
-            ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
+        fun hasPermission(context: Context): Boolean = permissions.all {
+            ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+        }
 
         private fun uuid16(short: Int): ParcelUuid =
             ParcelUuid(UUID.fromString(String.format("0000%04x-0000-1000-8000-00805f9b34fb", short)))

@@ -9290,6 +9290,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The device does not accept this key.'**
   String get deviceTokenWrong;
+
+  /// No description provided for @irButtonsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remote buttons'**
+  String get irButtonsTitle;
+
+  /// No description provided for @irButtonsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No buttons learned yet. Learn them from the original remote.'**
+  String get irButtonsEmpty;
+
+  /// No description provided for @irLearn.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn a button'**
+  String get irLearn;
+
+  /// No description provided for @irLearnName.
+  ///
+  /// In en, this message translates to:
+  /// **'Button name (e.g. AC on)'**
+  String get irLearnName;
+
+  /// No description provided for @irLearnPress.
+  ///
+  /// In en, this message translates to:
+  /// **'Point the original remote at the device and press the button. Waiting 20 seconds.'**
+  String get irLearnPress;
+
+  /// No description provided for @irLearnFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The device did not hear the button. Try again, closer.'**
+  String get irLearnFailed;
+
+  /// No description provided for @irLearned.
+  ///
+  /// In en, this message translates to:
+  /// **'Button \"{name}\" learned.'**
+  String irLearned(String name);
+
+  /// No description provided for @irSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get irSend;
+
+  /// No description provided for @irDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete button'**
+  String get irDelete;
+
+  /// No description provided for @cameraAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a camera'**
+  String get cameraAdd;
+
+  /// No description provided for @cameraUrlLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera image address'**
+  String get cameraUrlLabel;
+
+  /// No description provided for @cameraUrlHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A camera serves its current image at an address of its own. For example: Reolink /cgi-bin/api.cgi?cmd=Snap&channel=0, Hikvision /ISAPI/Streaming/channels/101/picture, Dahua /cgi-bin/snapshot.cgi, ESP32-CAM /capture.'**
+  String get cameraUrlHint;
+
+  /// No description provided for @cameraUserLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'User (if the camera asks)'**
+  String get cameraUserLabel;
+
+  /// No description provided for @cameraNoImage.
+  ///
+  /// In en, this message translates to:
+  /// **'There is no camera image at this address (or the user is wrong).'**
+  String get cameraNoImage;
+
+  /// No description provided for @cameraOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'The camera is not giving an image right now.'**
+  String get cameraOffline;
 }
 
 class _AppLocalizationsDelegate

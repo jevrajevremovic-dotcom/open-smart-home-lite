@@ -28,6 +28,15 @@ abstract interface class BleScanner {
   /// Every advertisement while listened to; one scan shared by all
   /// listeners. Fails with [BleScanError].
   Stream<BleAdvert> scan();
+
+  /// Connects to [address] for a moment and writes [value] to its
+  /// [characteristic] (UUIDs as text). Throws [BleScanError].
+  Future<void> write(
+    String address,
+    String service,
+    String characteristic,
+    List<int> value,
+  );
 }
 
 class AndroidBleScanner implements BleScanner {
@@ -66,6 +75,29 @@ class AndroidBleScanner implements BleScanner {
 
   @override
   Stream<BleAdvert> scan() => _shared.stream;
+
+  static const _gatt = MethodChannel('org.opensmarthome/ble_gatt');
+
+  @override
+  Future<void> write(
+    String address,
+    String service,
+    String characteristic,
+    List<int> value,
+  ) async {
+    try {
+      await _gatt.invokeMethod<bool>('write', {
+        'address': address,
+        'service': service,
+        'characteristic': characteristic,
+        'value': Uint8List.fromList(value),
+      });
+    } on PlatformException catch (e) {
+      throw BleScanError(e.code);
+    } on MissingPluginException {
+      throw const BleScanError('unsupported');
+    }
+  }
 
   void _start() {
     _platform = _events.receiveBroadcastStream().listen(

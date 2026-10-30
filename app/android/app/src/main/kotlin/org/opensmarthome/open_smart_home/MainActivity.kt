@@ -147,7 +147,7 @@ class MainActivity : FlutterFragmentActivity() {
         }
         bleResult?.success(false)
         bleResult = result
-        ActivityCompat.requestPermissions(this, arrayOf(BleScanHandler.permission), BLE_REQUEST)
+        ActivityCompat.requestPermissions(this, BleScanHandler.permissions, BLE_REQUEST)
     }
 
     private fun requestCamera(result: MethodChannel.Result) {
@@ -180,7 +180,11 @@ class MainActivity : FlutterFragmentActivity() {
                 cameraResult = null
             }
             BLE_REQUEST -> {
-                bleResult?.success(granted)
+                // Scanning and connecting are asked together: both are needed.
+                bleResult?.success(
+                    grantResults.isNotEmpty() &&
+                        grantResults.all { it == PackageManager.PERMISSION_GRANTED },
+                )
                 bleResult = null
             }
         }

@@ -5453,4 +5453,56 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deviceTokenWrong => 'The device does not accept this key.';
+
+  @override
+  String get irButtonsTitle => 'Remote buttons';
+
+  @override
+  String get irButtonsEmpty =>
+      'No buttons learned yet. Learn them from the original remote.';
+
+  @override
+  String get irLearn => 'Learn a button';
+
+  @override
+  String get irLearnName => 'Button name (e.g. AC on)';
+
+  @override
+  String get irLearnPress =>
+      'Point the original remote at the device and press the button. Waiting 20 seconds.';
+
+  @override
+  String get irLearnFailed =>
+      'The device did not hear the button. Try again, closer.';
+
+  @override
+  String irLearned(String name) {
+    return 'Button \"$name\" learned.';
+  }
+
+  @override
+  String get irSend => 'Send';
+
+  @override
+  String get irDelete => 'Delete button';
+
+  @override
+  String get cameraAdd => 'Add a camera';
+
+  @override
+  String get cameraUrlLabel => 'Camera image address';
+
+  @override
+  String get cameraUrlHint =>
+      'A camera serves its current image at an address of its own. For example: Reolink /cgi-bin/api.cgi?cmd=Snap&channel=0, Hikvision /ISAPI/Streaming/channels/101/picture, Dahua /cgi-bin/snapshot.cgi, ESP32-CAM /capture.';
+
+  @override
+  String get cameraUserLabel => 'User (if the camera asks)';
+
+  @override
+  String get cameraNoImage =>
+      'There is no camera image at this address (or the user is wrong).';
+
+  @override
+  String get cameraOffline => 'The camera is not giving an image right now.';
 }

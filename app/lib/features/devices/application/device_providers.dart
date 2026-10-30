@@ -13,6 +13,8 @@ import '../data/local/demo_adapter.dart';
 import '../data/local/esphome/esphome_adapter.dart';
 import '../data/local/esphome/esphome_client.dart';
 import '../data/local/hue_adapter.dart';
+import '../data/local/broadlink.dart';
+import '../data/local/camera_adapter.dart';
 import '../data/local/dirigera_adapter.dart';
 import '../data/local/kasa_adapter.dart';
 import '../data/local/klap.dart';
@@ -79,6 +81,8 @@ final homeBackendProvider = Provider<LocalBackend?>((ref) {
       DirigeraAdapter(ref.watch(lanRequestsProvider), tokens: secret),
       TuyaAdapter(ref.watch(tuyaClientProvider), keys: secret),
       MiioAdapter(ref.watch(miioClientProvider), tokens: secret),
+      BroadlinkAdapter(ref.watch(broadlinkClientProvider)),
+      CameraAdapter(ref.watch(lanRequestsProvider), logins: secret),
       WizAdapter(ref.watch(lanUdpProvider)),
       NanoleafAdapter(
         ref.watch(lanRequestsProvider),

@@ -7,7 +7,9 @@ import '../../../app/localization/l10n.dart';
 import '../../../core/errors/app_failure.dart';
 import '../../../core/widgets/responsive.dart';
 import '../../../core/widgets/status_widgets.dart';
+import '../../devices/data/local/camera_adapter.dart';
 import '../../devices/data/local/klap.dart';
+import '../../devices/data/local/lan_transport.dart';
 import '../../devices/data/local/local_home.dart';
 import '../../devices/presentation/device_edit.dart';
 import '../application/add_device_providers.dart';
@@ -72,6 +74,7 @@ class AddDeviceScreen extends ConsumerWidget {
                         'DIRIGERA' => Icons.hub_outlined,
                         'Tapo' => Icons.outlet_outlined,
                         'Tuya' || 'Xiaomi' => Icons.devices_other_outlined,
+                        'Broadlink' => Icons.settings_remote_outlined,
                         _ => Icons.power_outlined,
                       }),
                       title: Text(p.title),
@@ -95,6 +98,16 @@ class AddDeviceScreen extends ConsumerWidget {
                     onPressed: () => _manual(context, ref),
                     icon: const Icon(Icons.dialpad),
                     label: Text(l10n.addDeviceManual),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: OutlinedButton.icon(
+                    key: const Key('addCamera'),
+                    onPressed: () => _camera(context, ref),
+                    icon: const Icon(Icons.videocam_outlined),
+                    label: Text(l10n.cameraAdd),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -124,6 +137,41 @@ class AddDeviceScreen extends ConsumerWidget {
       return;
     }
     await _add(context, ref, found);
+  }
+
+  Future<void> _camera(BuildContext context, WidgetRef ref) async {
+    final l10n = context.l10n;
+    final messenger = ScaffoldMessenger.of(context);
+    final entered = await showDialog<(Uri, CameraLogin?)>(
+      context: context,
+      builder: (_) => const _CameraDialog(),
+    );
+    if (entered == null || !context.mounted) return;
+    final (url, login) = entered;
+    try {
+      await cameraSnapshot(ref.read(lanRequestsProvider), url, login: login);
+    } on AppFailure {
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(l10n.cameraNoImage)));
+      return;
+    }
+    if (!context.mounted) return;
+    final choice = await showDialog<(String?, String?)>(
+      context: context,
+      builder: (_) => _RoomDialog(title: url.host),
+    );
+    if (choice == null || !context.mounted) return;
+    await ref
+        .read(localHomeProvider.notifier)
+        .addDevice(
+          cameraDevice(url),
+          roomId: choice.$1,
+          password: login?.encode(),
+        );
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(l10n.addDeviceDone(url.host))));
   }
 
   Future<void> _add(
@@ -276,6 +324,83 @@ class _AddressDialogState extends State<_AddressDialog> {
         FilledButton(
           key: const Key('addDeviceAddressOk'),
           onPressed: done,
+          child: Text(l10n.addDeviceAdd),
+        ),
+      ],
+    );
+  }
+}
+
+/// A camera's image address and, if it asks, its login.
+class _CameraDialog extends StatefulWidget {
+  const _CameraDialog();
+
+  @override
+  State<_CameraDialog> createState() => _CameraDialogState();
+}
+
+class _CameraDialogState extends State<_CameraDialog> {
+  final _url = TextEditingController(text: 'http://');
+  final _user = TextEditingController();
+  final _password = TextEditingController();
+
+  @override
+  void dispose() {
+    _url.dispose();
+    _user.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return AlertDialog(
+      title: Text(l10n.cameraAdd),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l10n.cameraUrlHint),
+            TextField(
+              key: const Key('cameraUrl'),
+              controller: _url,
+              keyboardType: TextInputType.url,
+              autocorrect: false,
+              decoration: InputDecoration(labelText: l10n.cameraUrlLabel),
+            ),
+            TextField(
+              key: const Key('cameraUser'),
+              controller: _user,
+              autocorrect: false,
+              decoration: InputDecoration(labelText: l10n.cameraUserLabel),
+            ),
+            TextField(
+              key: const Key('cameraPassword'),
+              controller: _password,
+              obscureText: true,
+              decoration: InputDecoration(labelText: l10n.devicePasswordLabel),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.cancel),
+        ),
+        FilledButton(
+          key: const Key('cameraOk'),
+          onPressed: () {
+            final url = Uri.tryParse(_url.text.trim());
+            if (url == null || !url.hasAuthority) return;
+            final user = _user.text.trim();
+            Navigator.of(context).pop((
+              url,
+              user.isEmpty ? null : CameraLogin(user, _password.text),
+            ));
+          },
           child: Text(l10n.addDeviceAdd),
         ),
       ],

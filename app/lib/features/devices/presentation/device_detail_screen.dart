@@ -22,6 +22,8 @@ import 'controls/alarm_controls.dart';
 import 'controls/climate_controls.dart';
 import 'controls/light_controls.dart';
 import 'controls/more_controls.dart';
+import 'controls/camera_view.dart';
+import 'controls/ir_remote_controls.dart';
 import 'controls/other_controls.dart';
 import '../../restricted/application/restricted_mode.dart';
 import '../../media/presentation/tv_remote.dart';
@@ -183,6 +185,12 @@ List<Widget> deviceControlsFor(SmartHomeDevice d) {
       DeviceKind.mediaPlayer || DeviceKind.speaker || DeviceKind.television => [
         MediaControls(device: d),
         TvRemotePad(tvId: d.id),
+      ],
+      DeviceKind.camera when d.id.startsWith('camera:') => [
+        CameraView(device: d),
+      ],
+      DeviceKind.remote when d.id.startsWith('broadlink:') => [
+        IrRemoteControls(remoteId: d.id),
       ],
       _ when d.kind.isRoutine || d.kind == DeviceKind.button => [
         RoutineControls(device: d),

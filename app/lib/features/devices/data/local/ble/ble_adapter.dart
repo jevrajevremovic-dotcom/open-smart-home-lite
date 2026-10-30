@@ -11,6 +11,37 @@ import '../local_home.dart';
 import 'ble_advert.dart';
 import 'ble_scanner.dart';
 
+const switchBotService = 'cba20d00-224d-11e6-9fb8-0002a5d5c51b';
+const switchBotCharacteristic = 'cba20002-224d-11e6-9fb8-0002a5d5c51b';
+
+/// The bytes a SwitchBot takes for [command] on [part] (`press`,
+/// `switch`, `cover`); `null` for anything else.
+List<int>? switchBotCommand(String part, DeviceCommand command, DeviceState s) {
+  // SwitchBot's curtain counts 0 as open.
+  List<int> curtain(int open) => [
+    0x57,
+    0x0F,
+    0x45,
+    0x01,
+    0x05,
+    0xFF,
+    100 - open,
+  ];
+  return switch ((part, command)) {
+    ('press', Activate()) => const [0x57, 0x01, 0x00],
+    ('switch', TurnOn()) => const [0x57, 0x01, 0x01],
+    ('switch', TurnOff()) => const [0x57, 0x01, 0x02],
+    ('switch', Toggle()) => [0x57, 0x01, s.isOn == true ? 0x02 : 0x01],
+    ('cover', OpenCover()) => curtain(100),
+    ('cover', CloseCover()) => curtain(0),
+    ('cover', StopCover()) => const [0x57, 0x0F, 0x45, 0x01, 0x00, 0xFF],
+    ('cover', SetCoverPosition(:final percent)) => curtain(
+      percent.clamp(0, 100),
+    ),
+    _ => null,
+  };
+}
+
 /// Bluetooth LE sensors read from their advertisements, without
 /// connecting: thermometers, door/window, motion, leak and button
 /// sensors (BTHome, pvvx/ATC, SwitchBot Meter, Govee). One device per
@@ -111,6 +142,8 @@ class BleAdapter extends DeviceAdapter {
       open: r.open ?? old?.open,
       moisture: r.moisture ?? old?.moisture,
       button: r.button ?? old?.button,
+      switchOn: r.switchOn ?? old?.switchOn,
+      position: r.position ?? old?.position,
       packetId: r.packetId,
     );
     _heard[advert.id] = _clock();
@@ -118,11 +151,36 @@ class BleAdapter extends DeviceAdapter {
   }
 
   @override
-  Future<void> send(SmartHomeDevice device, DeviceCommand command) async =>
-      throw const AppFailure(
+  Future<void> send(SmartHomeDevice device, DeviceCommand command) async {
+    final config = _configs.values
+        .where((c) => device.id.startsWith('${c.key}:'))
+        .firstOrNull;
+    final part = device.id.split(':').last;
+    final value = config == null
+        ? null
+        : switchBotCommand(part, command, device.state);
+    if (config == null || value == null) {
+      throw AppFailure(
         FailureKind.unsupportedFeature,
-        debugMessage: 'Bluetooth sensors are only read',
+        debugMessage: '${command.runtimeType} for ${device.id}',
       );
+    }
+    try {
+      await _scanner.write(
+        config.host,
+        switchBotService,
+        switchBotCharacteristic,
+        value,
+      );
+    } on BleScanError catch (e) {
+      throw AppFailure(
+        e.reason == 'permission'
+            ? FailureKind.authorization
+            : FailureKind.network,
+        debugMessage: 'ble write: ${e.reason}',
+      );
+    }
+  }
 
   void _publish() {
     final now = _clock();
@@ -221,6 +279,42 @@ class BleAdapter extends DeviceAdapter {
             kind,
             const {},
             DeviceState(raw: value ? 'on' : 'off', isActive: value),
+          ),
+        );
+      }
+      if (r.model == 'SwitchBot Bot') {
+        final on = r.switchOn;
+        out.add(
+          on == null
+              ? make(
+                  'press',
+                  name,
+                  DeviceKind.button,
+                  const {Capability.trigger},
+                  const DeviceState(raw: 'idle'),
+                )
+              : make('switch', name, DeviceKind.switchDevice, {
+                  Capability.power,
+                }, DeviceState(raw: on ? 'on' : 'off', isOn: on)),
+        );
+      }
+      if (r.position case final p?) {
+        out.add(
+          make(
+            'cover',
+            name,
+            DeviceKind.curtain,
+            {
+              Capability.open,
+              Capability.close,
+              Capability.stop,
+              Capability.position,
+            },
+            DeviceState(
+              raw: p == 0 ? 'closed' : 'open',
+              coverState: p == 0 ? CoverState.closed : CoverState.open,
+              position: p,
+            ),
           ),
         );
       }
