@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.4.0] – 2026-10-30
+
 ### Dodato
 - Ukućani se dodaju na telefonu (Podešavanja → Kiosk → Ukućani na tabletu): lični PIN, rođendan i brze kontrole na zidnom tabletu. Čuvaju se u rezervnoj kopiji.
 - „Uređaj se ne pojavljuje?“ na ekranu Dodaj uređaj: šta treba podesiti za svaki od 22 proizvođača; isti savet ispod uređaja koji ne odgovara.
