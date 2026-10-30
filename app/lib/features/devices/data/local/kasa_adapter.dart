@@ -12,6 +12,7 @@ import '../../domain/capability.dart';
 import '../../domain/device_command.dart';
 import '../../domain/device_kind.dart';
 import '../../domain/smart_home_device.dart';
+import 'klap.dart';
 import 'local_home.dart';
 import 'polled_adapter.dart';
 import 'shelly_adapter.dart' show normalizeMac;
@@ -147,6 +148,23 @@ const _sysinfo = {
   'system': {'get_sysinfo': <String, Object?>{}},
 };
 
+/// Kasa's messages over KLAP (newer firmware), with [account].
+class KlapKasaTransport implements KasaTransport {
+  const KlapKasaTransport(this._klap, this._account);
+
+  final KlapClient _klap;
+  final TpLinkAccount _account;
+
+  @override
+  Future<Map<String, Object?>> send(
+    String host,
+    Map<String, Object?> request,
+  ) => _klap.send(host, _account, request);
+
+  @override
+  Stream<List<KasaFound>> discover() => const Stream.empty();
+}
+
 final kasaTransportProvider = Provider<KasaTransport>(
   (ref) => SocketKasaTransport(),
 );
@@ -162,16 +180,34 @@ String? kasaMac(Map<String, Object?> sysinfo) =>
 /// local protocol): on/off, brightness, bulbs' colour temperature and
 /// colour, and power where the device measures it.
 class KasaAdapter extends PolledAdapter {
-  KasaAdapter(this._transport, {super.pollEvery});
+  KasaAdapter(this._transport, {this.klap, this.accounts, super.pollEvery});
 
   final KasaTransport _transport;
+
+  /// Newer firmware (`options['protocol'] == 'klap'`): the same messages
+  /// over KLAP, with the TP-Link account.
+  final KlapClient? klap;
+  final Future<String?> Function(String key)? accounts;
+
+  Future<KasaTransport> _transportFor(ConfiguredDevice device) async {
+    if (device.options['protocol'] != 'klap') return _transport;
+    final account = TpLinkAccount.decode(await accounts?.call(device.key));
+    final client = klap;
+    if (account == null || client == null) {
+      throw const AppFailure(
+        FailureKind.authentication,
+        debugMessage: 'kasa: no account',
+      );
+    }
+    return KlapKasaTransport(client, account);
+  }
 
   @override
   String get id => 'kasa';
 
   @override
   Future<List<SmartHomeDevice>> read(ConfiguredDevice device) async {
-    final answer = await _transport.send(device.host, {
+    final answer = await (await _transportFor(device)).send(device.host, {
       ..._sysinfo,
       'emeter': {'get_realtime': <String, Object?>{}},
     });
@@ -230,7 +266,8 @@ class KasaAdapter extends PolledAdapter {
     } else {
       _unsupported(command);
     }
-    final answer = await _transport.send(device.host, request);
+    final answer = await (await _transportFor(device))
+        .send(device.host, request);
     final error = _firstError(answer);
     if (error != null) {
       throw AppFailure(FailureKind.server, debugMessage: 'kasa: $error');

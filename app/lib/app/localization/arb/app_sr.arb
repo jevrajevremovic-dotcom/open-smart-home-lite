@@ -1524,5 +1524,9 @@
   "linkTitle": "Uparivanje: {brand}",
   "linkFailed": "Uparivanje nije uspelo. Pokušajte ponovo.",
   "nanoleafLinkBody": "Držite dugme za uključivanje na Nanoleafu 5–7 sekundi, dok svetla ne počnu da trepću. Aplikacija čeka 30 sekundi.",
-  "tvLinkBody": "Na televizoru se pojavilo pitanje da li aplikacija sme da se poveže: izaberite Dozvoli. Aplikacija čeka 30 sekundi."
+  "tvLinkBody": "Na televizoru se pojavilo pitanje da li aplikacija sme da se poveže: izaberite Dozvoli. Aplikacija čeka 30 sekundi.",
+  "dirigeraLinkBody": "Pritisnite dugme za radnju na poleđini DIRIGERA čvorišta. Aplikacija čeka 30 sekundi.",
+  "tpLinkAccountHint": "Tapo uređaj proverava TP-Link nalog na samom uređaju: unesite e-poštu i lozinku naloga u koji je dodat. Ništa se ne šalje TP-Linku.",
+  "tpLinkUserLabel": "E-pošta TP-Link naloga",
+  "tpLinkWrongAccount": "Uređaj ne prihvata ovu e-poštu i lozinku."
 }

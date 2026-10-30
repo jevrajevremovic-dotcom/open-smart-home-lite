@@ -8,8 +8,10 @@ import '../../../core/errors/app_failure.dart';
 import '../../devices/data/local/esphome/esphome_client.dart';
 import '../../devices/data/local/ble/ble_advert.dart';
 import '../../devices/data/local/hue_adapter.dart';
+import '../../devices/data/local/dirigera_adapter.dart';
 import '../../devices/data/local/govee_adapter.dart';
 import '../../devices/data/local/kasa_adapter.dart';
+import '../../devices/data/local/klap.dart';
 import '../../devices/data/local/lan_transport.dart';
 import '../../devices/data/local/lg_tv_adapter.dart';
 import '../../devices/data/local/lifx_adapter.dart';
@@ -22,6 +24,7 @@ import '../../devices/data/local/samsung_tv_adapter.dart';
 import '../../devices/data/local/sonoff_adapter.dart';
 import '../../devices/data/local/sonos_adapter.dart';
 import '../../devices/data/local/ssdp.dart';
+import '../../devices/data/local/tapo_adapter.dart';
 import '../../devices/data/local/shelly_adapter.dart';
 import '../../devices/data/local/tasmota_adapter.dart';
 import '../../devices/data/local/wled_adapter.dart';
@@ -36,6 +39,7 @@ class ProbedDevice {
     required this.brand,
     this.name,
     this.needsPassword = false,
+    this.needsAccount = false,
     this.needsKey = false,
     this.needsLink = false,
     this.detail,
@@ -51,6 +55,10 @@ class ProbedDevice {
 
   /// The device asks for a password.
   final bool needsPassword;
+
+  /// The device checks a TP-Link account (Tapo, newer Kasa): e-mail and
+  /// password ([TpLinkAccount]), checked by [DeviceProbe.checkAccount].
+  final bool needsAccount;
 
   /// An ESPHome device that encrypts its API: the key is needed (and,
   /// when found by its address only, it tells who it is with the key).
@@ -79,6 +87,7 @@ class DeviceProbe {
     this.udp,
     this.requests,
     this.sockets,
+    this.klap,
   });
 
   final LanHttp _http;
@@ -87,6 +96,7 @@ class DeviceProbe {
   final LanUdp? udp;
   final LanRequests? requests;
   final LanSockets? sockets;
+  final KlapClient? klap;
 
   /// Devices that answer a search of their own on the network (WiZ, LIFX,
   /// Govee), as each search ends.
@@ -260,6 +270,9 @@ class DeviceProbe {
         return got(await nanoleafLink(http, d.host));
       case 'samsung' when ws != null:
         return got(await samsungLink(ws, d.host));
+      case 'dirigera' when http != null:
+        final pairing = _pairings[found] ??= DirigeraPairing(http, d.host);
+        return got(await pairing.tryLink());
       case 'lg' when ws != null:
         final r = await lgLink(ws, d.host);
         if (r == null) return null;
@@ -272,6 +285,50 @@ class DeviceProbe {
         );
     }
     return null;
+  }
+
+  /// A hub's pairing, kept between tries.
+  static final _pairings = Expando<DirigeraPairing>();
+
+  /// Who the TP-Link device [found] is with [account] (Tapo, else Kasa over
+  /// KLAP); `null` when it is neither. Throws `AppFailure(authentication)`
+  /// for a wrong account.
+  Future<ProbedDevice?> checkAccount(
+    ProbedDevice found,
+    TpLinkAccount account,
+  ) async {
+    final klap = this.klap;
+    if (klap == null) return null;
+    final host = found.device.host;
+    final tapo = await tapoIdentify(klap, host, account);
+    if (tapo != null) {
+      return ProbedDevice(
+        brand: 'Tapo',
+        name: tapo.name,
+        needsAccount: true,
+        device: ConfiguredDevice(
+          adapter: 'tapo',
+          id: tapo.id,
+          host: host,
+          model: tapo.model,
+          label: tapo.name ?? tapo.model ?? 'Tapo',
+        ),
+      );
+    }
+    final answer = await KlapKasaTransport(klap, account).send(host, {
+      'system': {'get_sysinfo': <String, Object?>{}},
+    });
+    final sysinfo = (answer['system'] as Map?)?['get_sysinfo'];
+    final kasa = sysinfo is Map
+        ? fromKasa(host, sysinfo.cast<String, Object?>())
+        : null;
+    if (kasa == null) return null;
+    return ProbedDevice(
+      brand: 'Kasa',
+      name: kasa.name,
+      needsAccount: true,
+      device: kasa.device.copyWith(options: {'protocol': 'klap'}),
+    );
   }
 
   /// A Yeelight that answered the search.
@@ -345,6 +402,9 @@ class DeviceProbe {
           label: service.name,
         ),
       );
+    }
+    if (service.type == LanService.dirigeraType) {
+      return _dirigera(service.host, service.txt['uuid'] ?? service.name, null);
     }
     if (service.type == LanService.sonoffType) {
       final id = service.txt['id'];
@@ -494,7 +554,42 @@ class DeviceProbe {
       await _probeSonoff(host) ??
       await _probeNanoleaf(host) ??
       await _probeMedia(host) ??
+      await _probeHub(host) ??
       await probeEsphome(host);
+
+  /// A DIRIGERA hub, or a TP-Link device on KLAP (Tapo, newer Kasa: who it
+  /// is shows once the account is given).
+  Future<ProbedDevice?> _probeHub(String host) async {
+    final http = requests;
+    if (http == null) return null;
+    if (await dirigeraProbe(http, host)) return _dirigera(host, host, null);
+    if (await klapProbe(http, host)) {
+      return ProbedDevice(
+        brand: 'Tapo',
+        needsAccount: true,
+        device: ConfiguredDevice(
+          adapter: 'tapo',
+          id: host.replaceAll('.', ''),
+          host: host,
+          label: 'Tapo',
+        ),
+      );
+    }
+    return null;
+  }
+
+  static ProbedDevice _dirigera(String host, String id, String? name) =>
+      ProbedDevice(
+        brand: 'DIRIGERA',
+        name: name,
+        needsLink: true,
+        device: ConfiguredDevice(
+          adapter: 'dirigera',
+          id: id.toLowerCase().replaceAll(RegExp('[^0-9a-z]'), ''),
+          host: host,
+          label: name ?? 'DIRIGERA',
+        ),
+      );
 
   /// A Roku, a Samsung TV or a Sonos at [host].
   Future<ProbedDevice?> _probeMedia(String host) async {
@@ -588,5 +683,6 @@ final deviceProbeProvider = Provider<DeviceProbe>(
     udp: ref.watch(lanUdpProvider),
     requests: ref.watch(lanRequestsProvider),
     sockets: ref.watch(lanSocketsProvider),
+    klap: ref.watch(klapClientProvider),
   ),
 );

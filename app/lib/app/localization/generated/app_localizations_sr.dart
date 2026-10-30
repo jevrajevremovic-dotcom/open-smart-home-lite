@@ -5453,6 +5453,20 @@ class AppLocalizationsSr extends AppLocalizations {
   @override
   String get tvLinkBody =>
       'Na televizoru se pojavilo pitanje da li aplikacija sme da se poveže: izaberite Dozvoli. Aplikacija čeka 30 sekundi.';
+
+  @override
+  String get dirigeraLinkBody =>
+      'Pritisnite dugme za radnju na poleđini DIRIGERA čvorišta. Aplikacija čeka 30 sekundi.';
+
+  @override
+  String get tpLinkAccountHint =>
+      'Tapo uređaj proverava TP-Link nalog na samom uređaju: unesite e-poštu i lozinku naloga u koji je dodat. Ništa se ne šalje TP-Linku.';
+
+  @override
+  String get tpLinkUserLabel => 'E-pošta TP-Link naloga';
+
+  @override
+  String get tpLinkWrongAccount => 'Uređaj ne prihvata ovu e-poštu i lozinku.';
 }
 
 /// The translations for Serbian, using the Latin script (`sr_Latn`).

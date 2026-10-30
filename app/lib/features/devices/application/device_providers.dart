@@ -13,7 +13,9 @@ import '../data/local/demo_adapter.dart';
 import '../data/local/esphome/esphome_adapter.dart';
 import '../data/local/esphome/esphome_client.dart';
 import '../data/local/hue_adapter.dart';
+import '../data/local/dirigera_adapter.dart';
 import '../data/local/kasa_adapter.dart';
+import '../data/local/klap.dart';
 import '../data/local/govee_adapter.dart';
 import '../data/local/lan_transport.dart';
 import '../data/local/lg_tv_adapter.dart';
@@ -23,6 +25,7 @@ import '../data/local/roku_adapter.dart';
 import '../data/local/samsung_tv_adapter.dart';
 import '../data/local/sonoff_adapter.dart';
 import '../data/local/sonos_adapter.dart';
+import '../data/local/tapo_adapter.dart';
 import '../data/local/wiz_adapter.dart';
 import '../data/local/lan_http.dart';
 import '../data/local/local_backend.dart';
@@ -65,7 +68,13 @@ final homeBackendProvider = Provider<LocalBackend?>((ref) {
             .readCredential(devicePasswordId(key)),
       ),
       YeelightAdapter(ref.watch(yeelightTransportProvider)),
-      KasaAdapter(ref.watch(kasaTransportProvider)),
+      KasaAdapter(
+        ref.watch(kasaTransportProvider),
+        klap: ref.watch(klapClientProvider),
+        accounts: secret,
+      ),
+      TapoAdapter(ref.watch(klapClientProvider), accounts: secret),
+      DirigeraAdapter(ref.watch(lanRequestsProvider), tokens: secret),
       WizAdapter(ref.watch(lanUdpProvider)),
       NanoleafAdapter(
         ref.watch(lanRequestsProvider),

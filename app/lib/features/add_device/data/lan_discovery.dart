@@ -24,6 +24,7 @@ class LanService {
   static const hueType = '_hue._tcp';
   static const nanoleafType = '_nanoleafapi._tcp';
   static const sonoffType = '_ewelink._tcp';
+  static const dirigeraType = '_ihsp._tcp';
 
   final String name;
 
@@ -69,6 +70,7 @@ class AndroidLanDiscovery implements LanDiscovery {
     LanService.hueType,
     LanService.nanoleafType,
     LanService.sonoffType,
+    LanService.dirigeraType,
   ];
   static final _log = AppLogger('Discovery');
 

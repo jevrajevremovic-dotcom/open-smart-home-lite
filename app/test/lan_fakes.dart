@@ -59,7 +59,7 @@ List<UdpPacket> udpAnswer(String host, Object json) => [
 class FakeLanRequests implements LanRequests {
   FakeLanRequests(this.routes);
 
-  final Map<String, LanResponse Function(FakeRequest request)> routes;
+  final Map<String, FutureOr<LanResponse> Function(FakeRequest request)> routes;
   final List<FakeRequest> requests = [];
 
   @override

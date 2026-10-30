@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/localization/l10n.dart';
+import '../../../core/errors/app_failure.dart';
 import '../../../core/widgets/responsive.dart';
 import '../../../core/widgets/status_widgets.dart';
+import '../../devices/data/local/klap.dart';
 import '../../devices/data/local/local_home.dart';
 import '../../devices/presentation/device_edit.dart';
 import '../application/add_device_providers.dart';
@@ -67,6 +69,8 @@ class AddDeviceScreen extends ConsumerWidget {
                         'Sonoff' => Icons.toggle_on_outlined,
                         'Roku' || 'Samsung' || 'LG' => Icons.tv,
                         'Sonos' => Icons.speaker_outlined,
+                        'DIRIGERA' => Icons.hub_outlined,
+                        'Tapo' => Icons.outlet_outlined,
                         _ => Icons.power_outlined,
                       }),
                       title: Text(p.title),
@@ -137,6 +141,8 @@ class AddDeviceScreen extends ConsumerWidget {
         title: found.title,
         secret: found.needsKey
             ? _Secret.key
+            : found.needsAccount
+            ? _Secret.account
             : found.needsPassword
             ? _Secret.password
             : null,
@@ -162,6 +168,27 @@ class AddDeviceScreen extends ConsumerWidget {
         brand: found.brand,
         name: found.name,
       );
+    }
+    if (found.needsAccount) {
+      final account = TpLinkAccount.decode(secret);
+      ProbedDevice? checked;
+      try {
+        checked = account == null
+            ? null
+            : await ref.read(deviceProbeProvider).checkAccount(found, account);
+      } on AppFailure catch (e) {
+        say(
+          e.kind == FailureKind.authentication
+              ? l10n.tpLinkWrongAccount
+              : l10n.addDeviceNotFound,
+        );
+        return;
+      }
+      if (checked == null) {
+        say(l10n.addDeviceNotFound);
+        return;
+      }
+      device = checked;
     }
     if (found.needsKey) {
       // The key is checked (and, found by address, tells who it is).
@@ -238,7 +265,7 @@ class _AddressDialogState extends State<_AddressDialog> {
   }
 }
 
-enum _Secret { password, key }
+enum _Secret { password, key, account }
 
 /// Waits for the device's button or on-screen prompt (asking every 2 s
 /// for 30 s); returns what pairing gave, or `null`.
@@ -303,6 +330,7 @@ class _LinkDialogState extends ConsumerState<_LinkDialog> {
           Text(switch (widget.found.device.adapter) {
             'nanoleaf' => l10n.nanoleafLinkBody,
             'samsung' || 'lg' => l10n.tvLinkBody,
+            'dirigera' => l10n.dirigeraLinkBody,
             _ => l10n.hueLinkBody,
           }),
           const SizedBox(height: 16),
@@ -333,13 +361,24 @@ class _RoomDialog extends StatefulWidget {
 
 class _RoomDialogState extends State<_RoomDialog> {
   String? _room;
+  final _user = TextEditingController();
   final _password = TextEditingController();
 
   @override
   void dispose() {
+    _user.dispose();
     _password.dispose();
     super.dispose();
   }
+
+  String? get _secret => switch (widget.secret) {
+    null => null,
+    _Secret.account => TpLinkAccount(
+      _user.text.trim(),
+      _password.text,
+    ).encode(),
+    _ => _password.text.trim(),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -355,12 +394,21 @@ class _RoomDialogState extends State<_RoomDialog> {
           RoomPicker(value: _room, onChanged: (v) => setState(() => _room = v)),
           if (widget.secret case final secret?) ...[
             const SizedBox(height: 16),
-            Text(
-              secret == _Secret.key
-                  ? l10n.deviceKeyHint
-                  : l10n.devicePasswordHint,
-            ),
+            Text(switch (secret) {
+              _Secret.key => l10n.deviceKeyHint,
+              _Secret.account => l10n.tpLinkAccountHint,
+              _Secret.password => l10n.devicePasswordHint,
+            }),
             const SizedBox(height: 8),
+            if (secret == _Secret.account)
+              TextField(
+                key: const Key('addDeviceUser'),
+                controller: _user,
+                keyboardType: TextInputType.emailAddress,
+                autocorrect: false,
+                enableSuggestions: false,
+                decoration: InputDecoration(labelText: l10n.tpLinkUserLabel),
+              ),
             TextField(
               key: const Key('addDevicePassword'),
               controller: _password,
@@ -383,9 +431,7 @@ class _RoomDialogState extends State<_RoomDialog> {
         ),
         FilledButton(
           key: const Key('addDeviceConfirm'),
-          onPressed: () => Navigator.of(
-            context,
-          ).pop((_room, widget.secret == null ? null : _password.text.trim())),
+          onPressed: () => Navigator.of(context).pop((_room, _secret)),
           child: Text(l10n.addDeviceAdd),
         ),
       ],

@@ -5424,4 +5424,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get tvLinkBody =>
       'The TV asks whether the app may connect: choose Allow. The app waits 30 seconds.';
+
+  @override
+  String get dirigeraLinkBody =>
+      'Press the action button on the back of the DIRIGERA hub. The app waits 30 seconds.';
+
+  @override
+  String get tpLinkAccountHint =>
+      'A Tapo device checks the TP-Link account on the device itself: enter the e-mail and password of the account it was added to. Nothing is sent to TP-Link.';
+
+  @override
+  String get tpLinkUserLabel => 'TP-Link account e-mail';
+
+  @override
+  String get tpLinkWrongAccount =>
+      'The device does not accept this e-mail and password.';
 }

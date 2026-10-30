@@ -9242,6 +9242,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The TV asks whether the app may connect: choose Allow. The app waits 30 seconds.'**
   String get tvLinkBody;
+
+  /// No description provided for @dirigeraLinkBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Press the action button on the back of the DIRIGERA hub. The app waits 30 seconds.'**
+  String get dirigeraLinkBody;
+
+  /// No description provided for @tpLinkAccountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A Tapo device checks the TP-Link account on the device itself: enter the e-mail and password of the account it was added to. Nothing is sent to TP-Link.'**
+  String get tpLinkAccountHint;
+
+  /// No description provided for @tpLinkUserLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'TP-Link account e-mail'**
+  String get tpLinkUserLabel;
+
+  /// No description provided for @tpLinkWrongAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'The device does not accept this e-mail and password.'**
+  String get tpLinkWrongAccount;
 }
 
 class _AppLocalizationsDelegate
