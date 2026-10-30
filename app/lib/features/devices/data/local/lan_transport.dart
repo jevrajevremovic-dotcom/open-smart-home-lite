@@ -5,6 +5,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
+import 'package:crypto/crypto.dart' as hash;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/errors/app_failure.dart';
@@ -18,13 +19,22 @@ import 'lan_http.dart';
 /// A device's HTTP answer.
 @immutable
 class LanResponse {
-  const LanResponse(this.status, this.body, {this.headers = const {}});
+  const LanResponse(
+    this.status,
+    this.body, {
+    this.headers = const {},
+    this.certificate,
+  });
 
   final int status;
   final Uint8List body;
 
   /// Lower-case names.
   final Map<String, String> headers;
+
+  /// The device's own certificate (SHA-256 of it, hex), when asked with
+  /// `insecure`: kept at pairing, then required ([LanRequests.send] `pin`).
+  final String? certificate;
 
   bool get ok => status >= 200 && status < 300;
   String get text => utf8.decode(body, allowMalformed: true);
@@ -40,7 +50,8 @@ class LanResponse {
 }
 
 /// HTTP of any kind to a device on the local network. [insecure] accepts
-/// the device's self-signed certificate (a hub's or TV's own HTTPS).
+/// the device's self-signed certificate (a hub's or TV's own HTTPS); with
+/// [pin], only that certificate (trusted the first time, then required).
 abstract interface class LanRequests {
   /// Throws `AppFailure` (network, timeout, authentication for 401/403);
   /// other statuses come back as they are.
@@ -50,9 +61,31 @@ abstract interface class LanRequests {
     Map<String, String> headers = const {},
     List<int>? body,
     bool insecure = false,
+    String? pin,
     LanAuth? auth,
     Duration timeout = const Duration(seconds: 5),
   });
+}
+
+/// The SHA-256 of a certificate ([der] bytes), hex.
+String certificateFingerprint(List<int> der) =>
+    hash.sha256.convert(der).toString();
+
+/// A self-signed certificate check for [host]: accepts it the first time
+/// ([pin] `null`), afterwards only the same one. Records what was seen.
+class _Pinning {
+  _Pinning(this.host, this.pin);
+
+  final String host;
+  final String? pin;
+  String? seen;
+  bool get mismatch => pin != null && seen != null && seen != pin;
+
+  bool check(X509Certificate cert, String host, int _) {
+    if (host != this.host) return false;
+    seen = certificateFingerprint(cert.der);
+    return pin == null || seen == pin;
+  }
 }
 
 /// [body] as JSON, with its header.
@@ -69,15 +102,15 @@ class IoLanRequests implements LanRequests {
     Map<String, String> headers = const {},
     List<int>? body,
     bool insecure = false,
+    String? pin,
     LanAuth? auth,
     Duration timeout = const Duration(seconds: 5),
   }) async {
+    final pinning = _Pinning(uri.host, pin);
     final client = HttpClient()
       ..connectionTimeout = const Duration(seconds: 3)
-      // Only for the one device asked: its own certificate, not checked.
-      ..badCertificateCallback = insecure
-          ? (_, host, _) => host == uri.host
-          : null;
+      // Only for the one device asked: its own certificate.
+      ..badCertificateCallback = insecure ? pinning.check : null;
     Future<LanResponse> once(String? authorization) async {
       final request = await client.openUrl(method, uri);
       request.followRedirects = false;
@@ -98,6 +131,7 @@ class IoLanRequests implements LanRequests {
         response.statusCode,
         bytes.takeBytes(),
         headers: names,
+        certificate: pinning.seen,
       );
     }
 
@@ -135,7 +169,11 @@ class IoLanRequests implements LanRequests {
     } on TimeoutException {
       throw AppFailure(FailureKind.timeout, debugMessage: uri.host);
     } on Object {
-      throw AppFailure(FailureKind.network, debugMessage: uri.host);
+      throw AppFailure(
+        // Another certificate than at pairing: someone else may answer.
+        pinning.mismatch ? FailureKind.certificate : FailureKind.network,
+        debugMessage: uri.host,
+      );
     } finally {
       client.close(force: true);
     }
@@ -307,39 +345,49 @@ class _SocketLink implements LanLink {
 /// An open WebSocket to a device (a TV).
 abstract interface class LanWebSocket {
   Stream<String> get messages;
+
+  /// The device's certificate (SHA-256, hex) on `wss`, else `null`.
+  String? get certificate;
   void send(String text);
   Future<void> close();
 }
 
 abstract interface class LanSockets {
-  /// [insecure]: the device's own certificate. Throws `AppFailure`.
-  Future<LanWebSocket> connect(Uri uri, {bool insecure = false});
+  /// [insecure]: the device's own certificate; with [pin], only that one.
+  /// Throws `AppFailure` (certificate when it is another one).
+  Future<LanWebSocket> connect(Uri uri, {bool insecure = false, String? pin});
 }
 
 class IoLanSockets implements LanSockets {
   @override
-  Future<LanWebSocket> connect(Uri uri, {bool insecure = false}) async {
+  Future<LanWebSocket> connect(
+    Uri uri, {
+    bool insecure = false,
+    String? pin,
+  }) async {
+    final pinning = _Pinning(uri.host, pin);
     final client = HttpClient()
       ..connectionTimeout = const Duration(seconds: 4)
-      ..badCertificateCallback = insecure
-          ? (_, host, _) => host == uri.host
-          : null;
+      ..badCertificateCallback = insecure ? pinning.check : null;
     try {
       // ignore: close_sinks, closed by the link's close()
       final socket = await WebSocket.connect(
         uri.toString(),
         customClient: client,
       ).timeout(const Duration(seconds: 6));
-      return _IoWebSocket(socket);
+      return _IoWebSocket(socket, pinning.seen);
     } on Object {
       client.close(force: true);
-      throw AppFailure(FailureKind.network, debugMessage: uri.host);
+      throw AppFailure(
+        pinning.mismatch ? FailureKind.certificate : FailureKind.network,
+        debugMessage: uri.host,
+      );
     }
   }
 }
 
 class _IoWebSocket implements LanWebSocket {
-  _IoWebSocket(this._socket)
+  _IoWebSocket(this._socket, this.certificate)
     : messages = _socket
           .map((m) => m is String ? m : utf8.decode(m as List<int>))
           .asBroadcastStream();
@@ -348,6 +396,9 @@ class _IoWebSocket implements LanWebSocket {
 
   @override
   final Stream<String> messages;
+
+  @override
+  final String? certificate;
 
   @override
   void send(String text) => _socket.add(text);

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:open_smart_home_lite/app/app.dart';
 import 'package:open_smart_home_lite/app/router/app_router.dart';
+import 'package:open_smart_home_lite/core/errors/app_failure.dart';
 import 'package:open_smart_home_lite/features/devices/application/device_providers.dart';
 
 import 'dart:typed_data';
@@ -179,7 +180,8 @@ void main() {
 
   test('Samsung: allowed on the TV; keys after the TV says ready', () async {
     final ws = sockets();
-    expect(await samsungLink(ws, samsung), 't1');
+    final linked = await samsungLink(ws, samsung);
+    expect((linked?.token, linked?.certificate), ('t1', 'cert-1'));
     final udp = FakeLanUdp(const {});
     final backend = LocalBackend(
       [SamsungTvAdapter(http(), ws, udp, tokens: (_) async => 't1')],
@@ -189,7 +191,7 @@ void main() {
             adapter: 'samsung',
             id: '0aa1-bb22',
             host: samsung,
-            options: {'mac': 'aabbcc001122'},
+            options: {'mac': 'aabbcc001122', 'cert': 'cert-1'},
           ),
         ],
       ),
@@ -201,6 +203,19 @@ void main() {
     await backend.send(tv, const StepVolume(up: true));
     expect(ws.sent.last, contains('KEY_VOLUP'));
     expect(ws.opened.last.queryParameters['token'], 't1');
+    // Someone else answering with another certificate: refused.
+    ws.certificate = 'cert-other';
+    await expectLater(
+      backend.send(tv, const StepVolume(up: true)),
+      throwsA(
+        isA<AppFailure>().having(
+          (e) => e.kind,
+          'kind',
+          FailureKind.certificate,
+        ),
+      ),
+    );
+    ws.certificate = 'cert-1';
 
     await backend.send(
       parseSamsungTv(backend.home.devices.single, null),
@@ -309,6 +324,11 @@ void main() {
     expect(credentials.values['device:samsung:0aa1-bb22'], 't1');
     final home = container.read(localHomeProvider);
     expect(home.devices.single.options['mac'], 'aabbcc001122');
+    expect(
+      home.devices.single.options['cert'],
+      'cert-1',
+      reason: 'the TV\'s certificate, required from now on',
+    );
 
     const id = 'samsung:0aa1-bb22:tv';
     expect(container.read(deviceProvider(id))?.state.isOn, isTrue);

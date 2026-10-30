@@ -193,26 +193,37 @@ void main() {
     },
   );
 
-  test('sent over Wi-Fi once, with its code', () async {
+  test('sent over Wi-Fi once, only to who knows the code', () async {
     // flutter_test answers every HTTP request with 400; this one is real.
     HttpOverrides.global = null;
+    String wrong(String code) => code == '000000' ? '111111' : '000000';
     final server = await LanTransferServer.start('{"x":1}', host: '127.0.0.1');
+    // A wrong code gets nothing, and does not use the transfer up.
     await expectLater(
-      receiveBackup(
-        server.address,
-        '000000' == server.code ? '111111' : '000000',
-      ),
+      receiveBackup(server.address, wrong(server.code)),
       throwsA(LanTransferError.wrongCode),
     );
-    // The wrong try took it: the server is gone.
+    expect(await receiveBackup(server.address, server.code), '{"x":1}');
     expect(await server.done, isTrue);
     await expectLater(
       receiveBackup(server.address, server.code),
       throwsA(LanTransferError.unreachable),
+      reason: 'served once',
     );
 
-    final again = await LanTransferServer.start('{"x":1}', host: '127.0.0.1');
-    expect(await receiveBackup(again.address, again.code), '{"x":1}');
-    expect(await again.done, isTrue);
+    // Three wrong codes end it.
+    final guessed = await LanTransferServer.start('{"x":1}', host: '127.0.0.1');
+    for (var i = 0; i < LanTransferServer.maxTries; i++) {
+      await expectLater(
+        receiveBackup(guessed.address, wrong(guessed.code)),
+        throwsA(LanTransferError.wrongCode),
+      );
+    }
+    expect(await guessed.done, isFalse);
+    expect(guessed.lockedOut, isTrue);
+    await expectLater(
+      receiveBackup(guessed.address, guessed.code),
+      throwsA(LanTransferError.unreachable),
+    );
   });
 }

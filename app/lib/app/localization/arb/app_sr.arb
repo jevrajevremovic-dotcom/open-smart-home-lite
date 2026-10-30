@@ -16,7 +16,7 @@
   "failureValidation": "Uređaj nije prihvatio komandu.",
   "failureParsing": "Uređaj je poslao neočekivan odgovor.",
   "failureServer": "Uređaj je prijavio grešku.",
-  "failureCertificate": "Bezbedna veza ne može da se potvrdi (problem sa sertifikatom).",
+  "failureCertificate": "Uređaj se predstavio drugim sertifikatom nego pri uparivanju. Možda se neko drugi javlja umesto njega; ako ste uređaj resetovali, uklonite ga i dodajte ponovo.",
   "failureUnavailableEntity": "Ovaj uređaj trenutno nije dostupan.",
   "failureUnsupportedFeature": "Ovaj uređaj ne podržava ovu radnju.",
   "failureWebSocket": "Veza u realnom vremenu je prekinuta.",
@@ -969,5 +969,6 @@
   "tipSonos": "Radi odmah.",
   "tipCamera": "Dugme „Dodaj kameru“: adresa slike sa kamere (primeri su u dijalogu) i korisnik, ako ga kamera traži.",
   "tipBluetooth": "Telefon mora biti blizu (do ~10 m). Rade BTHome (Shelly BLU), Xiaomi sa pvvx/ATC firmverom, SwitchBot i Govee termometri; šifrovani BTHome i Xiaomi MiBeacon ne.",
-  "tipUnavailable": "Uređaj trenutno ne odgovara."
+  "tipUnavailable": "Uređaj trenutno ne odgovara.",
+  "backupTransferLocked": "Prenos je prekinut: tri puta je unet pogrešan kod. Pošaljite ponovo."
 }

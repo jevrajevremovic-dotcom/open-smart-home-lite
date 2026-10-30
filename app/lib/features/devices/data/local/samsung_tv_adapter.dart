@@ -81,6 +81,7 @@ class SamsungTvAdapter extends PolledAdapter {
     final socket = await _sockets.connect(
       samsungRemoteUri(device.host, token),
       insecure: true,
+      pin: device.options['cert'],
     );
     try {
       // Keys count only once the TV has said the app may connect.
@@ -156,8 +157,12 @@ Future<Map<String, Object?>> samsungInfo(LanRequests http, String host) async {
 }
 
 /// Connects without a token: the TV asks whether to allow the app. The
-/// token once allowed; `null` while it waits or when refused.
-Future<String?> samsungLink(LanSockets sockets, String host) async {
+/// token once allowed (and the TV's certificate, to require from then on);
+/// `null` while it waits or when refused.
+Future<({String token, String? certificate})?> samsungLink(
+  LanSockets sockets,
+  String host,
+) async {
   final socket = await sockets.connect(
     samsungRemoteUri(host, null),
     insecure: true,
@@ -167,7 +172,10 @@ Future<String?> samsungLink(LanSockets sockets, String host) async {
     if (event?.name != 'ms.channel.connect') return null;
     final token = event?.data['token'];
     // Older TVs allow without a token.
-    return token is String ? token : '';
+    return (
+      token: token is String ? token : '',
+      certificate: socket.certificate,
+    );
   } finally {
     await socket.close();
   }

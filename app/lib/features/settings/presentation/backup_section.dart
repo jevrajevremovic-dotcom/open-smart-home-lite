@@ -111,6 +111,9 @@ class _BackupSectionState extends ConsumerState<BackupSection> {
     if (sent) {
       if (navigator.canPop()) navigator.pop();
       _say(l10n.backupSent);
+    } else if (server.lockedOut) {
+      if (navigator.canPop()) navigator.pop();
+      _say(l10n.backupTransferLocked);
     }
   }
 

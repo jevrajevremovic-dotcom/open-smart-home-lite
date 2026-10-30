@@ -62,7 +62,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get failureCertificate =>
-      'Bezbedna veza ne može da se potvrdi (problem sa sertifikatom).';
+      'Uređaj se predstavio drugim sertifikatom nego pri uparivanju. Možda se neko drugi javlja umesto njega; ako ste uređaj resetovali, uklonite ga i dodajte ponovo.';
 
   @override
   String get failureUnavailableEntity => 'Ovaj uređaj trenutno nije dostupan.';
@@ -3491,6 +3491,10 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get tipUnavailable => 'Uređaj trenutno ne odgovara.';
+
+  @override
+  String get backupTransferLocked =>
+      'Prenos je prekinut: tri puta je unet pogrešan kod. Pošaljite ponovo.';
 }
 
 /// The translations for Serbian, using the Latin script (`sr_Latn`).

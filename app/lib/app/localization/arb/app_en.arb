@@ -16,7 +16,7 @@
   "failureValidation": "The device did not accept the command.",
   "failureParsing": "The device sent an unexpected answer.",
   "failureServer": "The device reported an error.",
-  "failureCertificate": "The secure connection could not be verified (certificate problem).",
+  "failureCertificate": "The device presented a different certificate than when it was paired. Someone else may be answering in its place; if you reset the device, remove it and add it again.",
   "failureUnavailableEntity": "This device is currently unavailable.",
   "failureUnsupportedFeature": "This device does not support this action.",
   "failureWebSocket": "The live connection was interrupted.",
@@ -1082,5 +1082,6 @@
   "tipSonos": "Works as is.",
   "tipCamera": "The \"Add a camera\" button: the camera's image address (examples in the dialog) and a user, if the camera asks.",
   "tipBluetooth": "The phone must be near (up to ~10 m). BTHome (Shelly BLU), Xiaomi with pvvx/ATC firmware, SwitchBot and Govee thermometers work; encrypted BTHome and Xiaomi MiBeacon do not.",
-  "tipUnavailable": "The device is not answering right now."
+  "tipUnavailable": "The device is not answering right now.",
+  "backupTransferLocked": "The transfer was stopped: a wrong code was entered three times. Send again."
 }

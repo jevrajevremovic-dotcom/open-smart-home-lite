@@ -59,7 +59,10 @@ List<UdpPacket> udpAnswer(String host, Object json) => [
 /// HTTP devices: by `METHOD host:port/path` (`GET 10.0.0.5:8060/query/x`),
 /// a function of the request giving the answer. Records requests.
 class FakeLanRequests implements LanRequests {
-  FakeLanRequests(this.routes);
+  FakeLanRequests(this.routes, {this.certificate = 'cert-1'});
+
+  /// What the devices' HTTPS certificate is (as its fingerprint).
+  String certificate;
 
   final Map<String, FutureOr<LanResponse> Function(FakeRequest request)> routes;
   final List<FakeRequest> requests = [];
@@ -71,6 +74,7 @@ class FakeLanRequests implements LanRequests {
     Map<String, String> headers = const {},
     List<int>? body,
     bool insecure = false,
+    String? pin,
     LanAuth? auth,
     Duration timeout = const Duration(seconds: 5),
   }) async {
@@ -84,7 +88,19 @@ class FakeLanRequests implements LanRequests {
         debugMessage: '$hostPort no answer',
       );
     }
-    return route(request);
+    final https = uri.scheme == 'https';
+    if (https && pin != null && pin != certificate) {
+      throw AppFailure(FailureKind.certificate, debugMessage: hostPort);
+    }
+    final r = await route(request);
+    return https
+        ? LanResponse(
+            r.status,
+            r.body,
+            headers: r.headers,
+            certificate: certificate,
+          )
+        : r;
   }
 
   List<String> pathsTo(String method) => [
@@ -160,7 +176,10 @@ class _FakeLink implements LanLink {
 
 /// WebSocket devices (TVs): by URI without query, a conversation.
 class FakeLanSockets implements LanSockets {
-  FakeLanSockets(this.devices);
+  FakeLanSockets(this.devices, {this.certificate = 'cert-1'});
+
+  /// What the TVs' wss certificate is (as its fingerprint).
+  String certificate;
 
   /// `scheme://host:port/path` → each message's answers.
   final Map<String, List<String> Function(String message, Uri uri)> devices;
@@ -168,19 +187,27 @@ class FakeLanSockets implements LanSockets {
   final List<String> sent = [];
 
   @override
-  Future<LanWebSocket> connect(Uri uri, {bool insecure = false}) async {
+  Future<LanWebSocket> connect(
+    Uri uri, {
+    bool insecure = false,
+    String? pin,
+  }) async {
     final key = '${uri.scheme}://${uri.host}:${uri.port}${uri.path}';
     final answer = devices[key];
     if (answer == null) {
       throw AppFailure(FailureKind.network, debugMessage: key);
     }
+    final wss = uri.scheme == 'wss';
+    if (wss && pin != null && pin != certificate) {
+      throw AppFailure(FailureKind.certificate, debugMessage: key);
+    }
     opened.add(uri);
-    return _FakeSocket(uri, answer, sent);
+    return _FakeSocket(uri, answer, sent, wss ? certificate : null);
   }
 }
 
 class _FakeSocket implements LanWebSocket {
-  _FakeSocket(this._uri, this._answer, this._sent) {
+  _FakeSocket(this._uri, this._answer, this._sent, this.certificate) {
     // A greeting, as some TVs send on connect (once listened to).
     Timer.run(() {
       for (final m in _answer('', _uri)) {
@@ -193,6 +220,9 @@ class _FakeSocket implements LanWebSocket {
   final List<String> Function(String, Uri) _answer;
   final List<String> _sent;
   final _out = StreamController<String>.broadcast();
+
+  @override
+  final String? certificate;
 
   @override
   Stream<String> get messages => _out.stream;

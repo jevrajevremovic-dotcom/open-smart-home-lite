@@ -193,6 +193,7 @@ void main() {
       final pairing = DirigeraPairing(http, hub);
       expect(await pairing.tryLink(), isNull, reason: 'button not pressed yet');
       expect(await pairing.tryLink(), 'hubtok');
+      expect(pairing.certificate, 'cert-1');
       expect(
         http.requests.where((r) => r.uri.path == '/v1/oauth/authorize'),
         hasLength(1),
@@ -202,7 +203,14 @@ void main() {
       final backend = LocalBackend(
         [DirigeraAdapter(http, tokens: (_) async => 'hubtok')],
         home: const LocalHome(
-          devices: [ConfiguredDevice(adapter: 'dirigera', id: 'h1', host: hub)],
+          devices: [
+            ConfiguredDevice(
+              adapter: 'dirigera',
+              id: 'h1',
+              host: hub,
+              options: {'cert': 'cert-1'},
+            ),
+          ],
         ),
       )..start();
       addTearDown(backend.dispose);

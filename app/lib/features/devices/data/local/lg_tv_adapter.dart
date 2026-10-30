@@ -111,7 +111,12 @@ class LgTvAdapter extends DeviceAdapter {
   Future<LgSession> _session(ConfiguredDevice device) =>
       _sessions[device.key] ??= () async {
         final key = await keys?.call(device.key);
-        final s = await LgSession.open(_sockets, device.host, key);
+        final s = await LgSession.open(
+          _sockets,
+          device.host,
+          key,
+          pin: device.options['cert'],
+        );
         unawaited(s.closed.then((_) => _sessions.remove(device.key)));
         return s;
       }();
@@ -285,6 +290,7 @@ class LgSession {
     LanSockets sockets,
     String host,
     String? clientKey, {
+    String? pin,
     Duration wait = const Duration(seconds: 8),
   }) async {
     LanWebSocket socket;
@@ -292,8 +298,12 @@ class LgSession {
       socket = await sockets.connect(
         Uri.parse('wss://$host:3001/'),
         insecure: true,
+        pin: pin,
       );
     } on AppFailure {
+      // A TV paired over wss stays on wss (else its certificate would
+      // not matter).
+      if (pin != null) rethrow;
       socket = await sockets.connect(Uri.parse('ws://$host:3000/'));
     }
     final s = LgSession._(socket, sockets);
@@ -313,6 +323,9 @@ class LgSession {
 
   /// The key the TV gave (the one asked with, or a new one).
   String? clientKey;
+
+  /// The TV's certificate (wss), to require from then on.
+  String? get certificate => _socket.certificate;
 
   Future<String?> _register(String? clientKey) {
     _registered = Completer<String?>();
@@ -415,7 +428,7 @@ class LgSession {
 /// Connects without a key: the TV asks whether to allow the app. The client
 /// key once allowed, and the TV's MAC for Wake-on-LAN when it tells it;
 /// `null` when refused or not answered in time.
-Future<({String key, String? mac})?> lgLink(
+Future<({String key, String? mac, String? certificate})?> lgLink(
   LanSockets sockets,
   String host,
 ) async {
@@ -443,7 +456,9 @@ Future<({String key, String? mac})?> lgLink(
       // Not every TV tells.
     }
     final key = s.clientKey;
-    return key == null ? null : (key: key, mac: mac);
+    return key == null
+        ? null
+        : (key: key, mac: mac, certificate: s.certificate);
   } finally {
     await s.close();
   }

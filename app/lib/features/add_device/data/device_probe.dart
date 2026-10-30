@@ -354,26 +354,30 @@ class DeviceProbe {
     ({String secret, ConfiguredDevice device})? got(String? secret) =>
         secret == null ? null : (secret: secret, device: d);
     final http = requests, ws = sockets;
+    // A device's own certificate, required from now on.
+    ConfiguredDevice pinned(
+      String? cert, [
+      Map<String, String> more = const {},
+    ]) => d.copyWith(options: {...d.options, ...more, 'cert': ?cert});
     switch (d.adapter) {
       case 'hue':
         return got(await hueLink(_http, d.host));
       case 'nanoleaf' when http != null:
         return got(await nanoleafLink(http, d.host));
-      case 'samsung' when ws != null:
-        return got(await samsungLink(ws, d.host));
       case 'dirigera' when http != null:
         final pairing = _pairings[found] ??= DirigeraPairing(http, d.host);
-        return got(await pairing.tryLink());
+        final token = await pairing.tryLink();
+        if (token == null) return null;
+        return (secret: token, device: pinned(pairing.certificate));
+      case 'samsung' when ws != null:
+        final r = await samsungLink(ws, d.host);
+        if (r == null) return null;
+        return (secret: r.token, device: pinned(r.certificate));
       case 'lg' when ws != null:
         final r = await lgLink(ws, d.host);
         if (r == null) return null;
         // Its MAC, for turning it on later.
-        return (
-          secret: r.key,
-          device: r.mac == null
-              ? d
-              : d.copyWith(options: {...d.options, 'mac': r.mac!}),
-        );
+        return (secret: r.key, device: pinned(r.certificate, {'mac': ?r.mac}));
     }
     return null;
   }

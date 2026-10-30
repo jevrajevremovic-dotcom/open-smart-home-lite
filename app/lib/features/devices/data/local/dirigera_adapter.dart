@@ -52,6 +52,7 @@ class DirigeraAdapter extends PolledAdapter {
       Uri.parse('https://${device.host}:8443/v1/devices'),
       headers: await _auth(device),
       insecure: true,
+      pin: device.options['cert'],
     );
     final json = r.json;
     if (!r.ok || json is! List) {
@@ -104,6 +105,7 @@ class DirigeraAdapter extends PolledAdapter {
       headers: {...await _auth(device), ...b.headers},
       body: b.body,
       insecure: true,
+      pin: device.options['cert'],
     );
     if (!r.ok) {
       throw AppFailure(
@@ -123,6 +125,9 @@ class DirigeraPairing {
   final String host;
   final String _verifier;
   String? _code;
+
+  /// The hub's certificate as seen when pairing (kept, then required).
+  String? certificate;
 
   static String _newVerifier() {
     const chars =
@@ -159,7 +164,9 @@ class DirigeraPairing {
     final token = r.ok && r.json is Map
         ? (r.json as Map)['access_token']
         : null;
-    return token is String ? token : null;
+    if (token is! String) return null;
+    certificate = r.certificate;
+    return token;
   }
 
   Future<String> _authorize() async {

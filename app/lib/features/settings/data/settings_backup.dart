@@ -275,7 +275,11 @@ abstract final class SettingsBackup {
     if (secrets != null) {
       final store = ref.read(credentialStoreProvider);
       for (final MapEntry(:key, :value) in secrets.entries) {
-        await store.writeCredential(key, value);
+        // Only what a backup may carry: a file cannot write anything else
+        // into the phone's secure storage.
+        if (key.startsWith('device:') || key == 'osh.guest_wifi') {
+          await store.writeCredential(key, value);
+        }
       }
     }
     return BackupImport.done;

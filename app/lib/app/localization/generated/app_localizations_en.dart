@@ -62,7 +62,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get failureCertificate =>
-      'The secure connection could not be verified (certificate problem).';
+      'The device presented a different certificate than when it was paired. Someone else may be answering in its place; if you reset the device, remove it and add it again.';
 
   @override
   String get failureUnavailableEntity =>
@@ -3472,4 +3472,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tipUnavailable => 'The device is not answering right now.';
+
+  @override
+  String get backupTransferLocked =>
+      'The transfer was stopped: a wrong code was entered three times. Send again.';
 }

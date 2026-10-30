@@ -198,7 +198,7 @@ abstract class AppLocalizations {
   /// No description provided for @failureCertificate.
   ///
   /// In en, this message translates to:
-  /// **'The secure connection could not be verified (certificate problem).'**
+  /// **'The device presented a different certificate than when it was paired. Someone else may be answering in its place; if you reset the device, remove it and add it again.'**
   String get failureCertificate;
 
   /// No description provided for @failureUnavailableEntity.
@@ -5912,6 +5912,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The device is not answering right now.'**
   String get tipUnavailable;
+
+  /// No description provided for @backupTransferLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'The transfer was stopped: a wrong code was entered three times. Send again.'**
+  String get backupTransferLocked;
 }
 
 class _AppLocalizationsDelegate
