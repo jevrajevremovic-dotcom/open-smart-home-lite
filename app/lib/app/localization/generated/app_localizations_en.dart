@@ -5420,4 +5420,8 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get nanoleafLinkBody =>
       'Hold the power button on the Nanoleaf for 5–7 seconds, until the lights flash. The app waits 30 seconds.';
+
+  @override
+  String get tvLinkBody =>
+      'The TV asks whether the app may connect: choose Allow. The app waits 30 seconds.';
 }

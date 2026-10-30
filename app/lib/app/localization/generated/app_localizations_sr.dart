@@ -5449,6 +5449,10 @@ class AppLocalizationsSr extends AppLocalizations {
   @override
   String get nanoleafLinkBody =>
       'Držite dugme za uključivanje na Nanoleafu 5–7 sekundi, dok svetla ne počnu da trepću. Aplikacija čeka 30 sekundi.';
+
+  @override
+  String get tvLinkBody =>
+      'Na televizoru se pojavilo pitanje da li aplikacija sme da se poveže: izaberite Dozvoli. Aplikacija čeka 30 sekundi.';
 }
 
 /// The translations for Serbian, using the Latin script (`sr_Latn`).

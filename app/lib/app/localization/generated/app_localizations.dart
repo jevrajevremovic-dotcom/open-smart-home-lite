@@ -9236,6 +9236,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hold the power button on the Nanoleaf for 5–7 seconds, until the lights flash. The app waits 30 seconds.'**
   String get nanoleafLinkBody;
+
+  /// No description provided for @tvLinkBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The TV asks whether the app may connect: choose Allow. The app waits 30 seconds.'**
+  String get tvLinkBody;
 }
 
 class _AppLocalizationsDelegate

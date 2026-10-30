@@ -3,18 +3,25 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/errors/app_failure.dart';
+
 import '../../devices/data/local/esphome/esphome_client.dart';
 import '../../devices/data/local/ble/ble_advert.dart';
 import '../../devices/data/local/hue_adapter.dart';
 import '../../devices/data/local/govee_adapter.dart';
 import '../../devices/data/local/kasa_adapter.dart';
 import '../../devices/data/local/lan_transport.dart';
+import '../../devices/data/local/lg_tv_adapter.dart';
 import '../../devices/data/local/lifx_adapter.dart';
 import '../../devices/data/local/wiz_adapter.dart';
 import '../../devices/data/local/lan_http.dart';
 import '../../devices/data/local/local_home.dart';
 import '../../devices/data/local/nanoleaf_adapter.dart';
+import '../../devices/data/local/roku_adapter.dart';
+import '../../devices/data/local/samsung_tv_adapter.dart';
 import '../../devices/data/local/sonoff_adapter.dart';
+import '../../devices/data/local/sonos_adapter.dart';
+import '../../devices/data/local/ssdp.dart';
 import '../../devices/data/local/shelly_adapter.dart';
 import '../../devices/data/local/tasmota_adapter.dart';
 import '../../devices/data/local/wled_adapter.dart';
@@ -71,6 +78,7 @@ class DeviceProbe {
     this.kasa,
     this.udp,
     this.requests,
+    this.sockets,
   });
 
   final LanHttp _http;
@@ -78,6 +86,7 @@ class DeviceProbe {
   final KasaTransport? kasa;
   final LanUdp? udp;
   final LanRequests? requests;
+  final LanSockets? sockets;
 
   /// Devices that answer a search of their own on the network (WiZ, LIFX,
   /// Govee), as each search ends.
@@ -87,8 +96,15 @@ class DeviceProbe {
     final found = <ProbedDevice>[];
     Future<List<ProbedDevice>> quiet(Future<List<ProbedDevice>> f) =>
         f.catchError((Object _) => const <ProbedDevice>[]);
+    final http = requests;
     final searches = [
       quiet(wizDiscover(udp).then((l) => l.map(fromWiz).toList())),
+      if (http != null) ...[
+        quiet(rokuDiscover(udp, http).then((l) => l.map(fromRoku).toList())),
+        quiet(sonosDiscover(udp, http).then((l) => l.map(fromSonos).toList())),
+        quiet(_searchSamsung(udp, http)),
+        quiet(_searchLg(udp, http)),
+      ],
       quiet(lifxDiscover(udp).then((l) => l.map(fromLifx).toList())),
       quiet(goveeDiscover(udp).then((l) => l.map(fromGovee).toList())),
     ];
@@ -96,6 +112,100 @@ class DeviceProbe {
       found.addAll(await s);
       yield List.unmodifiable(found);
     }
+  }
+
+  static ProbedDevice fromRoku(
+    ({String host, String serial, String? name, String? model}) r,
+  ) => ProbedDevice(
+    brand: 'Roku',
+    name: r.name,
+    device: ConfiguredDevice(
+      adapter: 'roku',
+      id: r.serial,
+      host: r.host,
+      model: r.model,
+      label: r.name ?? 'Roku',
+    ),
+  );
+
+  static ProbedDevice fromSonos(
+    ({String host, String id, String? room, String? model}) p,
+  ) => ProbedDevice(
+    brand: 'Sonos',
+    name: p.room,
+    device: ConfiguredDevice(
+      adapter: 'sonos',
+      id: p.id,
+      host: p.host,
+      model: p.model,
+      label: p.room ?? 'Sonos',
+    ),
+  );
+
+  static ProbedDevice fromSamsung(
+    String host,
+    ({String id, String? name, String? model, String? mac}) t,
+  ) => ProbedDevice(
+    brand: 'Samsung',
+    name: t.name,
+    needsLink: true,
+    device: ConfiguredDevice(
+      adapter: 'samsung',
+      id: t.id,
+      host: host,
+      model: t.model,
+      label: t.name ?? 'Samsung TV',
+      options: {'mac': ?t.mac},
+    ),
+  );
+
+  Future<List<ProbedDevice>> _searchSamsung(
+    LanUdp udp,
+    LanRequests http,
+  ) async {
+    final out = <ProbedDevice>[];
+    for (final f in await ssdpSearch(
+      udp,
+      'urn:samsung.com:device:RemoteControlReceiver:1',
+    )) {
+      final t = await samsungProbe(http, f.host);
+      if (t != null) out.add(fromSamsung(f.host, t));
+    }
+    return out;
+  }
+
+  Future<List<ProbedDevice>> _searchLg(LanUdp udp, LanRequests http) async {
+    final out = <ProbedDevice>[];
+    for (final f in await ssdpSearch(
+      udp,
+      'urn:lge-com:service:webos-second-screen:1',
+    )) {
+      // `uuid:…::urn:…` → the TV's uuid.
+      final id = (f.usn ?? f.host).split('::').first.replaceFirst('uuid:', '');
+      String? name;
+      if (f.location case final location?) {
+        try {
+          final r = await http.send('GET', Uri.parse(location));
+          name = xmlText(r.text, 'friendlyName');
+        } on AppFailure {
+          // The name is a nicety.
+        }
+      }
+      out.add(
+        ProbedDevice(
+          brand: 'LG',
+          name: name,
+          needsLink: true,
+          device: ConfiguredDevice(
+            adapter: 'lg',
+            id: id.toLowerCase(),
+            host: f.host,
+            label: name ?? 'LG TV',
+          ),
+        ),
+      );
+    }
+    return out;
   }
 
   static ProbedDevice fromWiz(WizFound w) => ProbedDevice(
@@ -140,13 +250,28 @@ class DeviceProbe {
     ProbedDevice found,
   ) async {
     final d = found.device;
-    final String? secret = switch (d.adapter) {
-      'hue' => await hueLink(_http, d.host),
-      'nanoleaf' =>
-        requests == null ? null : await nanoleafLink(requests!, d.host),
-      _ => null,
-    };
-    return secret == null ? null : (secret: secret, device: d);
+    ({String secret, ConfiguredDevice device})? got(String? secret) =>
+        secret == null ? null : (secret: secret, device: d);
+    final http = requests, ws = sockets;
+    switch (d.adapter) {
+      case 'hue':
+        return got(await hueLink(_http, d.host));
+      case 'nanoleaf' when http != null:
+        return got(await nanoleafLink(http, d.host));
+      case 'samsung' when ws != null:
+        return got(await samsungLink(ws, d.host));
+      case 'lg' when ws != null:
+        final r = await lgLink(ws, d.host);
+        if (r == null) return null;
+        // Its MAC, for turning it on later.
+        return (
+          secret: r.key,
+          device: r.mac == null
+              ? d
+              : d.copyWith(options: {...d.options, 'mac': r.mac!}),
+        );
+    }
+    return null;
   }
 
   /// A Yeelight that answered the search.
@@ -368,7 +493,22 @@ class DeviceProbe {
       await _probeWiz(host) ??
       await _probeSonoff(host) ??
       await _probeNanoleaf(host) ??
+      await _probeMedia(host) ??
       await probeEsphome(host);
+
+  /// A Roku, a Samsung TV or a Sonos at [host].
+  Future<ProbedDevice?> _probeMedia(String host) async {
+    final http = requests;
+    if (http == null) return null;
+    if (await rokuProbe(http, host) case final r?) return fromRoku(r);
+    if (await samsungProbe(http, host) case final t?) {
+      return fromSamsung(host, t);
+    }
+    if (await sonosProbe(http, host) case final p?) {
+      return fromSonos((host: host, id: p.id, room: p.room, model: p.model));
+    }
+    return null;
+  }
 
   Future<ProbedDevice?> _probeSonoff(String host) async {
     final http = requests;
@@ -447,5 +587,6 @@ final deviceProbeProvider = Provider<DeviceProbe>(
     kasa: ref.watch(kasaTransportProvider),
     udp: ref.watch(lanUdpProvider),
     requests: ref.watch(lanRequestsProvider),
+    sockets: ref.watch(lanSocketsProvider),
   ),
 );

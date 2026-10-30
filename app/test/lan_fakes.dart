@@ -152,7 +152,8 @@ class _FakeLink implements LanLink {
   }
 
   @override
-  Future<void> close() => _out.close();
+  // Not awaited: a broadcast stream's close waits for its listeners.
+  Future<void> close() async => unawaited(_out.close());
 }
 
 /// WebSocket devices (TVs): by URI without query, a conversation.
@@ -178,8 +179,8 @@ class FakeLanSockets implements LanSockets {
 
 class _FakeSocket implements LanWebSocket {
   _FakeSocket(this._uri, this._answer, this._sent) {
-    // A greeting, as some TVs send on connect.
-    scheduleMicrotask(() {
+    // A greeting, as some TVs send on connect (once listened to).
+    Timer.run(() {
       for (final m in _answer('', _uri)) {
         if (!_out.isClosed) _out.add(m);
       }
@@ -206,5 +207,6 @@ class _FakeSocket implements LanWebSocket {
   }
 
   @override
-  Future<void> close() => _out.close();
+  // Not awaited: a broadcast stream's close waits for its listeners.
+  Future<void> close() async => unawaited(_out.close());
 }

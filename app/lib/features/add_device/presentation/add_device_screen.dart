@@ -65,6 +65,8 @@ class AddDeviceScreen extends ConsumerWidget {
                         'WiZ' || 'LIFX' || 'Govee' => Icons.lightbulb_outline,
                         'Nanoleaf' => Icons.hexagon_outlined,
                         'Sonoff' => Icons.toggle_on_outlined,
+                        'Roku' || 'Samsung' || 'LG' => Icons.tv,
+                        'Sonos' => Icons.speaker_outlined,
                         _ => Icons.power_outlined,
                       }),
                       title: Text(p.title),
@@ -300,6 +302,7 @@ class _LinkDialogState extends ConsumerState<_LinkDialog> {
         children: [
           Text(switch (widget.found.device.adapter) {
             'nanoleaf' => l10n.nanoleafLinkBody,
+            'samsung' || 'lg' => l10n.tvLinkBody,
             _ => l10n.hueLinkBody,
           }),
           const SizedBox(height: 16),

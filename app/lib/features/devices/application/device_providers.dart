@@ -16,9 +16,13 @@ import '../data/local/hue_adapter.dart';
 import '../data/local/kasa_adapter.dart';
 import '../data/local/govee_adapter.dart';
 import '../data/local/lan_transport.dart';
+import '../data/local/lg_tv_adapter.dart';
 import '../data/local/lifx_adapter.dart';
 import '../data/local/nanoleaf_adapter.dart';
+import '../data/local/roku_adapter.dart';
+import '../data/local/samsung_tv_adapter.dart';
 import '../data/local/sonoff_adapter.dart';
+import '../data/local/sonos_adapter.dart';
 import '../data/local/wiz_adapter.dart';
 import '../data/local/lan_http.dart';
 import '../data/local/local_backend.dart';
@@ -40,6 +44,9 @@ final homeIdProvider = Provider<String>((ref) => 'local');
 /// household's changes to [localHomeProvider] without starting over.
 final homeBackendProvider = Provider<LocalBackend?>((ref) {
   final http = ref.watch(lanHttpProvider);
+  // A device's password, key or token, from the phone's secure storage.
+  Future<String?> secret(String key) =>
+      ref.read(credentialStoreProvider).readCredential(devicePasswordId(key));
   final backend = LocalBackend(
     [
       DemoAdapter(),
@@ -67,6 +74,19 @@ final homeBackendProvider = Provider<LocalBackend?>((ref) {
             .readCredential(devicePasswordId(key)),
       ),
       SonoffAdapter(ref.watch(lanRequestsProvider)),
+      RokuAdapter(ref.watch(lanRequestsProvider)),
+      SamsungTvAdapter(
+        ref.watch(lanRequestsProvider),
+        ref.watch(lanSocketsProvider),
+        ref.watch(lanUdpProvider),
+        tokens: secret,
+      ),
+      LgTvAdapter(
+        ref.watch(lanSocketsProvider),
+        ref.watch(lanUdpProvider),
+        keys: secret,
+      ),
+      SonosAdapter(ref.watch(lanRequestsProvider)),
       LifxAdapter(ref.watch(lanUdpProvider)),
       GoveeAdapter(
         ref.watch(lanUdpProvider),
