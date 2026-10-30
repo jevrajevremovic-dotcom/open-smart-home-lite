@@ -18,6 +18,7 @@ import '../../devices/data/local/lifx_adapter.dart';
 import '../../devices/data/local/wiz_adapter.dart';
 import '../../devices/data/local/lan_http.dart';
 import '../../devices/data/local/local_home.dart';
+import '../../devices/data/local/miio.dart';
 import '../../devices/data/local/nanoleaf_adapter.dart';
 import '../../devices/data/local/roku_adapter.dart';
 import '../../devices/data/local/samsung_tv_adapter.dart';
@@ -25,6 +26,7 @@ import '../../devices/data/local/sonoff_adapter.dart';
 import '../../devices/data/local/sonos_adapter.dart';
 import '../../devices/data/local/ssdp.dart';
 import '../../devices/data/local/tapo_adapter.dart';
+import '../../devices/data/local/tuya.dart';
 import '../../devices/data/local/shelly_adapter.dart';
 import '../../devices/data/local/tasmota_adapter.dart';
 import '../../devices/data/local/wled_adapter.dart';
@@ -40,6 +42,7 @@ class ProbedDevice {
     this.name,
     this.needsPassword = false,
     this.needsAccount = false,
+    this.needsToken = false,
     this.needsKey = false,
     this.needsLink = false,
     this.detail,
@@ -59,6 +62,10 @@ class ProbedDevice {
   /// The device checks a TP-Link account (Tapo, newer Kasa): e-mail and
   /// password ([TpLinkAccount]), checked by [DeviceProbe.checkAccount].
   final bool needsAccount;
+
+  /// A Tuya local key or a Xiaomi token, checked by
+  /// [DeviceProbe.checkToken].
+  final bool needsToken;
 
   /// An ESPHome device that encrypts its API: the key is needed (and,
   /// when found by its address only, it tells who it is with the key).
@@ -88,6 +95,7 @@ class DeviceProbe {
     this.requests,
     this.sockets,
     this.klap,
+    this.tcp,
   });
 
   final LanHttp _http;
@@ -97,6 +105,7 @@ class DeviceProbe {
   final LanRequests? requests;
   final LanSockets? sockets;
   final KlapClient? klap;
+  final LanTcp? tcp;
 
   /// Devices that answer a search of their own on the network (WiZ, LIFX,
   /// Govee), as each search ends.
@@ -117,6 +126,8 @@ class DeviceProbe {
       ],
       quiet(lifxDiscover(udp).then((l) => l.map(fromLifx).toList())),
       quiet(goveeDiscover(udp).then((l) => l.map(fromGovee).toList())),
+      quiet(miioDiscover(udp).then((l) => l.map(fromMiio).toList())),
+      quiet(tuyaDiscover(udp).then((l) => l.map(fromTuya).toList())),
     ];
     for (final s in searches) {
       found.addAll(await s);
@@ -216,6 +227,67 @@ class DeviceProbe {
       );
     }
     return out;
+  }
+
+  static ProbedDevice fromTuya(
+    ({String id, String host, String version, String? product}) t,
+  ) => ProbedDevice(
+    brand: 'Tuya',
+    needsToken: true,
+    device: ConfiguredDevice(
+      adapter: 'tuya',
+      id: t.id,
+      host: t.host,
+      model: t.product,
+      label: 'Tuya',
+      options: {'version': t.version},
+    ),
+  );
+
+  static ProbedDevice fromMiio(({String host, int id}) m) => ProbedDevice(
+    brand: 'Xiaomi',
+    needsToken: true,
+    device: ConfiguredDevice(
+      adapter: 'miio',
+      id: '${m.id}',
+      host: m.host,
+      label: 'Xiaomi',
+    ),
+  );
+
+  /// [found] with [token] (a Tuya local key, a Xiaomi token): as it then
+  /// says it is. Throws `AppFailure(authentication)` for a wrong one.
+  Future<ProbedDevice> checkToken(ProbedDevice found, String token) async {
+    final d = found.device;
+    switch (d.adapter) {
+      case 'tuya':
+        final t = tcp;
+        if (t == null || token.length != 16) {
+          throw const AppFailure(FailureKind.authentication);
+        }
+        final target = TuyaTarget(
+          d.id,
+          d.host,
+          token,
+          d.options['version'] ?? '3.3',
+        );
+        // Answers only with the right key.
+        await TuyaClient(t).status(target);
+        return found;
+      case 'miio':
+        final u = udp;
+        if (u == null) throw const AppFailure(FailureKind.network);
+        final info = await MiioClient(u)
+            .call(d.host, miioToken(token), 'miIO.info');
+        final model = info is Map ? info['model'] as String? : null;
+        return ProbedDevice(
+          brand: found.brand,
+          name: model,
+          needsToken: true,
+          device: d.copyWith(model: model, label: model ?? 'Xiaomi'),
+        );
+    }
+    return found;
   }
 
   static ProbedDevice fromWiz(WizFound w) => ProbedDevice(
@@ -684,5 +756,6 @@ final deviceProbeProvider = Provider<DeviceProbe>(
     requests: ref.watch(lanRequestsProvider),
     sockets: ref.watch(lanSocketsProvider),
     klap: ref.watch(klapClientProvider),
+    tcp: ref.watch(lanTcpProvider),
   ),
 );

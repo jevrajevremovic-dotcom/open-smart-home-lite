@@ -20,12 +20,14 @@ import '../data/local/govee_adapter.dart';
 import '../data/local/lan_transport.dart';
 import '../data/local/lg_tv_adapter.dart';
 import '../data/local/lifx_adapter.dart';
+import '../data/local/miio.dart';
 import '../data/local/nanoleaf_adapter.dart';
 import '../data/local/roku_adapter.dart';
 import '../data/local/samsung_tv_adapter.dart';
 import '../data/local/sonoff_adapter.dart';
 import '../data/local/sonos_adapter.dart';
 import '../data/local/tapo_adapter.dart';
+import '../data/local/tuya.dart';
 import '../data/local/wiz_adapter.dart';
 import '../data/local/lan_http.dart';
 import '../data/local/local_backend.dart';
@@ -75,6 +77,8 @@ final homeBackendProvider = Provider<LocalBackend?>((ref) {
       ),
       TapoAdapter(ref.watch(klapClientProvider), accounts: secret),
       DirigeraAdapter(ref.watch(lanRequestsProvider), tokens: secret),
+      TuyaAdapter(ref.watch(tuyaClientProvider), keys: secret),
+      MiioAdapter(ref.watch(miioClientProvider), tokens: secret),
       WizAdapter(ref.watch(lanUdpProvider)),
       NanoleafAdapter(
         ref.watch(lanRequestsProvider),

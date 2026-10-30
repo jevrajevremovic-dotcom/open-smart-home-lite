@@ -9266,6 +9266,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The device does not accept this e-mail and password.'**
   String get tpLinkWrongAccount;
+
+  /// No description provided for @tuyaKeyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A Tuya device (Smart Life, Tuya Smart…) needs its local key, 16 characters. It is taken once from the Tuya account (e.g. with the tinytuya wizard); after that the app talks to the device directly.'**
+  String get tuyaKeyHint;
+
+  /// No description provided for @miioTokenHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A Xiaomi device needs its token, 32 characters. It is taken once from the Mi Home account (e.g. with Xiaomi Cloud Tokens Extractor).'**
+  String get miioTokenHint;
+
+  /// No description provided for @deviceTokenLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Local key / token'**
+  String get deviceTokenLabel;
+
+  /// No description provided for @deviceTokenWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'The device does not accept this key.'**
+  String get deviceTokenWrong;
 }
 
 class _AppLocalizationsDelegate

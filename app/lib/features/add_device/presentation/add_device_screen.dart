@@ -71,6 +71,7 @@ class AddDeviceScreen extends ConsumerWidget {
                         'Sonos' => Icons.speaker_outlined,
                         'DIRIGERA' => Icons.hub_outlined,
                         'Tapo' => Icons.outlet_outlined,
+                        'Tuya' || 'Xiaomi' => Icons.devices_other_outlined,
                         _ => Icons.power_outlined,
                       }),
                       title: Text(p.title),
@@ -143,6 +144,8 @@ class AddDeviceScreen extends ConsumerWidget {
             ? _Secret.key
             : found.needsAccount
             ? _Secret.account
+            : found.needsToken
+            ? (found.brand == 'Xiaomi' ? _Secret.miioToken : _Secret.tuyaKey)
             : found.needsPassword
             ? _Secret.password
             : null,
@@ -168,6 +171,21 @@ class AddDeviceScreen extends ConsumerWidget {
         brand: found.brand,
         name: found.name,
       );
+    }
+    if (found.needsToken) {
+      try {
+        device = await ref
+            .read(deviceProbeProvider)
+            .checkToken(found, secret ?? '');
+      } on AppFailure catch (e) {
+        say(
+          e.kind == FailureKind.authentication ||
+                  e.kind == FailureKind.validation
+              ? l10n.deviceTokenWrong
+              : l10n.addDeviceNotFound,
+        );
+        return;
+      }
     }
     if (found.needsAccount) {
       final account = TpLinkAccount.decode(secret);
@@ -265,7 +283,7 @@ class _AddressDialogState extends State<_AddressDialog> {
   }
 }
 
-enum _Secret { password, key, account }
+enum _Secret { password, key, account, tuyaKey, miioToken }
 
 /// Waits for the device's button or on-screen prompt (asking every 2 s
 /// for 30 s); returns what pairing gave, or `null`.
@@ -397,6 +415,8 @@ class _RoomDialogState extends State<_RoomDialog> {
             Text(switch (secret) {
               _Secret.key => l10n.deviceKeyHint,
               _Secret.account => l10n.tpLinkAccountHint,
+              _Secret.tuyaKey => l10n.tuyaKeyHint,
+              _Secret.miioToken => l10n.miioTokenHint,
               _Secret.password => l10n.devicePasswordHint,
             }),
             const SizedBox(height: 8),
@@ -416,9 +436,11 @@ class _RoomDialogState extends State<_RoomDialog> {
               autocorrect: false,
               enableSuggestions: false,
               decoration: InputDecoration(
-                labelText: secret == _Secret.key
-                    ? l10n.deviceKeyLabel
-                    : l10n.devicePasswordLabel,
+                labelText: switch (secret) {
+                  _Secret.key => l10n.deviceKeyLabel,
+                  _Secret.tuyaKey || _Secret.miioToken => l10n.deviceTokenLabel,
+                  _ => l10n.devicePasswordLabel,
+                },
               ),
             ),
           ],

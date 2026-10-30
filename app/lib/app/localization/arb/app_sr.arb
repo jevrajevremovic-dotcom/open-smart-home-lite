@@ -1528,5 +1528,9 @@
   "dirigeraLinkBody": "Pritisnite dugme za radnju na poleđini DIRIGERA čvorišta. Aplikacija čeka 30 sekundi.",
   "tpLinkAccountHint": "Tapo uređaj proverava TP-Link nalog na samom uređaju: unesite e-poštu i lozinku naloga u koji je dodat. Ništa se ne šalje TP-Linku.",
   "tpLinkUserLabel": "E-pošta TP-Link naloga",
-  "tpLinkWrongAccount": "Uređaj ne prihvata ovu e-poštu i lozinku."
+  "tpLinkWrongAccount": "Uređaj ne prihvata ovu e-poštu i lozinku.",
+  "tuyaKeyHint": "Tuya uređaj (Smart Life, Tuya Smart…) traži svoj lokalni ključ, 16 znakova. Ključ se jednom uzima iz Tuya naloga (npr. alatom tinytuya wizard); posle toga aplikacija razgovara direktno sa uređajem.",
+  "miioTokenHint": "Xiaomi uređaj traži svoj token, 32 znaka. Token se jednom uzima iz Mi Home naloga (npr. alatom Xiaomi Cloud Tokens Extractor).",
+  "deviceTokenLabel": "Lokalni ključ / token",
+  "deviceTokenWrong": "Uređaj ne prihvata ovaj ključ."
 }

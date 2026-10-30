@@ -15,7 +15,7 @@ class FakeLanUdp implements LanUdp {
   /// `host:port` → the answers (each from a host) to a datagram.
   final Map<String, List<UdpPacket> Function(Uint8List data)> devices;
   final List<(String host, int port, Uint8List data)> sent = [];
-  final _broadcasts = <int, StreamController<UdpPacket>>{};
+  final _broadcasts = <int, List<UdpPacket>>{};
 
   @override
   Future<List<UdpPacket>> ask(
@@ -34,13 +34,15 @@ class FakeLanUdp implements LanUdp {
     return first ? all.take(1).toList() : all;
   }
 
-  /// A device broadcasts [data] to [port].
-  void broadcast(int port, String host, List<int> data) =>
-      _broadcasts[port]?.add(UdpPacket(host, Uint8List.fromList(data)));
+  /// A device broadcasts [data] to [port] (heard by the next [listen]).
+  void broadcast(int port, String host, List<int> data) => _broadcasts
+      .putIfAbsent(port, () => [])
+      .add(UdpPacket(host, Uint8List.fromList(data)));
 
+  /// What was broadcast to [port] so far, at once (no waiting in tests).
   @override
   Stream<UdpPacket> listen(int port, {required Duration duration}) =>
-      (_broadcasts[port] ??= StreamController<UdpPacket>.broadcast()).stream;
+      Stream.fromIterable([...?_broadcasts[port]]);
 
   /// Sent to `host:port`, as text.
   List<String> textsTo(String hostPort) => [

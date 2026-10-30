@@ -2099,5 +2099,9 @@
   "dirigeraLinkBody": "Press the action button on the back of the DIRIGERA hub. The app waits 30 seconds.",
   "tpLinkAccountHint": "A Tapo device checks the TP-Link account on the device itself: enter the e-mail and password of the account it was added to. Nothing is sent to TP-Link.",
   "tpLinkUserLabel": "TP-Link account e-mail",
-  "tpLinkWrongAccount": "The device does not accept this e-mail and password."
+  "tpLinkWrongAccount": "The device does not accept this e-mail and password.",
+  "tuyaKeyHint": "A Tuya device (Smart Life, Tuya Smart…) needs its local key, 16 characters. It is taken once from the Tuya account (e.g. with the tinytuya wizard); after that the app talks to the device directly.",
+  "miioTokenHint": "A Xiaomi device needs its token, 32 characters. It is taken once from the Mi Home account (e.g. with Xiaomi Cloud Tokens Extractor).",
+  "deviceTokenLabel": "Local key / token",
+  "deviceTokenWrong": "The device does not accept this key."
 }

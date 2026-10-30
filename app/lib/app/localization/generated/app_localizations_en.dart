@@ -5439,4 +5439,18 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get tpLinkWrongAccount =>
       'The device does not accept this e-mail and password.';
+
+  @override
+  String get tuyaKeyHint =>
+      'A Tuya device (Smart Life, Tuya Smart…) needs its local key, 16 characters. It is taken once from the Tuya account (e.g. with the tinytuya wizard); after that the app talks to the device directly.';
+
+  @override
+  String get miioTokenHint =>
+      'A Xiaomi device needs its token, 32 characters. It is taken once from the Mi Home account (e.g. with Xiaomi Cloud Tokens Extractor).';
+
+  @override
+  String get deviceTokenLabel => 'Local key / token';
+
+  @override
+  String get deviceTokenWrong => 'The device does not accept this key.';
 }

@@ -5467,6 +5467,20 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get tpLinkWrongAccount => 'Uređaj ne prihvata ovu e-poštu i lozinku.';
+
+  @override
+  String get tuyaKeyHint =>
+      'Tuya uređaj (Smart Life, Tuya Smart…) traži svoj lokalni ključ, 16 znakova. Ključ se jednom uzima iz Tuya naloga (npr. alatom tinytuya wizard); posle toga aplikacija razgovara direktno sa uređajem.';
+
+  @override
+  String get miioTokenHint =>
+      'Xiaomi uređaj traži svoj token, 32 znaka. Token se jednom uzima iz Mi Home naloga (npr. alatom Xiaomi Cloud Tokens Extractor).';
+
+  @override
+  String get deviceTokenLabel => 'Lokalni ključ / token';
+
+  @override
+  String get deviceTokenWrong => 'Uređaj ne prihvata ovaj ključ.';
 }
 
 /// The translations for Serbian, using the Latin script (`sr_Latn`).
