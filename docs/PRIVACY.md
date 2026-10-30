@@ -1,28 +1,24 @@
 # Privatnost
 
-Open Smart Home je aplikacija za **vaš** Home Assistant. Nema naloga, servera ni oblaka autora aplikacije: aplikacija razgovara samo sa vašim Home Assistantom, a sa ostatkom interneta samo kad to sami uključite.
+Open Smart Home Lite razgovara sa uređajima u kući direktno, preko kućne Wi-Fi mreže i Bluetooth-a. Nema naloga, servera ni oblaka autora aplikacije, a nema ni Home Assistanta.
 
 ## Šta ostaje u kući
 
-- Stanja uređaja, prostorije, kamere, kalendari, liste, poruke ukućanima, istorija i dnevnik dolaze iz vašeg Home Assistanta i ne idu nigde drugde.
-- Token za prijavu je u zaštićenom skladištu uređaja (Android Keystore / iOS Keychain), nikad u logovima ni u rezervnoj kopiji.
-- Obaveštenja (upozorenja, poruke iz HA, muzika) pravi sam uređaj iz podataka koje prima od HA — nema push servera.
-- Podešavanja aplikacije su na uređaju; „Rezervna kopija u Home Assistantu” ih po vašem izboru čuva u **vašem** HA (bez tokena, PIN-ova i fotografija).
-- Fotografije soba, tlocrt i foto-okvir su samo na uređaju.
+- Spisak uređaja, sobe, imena, scene i automatizacije su samo na telefonu.
+- Lozinke, ključevi i tokeni uređaja su u zaštićenom skladištu telefona (Android Keystore), nikad u podešavanjima ni u logovima. To su Shelly lozinke, ESPHome ključevi, Hue korisnik, Nanoleaf i DIRIGERA tokeni, ključevi Samsung i LG televizora, Tuya lokalni ključevi, Xiaomi tokeni, TP-Link nalog i prijava na kameru.
+- **TP-Link nalog** (Tapo i noviji Kasa): uređaj ga proverava sam, preko lokalne mreže. Aplikacija ga ne šalje TP-Linku.
+- **Tuya lokalni ključ i Xiaomi token** se jednom uzimaju iz naloga tih proizvođača, alatom van aplikacije. Aplikacija sama ne pristupa njihovim nalozima.
+- Slika sa kamere se preuzima samo dok je ekran kamere otvoren i nigde se ne čuva.
+- Naučena dugmad daljinskog (Broadlink) čuvaju se uz uređaj na telefonu.
+- Rezervna kopija nosi lozinke i ključeve samo ako to izaberete, šifrovane lozinkom kopije. Prenos na drugi telefon ide preko iste Wi-Fi mreže, šifrovan šestocifrenim kodom.
 - Lični PIN-ovi ukućana i PIN tableta su samo na tom tabletu, kao heš.
-- Šifra Wi-Fi mreže za goste je u zaštićenom skladištu uređaja.
-- Obrada kamere tableta za buđenje ekrana i ključne reči (ako je uključeno) radi na uređaju ili u vašem HA.
 
-## Šta izlazi na internet — samo ako uključite
+## Šta izlazi na internet, samo ako uključite
 
 | Šta | Kome | Kada | Šta tačno |
 |---|---|---|---|
-| Vremenska prognoza | MET Norway (`api.met.no`) | Ako HA nema prognozu, a vi izaberete MET | Koordinate doma ili telefona zaokružene na ~1 km, najviše na 30 min |
-| Provera ažuriranja | GitHub (`api.github.com`) | Ako uključite proveru (ili je ručno pokrenete) | Vaša IP adresa i da aplikacija traži novu verziju |
-| Prepoznavanje govora preko interneta | Google/Apple servis telefona | Samo ako ga izričito izaberete (podrazumevano je na uređaju) | Snimak glasa dok držite dugme |
-| Pristup van kuće | Vaš Tailscale, Nabu Casa ili domen | Ako podesite spoljnu adresu | Isto što i kod kuće, šifrovano |
-| Assist preko Home Assistant Clouda | Nabu Casa | Ako je tako podešeno u vašem HA | Tekst komande |
-| Dodavanje novog Matter uređaja preko Bluetooth-a | Google Play services | Samo dok dodajete uređaj | Ono što Google Play services koristi za uparivanje |
+| Vremenska prognoza i zalazak sunca | MET Norway (`api.met.no`) | Ako uključite prognozu za dom ili za telefon | Koordinate zaokružene na ~1 km, najviše jednom na 30 min |
+| Provera ažuriranja | GitHub (`api.github.com`) | Ako uključite proveru ili je pokrenete ručno | Vaša IP adresa i da aplikacija traži novu verziju |
 
 Ništa od ovoga nije uključeno samo od sebe. Analitike, praćenja i reklama nema.
 
@@ -30,17 +26,13 @@ Ništa od ovoga nije uključeno samo od sebe. Analitike, praćenja i reklama nem
 
 | Dozvola | Zašto | Kada se traži |
 |---|---|---|
-| Internet, multicast | Veza sa Home Assistantom; pronalaženje servera na mreži (mDNS) | Uvek |
+| Internet, multicast | Razgovor sa uređajima u kući; pronalaženje uređaja na mreži (mDNS, SSDP, UDP) | Uvek |
+| Bluetooth (traženje, povezivanje) | Bluetooth senzori; kratko povezivanje sa SwitchBot Bot i Curtain radi komande | Pri dodavanju Bluetooth uređaja |
 | Približna lokacija | Vreme na mestu gde je telefon | Samo ako to izaberete |
-| Mikrofon | Glasovne komande, ključna reč na tabletu, pljesak | Samo pri uključivanju |
-| Kamera | Skeniranje QR koda; buđenje tableta kad neko priđe | Samo pri korišćenju |
-| NFC | NFC nalepnice | Kad se koriste |
-| Obaveštenja | Upozorenja, poruke iz HA, muzika | Samo pri uključivanju |
-| Usluga u prvom planu, pokretanje posle restarta | Poruke iz HA i kad je aplikacija zatvorena | Samo ako to uključite |
+| Mikrofon | Pljesak za paljenje svetla na tabletu | Samo pri uključivanju |
+| Kamera | Buđenje tableta kad neko priđe; slike soba | Samo pri korišćenju |
+| Obaveštenja | Upozorenja, baterije, „gotovo je“, muzika | Samo pri uključivanju |
+| Usluga u prvom planu, pokretanje posle restarta | Automatizacije dok je aplikacija zatvorena | Samo ako to uključite |
 | Instaliranje paketa | Ažuriranje sa GitHub izdanja (posle provere SHA-256) | Pri prvom ažuriranju |
-
-## Demo aplikacija
-
-„Open Smart Home Demo” radi sa izmišljenom kućom ugrađenom u aplikaciju, bez Home Assistanta i bez interneta.
 
 Pitanja i prijave: GitHub → Issues (za bezbednosne propuste: Security → Report a vulnerability).

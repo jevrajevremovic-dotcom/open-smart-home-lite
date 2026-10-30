@@ -2,7 +2,7 @@
 
 Lite verzija [Open Smart Home](https://github.com/jevrajevremovic-dotcom/open-smart-home) aplikacije: uređaji koji se povezuju na telefon preko **Wi-Fi-ja** (lokalna mreža) i **Bluetooth-a**, u jednoj aplikaciji, **bez Home Assistanta i bez Raspberry Pi-ja**. Telefon je centrala.
 
-Nastala je od Open Smart Home 1.0 i deli njen model uređaja i korisnički interfejs. Aplikacija se instalira pored originala (`org.opensmarthome.lite`). Radi sa Shelly, WLED, Tasmota, ESPHome, Philips Hue, Yeelight i TP-Link Kasa uređajima na lokalnoj mreži i sa Bluetooth LE senzorima; dok se ne doda prvi uređaj, prikazuje demo dom.
+Nastala je od Open Smart Home 1.0 i deli njen model uređaja i korisnički interfejs. Aplikacija se instalira pored originala (`org.opensmarthome.lite`). Radi sa preko 20 vrsta uređaja na lokalnoj mreži (Shelly, WLED, Tasmota, ESPHome, Hue, IKEA DIRIGERA, Yeelight, WiZ, LIFX, Govee, Nanoleaf, Sonoff, TP-Link Kasa i Tapo, Tuya, Xiaomi, Broadlink, televizori Samsung/LG/Roku, Sonos, kamere) i sa Bluetooth LE senzorima i SwitchBot uređajima; dok se ne doda prvi uređaj, prikazuje demo dom.
 
 ## Plan
 
@@ -14,10 +14,12 @@ Nastala je od Open Smart Home 1.0 i deli njen model uređaja i korisnički inter
 | 1b | Tasmota, Shelly sa lozinkom, WLED efekti i preseti, praćenje promenjene IP adrese | ✅ |
 | 1c | ESPHome (native API, sa Noise šifrovanjem) | ✅ |
 | 2 | Hue most, Yeelight, TP-Link Kasa (stari lokalni protokol) | ✅ |
-| 2b | LIFX; Kasa/Tapo sa novim protokolom (KLAP) | |
+| 2b | LIFX, WiZ, Govee, Nanoleaf, Sonoff DIY; Kasa/Tapo sa novim protokolom (KLAP) | ✅ |
+| 2c | IKEA DIRIGERA, Tuya lokalno (3.3, 3.4), Xiaomi miIO, Broadlink IR, kamere | ✅ |
+| 2d | Televizori (Roku, Samsung, LG) i Sonos | ✅ |
 | A | Lokalne scene i automatizacije, rad u pozadini | ✅ |
 | 3 | Bluetooth LE senzori (čitanje oglasa): BTHome/Shelly BLU, Xiaomi pvvx/ATC, SwitchBot Meter, Govee | ✅ |
-| 3b | Bluetooth uređaji koji se kontrolišu (SwitchBot Bot/Curtain, povezivanje) | |
+| 3b | Bluetooth uređaji koji se kontrolišu: SwitchBot Bot i Curtain | ✅ |
 | 4 | Matter | |
 
 ## Granica
@@ -58,6 +60,20 @@ ID uređaja je `<adapter>:<MAC>:<kanal>` (npr. `shelly:a8032ab12345:switch0`, `w
 | Yeelight | sijalice, trake, plafonjere: jačina, temperatura boje, boja (treba uključiti „LAN Control“ u Yeelight aplikaciji) |
 | TP-Link Kasa | utičnice, prekidači, dimeri, razdelnici (svaka utičnica posebno), sijalice; snaga gde je meri; samo stariji lokalni protokol — novi firmver (KLAP) i Tapo ne odgovaraju |
 | Bluetooth LE senzori | temperatura, vlažnost, osvetljenost, vrata/prozor, pokret, curenje, dugme, baterija — iz oglasa, bez povezivanja: BTHome v2 (Shelly BLU, DIY), Xiaomi LYWSD03MMC i slični sa pvvx/ATC firmverom, SwitchBot Meter, Govee H5072/H5075; šifrovani BTHome i Xiaomi MiBeacon ne |
+| WiZ | sijalice i trake (jačina, temperatura boje, boja), utičnice; bez naloga |
+| LIFX | sijalice i trake (jačina, temperatura boje, boja); bele sijalice zanemaruju boju |
+| Govee | svetla sa uključenim „LAN Control“ u Govee aplikaciji |
+| Nanoleaf | paneli (jačina, boja, temperatura boje) i njihove scene; uparuje se držanjem dugmeta |
+| Sonoff (DIY režim) | prekidači i utičnice, i višekanalni |
+| TP-Link Tapo i noviji Kasa | utičnice (snaga na P110/P115) i sijalice, preko KLAP-a, uz e-poštu i lozinku TP-Link naloga (proverava ih uređaj, ne šalju se TP-Linku); Tapo razdelnici (P300) još ne |
+| IKEA DIRIGERA | sijalice, utičnice, roletne, senzori pokreta, vrata, curenja i vazduha; uparuje se dugmetom na čvorištu |
+| Tuya (Smart Life i brendovi na njemu) | utičnice i prekidači (i višekanalni, snaga), svetla; protokoli 3.3 i 3.4 uz lokalni ključ uređaja; 3.5 još ne |
+| Xiaomi (miIO) | utičnice i svetla po MIoT specifikaciji, stare Chuangmi utičnice, Roborock usisivači; uz token uređaja |
+| Broadlink RM | infracrveni daljinski: dugmad se uče sa originalnog daljinskog (klima, TV, ventilator…) |
+| Kamere | trenutna slika sa adrese kamere (Reolink, Hikvision, Dahua, ESP32-CAM…), sa Basic ili Digest prijavom; bez video prenosa |
+| Televizori | Roku (daljinski, jačina, šta je uključeno), Samsung Tizen i LG webOS (daljinski, jačina, ulazi; potvrda na televizoru, paljenje preko Wake-on-LAN) |
+| Sonos | pusti/pauza, sledeća, jačina, utišaj, šta svira |
+| SwitchBot Bot i Curtain | Bot (pritisak, ili uključi/isključi), Curtain (otvori, zatvori, položaj), preko Bluetooth-a |
 | ESPHome | prekidači, svetla (jačina, boja, temperatura boje), roletne, dugmad, senzori, binarni senzori (vrata, pokret, curenje…), tekstualni senzori; dijagnostički entiteti se ne prikazuju u listama |
 
 ESPHome: veza je trajna (native API, port 6053) i uređaj sam šalje promene. Ako uređaj ima `api: encryption: key:`, ključ se unosi pri dodavanju i proverava pre nego što se uređaj doda (Noise `NNpsk0_25519_ChaChaPoly_SHA256`, `app/lib/features/devices/data/local/esphome/`). Ventilatori, klima, `number` i `select` entiteti još nisu podržani. Šifrovanje je testirano samo protiv sopstvene implementacije uređajske strane (`test/esphome_fake.dart`), ne protiv pravog uređaja.

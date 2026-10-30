@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+### Novi uređaji
+- Svetla: WiZ, LIFX, Govee (LAN), Nanoleaf (uparivanje dugmetom).
+- Sonoff u DIY režimu; TP-Link Tapo i noviji Kasa preko KLAP-a (uz TP-Link nalog, proverava ga uređaj).
+- IKEA DIRIGERA čvorište i njegovi Zigbee uređaji.
+- Tuya lokalno (3.3 i 3.4, uz lokalni ključ) i Xiaomi miIO (utičnice, svetla, Roborock usisivači, uz token).
+- Televizori: Roku, Samsung (Tizen), LG (webOS), sa daljinskim; Sonos zvučnici.
+- Broadlink IR daljinski: dugmad se uče sa originalnog daljinskog.
+- Kamere: slika sa adrese kamere, osvežava se dok je ekran otvoren.
+- SwitchBot Bot i Curtain preko Bluetooth-a (traži i dozvolu za povezivanje na Androidu 12+).
+
+### Ispravljeno
+- Izjava o privatnosti opisuje lite verziju (ranije: Home Assistant).
+
 ## [0.2.0] – 2026-10-30
 
 Prvo izdanje lite verzije: uređaji na lokalnoj Wi-Fi mreži i Bluetooth LE senzori, bez Home Assistanta i bez Raspberry Pi-ja. Verzije 0.1.0 bile su probne (potpisane debug ključem): pre instalacije ove treba ih obrisati, a dom pre toga sačuvati u rezervnu kopiju.

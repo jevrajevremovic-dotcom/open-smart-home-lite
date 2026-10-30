@@ -21,6 +21,7 @@ Aplikacija koristi sledeće pakete sa [pub.dev](https://pub.dev) (direktne zavis
 | [nsd_platform_interface](https://pub.dev/packages/nsd_platform_interface) | 2.2.0 | MIT |
 | [nsd_windows](https://pub.dev/packages/nsd_windows) | 3.0.1 | MIT |
 | [path_provider](https://pub.dev/packages/path_provider) | 2.1.6 | BSD-3-Clause |
+| [pointycastle](https://pub.dev/packages/pointycastle) | 4.0.0 | MIT |
 | [qr_flutter](https://pub.dev/packages/qr_flutter) | 4.1.0 | BSD-3-Clause |
 | [quick_actions](https://pub.dev/packages/quick_actions) | 1.1.1 | BSD-3-Clause |
 | [shared_preferences](https://pub.dev/packages/shared_preferences) | 2.5.6 | BSD-3-Clause |
