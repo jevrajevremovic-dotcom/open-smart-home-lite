@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.3.0] – 2026-10-30
+
 ### Novi uređaji
 - Svetla: WiZ, LIFX, Govee (LAN), Nanoleaf (uparivanje dugmetom).
 - Sonoff u DIY režimu; TP-Link Tapo i noviji Kasa preko KLAP-a (uz TP-Link nalog, proverava ga uređaj).
