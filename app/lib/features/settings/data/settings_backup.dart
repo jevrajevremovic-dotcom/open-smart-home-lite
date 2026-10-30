@@ -152,8 +152,10 @@ abstract final class SettingsBackup {
     String? password,
     bool replace = true,
   }) async {
-    if (json['app'] != _marker ||
-        (json['version'] != 1 && json['version'] != 2)) {
+    // A newer format is read too: it only adds fields (BACKUP_FORMAT.md),
+    // and those this version does not know are left out.
+    final version = json['version'];
+    if (json['app'] != _marker || version is! int || version < 1) {
       return BackupImport.notBackup;
     }
     // Secrets first: a wrong password changes nothing.

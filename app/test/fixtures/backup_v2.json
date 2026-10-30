@@ -1,0 +1,112 @@
+{
+  "app": "open-smart-home-settings",
+  "version": 2,
+  "theme": "dark",
+  "autoDark": false,
+  "oled": true,
+  "accent": "teal",
+  "language": "sr",
+  "favorites": [
+    "shelly:a8032ab12345:switch0"
+  ],
+  "home": {
+    "rooms": [
+      {
+        "id": "kitchen",
+        "name": "Kuhinja",
+        "icon": "mdi:stove"
+      },
+      {
+        "id": "living",
+        "name": "Dnevna soba"
+      }
+    ],
+    "devices": [
+      {
+        "adapter": "shelly",
+        "id": "a8032ab12345",
+        "host": "192.168.1.21",
+        "model": "SNSW-001P16EU",
+        "label": "Hodnik",
+        "secured": true
+      },
+      {
+        "adapter": "tuya",
+        "id": "plug1",
+        "host": "192.168.1.100",
+        "label": "Bojler",
+        "secured": true,
+        "options": {
+          "version": "3.4"
+        }
+      },
+      {
+        "adapter": "broadlink",
+        "id": "665544332211",
+        "host": "192.168.1.110",
+        "options": {
+          "devtype": "5f36",
+          "btn:Klima on": "JgAQIA=="
+        }
+      }
+    ],
+    "names": {
+      "shelly:a8032ab12345:switch0": "Svetlo u hodniku"
+    },
+    "roomOf": {
+      "shelly:a8032ab12345": "living",
+      "tuya:plug1": "kitchen"
+    },
+    "members": [
+      {
+        "id": "m1",
+        "name": "Ana"
+      }
+    ]
+  },
+  "routines": {
+    "scenes": [
+      {
+        "id": "s1",
+        "name": "Veče",
+        "actions": [
+          {
+            "device": "shelly:a8032ab12345:switch0",
+            "do": "on"
+          }
+        ]
+      }
+    ],
+    "automations": [
+      {
+        "id": "a1",
+        "name": "Jutro",
+        "enabled": true,
+        "triggers": [
+          {
+            "type": "time",
+            "at": "07:00"
+          }
+        ],
+        "conditions": [],
+        "actions": [
+          {
+            "device": "tuya:plug1:switch1",
+            "do": "on"
+          }
+        ]
+      }
+    ]
+  },
+  "homeLocation": {
+    "latitude": 44.82,
+    "longitude": 20.46
+  },
+  "secrets": {
+    "kdf": "pbkdf2-sha256",
+    "iterations": 1000,
+    "salt": "JKa15hSZ8VvOh6g4hiqTLg==",
+    "nonce": "0PxISECTJYWYY7Xh",
+    "data": "4UqQz6xXDSKvHbuUrZOl5iUI6kaTaoXB71uV3i4gQGofJvyuxF15Q8iD/K+D44axIgJIvJJzUKhtA3h+8WCNviReFy7tekY1TQduJprbu5rHzLYgwchZHFffVqlw"
+  }
+}

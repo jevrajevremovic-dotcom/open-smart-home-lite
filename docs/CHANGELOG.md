@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+### Dodato
+- Ukućani se dodaju na telefonu (Podešavanja → Kiosk → Ukućani na tabletu): lični PIN, rođendan i brze kontrole na zidnom tabletu. Čuvaju se u rezervnoj kopiji.
+- „Uređaj se ne pojavljuje?“ na ekranu Dodaj uređaj: šta treba podesiti za svaki od 22 proizvođača; isti savet ispod uređaja koji ne odgovara.
+- Format rezervne kopije je opisan i zaključan ([BACKUP_FORMAT.md](BACKUP_FORMAT.md)); kopiju novijeg formata aplikacija i dalje uvozi.
+
+### Bezbednost
+- Prenos preko Wi-Fi-ja: kopiju dobija samo ko zna kod; posle tri pogrešna koda prenos se prekida; sluša samo na Wi-Fi adresi.
+- DIRIGERA, Samsung i LG: sertifikat uređaja se pamti pri uparivanju, posle se traži isti.
+- „Obriši sve podatke“ briše i lozinke i ključeve uređaja.
+- Uvoz kopije upisuje u zaštićeno skladište samo lozinke uređaja.
+
+### Uklonjeno
+- Pozdrav pri dolasku kući, wake word i iskačuća kamera na vratima: radili su samo uz Home Assistant.
+- 605 tekstova koje aplikacija više ne koristi; poruke o greškama govore o uređaju, ne o serveru i tokenu.
+
 ## [0.3.1] – 2026-10-30
 
 ### Uklonjeno

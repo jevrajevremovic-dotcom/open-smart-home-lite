@@ -130,6 +130,6 @@ Prognoza za dom sada koristi lokaciju telefona zapamćenu kad se prognoza uklju�
 
 ## Izdanja
 
-Šta je novo: [docs/CHANGELOG.md](docs/CHANGELOG.md). Potpisivanje i objavljivanje: [docs/RELEASE.md](docs/RELEASE.md). Instalirana aplikacija sama nalazi nova izdanja na GitHub Releases (Podešavanja → O aplikaciji).
+Šta je novo: [docs/CHANGELOG.md](docs/CHANGELOG.md). Format rezervne kopije: [docs/BACKUP_FORMAT.md](docs/BACKUP_FORMAT.md). Bezbednost: [docs/SECURITY.md](docs/SECURITY.md). Potpisivanje i objavljivanje: [docs/RELEASE.md](docs/RELEASE.md). Instalirana aplikacija sama nalazi nova izdanja na GitHub Releases (Podešavanja → O aplikaciji).
 
 Licenca: vidi [LICENSE](LICENSE) i [NOTICE](NOTICE).
