@@ -9,7 +9,6 @@ import '../../../core/utils/value_list.dart';
 import '../../automations/application/automation_engine.dart';
 import '../data/local/ble/ble_adapter.dart';
 import '../data/local/ble/ble_scanner.dart';
-import '../data/local/demo_adapter.dart';
 import '../data/local/esphome/esphome_adapter.dart';
 import '../data/local/esphome/esphome_client.dart';
 import '../data/local/hue_adapter.dart';
@@ -46,81 +45,75 @@ import '../domain/smart_home_device.dart';
 /// layout, tiles). There is one home for now.
 final homeIdProvider = Provider<String>((ref) => 'local');
 
-/// The home's backend: the devices the phone talks to itself (and the
-/// demo home until the first real device is added). Follows the
+/// The home's backend: the devices the phone talks to itself. Follows the
 /// household's changes to [localHomeProvider] without starting over.
 final homeBackendProvider = Provider<LocalBackend?>((ref) {
   final http = ref.watch(lanHttpProvider);
   // A device's password, key or token, from the phone's secure storage.
   Future<String?> secret(String key) =>
       ref.read(credentialStoreProvider).readCredential(devicePasswordId(key));
-  final backend = LocalBackend(
-    [
-      DemoAdapter(),
-      ShellyAdapter(
-        http,
-        passwords: (key) => ref
-            .read(credentialStoreProvider)
-            .readCredential(devicePasswordId(key)),
-      ),
-      WledAdapter(http),
-      TasmotaAdapter(http),
-      HueAdapter(
-        http,
-        users: (key) => ref
-            .read(credentialStoreProvider)
-            .readCredential(devicePasswordId(key)),
-      ),
-      YeelightAdapter(ref.watch(yeelightTransportProvider)),
-      KasaAdapter(
-        ref.watch(kasaTransportProvider),
-        klap: ref.watch(klapClientProvider),
-        accounts: secret,
-      ),
-      TapoAdapter(ref.watch(klapClientProvider), accounts: secret),
-      DirigeraAdapter(ref.watch(lanRequestsProvider), tokens: secret),
-      TuyaAdapter(ref.watch(tuyaClientProvider), keys: secret),
-      MiioAdapter(ref.watch(miioClientProvider), tokens: secret),
-      BroadlinkAdapter(ref.watch(broadlinkClientProvider)),
-      CameraAdapter(ref.watch(lanRequestsProvider), logins: secret),
-      WizAdapter(ref.watch(lanUdpProvider)),
-      NanoleafAdapter(
-        ref.watch(lanRequestsProvider),
-        tokens: (key) => ref
-            .read(credentialStoreProvider)
-            .readCredential(devicePasswordId(key)),
-      ),
-      SonoffAdapter(ref.watch(lanRequestsProvider)),
-      RokuAdapter(ref.watch(lanRequestsProvider)),
-      SamsungTvAdapter(
-        ref.watch(lanRequestsProvider),
-        ref.watch(lanSocketsProvider),
-        ref.watch(lanUdpProvider),
-        tokens: secret,
-      ),
-      LgTvAdapter(
-        ref.watch(lanSocketsProvider),
-        ref.watch(lanUdpProvider),
-        keys: secret,
-      ),
-      SonosAdapter(ref.watch(lanRequestsProvider)),
-      LifxAdapter(ref.watch(lanUdpProvider)),
-      GoveeAdapter(
-        ref.watch(lanUdpProvider),
-        pollEvery: const Duration(seconds: 10),
-      ),
-      BleAdapter(ref.watch(bleScannerProvider)),
-      ref.watch(routineAdapterProvider),
-      EsphomeAdapter(
-        connector: ref.watch(esphomeConnectorProvider),
-        keys: (key) => ref
-            .read(credentialStoreProvider)
-            .readCredential(devicePasswordId(key)),
-      ),
-    ],
-    rooms: demoRooms,
-    home: ref.read(localHomeProvider),
-  )..start();
+  final backend = LocalBackend([
+    ShellyAdapter(
+      http,
+      passwords: (key) => ref
+          .read(credentialStoreProvider)
+          .readCredential(devicePasswordId(key)),
+    ),
+    WledAdapter(http),
+    TasmotaAdapter(http),
+    HueAdapter(
+      http,
+      users: (key) => ref
+          .read(credentialStoreProvider)
+          .readCredential(devicePasswordId(key)),
+    ),
+    YeelightAdapter(ref.watch(yeelightTransportProvider)),
+    KasaAdapter(
+      ref.watch(kasaTransportProvider),
+      klap: ref.watch(klapClientProvider),
+      accounts: secret,
+    ),
+    TapoAdapter(ref.watch(klapClientProvider), accounts: secret),
+    DirigeraAdapter(ref.watch(lanRequestsProvider), tokens: secret),
+    TuyaAdapter(ref.watch(tuyaClientProvider), keys: secret),
+    MiioAdapter(ref.watch(miioClientProvider), tokens: secret),
+    BroadlinkAdapter(ref.watch(broadlinkClientProvider)),
+    CameraAdapter(ref.watch(lanRequestsProvider), logins: secret),
+    WizAdapter(ref.watch(lanUdpProvider)),
+    NanoleafAdapter(
+      ref.watch(lanRequestsProvider),
+      tokens: (key) => ref
+          .read(credentialStoreProvider)
+          .readCredential(devicePasswordId(key)),
+    ),
+    SonoffAdapter(ref.watch(lanRequestsProvider)),
+    RokuAdapter(ref.watch(lanRequestsProvider)),
+    SamsungTvAdapter(
+      ref.watch(lanRequestsProvider),
+      ref.watch(lanSocketsProvider),
+      ref.watch(lanUdpProvider),
+      tokens: secret,
+    ),
+    LgTvAdapter(
+      ref.watch(lanSocketsProvider),
+      ref.watch(lanUdpProvider),
+      keys: secret,
+    ),
+    SonosAdapter(ref.watch(lanRequestsProvider)),
+    LifxAdapter(ref.watch(lanUdpProvider)),
+    GoveeAdapter(
+      ref.watch(lanUdpProvider),
+      pollEvery: const Duration(seconds: 10),
+    ),
+    BleAdapter(ref.watch(bleScannerProvider)),
+    ref.watch(routineAdapterProvider),
+    EsphomeAdapter(
+      connector: ref.watch(esphomeConnectorProvider),
+      keys: (key) => ref
+          .read(credentialStoreProvider)
+          .readCredential(devicePasswordId(key)),
+    ),
+  ], home: ref.read(localHomeProvider))..start();
   ref.listen(localHomeProvider, (_, home) => backend.configure(home));
   ref.onDispose(() => unawaited(backend.dispose()));
   return backend;

@@ -126,7 +126,6 @@ class LocalHome {
     this.devices = const [],
     this.names = const {},
     this.roomOf = const {},
-    this.demo = true,
   });
 
   final List<Room> rooms;
@@ -139,9 +138,6 @@ class LocalHome {
   /// Room id by `SmartHomeDevice.id` or [ConfiguredDevice.key]; a channel
   /// without its own room is where its physical device is.
   final Map<String, String> roomOf;
-
-  /// Whether the demo home is shown (until the first real device).
-  final bool demo;
 
   List<ConfiguredDevice> devicesOf(String adapter) => [
     for (final d in devices)
@@ -183,13 +179,11 @@ class LocalHome {
     List<ConfiguredDevice>? devices,
     Map<String, String>? names,
     Map<String, String>? roomOf,
-    bool? demo,
   }) => LocalHome(
     rooms: rooms ?? this.rooms,
     devices: devices ?? this.devices,
     names: names ?? this.names,
     roomOf: roomOf ?? this.roomOf,
-    demo: demo ?? this.demo,
   );
 
   Map<String, Object?> toJson() => {
@@ -199,7 +193,6 @@ class LocalHome {
     'devices': [for (final d in devices) d.toJson()],
     'names': names,
     'roomOf': roomOf,
-    'demo': demo,
   };
 
   /// Tolerant: a broken entry is skipped, not the whole home.
@@ -227,7 +220,6 @@ class LocalHome {
       ],
       names: strings(json['names']),
       roomOf: strings(json['roomOf']),
-      demo: json['demo'] != false,
     );
   }
 }
@@ -245,7 +237,7 @@ class LocalHomeController extends Notifier<LocalHome> {
   }
 
   /// Adds [device] (or updates its address), in [roomId], with its
-  /// [password] if it asks for one. The first real device ends the demo.
+  /// [password] if it asks for one.
   Future<void> addDevice(
     ConfiguredDevice device, {
     String? roomId,
@@ -265,7 +257,6 @@ class LocalHomeController extends Notifier<LocalHome> {
       state.copyWith(
         devices: [...rest, device],
         roomOf: {...state.roomOf, device.key: ?roomId},
-        demo: false,
       ),
     );
   }
@@ -376,8 +367,6 @@ class LocalHomeController extends Notifier<LocalHome> {
     ),
   );
 
-  Future<void> setDemo(bool demo) => _save(state.copyWith(demo: demo));
-
   /// From a backup: all of it ([replace]), or only what is missing here
   /// (devices, rooms, names and rooms of devices not set here).
   Future<void> importHome(LocalHome other, {required bool replace}) {
@@ -397,7 +386,6 @@ class LocalHomeController extends Notifier<LocalHome> {
         ],
         names: {...other.names, ...here.names},
         roomOf: {...other.roomOf, ...here.roomOf},
-        demo: here.demo && other.demo,
       ),
     );
   }

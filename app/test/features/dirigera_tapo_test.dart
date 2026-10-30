@@ -203,7 +203,6 @@ void main() {
         [DirigeraAdapter(http, tokens: (_) async => 'hubtok')],
         home: const LocalHome(
           devices: [ConfiguredDevice(adapter: 'dirigera', id: 'h1', host: hub)],
-          demo: false,
         ),
       )..start();
       addTearDown(backend.dispose);
@@ -258,7 +257,6 @@ void main() {
         devices: [
           ConfiguredDevice(adapter: 'tapo', id: 'ac15a2001122', host: plug),
         ],
-        demo: false,
       ),
     )..start();
     addTearDown(backend.dispose);

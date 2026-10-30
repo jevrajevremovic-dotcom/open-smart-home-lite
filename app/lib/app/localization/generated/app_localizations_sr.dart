@@ -5115,10 +5115,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get settingsHomeHint => 'Uređaji i sobe';
 
   @override
-  String get demoHomeNotice =>
-      'Ovo je demo dom. Dodajte svoje uređaje (Shelly, WLED, Tasmota, ESPHome, Hue, Yeelight, Kasa) i demo će se sam ugasiti.';
-
-  @override
   String get firstRunWelcomeBodyLite =>
       'Telefon sam upravlja vašim uređajima, bez servera. Podesimo aplikaciju — traje minut, a sve se kasnije može promeniti u Podešavanjima.';
 
@@ -5187,12 +5183,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String deviceRemoveConfirm(String name) {
     return 'Ukloniti $name iz aplikacije? Uređaj nastavlja da radi.';
   }
-
-  @override
-  String get demoDevicesSetting => 'Demo uređaji';
-
-  @override
-  String get demoDevicesHint => 'Izmišljeni dom za probu aplikacije.';
 
   @override
   String get homeDevicesTitle => 'Uređaji';
@@ -5532,6 +5522,13 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get cameraOffline => 'Kamera trenutno ne daje sliku.';
+
+  @override
+  String get emptyHomeTitle => 'Još nema uređaja';
+
+  @override
+  String get emptyHomeBody =>
+      'Dodajte uređaje sa kućne Wi-Fi mreže ili preko Bluetooth-a: Shelly, Hue, WiZ, Tapo, Tuya, ESPHome, televizore i druge.';
 }
 
 /// The translations for Serbian, using the Latin script (`sr_Latn`).

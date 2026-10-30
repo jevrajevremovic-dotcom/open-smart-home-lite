@@ -119,7 +119,7 @@ void main() {
         users: (_) async => user,
         pollEvery: const Duration(hours: 1),
       ),
-    ], home: const LocalHome(demo: false, devices: [bridge]))..start();
+    ], home: const LocalHome(devices: [bridge]))..start();
 
     setUp(() {
       http = FakeLanHttp(hueNetwork());
@@ -272,7 +272,6 @@ void main() {
       final backend = LocalBackend(
         [YeelightAdapter(bulb, pollEvery: const Duration(hours: 1))],
         home: const LocalHome(
-          demo: false,
           devices: [
             ConfiguredDevice(
               adapter: 'yeelight',
@@ -343,7 +342,6 @@ void main() {
       final backend = LocalBackend(
         [KasaAdapter(kasa, pollEvery: const Duration(hours: 1))],
         home: LocalHome(
-          demo: false,
           devices: [
             ConfiguredDevice(
               adapter: 'kasa',

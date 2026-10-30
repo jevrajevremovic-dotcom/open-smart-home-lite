@@ -24,6 +24,7 @@ import 'package:open_smart_home_lite/features/shortcuts/home_screen_widget.dart'
 import 'package:open_smart_home_lite/features/shortcuts/quick_tiles.dart';
 
 import '../helpers.dart';
+import '../lan_fakes.dart';
 
 final en = AppLocalizationsEn();
 final sr = AppLocalizationsSrLatn();
@@ -153,12 +154,17 @@ void main() {
     await unmount(tester);
   });
 
-  testWidgets('Settings: the home section tells it is the demo home', (
+  testWidgets('a new home has no made-up devices, it says how to add', (
     tester,
   ) async {
-    await pumpApp(tester);
-    await goTo(tester, AppRoutes.settingsSection('home'));
-    expect(find.text(en.demoHomeNotice), findsOneWidget);
+    // The app's own devices only (no test home).
+    await pumpApp(tester, requests: FakeLanRequests(const {}));
+    expect(find.byKey(const Key('emptyHome')), findsOneWidget);
+    expect(find.text(en.emptyHomeTitle), findsOneWidget);
+    await tapKey(tester, 'emptyHomeAdd');
+    await settle(tester, 4);
+    expect(find.text(en.addDeviceTitle), findsWidgets);
+    expect(find.byKey(const Key('addDeviceManual')), findsOneWidget);
     await unmount(tester);
   });
 }

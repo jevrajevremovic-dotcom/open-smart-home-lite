@@ -90,7 +90,6 @@ void main() {
     final backend = LocalBackend(
       [EsphomeAdapter(connector: esp.connect)],
       home: const LocalHome(
-        demo: false,
         devices: [ConfiguredDevice(adapter: 'esphome', id: 'e', host: 'h')],
       ),
     )..start();

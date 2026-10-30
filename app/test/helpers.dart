@@ -21,7 +21,9 @@ import 'package:open_smart_home_lite/features/clap/clap_platform.dart';
 import 'package:open_smart_home_lite/features/devices/application/device_providers.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/ble/ble_advert.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/ble/ble_scanner.dart';
-import 'package:open_smart_home_lite/features/devices/data/local/demo_adapter.dart';
+
+import 'demo_adapter.dart';
+
 import 'package:open_smart_home_lite/features/devices/data/local/device_adapter.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/local_backend.dart';
 import 'package:open_smart_home_lite/features/devices/data/local/local_home.dart';

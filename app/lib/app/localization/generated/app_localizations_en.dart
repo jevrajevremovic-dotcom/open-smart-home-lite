@@ -5087,10 +5087,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsHomeHint => 'Devices and rooms';
 
   @override
-  String get demoHomeNotice =>
-      'This is the demo home. Add your devices (Shelly, WLED, Tasmota, ESPHome, Hue, Yeelight, Kasa) and the demo turns itself off.';
-
-  @override
   String get firstRunWelcomeBodyLite =>
       'The phone controls your devices itself, no server needed. Let\'s set the app up — it takes a minute, and everything can be changed later in Settings.';
 
@@ -5158,12 +5154,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String deviceRemoveConfirm(String name) {
     return 'Remove $name from the app? The device keeps working.';
   }
-
-  @override
-  String get demoDevicesSetting => 'Demo devices';
-
-  @override
-  String get demoDevicesHint => 'A made-up home for trying the app.';
 
   @override
   String get homeDevicesTitle => 'Devices';
@@ -5505,4 +5495,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cameraOffline => 'The camera is not giving an image right now.';
+
+  @override
+  String get emptyHomeTitle => 'No devices yet';
+
+  @override
+  String get emptyHomeBody =>
+      'Add devices from your home Wi-Fi or over Bluetooth: Shelly, Hue, WiZ, Tapo, Tuya, ESPHome, TVs and more.';
 }

@@ -16,7 +16,7 @@ import '../widgets/app_widget_test.dart'
 import 'lan_adapters_test.dart' show hasRequest, network, plus1pm;
 
 void main() {
-  testWidgets('found on the network, added to a room, switched; demo gone', (
+  testWidgets('found on the network, added to a room, switched', (
     tester,
   ) async {
     final http = FakeLanHttp(network());
@@ -32,7 +32,7 @@ void main() {
     final container = ProviderScope.containerOf(
       tester.element(find.byType(SmartHomeApp)),
     );
-    expect(container.read(deviceProvider('demo:living_ceiling')), isNotNull);
+    expect(container.read(visibleDeviceIdsProvider), isEmpty);
 
     await goTo(tester, AppRoutes.addDevice);
     await settle(tester, 4);
@@ -46,8 +46,6 @@ void main() {
     expect(find.text(en.addDeviceAdded), findsOneWidget);
     final home = container.read(localHomeProvider);
     expect(home.devices.single.host, plus1pm);
-    expect(home.demo, isFalse);
-    expect(container.read(deviceProvider('demo:living_ceiling')), isNull);
 
     const relay = 'shelly:a8032ab12345:switch0';
     expect(container.read(deviceProvider(relay))!.state.isOn, isTrue);

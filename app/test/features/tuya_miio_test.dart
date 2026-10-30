@@ -219,7 +219,6 @@ void main() {
             options: {'version': '3.4'},
           ),
         ],
-        demo: false,
       ),
     )..start();
     addTearDown(backend.dispose);
@@ -266,7 +265,6 @@ void main() {
             model: 'cuco.plug.v3',
           ),
         ],
-        demo: false,
       ),
     )..start();
     addTearDown(backend.dispose);

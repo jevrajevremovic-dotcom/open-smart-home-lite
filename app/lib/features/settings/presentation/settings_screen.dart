@@ -293,10 +293,6 @@ class _SectionBody extends ConsumerWidget {
         ),
         subtitle: Text(l10n.devicesInRooms(deviceCount, roomCount)),
       ),
-      if (home.demo) ...[
-        InlineNotice.info(l10n.demoHomeNotice),
-        const SizedBox(height: 8),
-      ],
       Align(
         alignment: Alignment.centerLeft,
         child: FilledButton.tonalIcon(
@@ -392,15 +388,6 @@ class _SectionBody extends ConsumerWidget {
                 text: l10n.backgroundNotificationText,
               ),
         ),
-      SwitchListTile(
-        key: const Key('demoDevicesSwitch'),
-        contentPadding: EdgeInsets.zero,
-        secondary: const Icon(Icons.science_outlined),
-        title: Text(l10n.demoDevicesSetting),
-        subtitle: Text(l10n.demoDevicesHint),
-        value: home.demo,
-        onChanged: controller.setDemo,
-      ),
     ];
   }
 

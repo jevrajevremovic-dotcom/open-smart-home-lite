@@ -136,7 +136,7 @@ LocalBackend backendOf(FakeLanUdp udp, List<ConfiguredDevice> devices) =>
       WizAdapter(udp),
       LifxAdapter(udp),
       GoveeAdapter(udp),
-    ], home: LocalHome(devices: devices, demo: false));
+    ], home: LocalHome(devices: devices));
 
 void main() {
   test('WiZ: colour bulb read, turned on, dimmed, coloured', () async {

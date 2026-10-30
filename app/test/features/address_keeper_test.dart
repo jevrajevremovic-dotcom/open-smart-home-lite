@@ -26,7 +26,6 @@ void main() {
         preferences: {
           'localHome': jsonEncode(
             const LocalHome(
-              demo: false,
               devices: [
                 ConfiguredDevice(
                   adapter: 'shelly',

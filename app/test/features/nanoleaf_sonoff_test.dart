@@ -92,7 +92,6 @@ void main() {
         devices: [
           ConfiguredDevice(adapter: 'nanoleaf', id: 's1234', host: panels),
         ],
-        demo: false,
       ),
     )..start();
     addTearDown(backend.dispose);
@@ -131,7 +130,6 @@ void main() {
             label: 'Bojler',
           ),
         ],
-        demo: false,
       ),
     )..start();
     addTearDown(backend.dispose);

@@ -286,13 +286,9 @@ class BleAdapter extends DeviceAdapter {
         final on = r.switchOn;
         out.add(
           on == null
-              ? make(
-                  'press',
-                  name,
-                  DeviceKind.button,
-                  const {Capability.trigger},
-                  const DeviceState(raw: 'idle'),
-                )
+              ? make('press', name, DeviceKind.button, const {
+                  Capability.trigger,
+                }, const DeviceState(raw: 'idle'))
               : make('switch', name, DeviceKind.switchDevice, {
                   Capability.power,
                 }, DeviceState(raw: on ? 'on' : 'off', isOn: on)),

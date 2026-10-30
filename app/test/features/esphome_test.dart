@@ -202,7 +202,6 @@ void main() {
             ),
           ],
           home: LocalHome(
-            demo: false,
             devices: [
               ConfiguredDevice(
                 adapter: 'esphome',

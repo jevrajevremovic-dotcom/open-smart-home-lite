@@ -212,7 +212,6 @@ void main() {
         TasmotaAdapter(http, pollEvery: const Duration(hours: 1)),
       ],
       home: LocalHome(
-        demo: false,
         devices: [
           configured('shelly', 'a8032ab12345', plus1pm),
           configured('shelly', 'a8032ab00002', plus2pmCover),
@@ -480,7 +479,6 @@ void main() {
           ),
         ],
         home: LocalHome(
-          demo: false,
           devices: [
             configured(
               'shelly',
@@ -573,13 +571,11 @@ void main() {
         {'adapter': 'shelly'},
       ],
       'names': {'x': 'Y', 'z': 1},
-      'demo': false,
     });
     expect(home.rooms.single.name, 'Kuhinja');
     expect(home.devices.single.key, 'wled:e8db84aabbcc');
     expect(home.names, {'x': 'Y'});
-    expect(home.demo, isFalse);
     expect(LocalHome.fromJson(home.toJson()).devices, home.devices);
-    expect(LocalHome.fromJson(null).demo, isTrue);
+    expect(LocalHome.fromJson(null).devices, isEmpty);
   });
 }

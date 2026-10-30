@@ -8655,12 +8655,6 @@ abstract class AppLocalizations {
   /// **'Devices and rooms'**
   String get settingsHomeHint;
 
-  /// No description provided for @demoHomeNotice.
-  ///
-  /// In en, this message translates to:
-  /// **'This is the demo home. Add your devices (Shelly, WLED, Tasmota, ESPHome, Hue, Yeelight, Kasa) and the demo turns itself off.'**
-  String get demoHomeNotice;
-
   /// No description provided for @firstRunWelcomeBodyLite.
   ///
   /// In en, this message translates to:
@@ -8780,18 +8774,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove {name} from the app? The device keeps working.'**
   String deviceRemoveConfirm(String name);
-
-  /// No description provided for @demoDevicesSetting.
-  ///
-  /// In en, this message translates to:
-  /// **'Demo devices'**
-  String get demoDevicesSetting;
-
-  /// No description provided for @demoDevicesHint.
-  ///
-  /// In en, this message translates to:
-  /// **'A made-up home for trying the app.'**
-  String get demoDevicesHint;
 
   /// No description provided for @homeDevicesTitle.
   ///
@@ -9380,6 +9362,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The camera is not giving an image right now.'**
   String get cameraOffline;
+
+  /// No description provided for @emptyHomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No devices yet'**
+  String get emptyHomeTitle;
+
+  /// No description provided for @emptyHomeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add devices from your home Wi-Fi or over Bluetooth: Shelly, Hue, WiZ, Tapo, Tuya, ESPHome, TVs and more.'**
+  String get emptyHomeBody;
 }
 
 class _AppLocalizationsDelegate

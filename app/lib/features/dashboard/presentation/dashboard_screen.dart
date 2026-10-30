@@ -195,6 +195,18 @@ class DashboardBody extends ConsumerWidget {
             ],
           );
         }
+        // A new home: what to do first, instead of empty cards.
+        if (ref.watch(visibleDeviceIdsProvider).isEmpty) {
+          return CustomScrollView(
+            slivers: [
+              ..._fixedSlivers(ref),
+              const SliverPadding(
+                padding: _pad,
+                sliver: SliverToBoxAdapter(child: _EmptyHome()),
+              ),
+            ],
+          );
+        }
         if (!twoPanes) {
           return CustomScrollView(
             slivers: [
@@ -399,5 +411,42 @@ class DashboardBody extends ConsumerWidget {
         if (content == null || card.contentPane == content)
           ..._card(context, ref, card),
     ];
+  }
+}
+
+/// The home before its first device: where to add one.
+class _EmptyHome extends StatelessWidget {
+  const _EmptyHome();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    return Card.outlined(
+      key: const Key('emptyHome'),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          children: [
+            Icon(
+              Icons.home_outlined,
+              size: 48,
+              color: theme.colorScheme.primary,
+            ),
+            const SizedBox(height: 12),
+            Text(l10n.emptyHomeTitle, style: theme.textTheme.titleLarge),
+            const SizedBox(height: 8),
+            Text(l10n.emptyHomeBody, textAlign: TextAlign.center),
+            const SizedBox(height: 16),
+            FilledButton.icon(
+              key: const Key('emptyHomeAdd'),
+              onPressed: () => context.push(AppRoutes.addDevice),
+              icon: const Icon(Icons.add),
+              label: Text(l10n.addDeviceTitle),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

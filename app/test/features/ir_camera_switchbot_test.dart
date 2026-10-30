@@ -149,7 +149,6 @@ void main() {
             options: {...config.options, 'btn:Klima on': base64.encode(code!)},
           ),
         ],
-        demo: false,
       ),
     )..start();
     addTearDown(backend.dispose);
@@ -214,7 +213,6 @@ void main() {
               host: 'AA:BB:CC:DD:EE:01',
             ),
           ],
-          demo: false,
         ),
       )..start();
       addTearDown(backend.dispose);

@@ -1,5 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:open_smart_home_lite/features/devices/data/local/demo_adapter.dart';
+
+import '../demo_adapter.dart';
+
 import 'package:open_smart_home_lite/features/devices/data/local/local_backend.dart';
 import 'package:open_smart_home_lite/features/devices/domain/device_command.dart';
 import 'package:open_smart_home_lite/features/devices/domain/home_snapshot.dart';

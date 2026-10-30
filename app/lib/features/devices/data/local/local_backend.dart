@@ -6,7 +6,6 @@ import '../../domain/device_command.dart';
 import '../../domain/home_backend.dart';
 import '../../domain/home_snapshot.dart';
 import '../../domain/smart_home_device.dart';
-import 'demo_adapter.dart';
 import 'device_adapter.dart';
 import 'local_home.dart';
 
@@ -35,7 +34,7 @@ class LocalBackend implements HomeBackend {
   /// Each device's state and when it became that (adapters rarely know).
   final Map<String, (String, DateTime)> _changed = {};
 
-  /// Rooms not in [LocalHome] (the demo's, tests').
+  /// Rooms not in [LocalHome] (tests').
   final Map<String, Room> _extraRooms;
   LocalHome _home;
   final StreamController<HomeSnapshot> _controller =
@@ -94,13 +93,11 @@ class LocalBackend implements HomeBackend {
   void _merge() {
     final devices = <String, SmartHomeDevice>{
       for (final adapter in _adapters)
-        if (adapter is! DemoAdapter || _home.demo)
-          for (final d in adapter.current) d.id: _stamped(_home.overlay(d)),
+        for (final d in adapter.current) d.id: _stamped(_home.overlay(d)),
     };
     _changed.removeWhere((id, _) => !devices.containsKey(id));
     final rooms = <String, Room>{
-      if (_home.demo || _adapters.every((a) => a is! DemoAdapter))
-        ..._extraRooms,
+      ..._extraRooms,
       for (final r in _home.rooms) r.id: r,
     };
     _emit(

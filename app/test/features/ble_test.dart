@@ -136,7 +136,6 @@ void main() {
       final backend = LocalBackend(
         [BleAdapter(scanner, clock: () => now)],
         home: const LocalHome(
-          demo: false,
           devices: [
             ConfiguredDevice(
               adapter: 'ble',

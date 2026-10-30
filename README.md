@@ -2,7 +2,7 @@
 
 Lite verzija [Open Smart Home](https://github.com/jevrajevremovic-dotcom/open-smart-home) aplikacije: uređaji koji se povezuju na telefon preko **Wi-Fi-ja** (lokalna mreža) i **Bluetooth-a**, u jednoj aplikaciji, **bez Home Assistanta i bez Raspberry Pi-ja**. Telefon je centrala.
 
-Nastala je od Open Smart Home 1.0 i deli njen model uređaja i korisnički interfejs. Aplikacija se instalira pored originala (`org.opensmarthome.lite`). Radi sa preko 20 vrsta uređaja na lokalnoj mreži (Shelly, WLED, Tasmota, ESPHome, Hue, IKEA DIRIGERA, Yeelight, WiZ, LIFX, Govee, Nanoleaf, Sonoff, TP-Link Kasa i Tapo, Tuya, Xiaomi, Broadlink, televizori Samsung/LG/Roku, Sonos, kamere) i sa Bluetooth LE senzorima i SwitchBot uređajima; dok se ne doda prvi uređaj, prikazuje demo dom.
+Nastala je od Open Smart Home 1.0 i deli njen model uređaja i korisnički interfejs. Aplikacija se instalira pored originala (`org.opensmarthome.lite`). Radi sa preko 20 vrsta uređaja na lokalnoj mreži (Shelly, WLED, Tasmota, ESPHome, Hue, IKEA DIRIGERA, Yeelight, WiZ, LIFX, Govee, Nanoleaf, Sonoff, TP-Link Kasa i Tapo, Tuya, Xiaomi, Broadlink, televizori Samsung/LG/Roku, Sonos, kamere) i sa Bluetooth LE senzorima i SwitchBot uređajima; dok se ne doda prvi uređaj, početna pokazuje kako se uređaj dodaje.
 
 ## Plan
 
@@ -30,7 +30,6 @@ UI (kartice, sobe, kiosk…)
 DeviceCommandService  (provere: dostupnost, mogućnost, potvrda)
    │
 HomeBackend ── LocalBackend ── DeviceAdapter (jedan po vrsti uređaja)
-                                 ├─ DemoAdapter
                                  ├─ ShellyAdapter  ─┐
                                  ├─ WledAdapter    ─┼ PolledAdapter (HTTP, svakih 5 s)
                                  ├─ TasmotaAdapter ─┤
@@ -43,7 +42,7 @@ HomeBackend ── LocalBackend ── DeviceAdapter (jedan po vrsti uređaja)
 
 - `app/lib/features/devices/domain/home_backend.dart`: `HomeBackend`, `DeviceCommandSink`
 - `app/lib/features/devices/domain/home_snapshot.dart`: `HomeSnapshot`, `SyncStatus`
-- `app/lib/features/devices/data/local/`: `LocalBackend`, `DeviceAdapter`, `PolledAdapter`, `DemoAdapter`, `ShellyAdapter`, `WledAdapter`, `LocalHome` (sobe, dodati uređaji, imena; čuva se na telefonu)
+- `app/lib/features/devices/data/local/`: `LocalBackend`, `DeviceAdapter`, `PolledAdapter`, `ShellyAdapter`, `WledAdapter`, `LocalHome` (sobe, dodati uređaji, imena; čuva se na telefonu)
 - `app/lib/features/add_device/`: mDNS otkrivanje (`_http._tcp`), prepoznavanje (`/shelly`, `/json/info`, `Status 0`, ESPHome iz mDNS-a `_esphomelib._tcp` ili preko API-ja), ekran za dodavanje, `AddressKeeper` (prati promenjene IP adrese)
 
 ID uređaja je `<adapter>:<MAC>:<kanal>` (npr. `shelly:a8032ab12345:switch0`, `wled:e8db84aabbcc:light`), pa `LocalBackend` zna kom adapteru ide komanda. Jedan fizički uređaj (`deviceId` = `<adapter>:<MAC>`) daje po jedan uređaj za svaki kanal, i merač snage gde ga ima.

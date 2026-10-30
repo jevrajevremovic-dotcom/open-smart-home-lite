@@ -1,11 +1,14 @@
 import 'dart:async';
 
-import '../../../../core/errors/app_failure.dart';
-import '../../domain/capability.dart';
-import '../../domain/device_command.dart';
-import '../../domain/device_kind.dart';
-import '../../domain/smart_home_device.dart';
-import 'device_adapter.dart';
+import 'package:open_smart_home_lite/core/errors/app_failure.dart';
+import 'package:open_smart_home_lite/features/devices/domain/capability.dart';
+import 'package:open_smart_home_lite/features/devices/domain/device_command.dart';
+import 'package:open_smart_home_lite/features/devices/domain/device_kind.dart';
+import 'package:open_smart_home_lite/features/devices/domain/smart_home_device.dart';
+import 'package:open_smart_home_lite/features/devices/data/local/device_adapter.dart';
+
+/// A pretend home for tests: a few lights, a plug, a blind, sensors, a
+/// climate and a lock, answering commands at once.
 
 /// Rooms of the demo home.
 const demoRooms = {

@@ -163,7 +163,6 @@ void main() {
       [RokuAdapter(r)],
       home: const LocalHome(
         devices: [ConfiguredDevice(adapter: 'roku', id: 'x01234', host: roku)],
-        demo: false,
       ),
     )..start();
     addTearDown(backend.dispose);
@@ -193,7 +192,6 @@ void main() {
             options: {'mac': 'aabbcc001122'},
           ),
         ],
-        demo: false,
       ),
     )..start();
     addTearDown(backend.dispose);
@@ -228,7 +226,6 @@ void main() {
         devices: [
           ConfiguredDevice(adapter: 'lg', id: 'tv1', host: lg, label: 'TV'),
         ],
-        demo: false,
       ),
     )..start();
     addTearDown(backend.dispose);
@@ -257,7 +254,6 @@ void main() {
             label: 'Kuhinja',
           ),
         ],
-        demo: false,
       ),
     )..start();
     addTearDown(backend.dispose);

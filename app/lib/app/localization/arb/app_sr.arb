@@ -1427,7 +1427,6 @@
   "serviceLicensesHint": "Aplikacija i svi paketi koje koristi",
   "settingsHomeSection": "Dom",
   "settingsHomeHint": "Uređaji i sobe",
-  "demoHomeNotice": "Ovo je demo dom. Dodajte svoje uređaje (Shelly, WLED, Tasmota, ESPHome, Hue, Yeelight, Kasa) i demo će se sam ugasiti.",
   "firstRunWelcomeBodyLite": "Telefon sam upravlja vašim uređajima, bez servera. Podesimo aplikaciju — traje minut, a sve se kasnije može promeniti u Podešavanjima.",
   "settingsAboutSection": "O aplikaciji",
   "settingsAboutHint": "Verzija i ažuriranja",
@@ -1448,8 +1447,6 @@
   "roomDeleteConfirm": "Obrisati sobu {name}? Uređaji ostaju, bez sobe.",
   "deviceRemove": "Ukloni uređaj",
   "deviceRemoveConfirm": "Ukloniti {name} iz aplikacije? Uređaj nastavlja da radi.",
-  "demoDevicesSetting": "Demo uređaji",
-  "demoDevicesHint": "Izmišljeni dom za probu aplikacije.",
   "homeDevicesTitle": "Uređaji",
   "devicePasswordLabel": "Lozinka uređaja",
   "devicePasswordHint": "Ovaj uređaj traži lozinku (korisnik admin). Čuva se samo na ovom telefonu, u bezbednom skladištu.",
@@ -1547,5 +1544,7 @@
   "cameraUrlHint": "Kamera daje trenutnu sliku na svojoj adresi. Na primer: Reolink /cgi-bin/api.cgi?cmd=Snap&channel=0, Hikvision /ISAPI/Streaming/channels/101/picture, Dahua /cgi-bin/snapshot.cgi, ESP32-CAM /capture.",
   "cameraUserLabel": "Korisnik (ako kamera traži)",
   "cameraNoImage": "Na ovoj adresi nema slike sa kamere (ili je korisnik pogrešan).",
-  "cameraOffline": "Kamera trenutno ne daje sliku."
+  "cameraOffline": "Kamera trenutno ne daje sliku.",
+  "emptyHomeTitle": "Još nema uređaja",
+  "emptyHomeBody": "Dodajte uređaje sa kućne Wi-Fi mreže ili preko Bluetooth-a: Shelly, Hue, WiZ, Tapo, Tuya, ESPHome, televizore i druge."
 }

@@ -1989,7 +1989,6 @@
   "serviceLicensesHint": "The app and every package it uses",
   "settingsHomeSection": "Home",
   "settingsHomeHint": "Devices and rooms",
-  "demoHomeNotice": "This is the demo home. Add your devices (Shelly, WLED, Tasmota, ESPHome, Hue, Yeelight, Kasa) and the demo turns itself off.",
   "firstRunWelcomeBodyLite": "The phone controls your devices itself, no server needed. Let's set the app up — it takes a minute, and everything can be changed later in Settings.",
   "settingsAboutSection": "About",
   "settingsAboutHint": "Version and updates",
@@ -2013,8 +2012,6 @@
   "deviceRemove": "Remove device",
   "deviceRemoveConfirm": "Remove {name} from the app? The device keeps working.",
   "@deviceRemoveConfirm": {"placeholders": {"name": {"type": "String"}}},
-  "demoDevicesSetting": "Demo devices",
-  "demoDevicesHint": "A made-up home for trying the app.",
   "homeDevicesTitle": "Devices",
   "devicePasswordLabel": "Device password",
   "devicePasswordHint": "This device asks for a password (user admin). It is kept only on this phone, in secure storage.",
@@ -2119,5 +2116,7 @@
   "cameraUrlHint": "A camera serves its current image at an address of its own. For example: Reolink /cgi-bin/api.cgi?cmd=Snap&channel=0, Hikvision /ISAPI/Streaming/channels/101/picture, Dahua /cgi-bin/snapshot.cgi, ESP32-CAM /capture.",
   "cameraUserLabel": "User (if the camera asks)",
   "cameraNoImage": "There is no camera image at this address (or the user is wrong).",
-  "cameraOffline": "The camera is not giving an image right now."
+  "cameraOffline": "The camera is not giving an image right now.",
+  "emptyHomeTitle": "No devices yet",
+  "emptyHomeBody": "Add devices from your home Wi-Fi or over Bluetooth: Shelly, Hue, WiZ, Tapo, Tuya, ESPHome, TVs and more."
 }
