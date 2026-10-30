@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 import 'dart:typed_data';
 
 import '../../../../core/errors/app_failure.dart';
@@ -7,6 +6,7 @@ import '../../domain/capability.dart';
 import '../../domain/device_command.dart';
 import '../../domain/device_kind.dart';
 import '../../domain/smart_home_device.dart';
+import 'color_math.dart';
 import 'lan_transport.dart';
 import 'local_home.dart';
 import 'polled_adapter.dart';
@@ -171,23 +171,8 @@ class LifxColor {
   }
 
   factory LifxColor.fromRgb(RgbColor c, {double brightness = 1}) {
-    final r = c.red / 255, g = c.green / 255, bl = c.blue / 255;
-    final mx = max(r, max(g, bl)), mn = min(r, min(g, bl));
-    final d = mx - mn;
-    var h = 0.0;
-    if (d > 0) {
-      h = mx == r
-          ? 60 * (((g - bl) / d) % 6)
-          : mx == g
-          ? 60 * ((bl - r) / d + 2)
-          : 60 * ((r - g) / d + 4);
-    }
-    return LifxColor(
-      h < 0 ? h + 360 : h,
-      mx == 0 ? 0 : d / mx,
-      brightness,
-      3500,
-    );
+    final hsv = rgbToHsv(c);
+    return LifxColor(hsv.hue, hsv.saturation, brightness, 3500);
   }
 
   LifxColor copyWith({double? saturation, double? brightness, int? kelvin}) =>
@@ -198,22 +183,8 @@ class LifxColor {
         kelvin ?? this.kelvin,
       );
 
-  /// Full brightness and saturation, as the screen shows a colour.
-  RgbColor get rgb {
-    final h = hue / 60, c = saturation;
-    final x = c * (1 - (h % 2 - 1).abs());
-    final (r, g, b) = switch (h.floor() % 6) {
-      0 => (c, x, 0.0),
-      1 => (x, c, 0.0),
-      2 => (0.0, c, x),
-      3 => (0.0, x, c),
-      4 => (x, 0.0, c),
-      _ => (c, 0.0, x),
-    };
-    final m = 1 - c;
-    int v(double f) => ((f + m) * 255).round().clamp(0, 255);
-    return RgbColor(v(r), v(g), v(b));
-  }
+  /// Full brightness, as the screen shows a colour.
+  RgbColor get rgb => hsvToRgb(hue, saturation);
 
   /// SetColor: reserved byte, HSBK, duration (300 ms).
   Uint8List payload() {

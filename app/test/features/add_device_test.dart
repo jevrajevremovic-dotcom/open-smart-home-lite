@@ -265,7 +265,7 @@ void main() {
 
     pressed = true;
     await settle(tester, 25);
-    expect(find.byKey(const Key('hueLink')), findsNothing);
+    expect(find.byKey(const Key('deviceLink')), findsNothing);
     expect(credentials.values['device:hue:ecb5fafffe0a1b2c'], 'user1');
     await settle(tester, 4);
     expect(

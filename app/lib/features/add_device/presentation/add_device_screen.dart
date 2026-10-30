@@ -11,8 +11,6 @@ import '../../devices/presentation/device_edit.dart';
 import '../application/add_device_providers.dart';
 import '../../devices/data/local/ble/ble_scanner.dart';
 import '../../devices/data/local/esphome/esphome_client.dart';
-import '../../devices/data/local/hue_adapter.dart';
-import '../../devices/data/local/lan_http.dart';
 import '../data/device_probe.dart';
 import '../data/lan_discovery.dart';
 
@@ -65,6 +63,8 @@ class AddDeviceScreen extends ConsumerWidget {
                         'Yeelight' => Icons.lightbulb_outline,
                         'Kasa' => Icons.outlet_outlined,
                         'WiZ' || 'LIFX' || 'Govee' => Icons.lightbulb_outline,
+                        'Nanoleaf' => Icons.hexagon_outlined,
+                        'Sonoff' => Icons.toggle_on_outlined,
                         _ => Icons.power_outlined,
                       }),
                       title: Text(p.title),
@@ -144,15 +144,22 @@ class AddDeviceScreen extends ConsumerWidget {
     var (roomId, secret) = choice;
     var device = found;
     if (found.needsLink) {
-      secret = await showDialog<String>(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => _HueLinkDialog(host: found.device.host),
-      );
-      if (secret == null) {
-        say(l10n.hueLinkFailed);
+      final linked =
+          await showDialog<({String secret, ConfiguredDevice device})>(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => _LinkDialog(found: found),
+          );
+      if (linked == null) {
+        say(found.brand == 'Hue' ? l10n.hueLinkFailed : l10n.linkFailed);
         return;
       }
+      secret = linked.secret;
+      device = ProbedDevice(
+        device: linked.device,
+        brand: found.brand,
+        name: found.name,
+      );
     }
     if (found.needsKey) {
       // The key is checked (and, found by address, tells who it is).
@@ -231,20 +238,21 @@ class _AddressDialogState extends State<_AddressDialog> {
 
 enum _Secret { password, key }
 
-/// Waits for the bridge's button (asking every 2 s for 30 s); returns the
-/// app's user name, or `null`.
-class _HueLinkDialog extends ConsumerStatefulWidget {
-  const _HueLinkDialog({required this.host});
+/// Waits for the device's button or on-screen prompt (asking every 2 s
+/// for 30 s); returns what pairing gave, or `null`.
+class _LinkDialog extends ConsumerStatefulWidget {
+  const _LinkDialog({required this.found});
 
-  final String host;
+  final ProbedDevice found;
 
   @override
-  ConsumerState<_HueLinkDialog> createState() => _HueLinkDialogState();
+  ConsumerState<_LinkDialog> createState() => _LinkDialogState();
 }
 
-class _HueLinkDialogState extends ConsumerState<_HueLinkDialog> {
+class _LinkDialogState extends ConsumerState<_LinkDialog> {
   Timer? _timer;
   int _tries = 0;
+  bool _asking = false;
 
   @override
   void initState() {
@@ -259,33 +267,41 @@ class _HueLinkDialogState extends ConsumerState<_HueLinkDialog> {
   }
 
   Future<void> _try() async {
+    if (_asking) return; // a TV may take a while to answer
     if (++_tries > 15) {
       _timer?.cancel();
       if (mounted) Navigator.of(context).pop();
       return;
     }
-    String? user;
+    _asking = true;
+    ({String secret, ConfiguredDevice device})? linked;
     try {
-      user = await hueLink(ref.read(lanHttpProvider), widget.host);
+      linked = await ref.read(deviceProbeProvider).link(widget.found);
     } on Object {
       return; // try again
+    } finally {
+      _asking = false;
     }
-    if (user != null && mounted) {
+    if (linked != null && mounted) {
       _timer?.cancel();
-      Navigator.of(context).pop(user);
+      Navigator.of(context).pop(linked);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final brand = widget.found.brand;
     return AlertDialog(
-      key: const Key('hueLink'),
-      title: Text(l10n.hueLinkTitle),
+      key: const Key('deviceLink'),
+      title: Text(brand == 'Hue' ? l10n.hueLinkTitle : l10n.linkTitle(brand)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(l10n.hueLinkBody),
+          Text(switch (widget.found.device.adapter) {
+            'nanoleaf' => l10n.nanoleafLinkBody,
+            _ => l10n.hueLinkBody,
+          }),
           const SizedBox(height: 16),
           const LinearProgressIndicator(),
         ],

@@ -9218,6 +9218,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'That password is not right.'**
   String get backupWrongPassword;
+
+  /// No description provided for @linkTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pairing: {brand}'**
+  String linkTitle(String brand);
+
+  /// No description provided for @linkFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Pairing did not work. Try again.'**
+  String get linkFailed;
+
+  /// No description provided for @nanoleafLinkBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold the power button on the Nanoleaf for 5–7 seconds, until the lights flash. The app waits 30 seconds.'**
+  String get nanoleafLinkBody;
 }
 
 class _AppLocalizationsDelegate

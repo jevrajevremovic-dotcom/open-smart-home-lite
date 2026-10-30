@@ -5408,4 +5408,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backupWrongPassword => 'That password is not right.';
+
+  @override
+  String linkTitle(String brand) {
+    return 'Pairing: $brand';
+  }
+
+  @override
+  String get linkFailed => 'Pairing did not work. Try again.';
+
+  @override
+  String get nanoleafLinkBody =>
+      'Hold the power button on the Nanoleaf for 5–7 seconds, until the lights flash. The app waits 30 seconds.';
 }

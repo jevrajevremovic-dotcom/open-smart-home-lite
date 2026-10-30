@@ -13,6 +13,8 @@ import '../../devices/data/local/lifx_adapter.dart';
 import '../../devices/data/local/wiz_adapter.dart';
 import '../../devices/data/local/lan_http.dart';
 import '../../devices/data/local/local_home.dart';
+import '../../devices/data/local/nanoleaf_adapter.dart';
+import '../../devices/data/local/sonoff_adapter.dart';
 import '../../devices/data/local/shelly_adapter.dart';
 import '../../devices/data/local/tasmota_adapter.dart';
 import '../../devices/data/local/wled_adapter.dart';
@@ -47,7 +49,8 @@ class ProbedDevice {
   /// when found by its address only, it tells who it is with the key).
   final bool needsKey;
 
-  /// A Hue bridge: paired with its button before it can be added.
+  /// Paired with a button on the device (a Hue bridge, a Nanoleaf) or a
+  /// prompt on its screen before it can be added ([DeviceProbe.link]).
   final bool needsLink;
 
   /// What it reports now (a Bluetooth thermometer's `21.4 °C · 48 %`).
@@ -62,12 +65,19 @@ class ProbedDevice {
 /// (`Status 0`), Kasa (`get_sysinfo`) or ESPHome (its API, or what it
 /// announces). Only reads; `null` for anything else.
 class DeviceProbe {
-  const DeviceProbe(this._http, this._esphome, {this.kasa, this.udp});
+  const DeviceProbe(
+    this._http,
+    this._esphome, {
+    this.kasa,
+    this.udp,
+    this.requests,
+  });
 
   final LanHttp _http;
   final EsphomeConnector _esphome;
   final KasaTransport? kasa;
   final LanUdp? udp;
+  final LanRequests? requests;
 
   /// Devices that answer a search of their own on the network (WiZ, LIFX,
   /// Govee), as each search ends.
@@ -122,6 +132,22 @@ class DeviceProbe {
           label: g.sku == null ? 'Govee' : 'Govee ${g.sku}',
         ),
       );
+
+  /// One try at pairing with [found] (asked again until it works or the
+  /// person gives up): the secret to keep, and the device as it now says
+  /// it is. `null` while the button is not pressed.
+  Future<({String secret, ConfiguredDevice device})?> link(
+    ProbedDevice found,
+  ) async {
+    final d = found.device;
+    final String? secret = switch (d.adapter) {
+      'hue' => await hueLink(_http, d.host),
+      'nanoleaf' =>
+        requests == null ? null : await nanoleafLink(requests!, d.host),
+      _ => null,
+    };
+    return secret == null ? null : (secret: secret, device: d);
+  }
 
   /// A Yeelight that answered the search.
   static ProbedDevice fromYeelight(YeelightFound bulb) => ProbedDevice(
@@ -180,6 +206,35 @@ class DeviceProbe {
 
   /// A service found by mDNS: ESPHome tells who it is in its announcement.
   Future<ProbedDevice?> probeService(LanService service) async {
+    if (service.type == LanService.nanoleafType) {
+      final id = service.txt['id'] ?? service.host;
+      return ProbedDevice(
+        brand: 'Nanoleaf',
+        name: service.name,
+        needsLink: true,
+        device: ConfiguredDevice(
+          adapter: 'nanoleaf',
+          id: id.toLowerCase().replaceAll(RegExp('[^0-9a-z]'), ''),
+          host: service.host,
+          model: service.txt['md'],
+          label: service.name,
+        ),
+      );
+    }
+    if (service.type == LanService.sonoffType) {
+      final id = service.txt['id'];
+      if (id == null || id.isEmpty) return _probeSonoff(service.host);
+      return ProbedDevice(
+        brand: 'Sonoff',
+        device: ConfiguredDevice(
+          adapter: 'sonoff',
+          id: id,
+          host: service.host,
+          model: service.txt['type'],
+          label: 'Sonoff',
+        ),
+      );
+    }
     if (!service.isEsphome) return probe(service.host);
     final mac = service.txt['mac'];
     if (mac == null || mac.isEmpty) return probeEsphome(service.host);
@@ -311,7 +366,40 @@ class DeviceProbe {
       await probe(host) ??
       await _probeKasa(host) ??
       await _probeWiz(host) ??
+      await _probeSonoff(host) ??
+      await _probeNanoleaf(host) ??
       await probeEsphome(host);
+
+  Future<ProbedDevice?> _probeSonoff(String host) async {
+    final http = requests;
+    final s = http == null ? null : await sonoffProbe(http, host);
+    if (s == null) return null;
+    return ProbedDevice(
+      brand: 'Sonoff',
+      device: ConfiguredDevice(
+        adapter: 'sonoff',
+        id: s.id,
+        host: host,
+        model: s.firmware == null ? null : 'DIY ${s.firmware}',
+        label: 'Sonoff',
+      ),
+    );
+  }
+
+  Future<ProbedDevice?> _probeNanoleaf(String host) async {
+    final http = requests;
+    if (http == null || !await nanoleafProbe(http, host)) return null;
+    return ProbedDevice(
+      brand: 'Nanoleaf',
+      needsLink: true,
+      device: ConfiguredDevice(
+        adapter: 'nanoleaf',
+        id: host.replaceAll('.', ''),
+        host: host,
+        label: 'Nanoleaf',
+      ),
+    );
+  }
 
   Future<ProbedDevice?> _probeWiz(String host) async {
     final udp = this.udp;
@@ -358,5 +446,6 @@ final deviceProbeProvider = Provider<DeviceProbe>(
     ref.watch(esphomeConnectorProvider),
     kasa: ref.watch(kasaTransportProvider),
     udp: ref.watch(lanUdpProvider),
+    requests: ref.watch(lanRequestsProvider),
   ),
 );

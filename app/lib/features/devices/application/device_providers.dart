@@ -17,6 +17,8 @@ import '../data/local/kasa_adapter.dart';
 import '../data/local/govee_adapter.dart';
 import '../data/local/lan_transport.dart';
 import '../data/local/lifx_adapter.dart';
+import '../data/local/nanoleaf_adapter.dart';
+import '../data/local/sonoff_adapter.dart';
 import '../data/local/wiz_adapter.dart';
 import '../data/local/lan_http.dart';
 import '../data/local/local_backend.dart';
@@ -58,6 +60,13 @@ final homeBackendProvider = Provider<LocalBackend?>((ref) {
       YeelightAdapter(ref.watch(yeelightTransportProvider)),
       KasaAdapter(ref.watch(kasaTransportProvider)),
       WizAdapter(ref.watch(lanUdpProvider)),
+      NanoleafAdapter(
+        ref.watch(lanRequestsProvider),
+        tokens: (key) => ref
+            .read(credentialStoreProvider)
+            .readCredential(devicePasswordId(key)),
+      ),
+      SonoffAdapter(ref.watch(lanRequestsProvider)),
       LifxAdapter(ref.watch(lanUdpProvider)),
       GoveeAdapter(
         ref.watch(lanUdpProvider),

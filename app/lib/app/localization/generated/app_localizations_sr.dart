@@ -5437,6 +5437,18 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get backupWrongPassword => 'Lozinka nije dobra.';
+
+  @override
+  String linkTitle(String brand) {
+    return 'Uparivanje: $brand';
+  }
+
+  @override
+  String get linkFailed => 'Uparivanje nije uspelo. Pokušajte ponovo.';
+
+  @override
+  String get nanoleafLinkBody =>
+      'Držite dugme za uključivanje na Nanoleafu 5–7 sekundi, dok svetla ne počnu da trepću. Aplikacija čeka 30 sekundi.';
 }
 
 /// The translations for Serbian, using the Latin script (`sr_Latn`).

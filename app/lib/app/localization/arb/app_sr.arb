@@ -1520,5 +1520,8 @@
   "backupMerge": "Dodaj samo novo",
   "backupMergeHint": "Sve što je ovde ostaje; dodaje se ono čega nema.",
   "backupAskPassword": "Ova kopija ima lozinke i ključeve uređaja. Unesite lozinku kojom je napravljena.",
-  "backupWrongPassword": "Lozinka nije dobra."
+  "backupWrongPassword": "Lozinka nije dobra.",
+  "linkTitle": "Uparivanje: {brand}",
+  "linkFailed": "Uparivanje nije uspelo. Pokušajte ponovo.",
+  "nanoleafLinkBody": "Držite dugme za uključivanje na Nanoleafu 5–7 sekundi, dok svetla ne počnu da trepću. Aplikacija čeka 30 sekundi."
 }

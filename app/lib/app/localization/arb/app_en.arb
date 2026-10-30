@@ -2090,5 +2090,9 @@
   "backupMerge": "Add only what is new",
   "backupMergeHint": "Everything here stays; what is missing is added.",
   "backupAskPassword": "This backup has the devices' passwords and keys. Enter the password it was made with.",
-  "backupWrongPassword": "That password is not right."
+  "backupWrongPassword": "That password is not right.",
+  "linkTitle": "Pairing: {brand}",
+  "@linkTitle": {"placeholders": {"brand": {"type": "String"}}},
+  "linkFailed": "Pairing did not work. Try again.",
+  "nanoleafLinkBody": "Hold the power button on the Nanoleaf for 5–7 seconds, until the lights flash. The app waits 30 seconds."
 }

@@ -22,6 +22,8 @@ class LanService {
   static const httpType = '_http._tcp';
   static const esphomeType = '_esphomelib._tcp';
   static const hueType = '_hue._tcp';
+  static const nanoleafType = '_nanoleafapi._tcp';
+  static const sonoffType = '_ewelink._tcp';
 
   final String name;
 
@@ -65,6 +67,8 @@ class AndroidLanDiscovery implements LanDiscovery {
     LanService.httpType,
     LanService.esphomeType,
     LanService.hueType,
+    LanService.nanoleafType,
+    LanService.sonoffType,
   ];
   static final _log = AppLogger('Discovery');
 
